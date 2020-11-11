@@ -41,12 +41,11 @@ If you are familiar with publishing a Google Sheet, you can simply copy the demo
 ├── JoinForm
 ├── ImagesCarousel
 ├── styles/...
-└── Sheetr
-    ├── Sheetr.js
-    ├── AllArticles.js
-    ├── Article.js
-    ├── ArticleOpen.js
-    └── formatDateTime.js
+└── Studios
+    ├── Studios
+    ├── StudiosRouter
+    ├── Studio
+    └── StudioOpen
 ```
 
 #### Routing
