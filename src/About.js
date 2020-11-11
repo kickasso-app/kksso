@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid, Row, Col } from "react-flexbox-grid";
 
-import JoinForm from "./Joinform/index";
+import JoinForm from "./JoinForm";
 import "./styles/about.scss";
 
 const About = () => {

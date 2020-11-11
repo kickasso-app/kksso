@@ -4,10 +4,10 @@ import ReactDOM from "react-dom";
 import { Route, HashRouter } from "react-router-dom";
 import NavBar from "./NavBar.js";
 import Intro from "./Intro.js";
-import Sheetr from "./Sheetr/Sheetr.js";
+import Studios from "./Studios";
 import About from "./About.js";
 import Footer from "./Footer.js";
-import JoinForm from "./Joinform/index";
+import JoinForm from "./JoinForm";
 
 import "./styles/base.scss";
 import { Grommet } from "grommet";
@@ -30,7 +30,7 @@ const routing = (
             Object.keys(artistsLinks).includes(
               props.match.params.shortName.toLowerCase()
             ) ? (
-              <Sheetr {...props} />
+              <Studios {...props} />
             ) : (
               AllURLs.includes(props.match.params.shortName.toLowerCase()) || (
                 <Intro />
@@ -38,8 +38,8 @@ const routing = (
             )
           }
         />
-        <Route path="/studio/:id" component={Sheetr} />
-        <Route exact path="/studios" component={Sheetr} />
+        <Route path="/studio/:id" component={Studios} />
+        <Route exact path="/studios" component={Studios} />
         <Route path="/about" component={About} />
         <Route path="/join" component={JoinForm} />
 
