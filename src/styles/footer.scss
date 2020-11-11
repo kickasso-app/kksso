@@ -1,0 +1,18 @@
+@import "colors";
+
+footer {
+  margin-top: 4rem;
+  border-top: 1px solid $color-gray;
+  color: $color-primary;
+  background: $color--bg-white;
+  padding: 4rem;
+  // padding-bottom: 0rem;
+  p {
+    margin: 3rem 0;
+  }
+
+  a:link {
+    color: $color-secondary;
+    text-decoration: underline;
+  }
+}

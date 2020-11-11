@@ -1,0 +1,54 @@
+{
+  "name": "kksso",
+  "version": "1.0.0",
+  "homepage": "https://kksso.co/",
+  "dependencies": {
+    "emailjs-com": "^2.6.3",
+    "gh-pages": "^2.2.0",
+    "grommet": "^2.15.2",
+    "moment": "^2.29.1",
+    "node-sass": "^4.12.0",
+    "papaparse": "^5.3.0",
+    "polished": "^4.0.3",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-feather": "^2.0.4",
+    "react-flexbox-grid": "^2.1.2",
+    "react-markdown": "^5.0.2",
+    "react-masonry-css": "^1.0.14",
+    "react-progressive-image": "^0.6.0",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "^3.0.0",
+    "styled-components": "^5.2.0",
+    "tabletop": "^1.6.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "storybook": "start-storybook -p 6006 -s public --no-dll",
+    "build-storybook": "build-storybook -s public --no-dll"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@storybook/addon-actions": "^6.0.28",
+    "@storybook/addon-essentials": "^6.0.28",
+    "@storybook/addon-links": "^6.0.28",
+    "@storybook/node-logger": "^6.0.28",
+    "@storybook/preset-create-react-app": "^3.1.4",
+    "@storybook/react": "^6.0.28",
+    "react-is": "^17.0.1"
+  }
+}
