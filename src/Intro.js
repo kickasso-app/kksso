@@ -5,26 +5,20 @@ import ProgressiveImage from "react-progressive-image";
 
 import "./styles/intro.scss";
 
-import { Grommet, Box, Heading, Paragraph, Text } from "grommet";
-import { grommet } from "grommet/themes";
-
-const paragraphFiller = `
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua.
-`;
+import { Box, Heading, Text } from "grommet";
 
 const Intro = () => {
   const margin = "medium";
   const sectionMargin = { vertical: "12rem" };
 
   return (
-    <Grid fluid id="intro" textAlign="center" align="center">
+    <Grid fluid id="intro" align="center">
       <section>
         <Row id="intro">
           <Col xs={12} md={12}>
             <ProgressiveImage
               src={`/img/intro/banner-0.jpg`}
-              placeholder={`https://drive.google.com/uc?id=1m_AKM-NObKai64_ErCrVm8uQD3009m5z`}
+              placeholder={`/img/loader.svg`}
             >
               {(src, loading) => (
                 <img
@@ -49,7 +43,7 @@ const Intro = () => {
                 For artists
               </Heading>
               <Text size="medium">
-                Show your work in you studio when and how you like.
+                Show your work in your studio when and how you like.
               </Text>
             </Box>
             <Box margin={sectionMargin} align="center">
@@ -57,8 +51,8 @@ const Intro = () => {
                 For art lovers and collectors
               </Heading>
               <Text size="medium">
-                You can either explore new artists and visit their studios or
-                show your own collection.
+                Explore new artists and visit their studios or show your own
+                collection.
               </Text>
             </Box>
 
@@ -66,18 +60,19 @@ const Intro = () => {
               <Heading level={2} margin={margin}>
                 How it works?
               </Heading>
-              <Row>
-                <Col md={4}>
-                  {" "}
-                  <Text size="medium">1. Add your studio or space</Text>
-                </Col>
-                <Col md={4}>
-                  <Text size="medium">2. Confirm a visit</Text>
-                </Col>
-                <Col md={4}>
-                  <Text size="medium">3. Host someone in your studio</Text>{" "}
-                </Col>
-              </Row>{" "}
+              <Box fill pad="large">
+                <Row>
+                  <Col md={4}>
+                    <Text size="medium">1. Add your studio or space</Text>
+                  </Col>
+                  <Col md={4}>
+                    <Text size="medium">2. Confirm a visit</Text>
+                  </Col>
+                  <Col md={4}>
+                    <Text size="medium">3. Host someone in your studio</Text>
+                  </Col>
+                </Row>
+              </Box>
             </Box>
             <Box margin={sectionMargin} align="center">
               <Heading level={2} margin={margin}>
@@ -87,63 +82,67 @@ const Intro = () => {
                 As you are reading this, we are working on adding more core
                 features.
               </Text>
-              <Text size="medium">
-                - Host a one-time mini event in your space
-                <br />- Review your visit experience
-                <br />- Buy art in the app with a certficate of authencity and
-                arrange professional shipping
-                <br />- Organize your art collection
-              </Text>
+              <ul>
+                <li>Host a one-time mini event in your space</li>
+                <li>Review your visit experience</li>
+                <li>
+                  Buy art in the app with a certficate of authencity and arrange
+                  professional shipping
+                </li>
+                <li>Organize your art collection</li>
+              </ul>
             </Box>
           </Col>
         </Row>
-        <Row margin={sectionMargin} align="center">
-          <Col xs={12} md={6}>
-            <Box
-              align="center"
-              pad={{ vertical: "small" }}
-              margin={{ vertical: "xlarge" }}
-            >
-              <button className="button">
-                <NavLink exact to="/join">
-                  List Your Space
-                </NavLink>
-              </button>
-              <Text size="medium" margin="medium">
-                Have a studio or a space where you are creative and want to
-                share your finished work?
-                {/* {/* Do you have a collection want to share with others */}
-              </Text>
+        <Box margin={sectionMargin} align="center">
+          <Row>
+            <Heading level={2} margin={{ vertical: "1rem" }}>
+              Ready to give it a try
+            </Heading>
+          </Row>
+          <Row>
+            <Col xs={12} md={6}>
+              <Box
+                align="center"
+                pad={{ vertical: "small" }}
+                margin={{ vertical: "xlarge" }}
+              >
+                <button className="button">
+                  <NavLink exact to="/studios">
+                    Explore Artists
+                  </NavLink>
+                </button>
 
-              <Text size="small">Tell us about it and we will add it.</Text>
-            </Box>
-          </Col>
-          <Col xs={12} md={6}>
-            <Box
-              align="center"
-              pad={{ vertical: "small" }}
-              margin={{ vertical: "xlarge" }}
-            >
-              <button className="button">
-                <NavLink exact to="/studios">
-                  Explore Artists
-                </NavLink>
-              </button>
+                <Text size="medium" margin="medium">
+                  Do you want to get in contact with an artist and plan a visit
+                  to their studios?
+                </Text>
+                <Text size="small">Write us about it and we will add it.</Text>
+              </Box>
+            </Col>
 
-              <Text size="medium" margin="medium">
-                {" "}
-                Do you want to get in contact with an artist and plan a visit to
-                their studios?
-              </Text>
-              <Text size="small">Write us about it and we will add it.</Text>
-            </Box>
-          </Col>
-        </Row>
+            <Col xs={12} md={6}>
+              <Box
+                align="center"
+                pad={{ vertical: "small" }}
+                margin={{ vertical: "xlarge" }}
+              >
+                <button className="button">
+                  <NavLink exact to="/join">
+                    Add Your Space
+                  </NavLink>
+                </button>
+                <Text size="medium" margin="medium">
+                  Have a studio or a space where you are creative and want to
+                  share your finished work?
+                </Text>
+
+                <Text size="small">Tell us about it and we will add it.</Text>
+              </Box>
+            </Col>
+          </Row>
+        </Box>
       </section>
-      {/* <Paragraph size="small" margin={margin}>
-                Paragraph - Small
-                {paragraphFiller}
-              </Paragraph> */}
     </Grid>
   );
 };

@@ -6,7 +6,7 @@ import ReactMarkdown from "react-markdown";
 
 import { Grid, Row, Col } from "react-flexbox-grid";
 import ImagesCarousel from "./../../ImagesCarousel";
-import { ChevronLeft } from "react-feather";
+import { ChevronLeft, Disc } from "react-feather";
 
 import EmailForm from "./../../EmailForm";
 
@@ -16,6 +16,7 @@ const StudioOpen = ({
   article: {
     id,
     artist,
+    city,
     styles,
     dates,
     images,
@@ -34,11 +35,26 @@ const StudioOpen = ({
   const paragraphSeperator = "\\";
 
   const makeParagraphs = (paragraphString, pSeparator) => {
-    return paragraphString.split(pSeparator).map((paragraph, index) => (
-      // <p>
-      <ReactMarkdown key={index}>{paragraph}</ReactMarkdown>
-      // </p>
-    ));
+    return paragraphString
+      .split(pSeparator)
+      .map((paragraph, index) => (
+        <ReactMarkdown key={index}>{paragraph}</ReactMarkdown>
+      ));
+  };
+
+  const makeImagesArray = () => {
+    const imgUrls =
+      images !== undefined &&
+      images.split(",").map((imgId) => "/img/" + artist + "/" + imgId + ".jpg");
+
+    const imgTexts = imagesText !== undefined && imagesText.split(";");
+
+    const imgs = imgUrls.reduce((acc, current, index) => {
+      acc.push({ url: imgUrls[index], caption: imgTexts[index] || "" });
+      return acc;
+    }, []);
+
+    return imgs;
   };
 
   return (
@@ -53,26 +69,27 @@ const StudioOpen = ({
         </Link>
         <br />
 
-        <h2>{artist}</h2>
-
-        <ImagesCarousel
-          imgPaths={
-            images !== undefined &&
-            images
-              .split(",")
-              .map((imgId) => "/img/" + artist + "/" + imgId + ".jpg")
-          }
-          imgTexts={imagesText !== undefined && imagesText.split(";")}
-        />
+        <ImagesCarousel images={makeImagesArray()} />
 
         <Row>
           <Col xs={12} md={6}>
             <br />
+
+            <h2>{artist}</h2>
+
             <br />
             {makeParagraphs(artistText, paragraphSeperator)}
-            <h3>Medium</h3>
+
+            <h3>Mediums</h3>
             <p>{styles}</p>
+
             <h3>Studio</h3>
+
+            <h4>
+              <Disc size={18} strokeWidth="2" color="#7fffd4" fill="#fff" />{" "}
+              {city}
+            </h4>
+
             {makeParagraphs(studioText, paragraphSeperator)}
           </Col>
           <Col xs={12} md={5} mdOffset={1}>
@@ -90,7 +107,7 @@ const StudioOpen = ({
                       </ul>
                     </>
                   )}
-                  <h3>General Visit Etiquette</h3>
+                  <h3>General Visit Tips</h3>
                   <ul>
                     <li>Show up on time</li>
                     <li>Ask before taking photos of the artist and artworks</li>
@@ -115,6 +132,7 @@ StudioOpen.propTypes = {
     id: PropTypes.string.isRequired,
     dates: PropTypes.string.isRequired,
     styles: PropTypes.string.isRequired,
+    city: PropTypes.string.isRequired,
     rules: PropTypes.string.isRequired,
     artistText: PropTypes.string.isRequired,
     studioText: PropTypes.string.isRequired,

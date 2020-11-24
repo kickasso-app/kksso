@@ -54,14 +54,14 @@ const Studios = ({ match: { params } }) => {
   };
 
   useEffect(() => {
-    // const savedsheet = sessionStorage.getItem("savedsheet");
-    // if (savedsheet && process.env.REACT_APP_RELOAD_SHEET_ALWAYS !== "true") {
-    //   setSheet({ data: JSON.parse(savedsheet) });
-    //   setDataLoading(false);
-    // } else {
-    //   setDataLoading(true);
-    //   fetchTabletop();
-    // }
+    const savedsheet = sessionStorage.getItem("savedsheet");
+    if (savedsheet && process.env.REACT_APP_RELOAD_SHEET_ALWAYS !== "true") {
+      setSheet({ data: JSON.parse(savedsheet) });
+      setDataLoading(false);
+    } else {
+      setDataLoading(true);
+      fetchTabletop();
+    }
     setDataLoading(true);
     fetchTabletop();
   }, []);
@@ -76,7 +76,7 @@ const Studios = ({ match: { params } }) => {
       Object.keys(artistsLinks).includes(params.shortName.toLowerCase())
     )
       setShortURL("/studio/" + artistsLinks[params.shortName.toLowerCase()]);
-  }, []);
+  }, [params]);
 
   if (dataLoading) {
     return <div>Loading .. </div>;

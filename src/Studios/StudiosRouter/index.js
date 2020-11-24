@@ -14,6 +14,7 @@ import "./../../styles/program.scss";
 
 const dayButtons = ["All", "In A Week", "In A Month", "Later"];
 const dayValues = ["All", "week", "month", "later"];
+const cityValues = ["Berlin", "Paris", "Brussels"];
 const categoryButtons = [
   "Painting",
   "Sculpture",
@@ -28,7 +29,9 @@ const categoryButtons = [
 const StudiosRouter = ({ articles, articleIDRoute }) => {
   const [visibleArticles, setVisibleArticles] = useState(false);
   const [theDay, setTheDay] = useState("All");
+  const [theCity, setTheCity] = useState("All");
   const [theCat, setTheCat] = useState("All");
+
   const [articleIsOpen, setArticleIsOpen] = useState(false);
   const [articleID, setArticleID] = useState(false);
 
@@ -43,18 +46,26 @@ const StudiosRouter = ({ articles, articleIDRoute }) => {
 
   const filterArticles = (filter) => {
     let filtered = articles;
+    const today = moment();
     const nextWeek = moment().add(7, "days");
     const nextMonth = moment().add(1, "months");
+    const nextYear = moment().add(1, "years");
+
     if (filter.day !== false && filter.day !== "All") {
       filtered = filtered.filter((article) => {
-        const testDates = article.dates.split(",");
-        const tDate = moment(testDates[0], "DD/MM/YYYY hh:mm");
+        const datesArray = article.dates.split(",");
+        const dates = datesArray.map(d => moment(d, "DD/MM/YYYY hh:mm"));
 
-        const isNextWeek = tDate.isSameOrBefore(nextWeek);
-        const isNextMonth = tDate.isSameOrBefore(nextMonth);
-        const result = isNextWeek ? "week" : isNextMonth ? "month" : "later";
+        const isNextWeek = dates.some(d => d.isBetween(today, nextWeek));
+        const isNextMonth = dates.some(d => d.isBetween(today, nextMonth));
+        const isLater = dates.some(d => d.isBetween(nextMonth, nextYear));
+
+        let result = isNextWeek ? "week " : ""; 
+        result += isNextMonth ? "month " : "";
+        result +=  isLater ? "later" : "";
 
         return result.includes(filter.day);
+      
       });
     }
     if (filter.cat !== false && filter.cat !== "All") {
@@ -63,6 +74,12 @@ const StudiosRouter = ({ articles, articleIDRoute }) => {
         return article.styles.includes(style);
       });
     }
+    if (filter.city !== false && filter.city !== "All") {
+      filtered = filtered.filter((article) => {
+        return article.city.includes(filter.city);
+      });
+    }
+
     setVisibleArticles(
       filtered.map((article) => {
         return (
@@ -76,7 +93,8 @@ const StudiosRouter = ({ articles, articleIDRoute }) => {
     );
     setTheDay(filter.day);
     setTheCat(filter.cat);
-    sessionStorage.setItem("filters", JSON.stringify(filter));
+    setTheCity(filter.city);
+    // sessionStorage.setItem("filters", JSON.stringify(filter));
   };
 
   useEffect(() => {
@@ -84,22 +102,26 @@ const StudiosRouter = ({ articles, articleIDRoute }) => {
       openArticle(articleIDRoute);
     }
 
-    let savedfilters = sessionStorage.getItem("filters");
-    if (savedfilters) {
-      savedfilters = JSON.parse(savedfilters);
-      setTheDay(savedfilters.day);
-      setTheCat(savedfilters.cat);
-      filterArticles(savedfilters);
-    } else {
-      filterArticles({ day: theDay, cat: theCat });
-    }
+    // let savedfilters = sessionStorage.getItem("filters");
+    // if (savedfilters) {
+    //   savedfilters = JSON.parse(savedfilters);
+    //   setTheDay(savedfilters.day);
+    //   setTheCat(savedfilters.cat);
+    //   setTheCity(savedfilters.city);
+    //   filterArticles(savedfilters);
+    // } else {
+    //   filterArticles({ day: theDay, cat: theCat, city: theCity });
+    // }
+
+    filterArticles({ day: theDay, cat: theCat, city: theCity });
+
   }, [articles, articleIDRoute]);
 
   return (
     <div className="program" id="the-program">
       {articleIsOpen ? (
         <StudioOpen
-          article={articles.filter((article) => article.id === articleID).pop()}
+          article={articles.filter(article => article.id === articleID).pop()}
           closeArticle={closeArticle}
         />
       ) : (
@@ -115,23 +137,23 @@ const StudiosRouter = ({ articles, articleIDRoute }) => {
                       (theDay === dayValues[key] ? " is-checked" : "")
                     }
                     onClick={() => {
-                      filterArticles({ day: dayValues[key], cat: theCat });
+                      filterArticles({ day: dayValues[key], cat: theCat, city: theCity });
                     }}
                   >
                     {btn}
                   </button>
                 );
               })}
-              <br />
-              {categoryButtons.map((btn, key) => {
+               <br />
+              {cityValues.map((btn, key) => {
                 return (
                   <button
                     key={key}
                     className={
-                      "button styles" + (theCat === btn ? " is-checked" : "")
+                      "button styles" + (theCity === btn ? " is-checked" : "")
                     }
                     onClick={() => {
-                      filterArticles({ day: theDay, cat: btn });
+                      filterArticles({ day: theDay, cat: theCat, city: btn });
                     }}
                   >
                     {btn}
@@ -141,7 +163,31 @@ const StudiosRouter = ({ articles, articleIDRoute }) => {
               <button
                 className="button styles"
                 onClick={() => {
-                  filterArticles({ day: theDay, cat: "All" });
+                  filterArticles({ day: theDay, cat: theCat, city: "All" });
+                }}
+              >
+                <X size={16} strokeWidth="3" />
+              </button>
+              <br />
+              {categoryButtons.map((btn, key) => {
+                return (
+                  <button
+                    key={key}
+                    className={
+                      "button styles" + (theCat === btn ? " is-checked" : "")
+                    }
+                    onClick={() => {
+                      filterArticles({ day: theDay, cat: btn, city: theCity });
+                    }}
+                  >
+                    {btn}
+                  </button>
+                );
+              })}
+              <button
+                className="button styles"
+                onClick={() => {
+                  filterArticles({ day: theDay, cat: "All", city: theCity });
                 }}
               >
                 <X size={16} strokeWidth="3" />

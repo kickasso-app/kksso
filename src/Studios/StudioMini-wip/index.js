@@ -22,8 +22,8 @@ const StudioMini = ({
         {/* <Link to={`/studio/${id}`} onClick={() => openStudio(id)}> */}
         <ProgressiveImage
           src={"/img/" + artist + "/" + imageTeaser + ".jpg"}
-          placeholder={`https://drive.google.com/uc?id=1m_AKM-NObKai64_ErCrVm8uQD3009m5z`}
-        >
+          placeholder={`/img/loader.svg`}
+          >
           {(src, loading) => (
             <img
               id={`img-article-${id}`}

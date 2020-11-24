@@ -3,18 +3,18 @@ import PropTypes from "prop-types";
 
 import { Link } from "react-router-dom";
 import ProgressiveImage from "react-progressive-image";
-
 import moment from "moment";
+
+// import { Box } from "grommet";
+
+import { Disc, Hash } from 'react-feather'; 
 
 import "./../../styles/article.scss";
 
 const Studio = ({
-  article: { id, artist, styles, dates, teaserText, imageTeaser },
+  article: { id, artist,city, styles, dates, teaserText, imageTeaser },
   openArticle,
 }) => {
-  // const createMarkup = (raw) => {
-  //   return { __html: raw };
-  // };
 
   return (
     <div className="article">
@@ -22,7 +22,7 @@ const Studio = ({
         <Link to={`/studio/${id}`} onClick={() => openArticle(id)}>
           <ProgressiveImage
             src={"/img/" + artist + "/" + imageTeaser + ".jpg"}
-            placeholder={`https://drive.google.com/uc?id=1m_AKM-NObKai64_ErCrVm8uQD3009m5z`}
+            placeholder={`/img/loader.svg`}
           >
             {(src, loading) => (
               <img
@@ -40,12 +40,17 @@ const Studio = ({
         </Link>
 
         <h4>{artist}</h4>
-        {styles && (
-          <h4 className="secondary">
-            {""}
-            {styles}
-          </h4>
-        )}
+      
+      
+        <h4 className="secondary">
+          <Disc size={18} 
+              strokeWidth="2"    
+              color="#4b4b4b"
+              fill="#fff" />
+        {" "} {city}</h4> 
+        
+
+
         {dates && (
           <h4 className="secondary">
             Next Visit{" "}
@@ -54,7 +59,20 @@ const Studio = ({
             </strong>
           </h4>
         )}
-        <p>{teaserText}</p>
+
+<p>{teaserText}</p>
+
+        {styles && (
+
+        <h4 className="secondary">
+        <Hash size={18} 
+            strokeWidth="2"    
+            color="#4b4b4b"
+            fill="#fff" />
+      {" "} {styles}</h4> 
+        )}
+
+        
       </div>
     </div>
   );
@@ -65,6 +83,7 @@ Studio.propTypes = {
     id: PropTypes.string.isRequired,
     artist: PropTypes.string.isRequired,
     dates: PropTypes.string.isRequired,
+    city: PropTypes.string.isRequired,
     styles: PropTypes.string.isRequired,
     teaserText: PropTypes.string.isRequired,
     imageTeaser: PropTypes.string.isRequired,

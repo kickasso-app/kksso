@@ -1,8 +1,10 @@
 import React from "react";
 import { Grid, Row, Col } from "react-flexbox-grid";
 
-import { Facebook, Instagram } from "react-feather";
 import { Box, Image, Text } from "grommet";
+import { Instagram } from "react-feather";
+// import { Facebook, Instagram } from "react-feather";
+
 import "./styles/footer.scss";
 
 const Footer = () => {
@@ -30,11 +32,11 @@ const Footer = () => {
               </p>
               <Row>
                 {" "}
-                <Box height="20px" margin="small">
+                <Box height="22px" margin="medium">
                   <Image fit="contain" src="/img/logo-zoom.png" />{" "}
                 </Box>
               </Row>
-              <Text size="small">kickasso, 2020</Text>
+              <Text size="small">Kickasso, 2020</Text>
             </center>
           </Col>
         </Row>
