@@ -54,18 +54,17 @@ const StudiosRouter = ({ articles, articleIDRoute }) => {
     if (filter.day !== false && filter.day !== "All") {
       filtered = filtered.filter((article) => {
         const datesArray = article.dates.split(",");
-        const dates = datesArray.map(d => moment(d, "DD/MM/YYYY hh:mm"));
+        const dates = datesArray.map((d) => moment(d, "DD/MM/YYYY hh:mm"));
 
-        const isNextWeek = dates.some(d => d.isBetween(today, nextWeek));
-        const isNextMonth = dates.some(d => d.isBetween(today, nextMonth));
-        const isLater = dates.some(d => d.isBetween(nextMonth, nextYear));
+        const isNextWeek = dates.some((d) => d.isBetween(today, nextWeek));
+        const isNextMonth = dates.some((d) => d.isBetween(today, nextMonth));
+        const isLater = dates.some((d) => d.isBetween(nextMonth, nextYear));
 
-        let result = isNextWeek ? "week " : ""; 
+        let result = isNextWeek ? "week " : "";
         result += isNextMonth ? "month " : "";
-        result +=  isLater ? "later" : "";
+        result += isLater ? "later" : "";
 
         return result.includes(filter.day);
-      
       });
     }
     if (filter.cat !== false && filter.cat !== "All") {
@@ -114,14 +113,14 @@ const StudiosRouter = ({ articles, articleIDRoute }) => {
     // }
 
     filterArticles({ day: theDay, cat: theCat, city: theCity });
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [articles, articleIDRoute]);
 
   return (
     <div className="program" id="the-program">
       {articleIsOpen ? (
         <StudioOpen
-          article={articles.filter(article => article.id === articleID).pop()}
+          article={articles.filter((article) => article.id === articleID).pop()}
           closeArticle={closeArticle}
         />
       ) : (
@@ -137,14 +136,18 @@ const StudiosRouter = ({ articles, articleIDRoute }) => {
                       (theDay === dayValues[key] ? " is-checked" : "")
                     }
                     onClick={() => {
-                      filterArticles({ day: dayValues[key], cat: theCat, city: theCity });
+                      filterArticles({
+                        day: dayValues[key],
+                        cat: theCat,
+                        city: theCity,
+                      });
                     }}
                   >
                     {btn}
                   </button>
                 );
               })}
-               <br />
+              <br />
               {cityValues.map((btn, key) => {
                 return (
                   <button
