@@ -2,12 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import { Route, HashRouter } from "react-router-dom";
-import NavBar from "./NavBar.js";
-import Intro from "./Intro.js";
-import Studios from "./Studios";
-import About from "./About.js";
-import Footer from "./Footer.js";
-import JoinForm from "./JoinForm";
+import NavBar from "Components/NavBar";
+import Footer from "Components/Footer";
+import Intro from "Pages/Intro";
+import Studios from "Pages/Studios";
+import About from "Pages/About";
+import JoinForm from "Pages/Join";
 
 import "./styles/base.scss";
 import { Grommet } from "grommet";

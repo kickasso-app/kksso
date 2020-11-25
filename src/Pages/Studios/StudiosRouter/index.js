@@ -10,7 +10,7 @@ import Studio from "../Studio";
 import StudioOpen from "../StudioOpen";
 
 import Masonry from "react-masonry-css";
-import "./../../styles/program.scss";
+import "./studiosRouter.scss";
 
 const dayButtons = ["All", "In A Week", "In A Month", "Later"];
 const dayValues = ["All", "week", "month", "later"];

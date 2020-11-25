@@ -1,4 +1,4 @@
-@import "colors";
+@import "./styles/colors.scss";
 
 .article-info {
   margin: 1rem auto;
@@ -27,7 +27,7 @@
     font-size: 1rem;
     margin-top: 0.5rem;
   }
-  svg{
+  svg {
     vertical-align: top;
     margin-right: 0.333rem;
   }

@@ -5,7 +5,7 @@ import { Box, Image, Text } from "grommet";
 import { Instagram } from "react-feather";
 // import { Facebook, Instagram } from "react-feather";
 
-import "./styles/footer.scss";
+import "./footer.scss";
 
 const Footer = () => {
   return (

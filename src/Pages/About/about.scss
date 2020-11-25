@@ -1,4 +1,4 @@
-@import "colors";
+@import "./styles/colors.scss";
 
 .about {
   h2 {
@@ -8,6 +8,7 @@
   }
   h3 {
     margin-top: 2rem;
+    line-height: 1.75rem;
   }
 
   h3,

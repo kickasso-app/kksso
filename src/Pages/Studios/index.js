@@ -2,10 +2,10 @@ import React from "react";
 import { useState, useEffect } from "react";
 import Tabletop from "tabletop";
 // import Papa from "papaparse";
-import StudiosRouter from "./StudiosRouter/index.js";
+import StudiosRouter from "./StudiosRouter";
 import { Redirect } from "react-router-dom";
 
-import { artistsLinks } from "../constants";
+import { artistsLinks } from "../../constants";
 
 const sheetID = process.env.REACT_APP_GOOGLESHEET_ID;
 // const sheetID_CSV = process.env.REACT_APP_GOOGLESHEET_ID_CSV;

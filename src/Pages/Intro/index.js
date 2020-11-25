@@ -3,7 +3,7 @@ import { Grid, Row, Col } from "react-flexbox-grid";
 import { NavLink } from "react-router-dom";
 import ProgressiveImage from "react-progressive-image";
 
-import "./styles/intro.scss";
+import "./intro.scss";
 
 import { Box, Heading, Text } from "grommet";
 
@@ -97,7 +97,7 @@ const Intro = () => {
         <Box margin={sectionMargin} align="center">
           <Row>
             <Heading level={2} margin={{ vertical: "1rem" }}>
-              Ready to give it a try
+              Ready to give it a try?
             </Heading>
           </Row>
           <Row>
@@ -114,10 +114,12 @@ const Intro = () => {
                 </button>
 
                 <Text size="medium" margin="medium">
-                  Do you want to get in contact with an artist and plan a visit
-                  to their studios?
+                  Discover artists by location or medium and plan a visit to
+                  their studios
                 </Text>
-                <Text size="small">Write us about it and we will add it.</Text>
+                <Text size="small">
+                  We will help you get in touch with them.
+                </Text>
               </Box>
             </Col>
 

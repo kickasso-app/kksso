@@ -21,7 +21,7 @@ const SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID;
 const TEMPLATE_ID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
 const USER_ID = process.env.REACT_APP_EMAILJS_USER_ID;
 
-const JoinForm = () => {
+const Join = () => {
   const [values, setValues] = useState({
     requestor_email: "Requestor email",
     from_name: "Requestor Name",
@@ -228,4 +228,4 @@ const JoinForm = () => {
 //   artistEmail: PropTypes.string.isRequired,
 // };
 
-export default JoinForm;
+export default Join;

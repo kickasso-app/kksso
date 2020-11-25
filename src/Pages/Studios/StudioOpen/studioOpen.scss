@@ -1,4 +1,4 @@
-@import "colors";
+@import "./styles/colors.scss";
 
 .article-open {
   background: #ffffff;
@@ -33,11 +33,11 @@
   h3 {
     margin-top: 2rem;
   }
-  h4{
+  h4 {
     margin: 1rem 0;
     // font-weight: 600;
   }
-  svg{
+  svg {
     vertical-align: top;
     margin-right: 0.333rem;
   }

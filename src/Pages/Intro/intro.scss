@@ -1,4 +1,4 @@
-@import "colors";
+@import "./styles/colors.scss";
 
 #intro {
   color: $color-primary;
@@ -6,15 +6,15 @@
   margin-top: 0.5rem;
   // padding: 3rem 0;
   text-align: center;
-  ul{
+  ul {
     list-style-position: inside;
-    li{
-    font-size: 1rem;
-    line-height: 1.125rem;
-    margin-bottom: 1.125rem;
-    align-self: center;
+    li {
+      font-size: 1rem;
+      line-height: 1.125rem;
+      margin-bottom: 1.125rem;
+      align-self: center;
+    }
   }
-}
   h2.first {
     margin: 40vh auto;
   }

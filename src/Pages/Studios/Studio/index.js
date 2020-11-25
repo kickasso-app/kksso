@@ -7,15 +7,14 @@ import moment from "moment";
 
 // import { Box } from "grommet";
 
-import { Disc, Hash } from 'react-feather'; 
+import { Disc, Hash } from "react-feather";
 
-import "./../../styles/article.scss";
+import "./studio.scss";
 
 const Studio = ({
-  article: { id, artist,city, styles, dates, teaserText, imageTeaser },
+  article: { id, artist, city, styles, dates, teaserText, imageTeaser },
   openArticle,
 }) => {
-
   return (
     <div className="article">
       <div className="article-info">
@@ -40,16 +39,10 @@ const Studio = ({
         </Link>
 
         <h4>{artist}</h4>
-      
-      
-        <h4 className="secondary">
-          <Disc size={18} 
-              strokeWidth="2"    
-              color="#4b4b4b"
-              fill="#fff" />
-        {" "} {city}</h4> 
-        
 
+        <h4 className="secondary">
+          <Disc size={18} strokeWidth="2" color="#4b4b4b" fill="#fff" /> {city}
+        </h4>
 
         {dates && (
           <h4 className="secondary">
@@ -60,19 +53,14 @@ const Studio = ({
           </h4>
         )}
 
-<p>{teaserText}</p>
+        <p>{teaserText}</p>
 
         {styles && (
-
-        <h4 className="secondary">
-        <Hash size={18} 
-            strokeWidth="2"    
-            color="#4b4b4b"
-            fill="#fff" />
-      {" "} {styles}</h4> 
+          <h4 className="secondary">
+            <Hash size={18} strokeWidth="2" color="#4b4b4b" fill="#fff" />{" "}
+            {styles}
+          </h4>
         )}
-
-        
       </div>
     </div>
   );

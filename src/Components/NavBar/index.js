@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { Grid, Row, Col } from "react-flexbox-grid";
 
-import "./styles/nav.scss";
+import "./nav.scss";
 
 const headerImg = "/img/header-name.png";
 

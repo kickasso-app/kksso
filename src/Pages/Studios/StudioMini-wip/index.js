@@ -6,7 +6,7 @@ import ProgressiveImage from "react-progressive-image";
 
 import moment from "moment";
 
-import "./../../styles/article.scss";
+// import "./studio.scss";
 
 const StudioMini = ({
   article: { id, artist, styles, dates, teaserText, imageTeaser },
@@ -23,7 +23,7 @@ const StudioMini = ({
         <ProgressiveImage
           src={"/img/" + artist + "/" + imageTeaser + ".jpg"}
           placeholder={`/img/loader.svg`}
-          >
+        >
           {(src, loading) => (
             <img
               id={`img-article-${id}`}
