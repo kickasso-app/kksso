@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "homepage": "https://kksso.co/",
   "dependencies": {
+    "@securityscorecard/design-system": "github:securityscorecard/design-system",
     "emailjs-com": "^2.6.3",
     "grommet": "^2.15.2",
     "moment": "^2.29.1",

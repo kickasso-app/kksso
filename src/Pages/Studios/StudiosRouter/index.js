@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import moment from "moment";
 import { X } from "react-feather";
 
+import SearchBar from "../../../Components/SearchBar";
 import Studio from "../Studio";
 import StudioOpen from "../StudioOpen";
 
@@ -148,6 +149,8 @@ const StudiosRouter = ({ articles, articleIDRoute }) => {
                 );
               })}
               <br />
+
+              {/*               
               {cityValues.map((btn, key) => {
                 return (
                   <button
@@ -194,7 +197,8 @@ const StudiosRouter = ({ articles, articleIDRoute }) => {
                 }}
               >
                 <X size={16} strokeWidth="3" />
-              </button>
+              </button> */}
+              <SearchBar />
             </div>
           </div>
           <div className="all-articles">
