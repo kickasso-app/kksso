@@ -6,8 +6,8 @@ module.exports = {
     prependData: `
         $color-primary: #4b4b4b;
         $color-primary-black: #222; 
-        $color-secondary: #ff4500; 
-        $color-quad: #7fffd4;
+        $color-secondary: #C0FFF4; 
+        $color-quad: #FFC0CB;
         $color--bg-white: #fff;
 
         $color-gray: rgba(0, 0, 0, 0.1);

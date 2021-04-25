@@ -8,7 +8,7 @@ export const theme = {
     },
     colors: {
       // Overriding existing colors
-      brand: "#ff4500",
+      brand: "#C0FFF4",
       "accent-1": "#6FFFB0",
       "accent-2": "#7FFFB0",
       "accent-3": "#8FFFB0",
@@ -50,16 +50,16 @@ export const theme = {
     primary: {
       color: "brand",
       active: {
-        color: "#ff4500",
+        color: "#C0FFF4",
       },
     },
     secondary: {
       border: { color: "brand" },
       color: "#4b4b4b",
       active: {
-        extend: `background: #4b4b4b; border: 1px solid #ff4500;`,
+        extend: `background: #4b4b4b; border: 1px solid #C0FFF4;`,
         // background: {
-        //   color: "#ff4500",
+        //   color: "#C0FFF4",
         // },
       },
     },

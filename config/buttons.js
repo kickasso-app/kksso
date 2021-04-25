@@ -3,15 +3,14 @@ const navButtons = [
   //     label: "Home",
   //     path: "/",
   //   },
-  {
-    label: "Studios",
-    path: "/studios",
-  },
+  // {
+  //   label: "Studios",
+  //   path: "/studios",
+  // },
   {
     label: "about",
     path: "/about",
   },
-
   {
     label: "Join",
     path: "/join",

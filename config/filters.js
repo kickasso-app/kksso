@@ -1,15 +1,27 @@
-const dayButtons = ["All", "In A Week", "In A Month", "Later"];
-const dayValues = ["All", "week", "month", "later"];
-const cityValues = ["Berlin", "Paris", "Brussels"];
-const categoryButtons = [
+const cities = ["Berlin", "Paris", "Brussels", "Prague", "New York"];
+const mediums = [
   "Painting",
-  "Sculpture",
+  "Drawing",
   "Prints",
-  "Mixed Media",
   "Photography",
-  "Installation",
-  "Video",
   "Sound",
+  "Video",
+  "Mixed Media",
+  "Installation",
+  "Sculpture",
 ];
+const visitTimes = ["Anytime", "In a week", "In a month", "Later"];
 
-export { dayButtons, dayValues, cityValues, categoryButtons };
+// const cities = cityValues.map((city) => {
+//   return { name: city, type: "city" };
+// });
+
+// const mediums = mediumButtons.map((cat) => {
+//   return { name: cat, type: "medium" };
+// });
+
+// const artists = artistNames.map((a) => {
+//   return { name: a, type: "artist" };
+// });
+
+export { cities, mediums, visitTimes };

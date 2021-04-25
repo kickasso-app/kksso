@@ -1,12 +1,6 @@
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSupabase } from "use-supabase";
 import { supabase } from "../../services/supabase";
-
-import "firebase/firestore";
-import "firebase/functions";
-import { useCollection } from "react-firebase-hooks/firestore";
-
-import { FirebaseContext } from "../../services/firebase.js";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import Link from "next/link";
@@ -19,46 +13,30 @@ const Studios = () => {
   const margin = "medium";
   const sectionMargin = { vertical: "12rem" };
 
-  const firebase = useContext(FirebaseContext);
   const { auth, from } = useSupabase();
+
+  const [studiosDB, setStudiosDB] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState();
 
   const fetchStudios = async () => {
     let { data: supaStudios, error } = await supabase
       .from("studios")
       .select("*")
       .order("id", true);
-    if (error) console.log("error", error);
+    if (error) setError(error);
     else {
+      setStudiosDB(supaStudios);
       console.log(supaStudios);
+      setLoading(false);
     }
   };
 
-  const [value, loading, error] = useCollection(
-    firebase.firestore().collection("studios"),
-    {
-      snapshotListenOptions: { includeMetadataChanges: true },
-    }
-  );
-  //   const sayHello = firebase.functions().httpsCallable("sayHelloFunc");
-  //   const getProducts = firebase.functions().httpsCallable("getProductsCF");
-
-  const [studiosDB, setStudiosDB] = useState([]);
-
   useEffect(() => {
-    if (value) {
-      const data = value.docs.map((doc) => doc.data());
-      setStudiosDB(data);
-      console.log(data);
+    if (!studiosDB.length) {
+      fetchStudios();
     }
-    fetchStudios();
-    // sayHello({ name: "Shaun" }).then((result) => {
-    //   console.log(result.data);
-    // });
-    // getProducts({}).then((result) => {
-    //   console.log(result.data);
-    //   setResultfromCF(result.data);
-    // });
-  }, [value]);
+  }, [studiosDB]);
 
   return (
     <Grid fluid align="center">
@@ -67,19 +45,13 @@ const Studios = () => {
           <Col xs={12} md={12}>
             <br />
             {error && <strong>Error: {JSON.stringify(error)}</strong>}
-            {loading && <img src={`/img/loader.svg`} />}
-            {value && (
-              <>
-                <StudiosFilter studiosDB={studiosDB} />
-                <br />
-                <br />
-                {/* {value.docs.map((doc) => (
-                  <StudioCard studio={doc.data()} /> 
-
-                 <p key={doc.id}>{JSON.stringify(doc.data())}, </p>
-                ))}*/}
-              </>
+            {loading ? (
+              <img src={`/img/loader.svg`} />
+            ) : (
+              <StudiosFilter studiosDB={studiosDB} />
             )}
+            <br />
+            <br />
           </Col>
         </Row>
       </section>

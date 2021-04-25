@@ -9,6 +9,7 @@ import Image from "next/image";
 import styles from "./index.module.scss";
 
 import { Box, Heading, Text } from "grommet";
+import SearchBar from "./../../components/SearchBar";
 
 const Intro = () => {
   const margin = "medium";
@@ -19,20 +20,26 @@ const Intro = () => {
       <section>
         <Row id={styles.intro}>
           <Col xs={12} md={12}>
-            <Image
-              src={`/img/intro/banner-0.jpg`}
-              alt="banner"
-              layout="responsive"
-              width="100%"
-              height="62.23%"
-            />
-          </Col>
-          <Col xs={12} md={12}>
-            <Box margin={{ vertical: "6rem" }} align="center">
-              <Heading level={2} margin="xlarge" className="first">
-                expand the art space.
+            <Box margin={{ vertical: "1rem" }}>
+              <Image
+                src={`/img/intro/banner-0.jpg`}
+                alt="banner"
+                layout="responsive"
+                width="100%"
+                height="40%"
+              />
+              <Text alignSelf="start">from Hoa Lua's studio</Text>
+            </Box>
+            <Box margin={{ vertical: "3rem" }} align="center">
+              <Heading level={2} className="first">
+                Meet the artist
               </Heading>
             </Box>
+
+            <Box margin={{ vertical: "0rem", bottom: "12rem" }} align="center">
+              <SearchBar />
+            </Box>
+
             <Box margin={sectionMargin} align="center">
               <Heading level={2} margin={margin}>
                 For artists

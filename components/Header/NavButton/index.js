@@ -5,13 +5,7 @@ import styles from "./NavButton.module.scss";
 
 const NavButton = (props) => (
   <Link href={props.path}>
-    <div
-      className={`${styles.navButton}`}
-
-      // ${
-      //   props.router.pathname === props.path ? "Active" : ""
-      // }`}
-    >
+    <div className={`${styles.navButton}`}>
       <span
         className={`${
           props.router.pathname === props.path

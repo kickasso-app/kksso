@@ -108,7 +108,7 @@ const Studio = () => {
                   className={styles.icon}
                   size={18}
                   strokeWidth="2"
-                  color="#7fffd4"
+                  color="#FFC0CB"
                   fill="#fff"
                 />{" "}
                 {studioData.city}

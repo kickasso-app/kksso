@@ -4,16 +4,14 @@ import PropTypes from "prop-types";
 import { X } from "react-feather";
 import Masonry from "react-masonry-css";
 
-import {
-  dayButtons,
-  dayValues,
-  cityValues,
-  categoryButtons,
-} from "../../config/filters";
-
 import StudioCard from "../StudioCard";
 import filterStudios from "./filterStudios";
 import styles from "./index.module.scss";
+
+import { cities, mediums } from "../../config/filters";
+
+const dayButtons = ["All", "In A Week", "In A Month", "Later"];
+const dayValues = ["All", "week", "month", "later"];
 
 const StudiosFilter = ({ studiosDB: studios }) => {
   const [visibleStudios, setVisibleStudios] = useState(false);
@@ -55,7 +53,7 @@ const StudiosFilter = ({ studiosDB: studios }) => {
               );
             })}
             <br />
-            {cityValues.map((btn, key) => {
+            {cities.map((btn, key) => {
               return (
                 <button
                   key={key}
@@ -77,7 +75,7 @@ const StudiosFilter = ({ studiosDB: studios }) => {
               <X size={16} strokeWidth="3" />
             </button>
             <br />
-            {categoryButtons.map((btn, key) => {
+            {mediums.map((btn, key) => {
               return (
                 <button
                   key={key}
