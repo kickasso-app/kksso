@@ -20,13 +20,13 @@ const Intro = () => {
       <section>
         <Row id={styles.intro}>
           <Col xs={12} md={12}>
-            <Box margin={{ vertical: "1rem" }}>
+            <Box margin={{ bottom: "1rem" }}>
               <Image
                 src={`/img/intro/banner-0.jpg`}
                 alt="banner"
                 layout="responsive"
                 width="100%"
-                height="40%"
+                height="45%"
               />
               <Text alignSelf="start">from Hoa Lua's studio</Text>
             </Box>
