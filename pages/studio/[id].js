@@ -10,7 +10,7 @@ import Link from "next/link";
 // import ReactMarkdown from "react-markdown";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
-
+import { Box, Heading, Text, Button } from "grommet";
 import { ChevronLeft, Disc } from "react-feather";
 
 // import EmailForm from "Components/EmailForm";
@@ -23,7 +23,7 @@ const Studio = () => {
 
   const { auth, from } = useSupabase();
 
-  const [studioData, setStudioData] = useState(false);
+  const [studio, setStudio] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
   const [images, setImages] = useState([]);
@@ -42,23 +42,23 @@ const Studio = () => {
 
   const fetchStudio = async () => {
     // TO DO: grab from local store
-    let { data: supaStudios, error } = await supabase
+    let { data: oneStudio, error } = await supabase
       .from("studios")
       .select("*")
-      .filter("id", "eq", id);
+      .match({ id })
+      .single();
     if (error) setError(error);
     else {
-      const studio = supaStudios[0];
-      setStudioData(studio);
-      setLoading(false);
+      setStudio(oneStudio);
       setImages(
-        prepImagesforCarousel(studio.imagesFiles, studio.imagesCaptions)
+        prepImagesforCarousel(oneStudio.imagesFiles, oneStudio.imagesCaptions)
       );
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (!studioData) {
+    if (!studio) {
       fetchStudio();
     }
   }, [id]);
@@ -88,26 +88,35 @@ const Studio = () => {
         </Link>
         <br />
         <br />
-        {/* {error && <strong>Error: {JSON.stringify(error)}</strong>} */}
+        {/* TO DO
+         Remove this error
+         Error: {"hint":null,"details":null,"code":"22P02",
+         "message":"invalid input syntax for type integer: \"NaN\""}
+          */}
+        {error && error.code !== "22P02" && (
+          <strong>Error: {JSON.stringify(error)}</strong>
+        )}
         {loading ? (
-          <img src={`/img/loader.svg`} />
+          <Box align="center" pad="large">
+            <img src={`/img/loader.svg`} />
+          </Box>
         ) : (
           <Row>
             {images.length && (
-              <ImagesCarousel images={images} artist={studioData.artist} />
+              <ImagesCarousel images={images} artist={studio.artist} />
             )}
             <Col xs={12} md={6}>
               <br />
 
-              {studioData.artist && (
-                <h2 className={styles.maintitle}>{studioData.artist}</h2>
+              {studio.artist && (
+                <h2 className={styles.maintitle}>{studio.artist}</h2>
               )}
               <br />
-              {studioData.textLong &&
-                makeParagraphs(studioData.textLong, paragraphSeperator)}
+              {studio.textLong &&
+                makeParagraphs(studio.textLong, paragraphSeperator)}
 
               <h3 className={styles.sectiontitle}>Mediums</h3>
-              <p>{studioData.styles}</p>
+              <p>{studio.styles}</p>
 
               <h3 className={styles.sectiontitle}>Studio</h3>
 
@@ -119,24 +128,24 @@ const Studio = () => {
                   color="#FFC0CB"
                   fill="#fff"
                 />{" "}
-                {studioData.city}
+                {studio.city}
               </h4>
 
-              {studioData.textStudio &&
-                makeParagraphs(studioData.textStudio, paragraphSeperator)}
+              {studio.textStudio &&
+                makeParagraphs(studio.textStudio, paragraphSeperator)}
             </Col>
             <Col xs={12} md={5} mdOffset={1}>
               <Row>
-                {studioData.dates && (
+                {studio.dates && (
                   <>
-                    {studioData.rules && studioData.rules.length > 0 && (
+                    {studio.rules && studio.rules.length > 0 && (
                       <>
                         <h3 className={styles.sectiontitle}>
-                          {studioData.artist.split(" ")[0]}'s Visit Rules
+                          {studio.artist.split(" ")[0]}'s Visit Rules
                         </h3>
                         <br />
                         <ul className={styles.rules}>
-                          {studioData.rules.split(";").map((rule, index) => (
+                          {studio.rules.split(";").map((rule, index) => (
                             <li key={index}>{rule}</li>
                           ))}
                         </ul>

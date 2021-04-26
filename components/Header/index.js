@@ -11,7 +11,7 @@ const Header = ({ navButtons }) => {
   return (
     <Grid fluid>
       <Col xs={12}>
-        <Box margin={{ vertical: "0.5rem" }}>
+        <Box margin={{ bottom: "0.5rem", top: "0.625rem" }}>
           <Row start="md" center="xs">
             <Col xs={12} md={2}>
               <Link href="/">
