@@ -1,15 +1,11 @@
 import { useContext, useState, useEffect } from "react";
-import "firebase/firestore";
-import "firebase/functions";
-import PropTypes from "prop-types";
+
+import { useSupabase } from "use-supabase";
+import { supabase } from "../../services/supabase";
+// import PropTypes from "prop-types";
 
 import { useRouter } from "next/router";
 import Link from "next/link";
-import {
-  useCollectionOnce,
-  useCollection,
-} from "react-firebase-hooks/firestore";
-import { FirebaseContext } from "../../services/firebase.js";
 
 // import ReactMarkdown from "react-markdown";
 
@@ -25,23 +21,47 @@ const Studio = () => {
   const router = useRouter();
   const { id } = router.query;
 
-  const firebase = useContext(FirebaseContext);
+  const { auth, from } = useSupabase();
 
-  const [value, loading, error] = useCollectionOnce(
-    firebase.firestore().collection("studios"),
-    {
-      snapshotListenOptions: { includeMetadataChanges: true },
-    }
-  );
   const [studioData, setStudioData] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState();
+  const [images, setImages] = useState([]);
+
+  const prepImagesforCarousel = (files, captions) => {
+    const imgs = files.reduce((acc, current, index) => {
+      acc.push({
+        filename: files[index].trim(),
+        caption: captions[index] || "",
+      });
+      return acc;
+    }, []);
+
+    return imgs;
+  };
+
+  const fetchStudio = async () => {
+    // TO DO: grab from local store
+    let { data: supaStudios, error } = await supabase
+      .from("studios")
+      .select("*")
+      .filter("id", "eq", id);
+    if (error) setError(error);
+    else {
+      const studio = supaStudios[0];
+      setStudioData(studio);
+      setLoading(false);
+      setImages(
+        prepImagesforCarousel(studio.imagesFiles, studio.imagesCaptions)
+      );
+    }
+  };
 
   useEffect(() => {
-    if (value) {
-      const data = value.docs.map((doc) => doc.data());
-      const theStudioData = data.filter((studio) => studio.id === id)[0];
-      setStudioData(theStudioData);
+    if (!studioData) {
+      fetchStudio();
     }
-  }, [value]);
+  }, [id]);
 
   const paragraphSeperator = "\\";
 
@@ -54,46 +74,34 @@ const Studio = () => {
     ));
   };
 
-  const makeImagesArray = () => {
-    const imgUrls =
-      images !== undefined &&
-      images.split(",").map((imgId) => "/img/" + artist + "/" + imgId + ".jpg");
-
-    const imgTexts = imagesText !== undefined && imagesText.split(";");
-
-    const imgs = imgUrls.reduce((acc, current, index) => {
-      acc.push({ url: imgUrls[index], caption: imgTexts[index] || "" });
-      return acc;
-    }, []);
-
-    return imgs;
-  };
-
   return (
     <Grid fluid className={styles.studio}>
       <Col xs={12}>
         <ChevronLeft className={styles.icon} size={16} />{" "}
         <Link href="/studios" className={styles.backlink}>
           BACK
-          {/* <>
+          {/* 
+          <>
             <ChevronLeft className={styles.icon} size={14} /> <span> BACK </span>
-          </> */}
+          </> 
+          */}
         </Link>
         <br />
-        {error && <strong>Error: {JSON.stringify(error)}</strong>}
-        {loading && <img src={`/img/loader.svg`} />}
-        {value && studioData && (
-          // <Row> <ImagesCarousel images={makeImagesArray()} /></Row>
+        <br />
+        {/* {error && <strong>Error: {JSON.stringify(error)}</strong>} */}
+        {loading ? (
+          <img src={`/img/loader.svg`} />
+        ) : (
           <Row>
-            <ImagesCarousel
-              images={studioData.images}
-              artist={studioData.artist}
-            />
+            {images.length && (
+              <ImagesCarousel images={images} artist={studioData.artist} />
+            )}
             <Col xs={12} md={6}>
               <br />
 
-              <h2 className={styles.maintitle}>{studioData.artist}</h2>
-
+              {studioData.artist && (
+                <h2 className={styles.maintitle}>{studioData.artist}</h2>
+              )}
               <br />
               {studioData.textLong &&
                 makeParagraphs(studioData.textLong, paragraphSeperator)}
@@ -143,10 +151,10 @@ const Studio = () => {
                       <li>A gift is almost always a nice touch</li>
                     </ul>
                     {/* <EmailForm
-                openVisitDates={dates.split(",")}
-                artistEmail={email}
-                artistName={artist}
-              />  */}
+                      openVisitDates={dates.split(",")}
+                      artistEmail={email}
+                      artistName={artist}
+                    />  */}
                   </>
                 )}
               </Row>
@@ -157,7 +165,7 @@ const Studio = () => {
     </Grid>
   );
 };
-Studio.propTypes = {};
+// Studio.propTypes = {};
 
 // export const getServerSideProps = async ({ query }) => {
 //   const content = {}

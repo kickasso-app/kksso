@@ -40,7 +40,7 @@ const ImagesCarousel = ({ images, artist }) => {
     original: `/img/${artist}/${img.filename}`,
     description: img.caption,
   }));
-  console.log(items);
+  // console.log(items);
   return <ImageGallery items={items} {...carouselConfig} />;
 };
 
