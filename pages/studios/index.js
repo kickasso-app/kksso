@@ -43,15 +43,12 @@ const Studios = () => {
       <section>
         <Row id={styles.studio}>
           <Col xs={12} md={12}>
-            <br />
             {error && <strong>Error: {JSON.stringify(error)}</strong>}
             {loading ? (
               <img src={`/img/loader.svg`} />
             ) : (
               <StudiosFilter studiosDB={studiosDB} />
             )}
-            <br />
-            <br />
           </Col>
         </Row>
       </section>

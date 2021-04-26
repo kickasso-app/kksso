@@ -8,12 +8,20 @@ import { Box, Text, TextInput } from "grommet";
 
 import { cities, mediums } from "../../config/filters";
 
-export const SearchBar = () => {
+export const SearchBar = ({
+  isActive = true,
+  filters: { selectedCity, selectedMediums } = {
+    selectedCity: "",
+    selectedMediums: "",
+  },
+  onUpdate = () => {},
+}) => {
+  const [isSearchBarActive, setIsSearchBarActive] = useState(isActive);
   const [suggestionOpen, setSuggestionOpen] = useState(false);
   const [suggestionsType, setSuggestionsType] = useState("cities");
 
-  const [city, setCity] = useState("");
-  const [medium, setMedium] = useState("");
+  const [city, setCity] = useState(selectedCity);
+  const [medium, setMedium] = useState(selectedMediums);
   //   const [times, setTimes] = useState(visitTimes[0]);
 
   const [suggestedCities, setSuggestedCities] = useState(cities);
@@ -79,7 +87,7 @@ export const SearchBar = () => {
     () =>
       suggestedCities.map((city) => (
         <Col md={2} align="start">
-          <Text color="#4b4b4b">
+          <Text color="#4b4b4b" onClick={() => setCity(city)}>
             <Disc size={20} strokeWidth="1.5" color="#4b4b4b" fill="#fff" />
             {"  "}
             {city}
@@ -93,7 +101,7 @@ export const SearchBar = () => {
     () =>
       suggestedMediums.map((medium) => (
         <Col md={2} align="start">
-          <Text>
+          <Text onClick={() => setMedium(medium)}>
             <Hash size={18} strokeWidth="1" color="#4b4b4b" fill="#fff" />
             {"  "}
             {medium}
@@ -128,7 +136,7 @@ export const SearchBar = () => {
   return (
     <Box>
       <Box
-        width="xlarge"
+        width={isSearchBarActive ? "xlarge" : "large"}
         pad="small"
         border={{
           color: "#222222",
@@ -137,6 +145,8 @@ export const SearchBar = () => {
           side: "all",
         }}
         round="large"
+        // onClick={() => setIsSearchBarActive(true)}
+        onFocus={() => setIsSearchBarActive(true)}
       >
         <Grid fluid>
           <Row between="xs">
@@ -167,8 +177,14 @@ export const SearchBar = () => {
                 onChange: onChangeTimes,
               })}
             </Col> */}
-            <Col md={1}>
-              <Row end="xs">
+            <Col md={2}>
+              <Row
+                end="xs"
+                onClick={() => {
+                  onUpdate({ city, medium });
+                  setSuggestionOpen(false);
+                }}
+              >
                 <Link href={"/studios"}>
                   <Box
                     width="48px"
