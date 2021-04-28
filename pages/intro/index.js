@@ -10,6 +10,7 @@ import styles from "./index.module.scss";
 
 import { Box, Heading, Text } from "grommet";
 import SearchBar from "./../../components/SearchBar";
+import Button from "./../../components/Button";
 
 const Intro = () => {
   const margin = "medium";
@@ -109,9 +110,9 @@ const Intro = () => {
                 pad={{ vertical: "small" }}
                 margin={{ vertical: "xlarge" }}
               >
-                <button className="button">
+                <Button btnStyle="outline">
                   <Link href="/studios">Explore Artists</Link>
-                </button>
+                </Button>
 
                 <Text size="medium" margin="medium">
                   Discover artists by location or medium and plan a visit to
@@ -129,9 +130,9 @@ const Intro = () => {
                 pad={{ vertical: "small" }}
                 margin={{ vertical: "xlarge" }}
               >
-                <button className="button">
+                <Button btnStyle="outline">
                   <Link href="/join">Add Your Space</Link>
-                </button>
+                </Button>
                 <Text size="medium" margin="medium">
                   Have a studio or a space where you are creative and want to
                   share your finished work?

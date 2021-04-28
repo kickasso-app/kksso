@@ -13,7 +13,7 @@ import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import { Box, Heading, Text, Button } from "grommet";
 import { ChevronLeft, Disc } from "react-feather";
 
-// import EmailForm from "Components/EmailForm";
+import VisitForm from "../../components/forms/VisitForm";
 import ImagesCarousel from "../../components/ImagesCarousel";
 import styles from "./index.module.scss";
 
@@ -135,38 +135,33 @@ const Studio = () => {
                 makeParagraphs(studio.textStudio, paragraphSeperator)}
             </Col>
             <Col xs={12} md={5} mdOffset={1}>
-              <Row>
-                {studio.dates && (
-                  <>
-                    {studio.rules && studio.rules.length > 0 && (
-                      <>
-                        <h3 className={styles.sectiontitle}>
-                          {studio.artist.split(" ")[0]}'s Visit Rules
-                        </h3>
-                        <br />
-                        <ul className={styles.rules}>
-                          {studio.rules.split(";").map((rule, index) => (
-                            <li key={index}>{rule}</li>
-                          ))}
-                        </ul>
-                      </>
-                    )}
-                    <h3 className={styles.sectiontitle}>General Visit Tips</h3>
-                    <ul className={styles.rules}>
-                      <li>Show up on time</li>
-                      <li>
-                        Ask before taking photos of the artist and artworks
-                      </li>
-                      <li>A gift is almost always a nice touch</li>
-                    </ul>
-                    {/* <EmailForm
-                      openVisitDates={dates.split(",")}
-                      artistEmail={email}
-                      artistName={artist}
-                    />  */}
-                  </>
-                )}
-              </Row>
+              {studio.openDates && (
+                <>
+                  {studio.visitRules && studio.visitRules.length > 0 && (
+                    <>
+                      <h3 className={styles.sectiontitle}>
+                        {studio.artist.split(" ")[0]}'s Visit Rules
+                      </h3>
+                      <ul className={styles.rules}>
+                        {studio.visitRules.split(";").map((rule, index) => (
+                          <li key={index}>{rule}</li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+                  <h3 className={styles.sectiontitle}>General Visit Tips</h3>
+                  <ul className={styles.rules}>
+                    <li>Show up on time</li>
+                    <li>Ask before taking photos of the artist and artworks</li>
+                    <li>A gift is almost always a nice touch</li>
+                  </ul>
+                  <VisitForm
+                    openVisitDates={studio.openDates.split(",")}
+                    artistEmail={studio.email}
+                    artistName={studio.artist}
+                  />
+                </>
+              )}
             </Col>
           </Row>
         )}

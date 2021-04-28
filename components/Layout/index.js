@@ -9,10 +9,10 @@ const Layout = (props) => {
   return (
     <div className="layout">
       <Head>
-        <title>Kickasso</title>
+        <title>kksso</title>
         <meta
           name="description"
-          content="Kickasso is a web platform to connect artists, art lovers, and collectors in the studio"
+          content="kksso is a web platform to connect artists, art lovers, and collectors in the studio"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta charSet="utf-8" />

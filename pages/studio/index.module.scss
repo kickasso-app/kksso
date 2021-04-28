@@ -51,7 +51,8 @@ svg.icon {
 ul.rules {
   width: 100%;
   padding-left: 0.5rem;
-  list-style: inside none;
+  list-style: outside circle;
+  margin-left: 0.75rem;
 }
 
 @media only screen and (min-width: 400px) {
