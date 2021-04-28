@@ -10,11 +10,6 @@ import StudioCard from "../StudioCard";
 import filterStudios from "./filterStudios";
 import styles from "./index.module.scss";
 
-import { cities, mediums } from "../../config/filters";
-
-const dayButtons = ["All", "In A Week", "In A Month", "Later"];
-const dayValues = ["All", "week", "month", "later"];
-
 const StudiosFilter = ({ studiosDB: studios }) => {
   const [visibleStudios, setVisibleStudios] = useState(studios);
 

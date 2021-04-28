@@ -11,7 +11,7 @@ import { Disc, Hash } from "react-feather";
 import styles from "./index.module.scss";
 
 const StudioCard = ({
-  studio: { id, artist, city, styles: artStyles, dates, textMini },
+  studio: { id, artist, city, styles: artStyles, openDates, textMini },
 }) => {
   const router = useRouter();
 
@@ -28,6 +28,10 @@ const StudioCard = ({
   const [hoveredImg, setHoveredImg] = useState(false);
 
   const teaserSrc = `/img/${artist}/${hoverImg}.jpg`;
+
+  const nextVisit = openDates
+    ? moment(openDates.split(",")[0], "DD/MM/YYYY hh:mm").format("D MMM")
+    : false;
 
   function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -77,18 +81,15 @@ const StudioCard = ({
           className={styles.Icon}
           size={18}
           strokeWidth="2"
-          color="#4b4b4b"
+          color="#FFC0CB"
           fill="#fff"
-        />{" "}
-        {city}
+        />
+        {city.split(",")[0]}
       </h4>
 
-      {dates && (
+      {openDates && (
         <h4 className={styles.secondary}>
-          Next Visit{" "}
-          <strong>
-            {moment(dates[0].toDate(), "DD/MM/YYYY hh:mm").format("D MMM")}
-          </strong>
+          Next Visit <strong>{nextVisit}</strong>
         </h4>
       )}
 
@@ -110,15 +111,15 @@ const StudioCard = ({
   );
 };
 
-StudioCard.propTypes = {
-  studio: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    artist: PropTypes.string.isRequired,
-    dates: PropTypes.array.isRequired,
-    city: PropTypes.string.isRequired,
-    styles: PropTypes.string.isRequired,
-    textMini: PropTypes.string.isRequired,
-  }).isRequired,
-};
+// StudioCard.propTypes = {
+//   studio: PropTypes.shape({
+//     id: PropTypes.string.isRequired,
+//     artist: PropTypes.string.isRequired,
+//     openDates: PropTypes.array.isRequired,
+//     city: PropTypes.string.isRequired,
+//     mediums: PropTypes.string.isRequired,
+//     textMini: PropTypes.string.isRequired,
+//   }).isRequired,
+// };
 
 export default StudioCard;

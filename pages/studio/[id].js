@@ -1,8 +1,5 @@
-import { useContext, useState, useEffect } from "react";
-
-import { useSupabase } from "use-supabase";
-import { supabase } from "../../services/supabase";
-// import PropTypes from "prop-types";
+import { useState, useEffect, useContext } from "react";
+import { StudiosContext } from "../../services/studios";
 
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -21,11 +18,9 @@ const Studio = () => {
   const router = useRouter();
   const { id } = router.query;
 
-  const { auth, from } = useSupabase();
+  const { studios, fetchStudios, loading, error } = useContext(StudiosContext);
 
   const [studio, setStudio] = useState();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState();
   const [images, setImages] = useState([]);
 
   const prepImagesforCarousel = (files, captions) => {
@@ -40,28 +35,29 @@ const Studio = () => {
     return imgs;
   };
 
-  const fetchStudio = async () => {
-    // TO DO: grab from local store
-    let { data: oneStudio, error } = await supabase
-      .from("studios")
-      .select("*")
-      .match({ id })
-      .single();
-    if (error) setError(error);
-    else {
-      setStudio(oneStudio);
-      setImages(
-        prepImagesforCarousel(oneStudio.imagesFiles, oneStudio.imagesCaptions)
-      );
-      setLoading(false);
+  useEffect(() => {
+    if (!studios.length) {
+      fetchStudios();
     }
-  };
+  }, []);
 
   useEffect(() => {
-    if (!studio) {
-      fetchStudio();
+    if (studios.length && id && !studio) {
+      // const match = studios.filter((s) => {
+      //   return s.id === id;
+      // });
+      // To DO: WTH
+      // somehow filter is not working here !!!
+      const matchStudio = studios[id - 1];
+      setStudio(matchStudio);
+      setImages(
+        prepImagesforCarousel(
+          matchStudio.imagesFiles,
+          matchStudio.imagesCaptions
+        )
+      );
     }
-  }, [id]);
+  }, [loading, studios, id]);
 
   const paragraphSeperator = "\\";
 
@@ -96,7 +92,7 @@ const Studio = () => {
         {error && error.code !== "22P02" && (
           <strong>Error: {JSON.stringify(error)}</strong>
         )}
-        {loading ? (
+        {loading || !studio ? (
           <Box align="center" pad="large">
             <img src={`/img/loader.svg`} />
           </Box>
@@ -135,31 +131,38 @@ const Studio = () => {
                 makeParagraphs(studio.textStudio, paragraphSeperator)}
             </Col>
             <Col xs={12} md={5} mdOffset={1}>
-              {studio.openDates && (
+              {studio.visitRules && studio.visitRules.length > 0 && (
                 <>
-                  {studio.visitRules && studio.visitRules.length > 0 && (
-                    <>
-                      <h3 className={styles.sectiontitle}>
-                        {studio.artist.split(" ")[0]}'s Visit Rules
-                      </h3>
-                      <ul className={styles.rules}>
-                        {studio.visitRules.split(";").map((rule, index) => (
-                          <li key={index}>{rule}</li>
-                        ))}
-                      </ul>
-                    </>
-                  )}
-                  <h3 className={styles.sectiontitle}>General Visit Tips</h3>
+                  <h3 className={styles.sectiontitle}>
+                    {studio.artist.split(" ")[0]}'s Visit Rules
+                  </h3>
                   <ul className={styles.rules}>
-                    <li>Show up on time</li>
-                    <li>Ask before taking photos of the artist and artworks</li>
-                    <li>A gift is almost always a nice touch</li>
+                    {studio.visitRules.split(";").map((rule, index) => (
+                      <li key={index}>{rule}</li>
+                    ))}
                   </ul>
-                  <VisitForm
-                    openVisitDates={studio.openDates.split(",")}
-                    artistEmail={studio.email}
-                    artistName={studio.artist}
-                  />
+                </>
+              )}
+              <h3 className={styles.sectiontitle}>General Visit Tips</h3>
+              <ul className={styles.rules}>
+                <li>Show up on time</li>
+                <li>Ask before taking photos of the artist and artworks</li>
+                <li>A gift is almost always a nice touch</li>
+              </ul>
+              {studio.openDates ? (
+                <VisitForm
+                  openVisitDates={studio.openDates.split(",")}
+                  artistEmail={studio.email}
+                  artistName={studio.artist}
+                />
+              ) : (
+                <>
+                  <h3 className={styles.sectiontitle}>
+                    The artist has no upcoming visit dates right now
+                  </h3>
+                  <h4 className={styles.subsectiontitle}>
+                    Please check back again later
+                  </h4>
                 </>
               )}
             </Col>
@@ -169,32 +172,5 @@ const Studio = () => {
     </Grid>
   );
 };
-// Studio.propTypes = {};
-
-// export const getServerSideProps = async ({ query }) => {
-//   const content = {}
-
-//   const [value, loading, error] = useDocument(
-//     firebase.firestore().doc('hooks/nBShXiRGFAhuiPfBaGpt'),
-//     {
-//       snapshotListenOptions: { includeMetadataChanges: true },
-//     }
-//   );
-
-//   await fire.firestore()
-//     .collection('blog')
-//     .doc(query.id)
-//     .get()
-//     .then(result => {
-//       content['title'] = result.data().title;
-//       content['content'] = result.data().content;
-//     });
-// return {
-//     props: {
-//       title: content.title,
-//       content: content.content,
-//     }
-//   }
-// }
 
 export default Studio;

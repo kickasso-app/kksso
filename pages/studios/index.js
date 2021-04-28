@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
-import { useSupabase } from "use-supabase";
-import { supabase } from "../../services/supabase";
+import { useEffect, useContext } from "react";
+import { StudiosContext } from "../../services/studios";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import Link from "next/link";
@@ -10,33 +9,13 @@ import styles from "./index.module.scss";
 import StudiosFilter from "../../components/StudiosFilter/index.js";
 
 const Studios = () => {
-  const margin = "medium";
-  const sectionMargin = { vertical: "12rem" };
-
-  const { auth, from } = useSupabase();
-
-  const [studiosDB, setStudiosDB] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState();
-
-  const fetchStudios = async () => {
-    let { data: supaStudios, error } = await supabase
-      .from("studios")
-      .select("*")
-      .order("id", true);
-    if (error) setError(error);
-    else {
-      setStudiosDB(supaStudios);
-      console.log(supaStudios);
-      setLoading(false);
-    }
-  };
+  const { studios, fetchStudios, loading, error } = useContext(StudiosContext);
 
   useEffect(() => {
-    if (!studiosDB.length) {
+    if (!studios.length) {
       fetchStudios();
     }
-  }, [studiosDB]);
+  }, [studios]);
 
   return (
     <Grid fluid align="center">
@@ -47,7 +26,7 @@ const Studios = () => {
             {loading ? (
               <img src={`/img/loader.svg`} />
             ) : (
-              <StudiosFilter studiosDB={studiosDB} />
+              <StudiosFilter studiosDB={studios} />
             )}
           </Col>
         </Row>
