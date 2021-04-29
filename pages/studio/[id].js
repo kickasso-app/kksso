@@ -8,7 +8,7 @@ import Link from "next/link";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import { Box, Heading, Text, Button } from "grommet";
-import { ChevronLeft, Disc } from "react-feather";
+import { ChevronLeft, Disc, Instagram, Globe } from "react-feather";
 
 import VisitForm from "../../components/forms/VisitForm";
 import ImagesCarousel from "../../components/ImagesCarousel";
@@ -129,6 +129,36 @@ const Studio = () => {
 
               {studio.textStudio &&
                 makeParagraphs(studio.textStudio, paragraphSeperator)}
+
+              {studio.links && (
+                <>
+                  <h3 className={styles.sectiontitle}>Links</h3>
+                  <br />
+                  {studio.links.split(",").map((link) => {
+                    return (
+                      <Link href={link.trim()}>
+                        {link.includes("instagram") ? (
+                          <Instagram
+                            className={styles.icon}
+                            size={28}
+                            strokeWidth="1"
+                            color="#4B4B4B"
+                            fill="#FFF"
+                          />
+                        ) : (
+                          <Globe
+                            className={styles.icon}
+                            size={28}
+                            strokeWidth="1"
+                            color="#4B4B4B"
+                            fill="#FFF"
+                          />
+                        )}
+                      </Link>
+                    );
+                  })}
+                </>
+              )}
             </Col>
             <Col xs={12} md={5} mdOffset={1}>
               {studio.visitRules && studio.visitRules.length > 0 && (
