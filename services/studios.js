@@ -1,15 +1,22 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState } from "react";
 import { supabase } from "./supabase";
 
 const StudiosContext = createContext(null);
+
+const emptyQuery = { city: "", mediums: "" };
 
 const StudiosProvider = ({ children }) => {
   const [studios, setStudios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
+  const [query, setQuery] = useState(emptyQuery);
 
   const updateStudios = (newStudios) => {
     setStudios(newStudios);
+  };
+
+  const updateQuery = (newQuery) => {
+    setQuery(newQuery);
   };
 
   const fetchStudios = async () => {
@@ -44,7 +51,15 @@ const StudiosProvider = ({ children }) => {
   };
   } */
 
-  const contextObj = { studios, fetchStudios, loading, error, updateStudios };
+  const contextObj = {
+    studios,
+    query,
+    updateStudios,
+    updateQuery,
+    fetchStudios,
+    loading,
+    error,
+  };
 
   return (
     <StudiosContext.Provider value={contextObj}>

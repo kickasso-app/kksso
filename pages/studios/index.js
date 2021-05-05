@@ -9,7 +9,9 @@ import styles from "./index.module.scss";
 import StudiosFilter from "../../components/StudiosFilter/index.js";
 
 const Studios = () => {
-  const { studios, fetchStudios, loading, error } = useContext(StudiosContext);
+  const { studios, fetchStudios, query, loading, error } = useContext(
+    StudiosContext
+  );
 
   useEffect(() => {
     if (!studios.length) {
@@ -26,7 +28,7 @@ const Studios = () => {
             {loading ? (
               <img src={`/img/loader.svg`} />
             ) : (
-              <StudiosFilter studiosDB={studios} />
+              <StudiosFilter studios={studios} query={query} />
             )}
           </Col>
         </Row>

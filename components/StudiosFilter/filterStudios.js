@@ -5,35 +5,35 @@ const nextWeek = moment().add(7, "days");
 const nextMonth = moment().add(1, "months");
 const nextYear = moment().add(1, "years");
 
-const filterStudios = ({ studios, filters: { day, medium, city } }) => {
+const filterStudios = ({ studios, query: { day, mediums, city } }) => {
   let filtered = studios;
   // sessionStorage.setItem("filters", JSON.stringify(filters));
 
-  if (day !== false && day !== "All") {
+  // if (day !== false && day !== "All") {
+  //   filtered = filtered.filter((studio) => {
+  //     const datesArray = studio.dates.map((d) => d.toDate());
+  //     const dates = datesArray.map((d) => moment(d, "DD/MM/YYYY hh:mm"));
+
+  //     const isNextWeek = dates.some((d) => d.isBetween(today, nextWeek));
+  //     const isNextMonth = dates.some((d) => d.isBetween(today, nextMonth));
+  //     const isLater = dates.some((d) => d.isBetween(nextMonth, nextYear));
+
+  //     let result = isNextWeek ? "week " : "";
+  //     result += isNextMonth ? "month " : "";
+  //     result += isLater ? "later" : "";
+
+  //     return result.includes(day);
+  //   });
+  // }
+
+  if (mediums && mediums !== false && mediums !== "All") {
     filtered = filtered.filter((studio) => {
-      const datesArray = studio.dates.map((d) => d.toDate());
-      const dates = datesArray.map((d) => moment(d, "DD/MM/YYYY hh:mm"));
-
-      const isNextWeek = dates.some((d) => d.isBetween(today, nextWeek));
-      const isNextMonth = dates.some((d) => d.isBetween(today, nextMonth));
-      const isLater = dates.some((d) => d.isBetween(nextMonth, nextYear));
-
-      let result = isNextWeek ? "week " : "";
-      result += isNextMonth ? "month " : "";
-      result += isLater ? "later" : "";
-
-      return result.includes(day);
-    });
-  }
-
-  if (medium !== false && medium !== "All") {
-    filtered = filtered.filter((studio) => {
-      const style = medium.toLowerCase();
+      const style = mediums.toLowerCase();
       return studio.styles.includes(style);
     });
   }
 
-  if (city !== false && city !== "All") {
+  if (city && city !== false && city !== "All") {
     filtered = filtered.filter((studio) => {
       return studio.city.includes(city);
     });

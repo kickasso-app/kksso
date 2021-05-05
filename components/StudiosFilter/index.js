@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Box, Text } from "grommet";
 
-import { X } from "react-feather";
+import { Box, Text } from "grommet";
 import Masonry from "react-masonry-css";
 
 import SearchBar from "./../../components/SearchBar";
@@ -10,36 +9,20 @@ import StudioCard from "../StudioCard";
 import filterStudios from "./filterStudios";
 import styles from "./index.module.scss";
 
-const StudiosFilter = ({ studiosDB: studios }) => {
+const StudiosFilter = ({ studios, query }) => {
   const [visibleStudios, setVisibleStudios] = useState(studios);
 
   useEffect(() => {
-    if (studios) {
-      // TO DO: fetch filters from local store
-      const filters = { day: "All", medium: "All", city: "Berlin" };
-      const filteredStudios = filterStudios({ studios, filters });
+    if (studios && query) {
+      const filteredStudios = filterStudios({ studios, query });
       setVisibleStudios(filteredStudios);
     }
-  }, [studios]);
-
-  const applyFilters = ({ city: selectedCity, medium: selectedMedium }) => {
-    const filters = {
-      day: "All",
-      medium: selectedMedium || "All",
-      city: selectedCity || "All",
-    };
-    const filteredStudios = filterStudios({ studios, filters });
-    setVisibleStudios(filteredStudios);
-  };
+  }, [studios, query]);
 
   return (
     <div className={styles.studios}>
       <Box margin={"medium"}>
-        <SearchBar
-          isActive={false}
-          filters={{ selectedCity: "Berlin" }}
-          onUpdate={applyFilters}
-        />
+        <SearchBar isActive={false} />
       </Box>
       <Box margin={{ vertical: "large" }}>
         {visibleStudios.length ? (
@@ -66,7 +49,7 @@ const StudiosFilter = ({ studiosDB: studios }) => {
 };
 
 StudiosFilter.propTypes = {
-  studiosDB: PropTypes.array.isRequired,
+  studios: PropTypes.array.isRequired,
 };
 
 export default StudiosFilter;

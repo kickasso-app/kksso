@@ -1,5 +1,12 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
-import Link from "next/link";
+import React, {
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  useContext,
+} from "react";
+import { StudiosContext } from "../../services/studios";
+import { useRouter } from "next/router";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 
@@ -8,25 +15,24 @@ import { Box, Text, TextInput } from "grommet";
 
 import { cities, mediums } from "../../config/filters";
 
-export const SearchBar = ({
-  isActive = true,
-  filters: { selectedCity, selectedMediums } = {
-    selectedCity: "",
-    selectedMediums: "",
-  },
-  onUpdate = () => {},
-}) => {
+export const SearchBar = ({ isActive = true }) => {
+  const {
+    query: { city: queryCity, mediums: queryMedium },
+    updateQuery,
+  } = useContext(StudiosContext);
+
+  const router = useRouter();
+
   const [isSearchBarActive, setIsSearchBarActive] = useState(isActive);
   const [suggestionOpen, setSuggestionOpen] = useState(false);
   const [suggestionsType, setSuggestionsType] = useState("cities");
 
-  const [city, setCity] = useState(selectedCity);
-  const [medium, setMedium] = useState(selectedMediums);
+  const [city, setCity] = useState(queryCity);
+  const [medium, setMedium] = useState(queryMedium);
   //   const [times, setTimes] = useState(visitTimes[0]);
 
   const [suggestedCities, setSuggestedCities] = useState(cities);
   const [suggestedMediums, setSuggestedMediums] = useState(mediums);
-  //   const [selectedMediums, setSelectedMediums] = useState(Set());
 
   const boxRef = useRef();
 
@@ -75,14 +81,6 @@ export const SearchBar = ({
     }
   }, []);
 
-  //   const onSuggestionSelect = useCallback(
-  //     (event) => setValue(event.suggestion.value),
-  //     []
-  //   );
-
-  //   const onSuggestionsOpen = useCallback(() => setSuggestionOpen(true), []);
-  //   const onSuggestionsClose = useCallback(() => setSuggestionOpen(false), []);
-
   const renderCities = useMemo(
     () =>
       suggestedCities.map((city) => (
@@ -99,12 +97,20 @@ export const SearchBar = ({
 
   const renderMediums = useMemo(
     () =>
-      suggestedMediums.map((medium) => (
+      suggestedMediums.map((suggestedMedium) => (
         <Col md={2} align="start">
-          <Text onClick={() => setMedium(medium)}>
+          <Text
+            onClick={() => {
+              // TO DO: add more tan one medium
+              // if (!medium.includes(suggestedMedium)) {
+              //   setMedium(medium + " " + suggestedMedium);
+              // }
+              setMedium(suggestedMedium);
+            }}
+          >
             <Hash size={18} strokeWidth="1" color="#4b4b4b" fill="#fff" />
             {"  "}
-            {medium}
+            {suggestedMedium}
           </Text>
         </Col>
       )),
@@ -181,22 +187,24 @@ export const SearchBar = ({
               <Row
                 end="xs"
                 onClick={() => {
-                  onUpdate({ city, medium });
+                  updateQuery({ city: city, mediums: medium });
                   setSuggestionOpen(false);
+                  if (!router.pathname.includes("studios")) {
+                    router.push("/studios");
+                  }
                 }}
               >
-                <Link href={"/studios"}>
-                  <Box
-                    width="48px"
-                    align="center"
-                    pad="small"
-                    background="#FFC0CB"
-                    round="medium"
-                    margin="small"
-                  >
-                    <Search size={24} color="#222222" strokeWidth={1.5} />
+                <Box
+                  width="48px"
+                  align="center"
+                  pad="small"
+                  background="#FFC0CB"
+                  round="medium"
+                  margin="small"
+                >
+                  <Search size={24} color="#222222" strokeWidth={1.5} />
 
-                    {/* 
+                  {/* 
                   {value.length === 0 ? (
                     <Search size={24} color="#222222" strokeWidth={1.5} />
                   ) : (
@@ -206,8 +214,7 @@ export const SearchBar = ({
                       }}
                     />
                   )} */}
-                  </Box>
-                </Link>
+                </Box>
               </Row>
             </Col>
           </Row>
