@@ -39,10 +39,8 @@ export const SearchBar = ({ isActive = true }) => {
   const onChangeMedium = useCallback((event) => {
     const { value: query } = event.target;
     setMedium(query);
-    setSuggestionsType("mediums");
     if (!query.trim()) {
       setSuggestedMediums(mediums);
-      //   setSuggestionOpen(false);
     } else {
       // simulate an async call to the backend
       setTimeout(
@@ -54,18 +52,15 @@ export const SearchBar = ({ isActive = true }) => {
           ),
         300
       );
-      setSuggestionOpen(true);
     }
   }, []);
 
   const onChangeCity = useCallback((event) => {
     const { value: query } = event.target;
     setCity(query);
-    setSuggestionsType("cities");
 
     if (!query.trim()) {
       setSuggestedCities(cities);
-      //   setSuggestionOpen(false);
     } else {
       // simulate an async call to the backend
       setTimeout(
@@ -77,7 +72,6 @@ export const SearchBar = ({ isActive = true }) => {
           ),
         300
       );
-      setSuggestionOpen(true);
     }
   }, []);
 
@@ -121,11 +115,19 @@ export const SearchBar = ({ isActive = true }) => {
     boxRef,
     title,
     placeholder,
+    searchType,
     value,
     onChange,
   }) => {
     return (
-      <Box ref={boxRef} align="start">
+      <Box
+        ref={boxRef}
+        align="start"
+        onFocus={() => {
+          setSuggestionsType(searchType);
+          setSuggestionOpen(true);
+        }}
+      >
         {title && (
           <Text margin={{ left: "small", top: "xsmall" }}>{title}</Text>
         )}
@@ -151,7 +153,6 @@ export const SearchBar = ({ isActive = true }) => {
           side: "all",
         }}
         round="large"
-        // onClick={() => setIsSearchBarActive(true)}
         onFocus={() => setIsSearchBarActive(true)}
       >
         <Grid fluid>
@@ -161,6 +162,7 @@ export const SearchBar = ({ isActive = true }) => {
                 // boxRef: boxRef,
                 title: "Location",
                 placeholder: "Where to visit?",
+                searchType: "cities",
                 value: city,
                 onChange: onChangeCity,
               })}
@@ -170,6 +172,7 @@ export const SearchBar = ({ isActive = true }) => {
                 // boxRef: boxRef,
                 title: "Medium",
                 placeholder: "Which styles to explore?",
+                searchType: "mediums",
                 value: medium,
                 onChange: onChangeMedium,
               })}
