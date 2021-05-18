@@ -20,15 +20,15 @@ import {
 
 import Button from "./../../Button";
 
-const SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID;
-const TEMPLATE_ID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
-const USER_ID = process.env.REACT_APP_EMAILJS_USER_ID;
+const SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+const TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
+const USER_ID = process.env.NEXT_PUBLIC_EMAILJS_USER_ID;
 
 const VisitForm = ({ artistEmail, artistName, openVisitDates }) => {
   const [values, setValues] = useState({
     to_email: artistEmail,
     to_name: artistName,
-    requestor_email: "Requestor email",
+    requestor_email: "kickasso@gmail.com",
     from_name: "Requestor Name",
     message: "Hello There Message",
     request_date: "Tomorrow 2pm",
@@ -64,6 +64,10 @@ const VisitForm = ({ artistEmail, artistName, openVisitDates }) => {
       setIsEmailSent(true);
     }
   };
+
+  console.log(artistEmail);
+  console.log(values);
+  console.log(USER_ID);
 
   return (
     <Box align="center" justify="center">

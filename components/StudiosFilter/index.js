@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 
 import { Box, Text } from "grommet";
 import Masonry from "react-masonry-css";
@@ -46,10 +46,6 @@ const StudiosFilter = ({ studios, query }) => {
       </Box>
     </div>
   );
-};
-
-StudiosFilter.propTypes = {
-  studios: PropTypes.array.isRequired,
 };
 
 export default StudiosFilter;

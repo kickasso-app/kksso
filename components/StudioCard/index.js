@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 
 import { useRouter } from "next/router";
 import Link from "next/link";

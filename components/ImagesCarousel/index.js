@@ -1,6 +1,4 @@
 import ImageGallery from "react-image-gallery";
-import { useState, useEffect, useRef } from "react";
-import PropTypes from "prop-types";
 
 const carouselConfig = {
   showIndex: false,

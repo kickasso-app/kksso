@@ -5,17 +5,17 @@ import { Box } from "grommet";
 
 import NavButton from "./NavButton";
 
-import styles from "./index.module.scss";
+// import styles from "./index.module.scss";
 
 const Header = ({ navButtons }) => {
   return (
     <Grid fluid>
       <Col xs={12}>
         <Box margin={{ bottom: "0.5rem", top: "0.625rem" }}>
-          <Row start="md" center="xs">
+          <Row center="xs" start="md">
             <Col xs={12} md={2}>
               <Link href="/">
-                <img src={`/img/header-logo-sm.png`} alt="Kickasso" />
+                <img src={`/img/header-logo-sm.png`} alt="kksso" />
               </Link>
             </Col>
             <Col xs={12} md={10}>
