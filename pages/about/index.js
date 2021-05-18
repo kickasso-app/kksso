@@ -6,20 +6,15 @@ import styles from "./index.module.scss";
 
 const About = () => {
   return (
-    // <Layout>
     <section className={styles.about}>
       <Grid fluid>
         <Row>
           <Col xs={12} md={10} mdOffset={1}>
-            {/* <h2>
-              Our Story / ?
-              <br />
-            </h2>*/}
-
             <h2>What</h2>
             <h3>
               A web platform to connect artists, art lovers, and collectors
             </h3>
+
             <p>
               We want to enable the art world to use studios as complementary to
               the standard public art spaces.
@@ -46,13 +41,13 @@ const About = () => {
               situation and the low changes of visibility for a lot of artists.
             </p>
 
-            <h3>Kickasso is free and open</h3>
+            <h3>kksso is free and open</h3>
 
             <p>
               Our platform is free to join for all.
               <br />
-              Kickasso is open to all artists. Establihed and upcoming artists
-              are welcome to add their space.
+              kksso is open to all artists. Established and upcoming artists are
+              welcome to add their space.
             </p>
 
             <h3>Art at a distance</h3>
@@ -83,12 +78,13 @@ const About = () => {
             </p>
 
             <p>
-              Kickasso makes it easier for artists to show their work and make
-              new connections in the way they prefer and in the place where they
+              kksso makes it easier for artists to show their work and make new
+              connections in the way they prefer and in the place where they
               develop the creative concepts. Where they define their art.
             </p>
 
             <h2>How</h2>
+
             <ul>
               <li>
                 Artists create their profiles and add the dates when they want
@@ -99,12 +95,10 @@ const About = () => {
                 spaces and request a visit.
               </li>
               <li>
-                {" "}
                 We notify the artist of the visit request to the artist and
                 connect her to the guest.
               </li>
               <li>
-                {" "}
                 When the artist accepts the request, the guests confirm the
                 visit details.
               </li>
@@ -117,15 +111,13 @@ const About = () => {
             </ul>
             <h2>What to Expect</h2>
             <p>
-              {" "}
-              Kickasso is now taking its first steps and we want to make sure
-              that we set clear principles right at the start so that you may
-              know what to expect from us in the long term.
+              kksso is now taking its first steps and we want to make sure that
+              we set clear principles right at the start so that you may know
+              what to expect from us in the long term.
             </p>
             <ul>
               <li> We will not spam you.</li>
               <li>
-                {" "}
                 Your data is private. We will not sell it or use it without your
                 consent.
               </li>
@@ -143,38 +135,8 @@ const About = () => {
             <p>
               contact@kksso.co
               <br />
-              {/* +49 30 279 79 442 */}
             </p>
-            {/* <h2> Interface </h2>
-            <p>
-              Artists would create a hosting profile with a description and
-              photos of their artwork and studio space. They would also include
-              the times they are available for visits as well as other details
-              like the number of guests and any specific studio rules or time
-              limits they prefer. When the studio is open for a special showing
-              or one-time performance, they may also mark the date with an event
-              tag. The location of the studio would be not public until the
-              artist approves a visit request.
-            </p>
-            <p>
-              Art lovers and collectors would use the app to search and filter
-              artists’ studios in a specific city, using a specific technique,
-              and/or offering visits during a specific period. When the artist
-              receives the request, they can review the art lover or collector’s
-              profile and when they approve the visit request, both are notified
-              and the visit details are confirmed.
-            </p>
-            <p>
-              During the visit, if the artist has some works for sale and the
-              collector is interested in buying it, the transaction can be made
-              using the app and once a photo and the artwork details are quickly
-              filled out, a contract and a certificate of authenticity is
-              automatically delivered to both. Shipping is an optional addition
-              to the contract. The artwork is then marked as sold and is
-              optionally added to the collector’s profile. After the visit, both
-              host and guest may write a review and rate the visit experience.
-              This helps artists and visitors decide on future visits.
-            </p>
+            {/* 
 
             <p class="highlighted">
               * +++++++ We do not tolerate any kind of sexism, racism and other
@@ -186,7 +148,6 @@ const About = () => {
         </Row>
       </Grid>
     </section>
-    // </Layout>
   );
 };
 export default About;
