@@ -14,13 +14,14 @@ import {
   TextInput,
   Text,
   Heading,
+  Grommet,
 } from "grommet";
 
 import Button from "./../../components/Button";
 
-const SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID;
-const TEMPLATE_ID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
-const USER_ID = process.env.REACT_APP_EMAILJS_USER_ID;
+const SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+const TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
+const USER_ID = process.env.NEXT_PUBLIC_EMAILJS_USER_ID;
 
 const Join = () => {
   const [values, setValues] = useState({
@@ -35,7 +36,7 @@ const Join = () => {
   const [isEmailSent, setIsEmailSent] = useState(false);
   const [sendEmailError, setSendEmailError] = useState(false);
   // Remove in Production
-  const [sendingRealEmail] = useState(false);
+  const sendingRealEmail = false;
 
   useEffect(() => {
     emailjs.init(USER_ID);
@@ -76,152 +77,155 @@ const Join = () => {
         <Text size="medium" margin={textMargin}>
           Add your info here and we will get back to you as soon as possible.
         </Text>
-        <Form
-          values={values}
-          onChange={(nextValue) => {
-            setValues(nextValue);
-            // console.log("Change", nextValue);
-          }}
-          onReset={() =>
-            setValues({
-              requestor_email: "Requestor email",
-              from_name: "Requestor Name",
-              message: "Hello There Message",
-            })
-          }
-          onSubmit={handleSendEmail}
-          validate="submit"
-        >
-          <FormField
-            name="from_name"
-            htmlfor="text-input-id"
-            label="Name"
-            required
-            margin={fieldMargin}
-          >
-            <TextInput id="text-input-id" name="from_name" placeholder="Name" />
-          </FormField>
-          <FormField
-            label="Email"
-            name="requestor_email"
-            required
-            validate={{
-              regexp: /\S+@\S+\.\S+/,
-              message: "Enter a valid email address",
+        <Grommet>
+          {" "}
+          <Form
+            values={values}
+            onChange={(nextValue) => {
+              setValues(nextValue);
+              // console.log("Change", nextValue);
             }}
-            margin={fieldMargin}
+            onReset={() =>
+              setValues({
+                requestor_email: "Requestor email",
+                from_name: "Requestor Name",
+                message: "Hello There Message",
+              })
+            }
+            onSubmit={handleSendEmail}
+            validate="submit"
           >
-            <MaskedInput
+            <FormField
+              name="from_name"
+              htmlfor="text-input-id"
+              label="Name"
+              required
+              margin={fieldMargin}
+            >
+              <TextInput
+                id="text-input-id"
+                name="from_name"
+                placeholder="Name"
+              />
+            </FormField>
+            <FormField
+              label="Email"
               name="requestor_email"
-              mask={[
-                { regexp: /^[\w\-_.]+$/, placeholder: "your" },
-                { fixed: "@" },
-                { regexp: /^[\w]+$/, placeholder: "email" },
-                { fixed: "." },
-                { regexp: /^[\w]+$/, placeholder: "com" },
-              ]}
-            />
-          </FormField>
-          <FormField
-            name="city"
-            htmlfor="text-input-id"
-            label="City"
-            margin={fieldMargin}
-            required
-          >
-            <TextInput id="text-input-id" name="city" placeholder="Berlin" />
-          </FormField>
+              required
+              validate={{
+                regexp: /\S+@\S+\.\S+/,
+                message: "Enter a valid email address",
+              }}
+              margin={fieldMargin}
+            >
+              <MaskedInput
+                name="requestor_email"
+                mask={[
+                  { regexp: /^[\w\-_.]+$/, placeholder: "your" },
+                  { fixed: "@" },
+                  { regexp: /^[\w]+$/, placeholder: "email" },
+                  { fixed: "." },
+                  { regexp: /^[\w]+$/, placeholder: "com" },
+                ]}
+              />
+            </FormField>
+            <FormField
+              name="city"
+              htmlfor="text-input-id"
+              label="City"
+              margin={fieldMargin}
+              required
+            >
+              <TextInput id="text-input-id" name="city" placeholder="Berlin" />
+            </FormField>
 
-          <FormField
-            name="mediums"
-            htmlfor="text-input-id"
-            label="Mediums used"
-            required
-            margin={fieldMargin}
-          >
-            <TextInput
-              id="text-input-id"
+            <FormField
               name="mediums"
-              placeholder="painting, prints, sound"
-            />
-          </FormField>
+              htmlfor="text-input-id"
+              label="Mediums used"
+              required
+              margin={fieldMargin}
+            >
+              <TextInput
+                id="text-input-id"
+                name="mediums"
+                placeholder="painting, prints, sound"
+              />
+            </FormField>
 
-          <FormField
-            name="types"
-            label="How would you use your account?"
-            margin={fieldMargin}
-          >
-            To Do: Add CheckBoxGroup
-            <br />
-            Artist, <br />
-            Art Lover, <br /> Collector
-            {/* <CheckBoxGroup
+            <FormField
               name="types"
-              valueKey="id"
-              required
-              options={[
-                { label: "Artist", id: "1" },
-                { label: "Art Lover", id: "2" },
-                { label: "Collector", id: "3" },
-              ]}
-            /> */}
-          </FormField>
+              label="How would you use your account?"
+              margin={fieldMargin}
+            >
+              <CheckBoxGroup
+                name="types"
+                valueKey="id"
+                required
+                options={[
+                  { label: "Artist", id: "1" },
+                  { label: "Art Lover", id: "2" },
+                  { label: "Collector", id: "3" },
+                ]}
+              />
+            </FormField>
 
-          <FormField label="Hello!" name="message" margin={fieldMargin}>
-            <TextArea
-              name="about"
-              placeholder="Tell us about your artwork or collection, and your space or studio (required)"
-              fill
-              required
-            />
-          </FormField>
+            <FormField label="Hello!" name="message" margin={fieldMargin}>
+              <TextArea
+                name="about"
+                placeholder="Tell us about your artwork or collection, and your space or studio (required)"
+                fill
+                required
+              />
+            </FormField>
 
-          <FormField
-            name="portfolio"
-            htmlfor="text-input-id"
-            label="Portfolio"
-            type="url"
-            margin={fieldMargin}
-          >
-            <TextInput
-              id="text-input-id"
+            <FormField
               name="portfolio"
-              placeholder="Link (optional)"
-            />
-          </FormField>
-          <br />
-          <Box direction="row" gap="medium">
-            <Button type="submit" btnStyle="filled" disabled={isEmailSent}>
-              Join
-            </Button>
+              htmlfor="text-input-id"
+              label="Portfolio"
+              type="url"
+              margin={fieldMargin}
+            >
+              <TextInput
+                id="text-input-id"
+                name="portfolio"
+                placeholder="Link (optional)"
+              />
+            </FormField>
+            <br />
+            <Box direction="row" gap="medium">
+              <Button type="submit" btnStyle="filled" disabled={isEmailSent}>
+                Join
+              </Button>
 
-            <Button type="reset" btnStyle="outline">
-              Clear
-            </Button>
-          </Box>
+              <Button type="reset" btnStyle="outline">
+                Clear
+              </Button>
+            </Box>
 
-          {isEmailSent ? (
-            <>
-              <Text>
-                <CheckCircle size={20} color="#7fffd4" strokeWidth={4} />
-                <br />
-                We just sent your request to the artist!
-                <br /> Please wait to hear back from them to confirm the visit
-                details.
-              </Text>
-            </>
-          ) : (
-            sendEmailError && (
-              <Text>
-                <XCircle size={18} color="#ff4500" strokeWidth={2} />
-                <br />
-                We couldn't send your request this time.
-                <br />
-                Please try again.
-              </Text>
-            )
-          )}
-        </Form>
+            {isEmailSent ? (
+              <>
+                <Text>
+                  <CheckCircle size={24} color="#C0FFF4" strokeWidth={3} />
+                  <br />
+                  Thanks for joining!
+                  <br /> Please check your email to confirm your account
+                  details.
+                </Text>
+              </>
+            ) : (
+              sendEmailError && (
+                <Text>
+                  <XCircle size={24} color="#FFC0CB" strokeWidth={3} />
+                  <br />
+                  We couldn't send your request this time.
+                  <br />
+                  Please try again.
+                </Text>
+              )
+            )}
+          </Form>
+        </Grommet>
       </Box>
     </Box>
   );

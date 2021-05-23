@@ -16,6 +16,7 @@ import {
   TextArea,
   TextInput,
   Text,
+  Grommet,
 } from "grommet";
 
 import Button from "./../../Button";
@@ -36,7 +37,7 @@ const VisitForm = ({ artistEmail, artistName, openVisitDates }) => {
   const [isEmailSent, setIsEmailSent] = useState(false);
   const [sendEmailError, setSendEmailError] = useState(false);
   // Remove in Production
-  const [sendingRealEmail] = useState(false);
+  const sendingRealEmail = false;
 
   useEffect(() => {
     emailjs.init(USER_ID);
@@ -65,10 +66,6 @@ const VisitForm = ({ artistEmail, artistName, openVisitDates }) => {
     }
   };
 
-  console.log(artistEmail);
-  console.log(values);
-  console.log(USER_ID);
-
   return (
     <Box align="center" justify="center">
       <Box
@@ -76,118 +73,111 @@ const VisitForm = ({ artistEmail, artistName, openVisitDates }) => {
         // pad="medium"
         margin={{ vertical: "large" }}
       >
-        <Form
-          values={values}
-          onChange={(nextValue) => {
-            setValues(nextValue);
-            // console.log("Change", nextValue);
-          }}
-          onReset={() =>
-            setValues({
-              to_email: artistEmail,
-              to_name: artistName,
-              requestor_email: "Requestor email",
-              from_name: "Requestor Name",
-              message: "Hello There Message",
-              request_date: "",
-            })
-          }
-          onSubmit={handleSendEmail}
-          validate="blur"
-        >
-          <FormField
-            name="request_date"
-            label="When to Visit?"
-            required
-            component={RadioButtonGroup}
-            options={openVisitDates.map((date) =>
-              moment(date, "DD/MM/YYYY hh:mm").format("D MMM - h:mm a")
-            )}
-          />
-
-          <FormField
-            name="from_name"
-            htmlfor="text-input-id"
-            label="Name"
-            required
-          >
-            <TextInput
-              id="text-input-id"
-              name="from_name"
-              placeholder="Your Name"
-            />
-          </FormField>
-          <FormField
-            label="Email"
-            name="requestor_email"
-            required
-            validate={{
-              regexp: /\S+@\S+\.\S+/,
-              message: "Enter a valid email address",
+        <Grommet>
+          <Form
+            id="dddd"
+            values={values}
+            onChange={(nextValue) => {
+              setValues(nextValue);
             }}
+            onReset={() =>
+              setValues({
+                to_email: artistEmail,
+                to_name: artistName,
+                requestor_email: "Requestor email",
+                from_name: "Requestor Name",
+                message: "Hello There Message",
+                request_date: "",
+              })
+            }
+            onSubmit={handleSendEmail}
+            validate="blur"
           >
-            <MaskedInput
-              name="requestor_email"
-              mask={[
-                { regexp: /^[\w\-_.]+$/, placeholder: "your" },
-                { fixed: "@" },
-                { regexp: /^[\w]+$/, placeholder: "email" },
-                { fixed: "." },
-                { regexp: /^[\w]+$/, placeholder: "com" },
-              ]}
+            <FormField
+              name="request_date"
+              label="When to Visit?"
+              required
+              component={RadioButtonGroup}
+              options={openVisitDates.map((date) =>
+                moment(date, "DD/MM/YYYY hh:mm").format("D MMM - h:mm a")
+              )}
             />
-          </FormField>
-          <FormField label="Message to artist" name="message">
-            <TextArea
-              name="message"
-              placeholder="Add a little something about you and why you want to visit the artist’s studio and what you like about their work. (optional)"
-              fill
-            />
-          </FormField>
-          <br />
-          <Box direction="row" gap="medium">
-            <Button type="submit" btnStyle="filled" disabled={isEmailSent}>
-              Request A Visit
-            </Button>
-            <Button type="reset" btnStyle="outline">
-              Clear
-            </Button>
-          </Box>
 
-          {isEmailSent ? (
-            <>
-              <Text>
-                <CheckCircle size={20} color="#7fffd4" strokeWidth={4} />
-                <br />
-                We just sent your request to the artist!
-                <br /> Please wait to hear back from them to confirm the visit
-                details.
-              </Text>
-            </>
-          ) : (
-            sendEmailError && (
-              <Text>
-                <XCircle size={18} color="#ff4500" strokeWidth={2} />
-                <br />
-                We couldn't send your request this time.
-                <br />
-                Please try again.
-              </Text>
-            )
-          )}
-        </Form>
+            <FormField
+              name="from_name"
+              htmlfor="text-input-id"
+              label="Name"
+              required
+            >
+              <TextInput
+                id="text-input-id"
+                name="from_name"
+                placeholder="Your Name"
+              />
+            </FormField>
+            <FormField
+              label="Email"
+              name="requestor_email"
+              required
+              validate={{
+                regexp: /\S+@\S+\.\S+/,
+                message: "Enter a valid email address",
+              }}
+            >
+              <MaskedInput
+                name="requestor_email"
+                mask={[
+                  { regexp: /^[\w\-_.]+$/, placeholder: "your" },
+                  { fixed: "@" },
+                  { regexp: /^[\w]+$/, placeholder: "email" },
+                  { fixed: "." },
+                  { regexp: /^[\w]+$/, placeholder: "com" },
+                ]}
+              />
+            </FormField>
+            <FormField label="Message to artist" name="message">
+              <TextArea
+                name="message"
+                placeholder="Add a little something about you and why you want to visit the artist’s studio and what you like about their work. (optional)"
+                fill
+              />
+            </FormField>
+            <br />
+            <Box direction="row" gap="medium">
+              <Button type="submit" btnStyle="filled" disabled={isEmailSent}>
+                Request A Visit
+              </Button>
+              <Button type="reset" btnStyle="outline">
+                Clear
+              </Button>
+            </Box>
+
+            {isEmailSent ? (
+              <>
+                <Text>
+                  <CheckCircle size={24} color="#C0FFF4" strokeWidth={3} />
+                  <br />
+                  We just sent your request to the artist!
+                  <br /> Please wait to hear back from them to confirm the visit
+                  details.
+                </Text>
+              </>
+            ) : (
+              sendEmailError && (
+                <Text>
+                  <XCircle size={24} color="#FFC0CB" strokeWidth={3} />
+                  <br />
+                  We couldn't send your request this time.
+                  <br />
+                  Please try again.
+                </Text>
+              )
+            )}
+          </Form>
+        </Grommet>
       </Box>
     </Box>
   );
 };
-
-// VisitForm.propTypes = {
-//   openVisitDates: PropTypes.arrayOf(PropTypes.string),
-//   artistEmail: PropTypes.string.isRequired,
-// };
-
-// VisitForm.defaultProps = {
-//   openVisitDates: ["Maui", "Kauai", "Oahu"],
-// };
 
 export default VisitForm;
