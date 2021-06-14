@@ -11,14 +11,14 @@ const navButtons = [
     label: "about",
     path: "/about",
   },
-  {
-    label: "Join",
-    path: "/join",
-  },
-  {
-    label: "Sign In/Up",
-    path: "/signin",
-  },
+  // {
+  //   label: "Join",
+  //   path: "/join",
+  // },
+  // {
+  //   label: "Sign In/Up",
+  //   path: "/signin",
+  // },
 ];
 
 export default navButtons;

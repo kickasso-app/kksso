@@ -111,9 +111,11 @@ const Intro = () => {
                 margin={{ vertical: "xlarge" }}
               >
                 <Button btnStyle="outline">
-                  <Link href="/studios">Explore Artists</Link>
+                  <Box margin={{ vertical: "1rem", horizontal: "1rem" }}>
+                    <Link href="/studios">Explore Artists</Link>
+                  </Box>
                 </Button>
-
+                <br />
                 <Text size="medium" margin="medium">
                   Discover artists by location or medium and plan a visit to
                   their studios
@@ -131,8 +133,11 @@ const Intro = () => {
                 margin={{ vertical: "xlarge" }}
               >
                 <Button btnStyle="outline">
-                  <Link href="/join">Add Your Space</Link>
+                  <Box margin={{ vertical: "1rem", horizontal: "1rem" }}>
+                    <Link href="/join">Add Your Space</Link>
+                  </Box>
                 </Button>
+                <br />
                 <Text size="medium" margin="medium">
                   Have a studio or a space where you are creative and want to
                   share your finished work?

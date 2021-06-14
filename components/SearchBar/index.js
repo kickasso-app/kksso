@@ -123,10 +123,7 @@ export const SearchBar = ({ isActive = true }) => {
       <Box
         ref={boxRef}
         align="start"
-        onFocus={() => {
-          setSuggestionsType(searchType);
-          setSuggestionOpen(true);
-        }}
+        onFocus={() => setSuggestionsType(searchType)}
       >
         {title && (
           <Text margin={{ left: "small", top: "xsmall" }}>{title}</Text>
@@ -153,7 +150,10 @@ export const SearchBar = ({ isActive = true }) => {
           side: "all",
         }}
         round="large"
-        onFocus={() => setIsSearchBarActive(true)}
+        onFocus={() => {
+          setIsSearchBarActive(true);
+          setSuggestionOpen(true);
+        }}
       >
         <Grid fluid>
           <Row between="xs">

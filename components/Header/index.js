@@ -4,6 +4,7 @@ import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import { Box } from "grommet";
 
 import NavButton from "./NavButton";
+import Button from "./../Button";
 
 // import styles from "./index.module.scss";
 
@@ -28,6 +29,9 @@ const Header = ({ navButtons }) => {
                     // icon={button.icon}
                   />
                 ))}
+                <Button btnStyle="outline">
+                  <Link href="/join">Join</Link>
+                </Button>
               </Row>
             </Col>
           </Row>

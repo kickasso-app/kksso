@@ -1,4 +1,4 @@
-const cities = ["Berlin", "Paris", "Brussels", "Prague", "New York"];
+const cities = ["Berlin", "Paris", "Brussels", "Cairo", "Prague", "New York"];
 const mediums = [
   "Painting",
   "Drawing",

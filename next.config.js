@@ -1,6 +1,22 @@
 const path = require("path");
 
 module.exports = {
+  distDir: "build",
+  outDir: "export",
+  exportPathMap: async function (
+    defaultPathMap,
+    { dev, dir, outDir, distDir, buildId }
+  ) {
+    return {
+      "/": { page: "/" },
+      "/about": { page: "/about" },
+      "/join": { page: "/join" },
+      "/studios": { page: "/studios" },
+      "/studio/1": { page: "/studio/1" },
+
+      // '/p/deploy-nextjs': { page: '/post', query: { title: 'deploy-nextjs' } },
+    };
+  },
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],
     prependData: `
