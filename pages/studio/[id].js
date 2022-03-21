@@ -82,8 +82,6 @@ const Studio = () => {
           </> 
           */}
         </Link>
-        <br />
-        <br />
         {/* TO DO
          Remove this error
          Error: {"hint":null,"details":null,"code":"22P02",
@@ -97,106 +95,111 @@ const Studio = () => {
             <img src={`/img/loader.svg`} />
           </Box>
         ) : (
-          <Row>
-            {images.length && (
-              <ImagesCarousel images={images} artist={studio.artist} />
-            )}
-            <Col xs={12} md={6}>
-              <br />
-
-              {studio.artist && (
-                <h2 className={styles.maintitle}>{studio.artist}</h2>
+          <>
+            <Box fill="horizontal" pad="medium">
+              {images.length && (
+                <ImagesCarousel images={images} artist={studio.artist} />
               )}
-              <br />
-              {studio.textLong &&
-                makeParagraphs(studio.textLong, paragraphSeperator)}
+            </Box>
 
-              <h3 className={styles.sectiontitle}>Mediums</h3>
-              <p>{studio.styles}</p>
+            <Row>
+              <Col xs={12} md={6}>
+                <br />
 
-              <h3 className={styles.sectiontitle}>Studio</h3>
+                {studio.artist && (
+                  <h2 className={styles.maintitle}>{studio.artist}</h2>
+                )}
+                <br />
+                {studio.textLong &&
+                  makeParagraphs(studio.textLong, paragraphSeperator)}
 
-              <h4 className={styles.subsectiontitle}>
-                <Disc
-                  className={styles.icon}
-                  size={18}
-                  strokeWidth="2"
-                  color="#FFC0CB"
-                  fill="#fff"
-                />{" "}
-                {studio.city}
-              </h4>
+                <h3 className={styles.sectiontitle}>Mediums</h3>
+                <p>{studio.styles}</p>
 
-              {studio.textStudio &&
-                makeParagraphs(studio.textStudio, paragraphSeperator)}
+                <h3 className={styles.sectiontitle}>Studio</h3>
 
-              {studio.links && (
-                <>
-                  <h3 className={styles.sectiontitle}>Links</h3>
-                  <br />
-                  {studio.links.split(",").map((link) => {
-                    return (
-                      <Link href={link.trim()}>
-                        {link.includes("instagram") ? (
-                          <Instagram
-                            className={styles.icon}
-                            size={28}
-                            strokeWidth="1"
-                            color="#4B4B4B"
-                            fill="#FFF"
-                          />
-                        ) : (
-                          <Globe
-                            className={styles.icon}
-                            size={28}
-                            strokeWidth="1"
-                            color="#4B4B4B"
-                            fill="#FFF"
-                          />
-                        )}
-                      </Link>
-                    );
-                  })}
-                </>
-              )}
-            </Col>
-            <Col xs={12} md={5} mdOffset={1}>
-              {studio.visitRules && studio.visitRules.length > 0 && (
-                <>
-                  <h3 className={styles.sectiontitle}>
-                    {studio.artist.split(" ")[0]}'s Visit Rules
-                  </h3>
-                  <ul className={styles.rules}>
-                    {studio.visitRules.split(";").map((rule, index) => (
-                      <li key={index}>{rule}</li>
-                    ))}
-                  </ul>
-                </>
-              )}
-              <h3 className={styles.sectiontitle}>General Visit Tips</h3>
-              <ul className={styles.rules}>
-                <li>Show up on time</li>
-                <li>Ask before taking photos of the artist and artworks</li>
-                <li>A gift is almost always a nice touch</li>
-              </ul>
-              {studio.openDates ? (
-                <VisitForm
-                  openVisitDates={studio.openDates.split(",")}
-                  artistEmail={studio.email}
-                  artistName={studio.artist}
-                />
-              ) : (
-                <>
-                  <h3 className={styles.sectiontitle}>
-                    The artist has no upcoming visit dates right now
-                  </h3>
-                  <h4 className={styles.subsectiontitle}>
-                    Please check back again later
-                  </h4>
-                </>
-              )}
-            </Col>
-          </Row>
+                <h4 className={styles.subsectiontitle}>
+                  <Disc
+                    className={styles.icon}
+                    size={18}
+                    strokeWidth="2"
+                    color="#FFC0CB"
+                    fill="#fff"
+                  />{" "}
+                  {studio.city}
+                </h4>
+
+                {studio.textStudio &&
+                  makeParagraphs(studio.textStudio, paragraphSeperator)}
+
+                {studio.links && (
+                  <>
+                    <h3 className={styles.sectiontitle}>Links</h3>
+                    <br />
+                    {studio.links.split(",").map((link) => {
+                      return (
+                        <Link href={link.trim()}>
+                          {link.includes("instagram") ? (
+                            <Instagram
+                              className={styles.icon}
+                              size={28}
+                              strokeWidth="1"
+                              color="#4B4B4B"
+                              fill="#FFF"
+                            />
+                          ) : (
+                            <Globe
+                              className={styles.icon}
+                              size={28}
+                              strokeWidth="1"
+                              color="#4B4B4B"
+                              fill="#FFF"
+                            />
+                          )}
+                        </Link>
+                      );
+                    })}
+                  </>
+                )}
+              </Col>
+              <Col xs={12} md={5} mdOffset={1}>
+                {studio.visitRules && studio.visitRules.length > 0 && (
+                  <>
+                    <h3 className={styles.sectiontitle}>
+                      {studio.artist.split(" ")[0]}'s Visit Rules
+                    </h3>
+                    <ul className={styles.rules}>
+                      {studio.visitRules.split(";").map((rule, index) => (
+                        <li key={index}>{rule}</li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+                <h3 className={styles.sectiontitle}>General Visit Tips</h3>
+                <ul className={styles.rules}>
+                  <li>Show up on time</li>
+                  <li>Ask before taking photos of the artist and artworks</li>
+                  <li>A gift is almost always a nice touch</li>
+                </ul>
+                {studio.openDates ? (
+                  <VisitForm
+                    openVisitDates={studio.openDates.split(",")}
+                    artistEmail={studio.email}
+                    artistName={studio.artist}
+                  />
+                ) : (
+                  <>
+                    <h3 className={styles.sectiontitle}>
+                      The artist has no upcoming visit dates right now
+                    </h3>
+                    <h4 className={styles.subsectiontitle}>
+                      Please check back again later
+                    </h4>
+                  </>
+                )}
+              </Col>
+            </Row>
+          </>
         )}
       </Col>
     </Grid>
