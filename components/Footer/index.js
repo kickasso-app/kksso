@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 
-import { SimpleGrid } from "@chakra-ui/react";
+// import { SimpleGrid } from "@chakra-ui/react";
 import { Box, Image, Text } from "grommet";
 import { Instagram } from "react-feather";
 // import { Facebook, Instagram } from "react-feather";
