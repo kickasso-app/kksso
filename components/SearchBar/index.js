@@ -5,7 +5,7 @@ import React, {
   useState,
   useContext,
 } from "react";
-import { StudiosContext } from "../../services/studios";
+import { StudiosContext } from "services/studios";
 import { useRouter } from "next/router";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";

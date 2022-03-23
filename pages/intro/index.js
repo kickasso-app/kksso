@@ -9,8 +9,8 @@ import Image from "next/image";
 import styles from "./index.module.scss";
 
 import { Box, Heading, Text } from "grommet";
-import SearchBar from "./../../components/SearchBar";
-import Button from "./../../components/Button";
+import SearchBar from "components/SearchBar";
+import Button from "components/Button";
 
 const Intro = () => {
   const margin = "medium";

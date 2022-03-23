@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Box, Text } from "grommet";
 import Masonry from "react-masonry-css";
 
-import SearchBar from "./../../components/SearchBar";
+import SearchBar from "components/SearchBar";
 import StudioCard from "../StudioCard";
 import filterStudios from "./filterStudios";
 import styles from "./index.module.scss";
@@ -25,7 +25,7 @@ const StudiosFilter = ({ studios, query }) => {
         <SearchBar isActive={false} />
       </Box>
       <Box margin={{ vertical: "large" }}>
-        {visibleStudios.length ? (
+        {visibleStudios.length > 0 ? (
           <Masonry
             breakpointCols={{
               default: 3,

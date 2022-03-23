@@ -23,13 +23,16 @@ const StudiosProvider = ({ children }) => {
     let { data: supaStudios, error } = await supabase
       .from("studios")
       .select("*")
+      .is("is_published", true)
       .order("id", true);
-    if (error) setError(error);
-    else {
+    if (error) {
+      setError(error);
+      console.log(error);
+    } else {
       setStudios(supaStudios);
       // console.log(supaStudios);
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   /* {

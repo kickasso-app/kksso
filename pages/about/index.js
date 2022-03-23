@@ -1,6 +1,6 @@
 import React from "react";
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
-import Layout from "../../components/Layout";
+import Layout from "components/Layout";
 
 import styles from "./index.module.scss";
 

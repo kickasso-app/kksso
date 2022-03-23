@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { StudiosContext } from "../../services/studios";
+import { StudiosContext } from "services/studios";
 
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -10,8 +10,8 @@ import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import { Box, Heading, Text, Button } from "grommet";
 import { ChevronLeft, Disc, Instagram, Globe } from "react-feather";
 
-import VisitForm from "../../components/forms/VisitForm";
-import ImagesCarousel from "../../components/ImagesCarousel";
+import VisitForm from "components/forms/VisitForm";
+import ImagesCarousel from "components/ImagesCarousel";
 import styles from "./index.module.scss";
 
 const Studio = () => {
@@ -36,7 +36,7 @@ const Studio = () => {
   };
 
   useEffect(() => {
-    if (!studios.length) {
+    if (!studios.length && loading) {
       fetchStudios();
     }
   }, []);
@@ -138,7 +138,7 @@ const Studio = () => {
                     <br />
                     {studio.links.split(",").map((link) => {
                       return (
-                        <Link href={link.trim()}>
+                        <Link href={link.trim()} key={link}>
                           {link.includes("instagram") ? (
                             <Instagram
                               className={styles.icon}

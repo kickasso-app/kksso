@@ -1,6 +1,6 @@
 import { SupabaseContextProvider } from "use-supabase";
-import { supabase } from "../services/supabase";
-import { StudiosProvider } from "../services/studios";
+import { supabase } from "services/supabase";
+import { StudiosProvider } from "services/studios";
 // import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
 import "../styles/base.scss";
@@ -18,7 +18,7 @@ import "react-image-gallery/styles/scss/image-gallery.scss";
 //   },
 // });
 
-import Layout from "../components/Layout";
+import Layout from "components/Layout";
 
 export default function MyApp({ Component, pageProps }) {
   return (

@@ -5,7 +5,7 @@ import Link from "next/link";
 import firebase from "firebase/app";
 import "firebase/auth";
 
-import { initFirebase } from "../../services/firebase";
+import { initFirebase } from "services/firebase";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import { Box, Heading, Text, Button } from "grommet";
