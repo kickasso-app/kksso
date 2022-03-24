@@ -66,4 +66,4 @@ const themeChanges = {
   },
 };
 
-export default deepMerge(grommet, themeChanges);
+export default deepMerge(base, themeChanges);
