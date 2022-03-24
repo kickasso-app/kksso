@@ -1,16 +1,64 @@
 import { useState } from "react";
-import { supabase } from "services/supabase";
+import { useRouter } from "next/router";
+
+import { useAuth } from "services/auth";
+import {
+  Box,
+  Form,
+  FormField,
+  MaskedInput,
+  CheckBoxGroup,
+  TextArea,
+  TextInput,
+  Text,
+  Heading,
+  Anchor,
+  Paragraph,
+  Button as GrommetButton,
+} from "grommet";
+import Button from "components/Button";
 
 export default function Auth() {
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("");
+  const [newUser, setNewUser] = useState(true);
 
-  const handleLogin = async (email) => {
+  const router = useRouter();
+
+  const { signUp, signIn, user } = useAuth();
+
+  const handleSignUp = async (event) => {
+    event.preventDefault();
+
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+
     try {
       setLoading(true);
-      const { error } = await supabase.auth.signIn({ email });
+      const { error } = await signUp({ email, password });
       if (error) throw error;
-      alert("Check your email for the login link!");
+      if (user) {
+        router.push("/welcome?email=${user.email}");
+      }
+    } catch (error) {
+      alert(error.error_description || error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogIn = async (event) => {
+    event.preventDefault();
+
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+
+    try {
+      setLoading(true);
+      const { error } = await signIn({ email, password });
+      if (error) throw error;
+      if (user) {
+        router.push("/");
+      }
     } catch (error) {
       alert(error.error_description || error.message);
     } finally {
@@ -19,34 +67,51 @@ export default function Auth() {
   };
 
   return (
-    <div className="row flex flex-center">
-      <div className="col-6 form-widget">
-        <h1 className="header">Supabase + Next.js</h1>
-        <p className="description">
-          Sign in via magic link with your email below
-        </p>
-        <div>
-          <input
-            className="inputField"
-            type="email"
-            placeholder="Your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              handleLogin(email);
-            }}
-            className="button block"
-            disabled={loading}
-          >
-            <span>{loading ? "Loading" : "Send magic link"}</span>
-          </button>
-        </div>
-      </div>
-    </div>
+    <>
+      <form onSubmit={newUser ? handleSignUp : handleLogIn}>
+        <Box width="large" pad="medium">
+          <Heading level={3}>{newUser ? "Sign Up" : "Login"}</Heading>
+          <Box>
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+            />
+          </Box>
+          <Box>
+            <label htmlFor="password">Password</label>
+
+            <input type="password" id="password" name="password" required />
+          </Box>
+          <br />
+          <Box>
+            <Button btnStyle="filled" type="submit">
+              {/* Still something is wrong with grommet button styles
+           can't pad or size correctly */}
+              {/* <GrommetButton primary size="large" type="submit"> */}
+              {loading ? "Loading..." : newUser ? "Sign Up" : "Login"}
+              {/* </GrommetButton> */}
+            </Button>
+          </Box>
+
+          <br />
+
+          {newUser ? (
+            <Paragraph>
+              Already have an account?{" "}
+              <Anchor onClick={() => setNewUser(false)}>Log In</Anchor>
+            </Paragraph>
+          ) : (
+            <Paragraph>
+              Don't have an account?{" "}
+              <Anchor onClick={() => setNewUser(true)}>Sign Up</Anchor>
+            </Paragraph>
+          )}
+        </Box>
+      </form>
+    </>
   );
 }

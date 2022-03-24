@@ -4,7 +4,7 @@ import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import { Box } from "grommet";
 
 import NavButton from "./NavButton";
-import Button from "./../Button";
+import Button from "components/Button";
 
 // import styles from "./index.module.scss";
 

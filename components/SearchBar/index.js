@@ -1,11 +1,5 @@
-import React, {
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-  useContext,
-} from "react";
-import { StudiosContext } from "services/studios";
+import React, { useCallback, useMemo, useRef, useState } from "react";
+import { useStudios } from "services/studios";
 import { useRouter } from "next/router";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
@@ -19,7 +13,7 @@ export const SearchBar = ({ isActive = true }) => {
   const {
     query: { city: queryCity, mediums: queryMedium },
     updateQuery,
-  } = useContext(StudiosContext);
+  } = useStudios();
 
   const router = useRouter();
 

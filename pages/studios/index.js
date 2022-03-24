@@ -1,5 +1,5 @@
-import { useEffect, useContext } from "react";
-import { StudiosContext } from "services/studios";
+import { useEffect } from "react";
+import { useStudios } from "services/studios";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import Link from "next/link";
@@ -9,8 +9,7 @@ import styles from "./index.module.scss";
 import StudiosFilter from "components/StudiosFilter/index.js";
 
 const Studios = () => {
-  const { studios, fetchStudios, query, loading, error } =
-    useContext(StudiosContext);
+  const { studios, fetchStudios, query, loading, error } = useStudios();
 
   useEffect(() => {
     if (!studios.length && loading) {

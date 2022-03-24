@@ -1,5 +1,5 @@
-import { useState, useEffect, useContext } from "react";
-import { StudiosContext } from "services/studios";
+import { useState, useEffect } from "react";
+import { useStudios } from "services/studios";
 
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -18,7 +18,7 @@ const Studio = () => {
   const router = useRouter();
   const { id } = router.query;
 
-  const { studios, fetchStudios, loading, error } = useContext(StudiosContext);
+  const { studios, fetchStudios, loading, error } = useStudios();
 
   const [studio, setStudio] = useState();
   const [images, setImages] = useState([]);

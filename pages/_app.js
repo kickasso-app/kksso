@@ -1,6 +1,8 @@
-import { SupabaseContextProvider } from "use-supabase";
-import { supabase } from "services/supabase";
+import { AuthProvider } from "services/auth";
 import { StudiosProvider } from "services/studios";
+
+// import { SupabaseContextProvider } from "use-supabase";
+// import { supabase } from "services/supabase";
 // import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
 import "../styles/base.scss";
@@ -22,14 +24,16 @@ import Layout from "components/Layout";
 
 export default function MyApp({ Component, pageProps }) {
   return (
-    <SupabaseContextProvider client={supabase}>
+    <AuthProvider>
       <StudiosProvider>
-        {/* <ChakraProvider theme={theme}> */}
+        {/* <SupabaseContextProvider client={supabase}> 
+        <ChakraProvider theme={theme}> */}
         <Layout>
           <Component {...pageProps} />
         </Layout>
-        {/* </ChakraProvider> */}
+        {/* </SupabaseContextProvider> 
+        </ChakraProvider> */}
       </StudiosProvider>
-    </SupabaseContextProvider>
+    </AuthProvider>
   );
 }

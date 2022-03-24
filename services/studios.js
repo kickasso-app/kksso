@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { supabase } from "./supabase";
 
 const StudiosContext = createContext(null);
@@ -71,4 +71,6 @@ const StudiosProvider = ({ children }) => {
   );
 };
 
-export { StudiosContext, StudiosProvider };
+const useStudios = () => useContext(StudiosContext);
+
+export { useStudios, StudiosContext, StudiosProvider };
