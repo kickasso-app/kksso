@@ -3,12 +3,15 @@ import Image from "next/image";
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import { Box } from "grommet";
 
+import { useAuth } from "services/auth";
+
 import NavButton from "./NavButton";
 import Button from "components/Button";
 
 // import styles from "./index.module.scss";
 
 const Header = ({ navButtons }) => {
+  const { session } = useAuth();
   return (
     <Grid fluid>
       <Col xs={12}>
@@ -29,8 +32,13 @@ const Header = ({ navButtons }) => {
                     // icon={button.icon}
                   />
                 ))}
+                {}
                 <Button btnStyle="outline">
-                  <Link href="/join">Join</Link>
+                  {session ? (
+                    <Link href="/profile">Profile</Link>
+                  ) : (
+                    <Link href="/join">Join</Link>
+                  )}
                 </Button>
               </Row>
             </Col>

@@ -6,6 +6,7 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [user, setUser] = useState();
   const [session, setSession] = useState(null);
+  const [event, setEvent] = useState();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -21,7 +22,10 @@ export function AuthProvider({ children }) {
       async (event, session) => {
         setSession(session ?? null);
         setUser(session?.user ?? null);
+        setEvent(event ?? null);
         setLoading(false);
+        console.log(session);
+        console.log(session?.user);
       }
     );
 
@@ -37,6 +41,8 @@ export function AuthProvider({ children }) {
     signOut: () => supabase.auth.signOut(),
     user,
     session,
+    event,
+    authLoading: loading,
   };
 
   return (

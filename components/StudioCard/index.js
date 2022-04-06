@@ -11,16 +11,16 @@ import { Disc, Hash } from "react-feather";
 import styles from "./index.module.scss";
 
 const StudioCard = ({
-  studio: { id, artist, city, styles: artStyles, openDates, textMini },
+  studio: { studio_id, artist, city, styles: artStyles, openDates, textMini },
 }) => {
   const router = useRouter();
 
   const articleLink = {
     pathname: "/studio/[id]",
-    query: { id: id },
+    query: { id: studio_id },
   };
 
-  const openArticle = (id) => {
+  const openArticle = () => {
     router.push(articleLink);
   };
 
@@ -61,16 +61,13 @@ const StudioCard = ({
         // }}
       >
         <Link href={articleLink}>
-          <ProgressiveImage src={teaserSrc} placeholder={`/img/loader.svg`}>
-            {(src, loading) => (
-              <img
-                className={styles.cardImg}
-                onClick={() => openArticle(id)}
-                src={src}
-                alt={artist}
-              />
-            )}
-          </ProgressiveImage>
+          <a onClick={() => openArticle()}>
+            <ProgressiveImage src={teaserSrc} placeholder={`/img/loader.svg`}>
+              {(src, loading) => (
+                <img className={styles.cardImg} src={src} alt={artist} />
+              )}
+            </ProgressiveImage>
+          </a>
         </Link>
       </div>
 

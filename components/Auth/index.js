@@ -34,7 +34,10 @@ export default function Auth() {
 
     try {
       setLoading(true);
-      const { error } = await signUp({ email, password });
+      const { error } = await signUp({
+        email,
+        password,
+      });
       if (error) throw error;
       if (user) {
         router.push("/welcome?email=${user.email}");
@@ -57,7 +60,8 @@ export default function Auth() {
       const { error } = await signIn({ email, password });
       if (error) throw error;
       if (user) {
-        router.push("/");
+        // router.push("/");
+        router.push("/welcome");
       }
     } catch (error) {
       alert(error.error_description || error.message);
@@ -90,7 +94,7 @@ export default function Auth() {
           <Box>
             <Button btnStyle="filled" type="submit">
               {/* Still something is wrong with grommet button styles
-           can't pad or size correctly */}
+               can't pad or size correctly */}
               {/* <GrommetButton primary size="large" type="submit"> */}
               {loading ? "Loading..." : newUser ? "Sign Up" : "Login"}
               {/* </GrommetButton> */}

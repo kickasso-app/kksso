@@ -24,7 +24,7 @@ const StudiosProvider = ({ children }) => {
       .from("studios")
       .select("*")
       .is("is_published", true)
-      .order("id", true);
+      .order("studio_id", true);
     if (error) {
       setError(error);
       console.log(error);

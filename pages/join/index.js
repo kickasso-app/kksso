@@ -1,21 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { supabase } from "services/supabase";
-import Auth from "components/Auth";
-import SignUp from "components/Auth/SignUp";
-// import SignIn from "components/Auth/SignIn";
-import Account from "components/Account";
+import React from "react";
+import { useRouter } from "next/router";
 import { useAuth } from "services/auth";
 
+import Auth from "components/Auth";
+
 export default function Join() {
-  const { session } = useAuth();
+  const router = useRouter();
+  const { session, user } = useAuth();
+  if (session) {
+    router.push("/profile");
+  }
 
   return (
     <div className="container" style={{ padding: "50px 0 100px 0" }}>
-      {!session ? (
-        <Auth />
-      ) : (
-        <Account key={session.user.id} session={session} />
-      )}
+      <Auth />
     </div>
   );
 }

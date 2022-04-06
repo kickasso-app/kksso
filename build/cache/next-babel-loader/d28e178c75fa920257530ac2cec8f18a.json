@@ -1,1 +1,0 @@
-{"ast":null,"code":"import Intro from \"./intro\";\nexport default Intro;","map":{"version":3,"sources":["/home/you/Code/github/kksso/pages/index.js"],"names":["Intro"],"mappings":"AAAA,OAAOA,KAAP,MAAkB,SAAlB;AAEA,eAAeA,KAAf","sourcesContent":["import Intro from \"./intro\";\n\nexport default Intro;\n"]},"metadata":{},"sourceType":"module"}

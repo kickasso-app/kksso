@@ -10,19 +10,28 @@ const themeChanges = {
   spacing: 24,
   defaultMode: "light",
   global: {
-    font: {
-      family: "Nunito Sans",
-      size: "16px",
-      height: "20px",
-      color: "#4b4b4b",
-    },
     colors: {
       // overriding colors
       brand: "#FFC0CB",
       "accent-1": "#C0FFF4",
       "dark-1": "4b4b4b",
       control: "accent-1",
+      focus: "#FFC0CB",
     },
+    font: {
+      family: "Nunito Sans",
+      size: "16px",
+      height: "20px",
+      color: "#4b4b4b",
+    },
+    // active: {
+    //   background: "white",
+    //   color: "brand",
+    // },
+    // selected: {
+    //   background: "white",
+    //   color: "brand",
+    // },
   },
   anchor: {
     color: "text",
@@ -51,19 +60,33 @@ const themeChanges = {
         color: "#C0FFF4",
       },
     },
-    // size is useless
-    // size: {
-    //   large: {
-    //     border: {
-    //       radius: "14px",
-    //     },
-    //     pad: {
-    //       vertical: "14px",
-    //       horizontal: "22px",
-    //     },
-    //   },
-    // },
   },
+  tab: {
+    color: "black",
+    border: {
+      // side: "bottom",
+      // size: "small",
+      color: "brand",
+      active: {
+        color: "black",
+      },
+      hover: {
+        color: "black",
+      },
+    },
+  },
+  // size is useless
+  // size: {
+  //   large: {
+  //     border: {
+  //       radius: "14px",
+  //     },
+  //     pad: {
+  //       vertical: "14px",
+  //       horizontal: "22px",
+  //     },
+  //   },
+  // },
 };
 
 export default deepMerge(base, themeChanges);
