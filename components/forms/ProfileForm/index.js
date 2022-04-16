@@ -61,9 +61,31 @@ export default function ProfileForm({ profile, profileLoading }) {
 
       let { error } = await supabase
         .from("studios")
-        .update(updates, {
-          returning: "minimal", // Don't return the value after inserting
-        })
+        .update(updates, { returning: "minimal" })
+        .eq("uuid", user.id);
+
+      if (error) {
+        setIsUpdateError(true);
+        throw error;
+      } else {
+        setIsUpdateSuccess(true);
+      }
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function updatePhotosUrl(url) {
+    try {
+      setIsUpdateError(false);
+      setIsUpdateSuccess(false);
+      setLoading(true);
+
+      let { error } = await supabase
+        .from("studios")
+        .update({ photoUrl: url }, { returning: "minimal" })
         .eq("uuid", user.id);
 
       if (error) {
@@ -160,6 +182,15 @@ export default function ProfileForm({ profile, profileLoading }) {
                 placeholder="Link (optional)"
               />
             </FormField> */}
+            <Avatar
+              url={
+                "https://chsbkuvxttsertgkuwhy.supabase.co/storage/v1/object/sign/avatars/a67a18aa-551c-4ecf-9281-8f1f6b596ef2/0.7190100317596877.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhdmF0YXJzL2E2N2ExOGFhLTU1MWMtNGVjZi05MjgxLThmMWY2YjU5NmVmMi8wLjcxOTAxMDAzMTc1OTY4NzcuanBnIiwiaWF0IjoxNjUwMTAwNTM5LCJleHAiOjE5NjU0NjA1Mzl9.uejvZ4Z4yyqHLp9TaMz-awWqeTO5Rjq-ZQrJJml3Uz4"
+              }
+              size={150}
+              onUpload={(url) => {
+                updatePhotosUrl(url);
+              }}
+            />
             <br />
             <Box direction="row" gap="medium">
               <Button type="submit" btnStyle="filled" disabled={loading}>

@@ -70,28 +70,44 @@ export default function Auth() {
     }
   };
 
+  const fieldMargin = { vertical: "medium" };
+  const textMargin = { bottom: "medium" };
+
   return (
     <>
       <form onSubmit={newUser ? handleSignUp : handleLogIn}>
         <Box width="large" pad="medium">
           <Heading level={3}>{newUser ? "Sign Up" : "Login"}</Heading>
           <Box>
-            <label htmlFor="email">Email</label>
+            {/* <label htmlFor="email">Email</label>
             <input
               id="email"
               name="email"
               type="email"
               autoComplete="email"
               required
-            />
+            /> */}
+            <FormField name="email" label="Email" margin={fieldMargin} required>
+              <TextInput
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                placeholder="Your email"
+              />
+            </FormField>
           </Box>
           <Box>
-            <label htmlFor="password">Password</label>
-
-            <input type="password" id="password" name="password" required />
+            <FormField
+              name="password"
+              label="Password"
+              margin={fieldMargin}
+              required
+            >
+              <TextInput type="password" id="password" name="password" />
+            </FormField>
           </Box>
-          <br />
-          <Box>
+          <Box margin={fieldMargin}>
             <Button btnStyle="filled" type="submit">
               {/* Still something is wrong with grommet button styles
                can't pad or size correctly */}

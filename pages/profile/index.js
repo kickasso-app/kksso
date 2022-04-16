@@ -44,7 +44,7 @@ export default function Profile() {
 
       if (data) {
         setProfile({
-          uuid: user.id,
+          // uuid: user.id,
           ...data,
           // types: "1",
         });
