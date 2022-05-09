@@ -147,9 +147,6 @@ const VisitForm = ({ artistEmail, artistName, openVisitDates }) => {
               <Button type="submit" btnStyle="filled" disabled={isEmailSent}>
                 Request A Visit
               </Button>
-              <Button type="reset" btnStyle="outline">
-                Clear
-              </Button>
             </Box>
 
             {isEmailSent ? (

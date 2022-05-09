@@ -1,13 +1,12 @@
-import { useState, useEffect } from "react";
-import { useStudios } from "services/studios";
+import { useEffect } from "react";
 
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-// import ReactMarkdown from "react-markdown";
+import { useStudios } from "services/studios";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
-import { Box, Heading, Text, Button } from "grommet";
+import { Box } from "grommet";
 import { ChevronLeft, Disc, Instagram, Globe } from "react-feather";
 
 import VisitForm from "components/forms/VisitForm";
@@ -18,46 +17,12 @@ const Studio = () => {
   const router = useRouter();
   const { id } = router.query;
 
-  const { studios, fetchStudios, loading, error } = useStudios();
-
-  const [studio, setStudio] = useState();
-  const [images, setImages] = useState([]);
-
-  const prepImagesforCarousel = (files, captions) => {
-    const imgs = files.reduce((acc, current, index) => {
-      acc.push({
-        filename: files[index].trim(),
-        caption: captions[index] || "",
-      });
-      return acc;
-    }, []);
-
-    return imgs;
-  };
+  const { studio, fetchStudio, loading, error } = useStudios();
 
   useEffect(() => {
-    if (!studios.length && loading) {
-      fetchStudios();
-    }
-  }, []);
-
-  useEffect(() => {
-    if (studios.length && id && !studio) {
-      // const match = studios.filter((s) => {
-      //   return s.id === id;
-      // });
-      // To DO: WTH
-      // somehow filter is not working here !!!
-      const matchStudio = studios[id - 1];
-      setStudio(matchStudio);
-      setImages(
-        prepImagesforCarousel(
-          matchStudio.imagesFiles,
-          matchStudio.imagesCaptions
-        )
-      );
-    }
-  }, [loading, studios, id]);
+    fetchStudio({ id });
+    console.log(studio);
+  }, [id]);
 
   const paragraphSeperator = "\\";
 
@@ -90,18 +55,19 @@ const Studio = () => {
         {error && error.code !== "22P02" && (
           <strong>Error: {JSON.stringify(error)}</strong>
         )}
-        {loading || !studio ? (
+        {loading ? (
           <Box align="center" pad="large">
             <img src={`/img/loader.svg`} />
           </Box>
+        ) : !studio ? (
+          <Box align="center" margin="large">
+            There is no studio here :(
+          </Box>
         ) : (
           <>
-            <Box fill="horizontal" pad="medium">
-              {images.length && (
-                <ImagesCarousel images={images} artist={studio.artist} />
-              )}
+            <Box align="center" margin="small">
+              <ImagesCarousel userId={studio.uuid} />
             </Box>
-
             <Row>
               <Col xs={12} md={6}>
                 <br />
@@ -132,33 +98,39 @@ const Studio = () => {
                 {studio.textStudio &&
                   makeParagraphs(studio.textStudio, paragraphSeperator)}
 
-                {studio.links && (
+                {(studio.website || studio.instagram) && (
                   <>
                     <h3 className={styles.sectiontitle}>Links</h3>
                     <br />
-                    {studio.links.split(",").map((link) => {
-                      return (
-                        <Link href={link.trim()} key={link}>
-                          {link.includes("instagram") ? (
-                            <Instagram
-                              className={styles.icon}
-                              size={28}
-                              strokeWidth="1"
-                              color="#4B4B4B"
-                              fill="#FFF"
-                            />
-                          ) : (
-                            <Globe
-                              className={styles.icon}
-                              size={28}
-                              strokeWidth="1"
-                              color="#4B4B4B"
-                              fill="#FFF"
-                            />
-                          )}
-                        </Link>
-                      );
-                    })}
+                    {studio.website && (
+                      <Link href={studio.website}>
+                        <Globe
+                          className={styles.icon}
+                          size={28}
+                          strokeWidth="1"
+                          color="#4B4B4B"
+                          fill="#FFF"
+                        />
+                      </Link>
+                    )}
+
+                    {studio.instagram && (
+                      <Link
+                        href={
+                          studio.instagram?.includes("instagram.com/")
+                            ? studio.instagram
+                            : `https://instagram.com/${studio.instagram}`
+                        }
+                      >
+                        <Instagram
+                          className={styles.icon}
+                          size={28}
+                          strokeWidth="1"
+                          color="#4B4B4B"
+                          fill="#FFF"
+                        />
+                      </Link>
+                    )}
                   </>
                 )}
               </Col>

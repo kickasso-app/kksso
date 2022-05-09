@@ -5,18 +5,32 @@ import { supabase } from "services/supabase";
 
 import { Box, Tab, Tabs } from "grommet";
 
-import Account from "components/Account";
 import ProfileForm from "components/forms/ProfileForm";
+import PhotosForm from "components/forms/PhotosForm";
+import VisitsSettingsForm from "components/forms/VisitsSettingsForm";
+import AccountSettings from "components/forms/AccountSettings";
+
+import { profileFields } from "config/constants/profile";
 
 export default function Profile() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [profile, setProfile] = useState(null);
 
-  const router = useRouter();
+  const [index, setIndex] = useState(0);
+
+  const onActive = (nextIndex) => {
+    router.push(`/profile/?section=${nextIndex}`, undefined, { shallow: true });
+    setIndex(nextIndex);
+  };
+
+  useEffect(() => {
+    if (router?.query?.section) {
+      onActive(parseInt(router.query.section));
+    }
+  }, []);
 
   const { session, user, event } = useAuth();
-
-  // console.log(session);
 
   if (!session && event !== "SIGNED_OUT") {
     router.push("/join");
@@ -32,9 +46,10 @@ export default function Profile() {
     try {
       setLoading(true);
 
+      // TO DO: add to services/studios
       let { data, error, status } = await supabase
         .from("studios")
-        .select(`artist, city, styles, textMini, accountType`) // avatar_url
+        .select(profileFields.join(", "))
         .eq("uuid", user.id)
         .single();
 
@@ -43,11 +58,7 @@ export default function Profile() {
       }
 
       if (data) {
-        setProfile({
-          // uuid: user.id,
-          ...data,
-          // types: "1",
-        });
+        setProfile({ ...data });
       }
     } catch (error) {
       alert(error.message);
@@ -58,18 +69,33 @@ export default function Profile() {
 
   return (
     <main>
-      {user && (
+      {loading && (
+        <Box align="center">
+          <img src={`/img/loader.svg`} />
+        </Box>
+      )}
+      {!loading && user && (
         <>
           {user.role === "authenticated" ? (
-            <Tabs>
+            <Tabs activeIndex={index} onActive={onActive}>
               <Tab title="Profile">
                 <Box pad="medium">
-                  <ProfileForm profileLoading={loading} profile={profile} />
+                  <ProfileForm profile={profile} />
                 </Box>
               </Tab>
-              <Tab title="Account">
+              <Tab title="Photos">
                 <Box pad="medium">
-                  <Account />
+                  <PhotosForm profile={profile} />
+                </Box>
+              </Tab>
+              <Tab title="Visits">
+                <Box pad="medium">
+                  <VisitsSettingsForm profile={profile} />
+                </Box>
+              </Tab>
+              <Tab title="Settings">
+                <Box pad="medium">
+                  <AccountSettings profile={profile} />
                 </Box>
               </Tab>
             </Tabs>

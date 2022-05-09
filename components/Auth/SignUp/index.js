@@ -5,18 +5,7 @@ import Link from "next/link";
 
 import { useAuth } from "services/auth";
 
-import {
-  Box,
-  Form,
-  FormField,
-  MaskedInput,
-  CheckBoxGroup,
-  TextArea,
-  TextInput,
-  Text,
-  Heading,
-  Grommet,
-} from "grommet";
+import { Box } from "grommet";
 
 export default function SignUp() {
   const router = useRouter();

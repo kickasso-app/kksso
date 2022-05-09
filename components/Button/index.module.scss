@@ -1,6 +1,24 @@
 button.outline:focus,
-button.filled:focus {
+button.filled:focus button.text:focus {
   outline: 0;
+}
+
+button.text {
+  background-color: $color--bg-white;
+  color: $color-primary;
+  a {
+    // color: inherit;
+    text-decoration: none;
+  }
+  font-size: 1.125rem;
+  font-family: "Nunito Sans", sans-serif;
+  padding: 0;
+  border: 0;
+  // margin: 0;
+}
+
+button.text:hover {
+  font-weight: bold;
 }
 
 button.outline {

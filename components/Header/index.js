@@ -7,10 +7,13 @@ import { useAuth } from "services/auth";
 
 import NavButton from "./NavButton";
 import Button from "components/Button";
+import ProfileButton from "./ProfileButton";
+
+import MENU_LINKS from "config/menuLinks";
 
 // import styles from "./index.module.scss";
 
-const Header = ({ navButtons }) => {
+const Header = () => {
   const { session } = useAuth();
   return (
     <Grid fluid>
@@ -24,7 +27,7 @@ const Header = ({ navButtons }) => {
             </Col>
             <Col xs={12} md={10}>
               <Row center="xs" end="md">
-                {navButtons.map((button) => (
+                {MENU_LINKS.map((button) => (
                   <NavButton
                     key={button.path}
                     path={button.path}
@@ -32,14 +35,14 @@ const Header = ({ navButtons }) => {
                     // icon={button.icon}
                   />
                 ))}
-                {}
-                <Button btnStyle="outline">
-                  {session ? (
-                    <Link href="/profile">Profile</Link>
-                  ) : (
+
+                {session ? (
+                  <ProfileButton />
+                ) : (
+                  <Button btnStyle="outline">
                     <Link href="/join">Join</Link>
-                  )}
-                </Button>
+                  </Button>
+                )}
               </Row>
             </Col>
           </Row>

@@ -21,7 +21,7 @@ const StudiosFilter = ({ studios, query }) => {
 
   return (
     <div className={styles.studios}>
-      <Box margin={"medium"}>
+      <Box align="center" margin="medium">
         <SearchBar isActive={false} />
       </Box>
       <Box margin={{ vertical: "large" }}>

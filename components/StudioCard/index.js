@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 // import PropTypes from "prop-types";
 
 import { useRouter } from "next/router";
@@ -9,9 +9,18 @@ import moment from "moment";
 import { Disc, Hash } from "react-feather";
 
 import styles from "./index.module.scss";
+import { downloadProfileImage } from "services/images";
 
 const StudioCard = ({
-  studio: { studio_id, artist, city, styles: artStyles, openDates, textMini },
+  studio: {
+    studio_id,
+    uuid,
+    artist,
+    city,
+    styles: artStyles,
+    openDates,
+    textMini,
+  },
 }) => {
   const router = useRouter();
 
@@ -24,10 +33,10 @@ const StudioCard = ({
     router.push(articleLink);
   };
 
+  const [imgUrl, setImgUrl] = useState(false);
+
   const [hoverImg, setHoverImg] = useState("0");
   const [hoveredImg, setHoveredImg] = useState(false);
-
-  const teaserSrc = `/img/${artist}/${hoverImg}.jpg`;
 
   const nextVisit = openDates
     ? moment(openDates.split(",")[0], "DD/MM/YYYY hh:mm").format("D MMM")
@@ -37,17 +46,34 @@ const StudioCard = ({
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  useEffect(() => {
-    console.log(hoveredImg);
+  const fetchImg = useCallback(async () => {
+    const url = await downloadProfileImage({ userId: uuid });
 
-    if (hoveredImg) {
-      sleep(2000).then(() => {
-        setHoverImg((hoverImg + 1) % 3);
-        console.log(hoverImg);
-        console.log(teaserSrc);
-      });
+    if (url) {
+      // the DB version
+      setImgUrl(url);
+    } else {
+      // the file version
+      const teaserSrc = `/img/${artist}/0.jpg`;
+      setImgUrl(teaserSrc);
     }
-  }, [hoveredImg]);
+    console.log(url);
+  }, []);
+
+  useEffect(() => {
+    fetchImg();
+  }, [fetchImg]);
+
+  // useEffect(() => {
+  //   // console.log(hoveredImg);
+
+  //   if (hoveredImg) {
+  //     sleep(2000).then(() => {
+  //        setHoverImg((hoverImg + 1) % 3);
+
+  //     });
+  //   }
+  // }, [hoveredImg]);
 
   return (
     <div className={styles.StudioCard}>
@@ -62,7 +88,9 @@ const StudioCard = ({
       >
         <Link href={articleLink}>
           <a onClick={() => openArticle()}>
-            <ProgressiveImage src={teaserSrc} placeholder={`/img/loader.svg`}>
+            {/* // imgUrl */}
+
+            <ProgressiveImage src={imgUrl} placeholder={`/img/loader.svg`}>
               {(src, loading) => (
                 <img className={styles.cardImg} src={src} alt={artist} />
               )}

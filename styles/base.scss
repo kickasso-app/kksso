@@ -57,3 +57,27 @@ p {
 .highlighted {
   color: $color-secondary !important;
 }
+
+// temp gallery styles
+
+.image-gallery {
+  .image-gallery-left-nav .image-gallery-svg,
+  .image-gallery-right-nav .image-gallery-svg {
+    height: 30px !important;
+    width: 15px !important;
+  }
+  .image-gallery-bullet {
+    box-shadow: none !important;
+    &:focus,
+    &:hover {
+      background: #fff !important;
+      border-color: #fff !important;
+    }
+    .image-gallery-bullet.active:hover {
+      background: #fff !important;
+    }
+  }
+  .image-gallery-icon:hover {
+    color: #fff;
+  }
+}

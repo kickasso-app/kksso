@@ -5,8 +5,6 @@ import { Grommet } from "grommet";
 import Header from "../Header";
 import Footer from "../Footer";
 
-import navButtons from "../../config/buttons";
-
 import grommetTheme from "styles/grommetTheme";
 // import { grommet, base } from "grommet";
 
@@ -27,7 +25,7 @@ const Layout = (props) => {
       </Head>
       <Grommet theme={grommetTheme}>
         <div className="layout">
-          <Header navButtons={navButtons} />
+          <Header />
           <div className="content">{props.children}</div>
           <Footer />
         </div>

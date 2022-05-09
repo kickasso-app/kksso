@@ -7,6 +7,9 @@ const emptyQuery = { city: "", mediums: "" };
 
 const StudiosProvider = ({ children }) => {
   const [studios, setStudios] = useState([]);
+  const [studio, setStudio] = useState(false);
+  const [userStudio, setUserStudio] = useState(false);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
   const [query, setQuery] = useState(emptyQuery);
@@ -20,10 +23,11 @@ const StudiosProvider = ({ children }) => {
   };
 
   const fetchStudios = async () => {
+    setLoading(true);
     let { data: supaStudios, error } = await supabase
       .from("studios")
       .select("*")
-      .is("is_published", true)
+      .is("published", true)
       .order("studio_id", true);
     if (error) {
       setError(error);
@@ -35,31 +39,48 @@ const StudiosProvider = ({ children }) => {
     setLoading(false);
   };
 
-  /* {
-  const fetchStudio = async () => {
-    // TO DO: grab from local store
-    let { data: oneStudio, error } = await supabase
+  const fetchUserStudio = async ({ uuid }) => {
+    setLoading(true);
+    let { data: studio, error } = await supabase
       .from("studios")
       .select("*")
-      .match({ id })
-      .single();
-    if (error) setError(error);
-    else {
-      setStudio(oneStudio);
-      setImages(
-        prepImagesforCarousel(oneStudio.imagesFiles, oneStudio.imagesCaptions)
-      );
-      setLoading(false);
+      .eq("uuid", uuid);
+    if (error) {
+      setError(error);
+      console.log(error);
+    } else {
+      setUserStudio(studio[0]);
+      // console.log(studio[0]);
     }
+    setLoading(false);
   };
-  } */
+
+  const fetchStudio = async ({ id }) => {
+    setLoading(true);
+    let { data: studio, error } = await supabase
+      .from("studios")
+      .select("*")
+      .eq("studio_id", id);
+    if (error) {
+      setError(error);
+      console.log(error);
+    } else {
+      setStudio(studio[0]);
+      // console.log(studio[0]);
+    }
+    setLoading(false);
+  };
 
   const contextObj = {
     studios,
+    studio,
+    userStudio,
     query,
     updateStudios,
     updateQuery,
     fetchStudios,
+    fetchStudio,
+    fetchUserStudio,
     loading,
     error,
   };

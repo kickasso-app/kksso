@@ -3,17 +3,15 @@ import { withRouter } from "next/router";
 
 import styles from "./NavButton.module.scss";
 
-const NavButton = (props) => (
-  <Link href={props.path}>
+const NavButton = ({ path, label, router }) => (
+  <Link href={path}>
     <div className={`${styles.navButton}`}>
       <span
         className={`${
-          props.router.pathname === props.path
-            ? styles.labelActive
-            : styles.label
+          router.pathname === path ? styles.labelActive : styles.label
         }`}
       >
-        {props.label}
+        {label}
       </span>
     </div>
   </Link>

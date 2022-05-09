@@ -12,7 +12,7 @@ const Studios = () => {
   const { studios, fetchStudios, query, loading, error } = useStudios();
 
   useEffect(() => {
-    if (!studios.length && loading) {
+    if (!studios.length) {
       fetchStudios();
     }
   }, [studios]);

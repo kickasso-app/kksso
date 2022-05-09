@@ -73,7 +73,7 @@ const SignIn = () => {
     try {
       const response = await firebase.auth().createUserWithPopUp(provider);
       const { user, credenitals } = result;
-      console.log({ user, credenitals });
+      // console.log({ user, credenitals });
       if (!user) {
         throw new Error("no user");
       }

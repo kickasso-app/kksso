@@ -1,4 +1,12 @@
+import { useState, useEffect, useCallback } from "react";
 import ImageGallery from "react-image-gallery";
+import Flickity from "react-flickity-component";
+
+import { downloadImages, getImagesUrls } from "services/images";
+
+import { Box } from "grommet";
+
+import styles from "./index.module.scss";
 
 const carouselConfig = {
   showIndex: false,
@@ -16,6 +24,9 @@ const carouselConfig = {
   slideOnThumbnailOver: false,
   thumbnailPosition: "bottom",
   showVideo: {},
+  loading: "lazy",
+  lazyload: true,
+  originalHeight: "60vh",
 };
 
 const imagesTest = [
@@ -33,13 +44,63 @@ const imagesTest = [
   },
 ];
 
-const ImagesCarousel = ({ images, artist }) => {
-  const items = images.map((img) => ({
-    original: `/img/${artist}/${img.filename}`,
-    description: img.caption,
-  }));
-  // console.log(items);
-  return <ImageGallery items={items} {...carouselConfig} />;
+const ImagesCarousel = ({ images, artist, userId }) => {
+  const [imgs, setImgs] = useState([]);
+  // const [imgUrls, setImgUrls] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchImgs = useCallback(async () => {
+    const urls = await downloadImages({ userId });
+    // const urls = await getImagesUrls({ userId });
+
+    // console.log(urls);
+    if (urls) {
+      // setImgUrls(urls);
+      setImgs(
+        urls.map((img) => ({
+          original: img,
+          originalHeight: 600,
+          // from local files
+          // original: `/img/${artist}/${img.filename}`,
+          // description: img.caption,
+        }))
+      );
+      setLoading(false);
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    fetchImgs();
+  }, [fetchImgs, userId]);
+
+  return (
+    <>
+      {loading ? (
+        <Box pad="large">
+          <img src={`/img/loader.svg`} />
+        </Box>
+      ) : (
+        // <div >
+        // doesn't apply styles className={styles.studioGallery}
+        <ImageGallery items={imgs} {...carouselConfig} />
+        // <Box pad="large">
+        //   {imgUrls && (
+        //     <Flickity
+        //     // disableImagesLoaded={true} // default false
+        //     // reloadOnUpdate={true} // default false
+        //     // static={true} // default false
+        //     >
+        //       {imgUrls.map((url) => {
+        //         console.log(url);
+        //         return <img src={url} />;
+        //       })}
+        //     </Flickity>
+        //   )}
+        // </Box>
+        // </div>
+      )}
+    </>
+  );
 };
 
 export default ImagesCarousel;

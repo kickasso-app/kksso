@@ -29,7 +29,9 @@ const Intro = () => {
                 width="100%"
                 height="45%"
               />
-              <Text alignSelf="start">from Hoa Lua's studio</Text>
+              <Text alignSelf="start" margin={{ top: "xsmall" }}>
+                from Hoa Lua's <Link href={`/studio/2`}> studio</Link>
+              </Text>
             </Box>
             <Box margin={{ vertical: "3rem" }} align="center">
               <Heading level={2} className="first">

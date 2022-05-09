@@ -1,13 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { supabase } from "services/supabase";
 
 import { useAuth } from "services/auth";
 
-import Avatar from "components/Account/Avatar";
 import Button from "components/Button";
 
 import { CheckCircle, XCircle } from "react-feather";
-
 import {
   Box,
   Form,
@@ -25,30 +23,25 @@ const emptyProfile = {
   artist: "",
   city: "",
   styles: "",
-  accountType: [],
+  accountType: [""],
   textMini: "",
+  textLong: "",
+  textStudio: "",
+  website: "",
+  instagram: "",
 };
-export default function ProfileForm({ profile, profileLoading }) {
-  const [values, setValues] = useState(emptyProfile);
 
-  const [loading, setLoading] = useState(profileLoading);
+export default function ProfileForm({ profile }) {
+  const [values, setValues] = useState(profile);
+
+  const [loading, setLoading] = useState(false);
   const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
   const [isUpdateError, setIsUpdateError] = useState(false);
 
-  const { user, session } = useAuth();
-
-  useEffect(() => {
-    if (profile?.artist) {
-      setLoading(true);
-      setValues(profile);
-      setLoading(false);
-    }
-  }, [profile]);
+  const { user } = useAuth();
 
   async function updateProfile(event) {
-    console.log(event.touched);
-    // console.log("Submit", event.value, event.touched);
-    // console.log(values);
+    //  console.log(event.touched);
     try {
       setIsUpdateError(false);
       setIsUpdateSuccess(false);
@@ -101,7 +94,7 @@ export default function ProfileForm({ profile, profileLoading }) {
     }
   }
 
-  const fieldMargin = { vertical: "medium" };
+  const fieldMargin = { vertical: "large" };
   const textMargin = { bottom: "medium" };
 
   return (
@@ -118,7 +111,6 @@ export default function ProfileForm({ profile, profileLoading }) {
             value={values}
             onChange={(nextValue) => {
               setValues(nextValue);
-              //   console.log("Change", nextValue);
             }}
             onReset={() => setValues(profile)}
             onSubmit={updateProfile}
@@ -157,48 +149,78 @@ export default function ProfileForm({ profile, profileLoading }) {
             </FormField>
 
             <FormField
-              label="A mini description"
+              label="A short intro (max 300 chars)"
               name="textMini"
               margin={fieldMargin}
             >
               <TextArea
                 name="textMini"
-                placeholder="Tell us about your artwork or collection, and your space or studio (required)"
+                placeholder="Tell us about your art practice. This is the main text. (required)"
                 fill
+                maxLength={300}
+                rows={6}
                 required
               />
             </FormField>
 
-            {/* <FormField
-              name="portfolio"
+            <FormField
+              label="About your Art"
+              name="textLong"
+              margin={fieldMargin}
+            >
+              <TextArea
+                name="textLong"
+                placeholder="Tell us about your artwork or collection in more detail"
+                fill
+                maxLength={1200}
+                rows={8}
+              />
+            </FormField>
+
+            <FormField
+              label="About your Studio"
+              name="textStudio"
+              margin={fieldMargin}
+            >
+              <TextArea
+                name="textStudio"
+                placeholder="Tell us about your space or studio"
+                fill
+                maxLength={1200}
+                rows={8}
+              />
+            </FormField>
+
+            <FormField
+              name="website"
               htmlfor="text-input-id"
-              label="Portfolio"
+              label="Website (optional)"
               type="url"
               margin={fieldMargin}
             >
               <TextInput
                 id="text-input-id"
-                name="portfolio"
-                placeholder="Link (optional)"
+                name="website"
+                placeholder="https://yoursite.com"
               />
-            </FormField> */}
-            <Avatar
-              url={
-                "https://chsbkuvxttsertgkuwhy.supabase.co/storage/v1/object/sign/avatars/a67a18aa-551c-4ecf-9281-8f1f6b596ef2/0.7190100317596877.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhdmF0YXJzL2E2N2ExOGFhLTU1MWMtNGVjZi05MjgxLThmMWY2YjU5NmVmMi8wLjcxOTAxMDAzMTc1OTY4NzcuanBnIiwiaWF0IjoxNjUwMTAwNTM5LCJleHAiOjE5NjU0NjA1Mzl9.uejvZ4Z4yyqHLp9TaMz-awWqeTO5Rjq-ZQrJJml3Uz4"
-              }
-              size={150}
-              onUpload={(url) => {
-                updatePhotosUrl(url);
-              }}
-            />
-            <br />
+            </FormField>
+            <FormField
+              name="instagram"
+              htmlfor="text-input-id"
+              label="Instagram (optional)"
+              type="url"
+              margin={fieldMargin}
+            >
+              <TextInput
+                id="text-input-id"
+                name="instagram"
+                placeholder="https://instagram.com/X"
+              />
+            </FormField>
+
             <Box direction="row" gap="medium">
               <Button type="submit" btnStyle="filled" disabled={loading}>
                 Update
-              </Button>
-
-              <Button type="reset" btnStyle="outline">
-                Clear
               </Button>
             </Box>
 

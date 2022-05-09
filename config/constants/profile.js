@@ -1,0 +1,16 @@
+export const profileFields = [
+  "artist",
+  "city",
+  "styles",
+  "textMini",
+  "textLong",
+  "textStudio",
+  "visitRules",
+  "openDates",
+  "website",
+  "instagram",
+  "address",
+  "accountType",
+  "published",
+  "studio_id",
+];
