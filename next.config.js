@@ -1,7 +1,7 @@
 const path = require("path");
 
 const nextConfig = {
-  distDir: "build",
+  // distDir: "build",
   outDir: "export",
   // exportPathMap: async function (
   //   defaultPathMap,
@@ -29,8 +29,6 @@ const nextConfig = {
     `,
   },
   env: {
-    // FIREBASE_API_KEY: "AIzaSc8MqCGj34t5mjU",
-    // FIREBASE_AUTH_DOMAIN: "kksso-101.firebaseapp.com",
   },
 };
 
