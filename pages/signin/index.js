@@ -27,7 +27,7 @@
 //   return [value, input];
 // };
 
-// const SignIn = () => {
+const SignIn = () => {
 //   const [authorizing, setAuthorizing] = useState(false);
 
 //   const [isNewUser, setIsNewUser] = useState(false);
@@ -121,5 +121,9 @@
 //     </Grid>
 //   );
 // };
+   return (
+    <></>
+   );
+};
 
-// export default SignIn;
+export default SignIn;
