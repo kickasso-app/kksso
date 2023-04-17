@@ -1,7 +1,7 @@
 {
-  "name": "kksso-next",
-  "version": "0.1.0",
-  "private": true,
+  "name": "kksso",
+  "version": "1.0.0",
+  "homepage": "https://kksso.co/",
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "next build",
