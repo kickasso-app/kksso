@@ -14,7 +14,7 @@ import Button from "components/Button";
 
 const Intro = () => {
   const margin = "medium";
-  const sectionMargin = { vertical: "12rem" };
+  const sectionMargin = { vertical: "20em" };
 
   return (
     <Grid fluid id={styles.intro} align="center">
@@ -51,7 +51,7 @@ const Intro = () => {
                 Show your work in your studio when and how you like.
               </Text>
             </Box>
-            <Box margin={sectionMargin} align="center">
+            <Box margin={margin} align="center">
               <Heading level={2} margin={margin}>
                 For art lovers and collectors
               </Heading>
@@ -99,7 +99,7 @@ const Intro = () => {
             </Box>
           </Col>
         </Row>
-        <Box margin={sectionMargin} align="center">
+        <Box margin={margin} align="center">
           <Row>
             <Heading level={2} margin={{ vertical: "1rem" }}>
               Ready to give it a try?
@@ -114,7 +114,7 @@ const Intro = () => {
               >
                 <Button btnStyle="outline">
                   <Box margin={{ vertical: "1rem", horizontal: "1rem" }}>
-                    <Link href="/studios">Explore Artists</Link>
+                    <Link href="/studios">Explore Studios</Link>
                   </Box>
                 </Button>
                 <br />

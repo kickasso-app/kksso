@@ -12,6 +12,7 @@ import { User } from "react-feather";
 import { DropButton, Box } from "grommet";
 
 export default function ProfileButton() {
+  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
@@ -37,8 +38,11 @@ export default function ProfileButton() {
 
   return (
     <DropButton
+      open={open}
+      onClose={() => setOpen(false)}
+      onOpen={() => setOpen(true)}
       dropContent={
-        <Box pad={"small"}>
+        <Box pad={"small"} onClick={() => setOpen(false)}>
           <NavButton path={"/profile?section=0"} label={"Profile"} />
           <NavButton path={"/profile?section=3"} label={"Settings"} />
           <Box pad={{ vertical: "small" }}>

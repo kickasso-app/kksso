@@ -22,7 +22,8 @@ const Header = () => {
           <Row center="xs" start="md">
             <Col xs={12} md={2}>
               <Link href="/">
-                <img src={`/img/header-logo-sm.png`} alt="kksso" />
+                {/* <img src={`/img/header-logo-sm.png`} alt="kksso" /> */}
+                <img src={`/img/header-arti-logo-color-sm.png`} alt="arti" />
               </Link>
             </Col>
             <Col xs={12} md={10}>

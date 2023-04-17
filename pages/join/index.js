@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 import { useAuth } from "services/auth";
@@ -21,6 +21,11 @@ export default function Join() {
 
   const { signUp, signIn, user } = useAuth();
 
+  useEffect(() => {
+    if (user) {
+      router.push("/profile");
+    }
+  }, [user]);
   const handleSignUp = async (event) => {
     event.preventDefault();
 

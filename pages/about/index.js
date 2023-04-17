@@ -41,12 +41,12 @@ const About = () => {
               situation and the low changes of visibility for a lot of artists.
             </p>
 
-            <h3>kksso is free and open</h3>
+            <h3>arti is free and open</h3>
 
             <p>
               Our platform is free to join for all.
               <br />
-              kksso is open to all artists. Established and upcoming artists are
+              arti is open to all artists. Established and upcoming artists are
               welcome to add their space.
             </p>
 
@@ -78,7 +78,7 @@ const About = () => {
             </p>
 
             <p>
-              kksso makes it easier for artists to show their work and make new
+              arti makes it easier for artists to show their work and make new
               connections in the way they prefer and in the place where they
               develop the creative concepts. Where they define their art.
             </p>
@@ -111,7 +111,7 @@ const About = () => {
             </ul>
             <h2>What to Expect</h2>
             <p>
-              kksso is now taking its first steps and we want to make sure that
+              arti is now taking its first steps and we want to make sure that
               we set clear principles right at the start so that you may know
               what to expect from us in the long term.
             </p>
@@ -133,7 +133,7 @@ const About = () => {
               <br />
             </h2>
             <p>
-              contact@kksso.co
+              contact@arti.co
               <br />
             </p>
             {/* 
