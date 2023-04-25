@@ -1,3 +1,5 @@
+// TO DO: clean up, cities and visitTimes not used anymore 
+
 const cities = ["Berlin", "Paris", "Brussels", "Cairo", "Prague", "New York"];
 const mediums = [
   "Painting",
@@ -11,17 +13,5 @@ const mediums = [
   "Sculpture",
 ];
 const visitTimes = ["Anytime", "In a week", "In a month", "Later"];
-
-// const cities = cityValues.map((city) => {
-//   return { name: city, type: "city" };
-// });
-
-// const mediums = mediumButtons.map((cat) => {
-//   return { name: cat, type: "medium" };
-// });
-
-// const artists = artistNames.map((a) => {
-//   return { name: a, type: "artist" };
-// });
 
 export { cities, mediums, visitTimes };
