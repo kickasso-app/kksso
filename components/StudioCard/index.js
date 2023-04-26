@@ -57,38 +57,21 @@ const StudioCard = ({
       const teaserSrc = `/img/${artist}/0.jpg`;
       setImgUrl(teaserSrc);
     }
-    console.log(url);
-  }, []);
+    // console.log(url);
+  }, [uuid]);
 
   useEffect(() => {
     fetchImg();
   }, [fetchImg]);
 
-  // useEffect(() => {
-  //   // console.log(hoveredImg);
-
-  //   if (hoveredImg) {
-  //     sleep(2000).then(() => {
-  //        setHoverImg((hoverImg + 1) % 3);
-
-  //     });
-  //   }
-  // }, [hoveredImg]);
 
   return (
     <div className={styles.StudioCard}>
       <div
         className={styles.imgContainer}
-        // onMouseEnter={() => {
-        //   setHoveredImg(true);
-        // }}
-        // onMouseLeave={() => {
-        //   setHoveredImg(false);
-        // }}
       >
         <Link href={articleLink}>
           <a onClick={() => openArticle()}>
-            {/* // imgUrl */}
 
             <ProgressiveImage src={imgUrl} placeholder={`/img/loader.svg`}>
               {(src, loading) => (

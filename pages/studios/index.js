@@ -9,7 +9,7 @@ import styles from "./index.module.scss";
 import StudiosFilter from "components/StudiosFilter/index.js";
 
 const Studios = () => {
-  const { studios, fetchStudios, query, loading, error } = useStudios();
+  const { studios, fetchStudios, loading, error } = useStudios();
 
   useEffect(() => {
     if (!studios.length) {
@@ -26,7 +26,7 @@ const Studios = () => {
             {loading ? (
               <img src={`/img/loader.svg`} />
             ) : (
-              <StudiosFilter studios={studios} query={query} />
+              <StudiosFilter studios={studios} />
             )}
           </Col>
         </Row>

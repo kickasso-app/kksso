@@ -3,24 +3,25 @@ import { supabase } from "./supabase";
 
 const StudiosContext = createContext(null);
 
-const emptyQuery = { city: "", mediums: "" };
+const emptyQuery = "";
 
 const StudiosProvider = ({ children }) => {
+
   const [studios, setStudios] = useState([]);
+
+  const [query, setQuery] = useState(emptyQuery);
+  const [searchStudios, setSearchStudios] = useState([]);
+
   const [studio, setStudio] = useState(false);
   const [userStudio, setUserStudio] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
-  const [query, setQuery] = useState(emptyQuery);
 
-  const updateStudios = (newStudios) => {
-    setStudios(newStudios);
-  };
 
-  const updateQuery = (newQuery) => {
-    setQuery(newQuery);
-  };
+  /**
+   * This function fetches published studios from a Supabase database and sets them in state.
+   */
 
   const fetchStudios = async () => {
     setLoading(true);
@@ -39,21 +40,48 @@ const StudiosProvider = ({ children }) => {
     setLoading(false);
   };
 
-  const fetchUserStudio = async ({ uuid }) => {
+
+  /**
+   * This function updates the search query and fetches search results from a Supabase database based on
+   * the query.
+   * @param newQuery - newQuery is a string parameter that represents the user's search query. It is
+   * passed to the updateQuery function as an argument and then used to fetch relevant data from the
+   * "studios" table in the Supabase database.
+   */
+
+  const updateQuery = (newQuery) => {
+    setQuery(newQuery);
+    if (!newQuery) {
+      setSearchStudios([]);
+    } else {
+      fetchSearchStudios(newQuery);
+    }
+  };
+
+  const fetchSearchStudios = async (newQuery) => {
     setLoading(true);
-    let { data: studio, error } = await supabase
+    let { data: resultStudios, error } = await supabase
       .from("studios")
-      .select("*")
-      .eq("uuid", uuid);
+      .select()
+      .is("published", true)
+      .textSearch('fts', newQuery, {
+        type: 'websearch',
+        config: 'english',
+      });
     if (error) {
       setError(error);
       console.log(error);
     } else {
-      setUserStudio(studio[0]);
-      // console.log(studio[0]);
+      setSearchStudios(resultStudios);
+      // console.log("new search"); console.log(resultStudios);
     }
     setLoading(false);
   };
+
+  /**
+   * This is an asynchronous function that fetches data from a Supabase database table called "studios"
+   * based on a given ID (studio_id) and sets the fetched data to a state variable called "studio".
+   */
 
   const fetchStudio = async ({ id }) => {
     setLoading(true);
@@ -71,12 +99,34 @@ const StudiosProvider = ({ children }) => {
     setLoading(false);
   };
 
+
+  /**
+   * This is an asynchronous function that fetches a user's studio data from a Supabase database based on
+   * their UUID.
+   */
+
+  const fetchUserStudio = async ({ uuid }) => {
+    setLoading(true);
+    let { data: studio, error } = await supabase
+      .from("studios")
+      .select("*")
+      .eq("uuid", uuid);
+    if (error) {
+      setError(error);
+      console.log(error);
+    } else {
+      setUserStudio(studio[0]);
+      // console.log(studio[0]);
+    }
+    setLoading(false);
+  };
+
   const contextObj = {
     studios,
+    searchStudios,
     studio,
     userStudio,
     query,
-    updateStudios,
     updateQuery,
     fetchStudios,
     fetchStudio,

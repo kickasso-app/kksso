@@ -40,7 +40,7 @@ const Intro = () => {
             </Box>
 
             <Box margin={{ vertical: "0rem", bottom: "12rem" }} align="center">
-              <SearchBar />
+              <SearchBar isBarFullWidth />
             </Box>
 
             <Box margin={sectionMargin} align="center">
