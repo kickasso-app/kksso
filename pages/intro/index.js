@@ -1,6 +1,4 @@
-// import React from "react";
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
-// import { NavLink } from "react-router-dom";
 import Link from "next/link";
 
 import ProgressiveImage from "react-progressive-image";
@@ -11,6 +9,8 @@ import styles from "./index.module.scss";
 import { Box, Heading, Text } from "grommet";
 import SearchBar from "components/SearchBar";
 import Button from "components/Button";
+
+import FEATURED_STUDIO from "config/featured";
 
 const Intro = () => {
   const margin = "medium";
@@ -30,7 +30,7 @@ const Intro = () => {
                 height="45%"
               />
               <Text alignSelf="start" margin={{ top: "xsmall" }}>
-                from Hoa Lua's <Link href={`/studio/2`}> studio</Link>
+                from {FEATURED_STUDIO.artist}'s <Link href={`/studio/${FEATURED_STUDIO.id}`}> studio</Link>
               </Text>
             </Box>
             <Box margin={{ vertical: "3rem" }} align="center">
