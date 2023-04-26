@@ -22,7 +22,7 @@ const Studios = () => {
       <section>
         <Row id={styles.studio}>
           <Col xs={12} md={12}>
-            {error && <strong>Error: {JSON.stringify(error)}</strong>}
+            {/* {error && <strong>Error: {JSON.stringify(error)}</strong>} */}
             {loading ? (
               <img src={`/img/loader.svg`} />
             ) : (

@@ -24,6 +24,8 @@ const Studio = () => {
     console.log(studio);
   }, [id]);
 
+  console.log(studio);
+
   const paragraphSeperator = "\\";
 
   const makeParagraphs = (paragraphString, pSeparator) => {

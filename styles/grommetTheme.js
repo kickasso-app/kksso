@@ -17,6 +17,7 @@ const themeChanges = {
       "dark-1": "4b4b4b",
       control: "accent-1",
       focus: "#FFC0CB",
+      icon: "#FFC0CB",
     },
     font: {
       family: "Nunito Sans",
@@ -73,6 +74,16 @@ const themeChanges = {
       hover: {
         color: "black",
       },
+    },
+  },
+  calendar: {
+    medium: {
+      daySize: "46px",
+    },
+    day: {
+      extend: ({ isSelected }) => `
+        border-radius: 100px;
+        background-color: ${isSelected && '#C0FFF4'}`,
     },
   },
   // size is useless
