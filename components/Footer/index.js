@@ -23,22 +23,22 @@ const Footer = () => {
               &nbsp;&nbsp;&nbsp; */}
               <a href="https://www.instagram.com/">
                 <Instagram
-                  size={24}
+                  size={40}
                   fill="#4b4b4b"
                   color="#fff"
-                  // strokeWidth={2}
+                // strokeWidth={2}
                 />
               </a>
               <p>
-                <b>contact</b>@kksso.co
+                <b>contact</b>@arti.co
               </p>
               <Row>
                 {" "}
-                <Box height="22px" margin="medium">
-                  <Image fit="contain" src="/img/logo-zoom.png" />{" "}
+                <Box height="50px" margin="medium">
+                  <Image fit="contain" src="/img/logo-only.png" />{" "}
                 </Box>
               </Row>
-              <Text size="small">Kickasso, 2020</Text>
+              <Text size="small">Arti, 2023</Text>
             </center>
           </Col>
         </Row>
