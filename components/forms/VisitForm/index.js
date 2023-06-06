@@ -20,6 +20,8 @@ import {
 
 import Button from "./../../Button";
 
+import { calendarBounds } from "config/calendar";
+
 const SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
 const TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
 const USER_ID = process.env.NEXT_PUBLIC_EMAILJS_USER_ID;
@@ -36,6 +38,7 @@ const VisitForm = ({ artistEmail, artistName, openVisitDates }) => {
     requestor_email: "kickasso@gmail.com",
     from_name: "Requestor Name",
     message: "Hello There Message",
+    visit_reason: "Reason of Visit",
     request_date: "",
   };
 
@@ -53,6 +56,33 @@ const VisitForm = ({ artistEmail, artistName, openVisitDates }) => {
   const readableDate = (calendarDate) => moment(calendarDate, "YYYY-MM-DD hh:mm").format("D MMMM - h:mm a");
 
   const calendarDates = openVisitDates.map(d => prepDates(d));
+
+  const getDaysArray = (start, end) => {
+    for (var arr = [], dt = new Date(start); dt <= new Date(end); dt.setDate(dt.getDate() + 1)) {
+      arr.push(new Date(dt));
+    }
+    return arr;
+  };
+
+  const getDisabledArray = (start, end, openDates) => {
+
+    const allDays = getDaysArray(new Date(start), new Date(end)).map((v) => v.toISOString().slice(0, 10));
+    const openIndexes = [];
+
+    openDates.forEach(d => {
+      const i = allDays.indexOf(d.slice(0, 10));
+      openIndexes.push(i);
+    });
+
+    for (let i = openIndexes.length - 1; i >= 0; i--) {
+      allDays.splice(openIndexes[i], 1);
+    }
+
+    const disabled = allDays;
+    return disabled;
+  }
+
+  const disabledDates = getDisabledArray(calendarBounds.Start, calendarBounds.End, calendarDates);
 
   const onSelectDate = (date) => {
     setValues({ ...values, request_date: readableDate(date) });
@@ -120,7 +150,8 @@ const VisitForm = ({ artistEmail, artistName, openVisitDates }) => {
               dates={calendarDates}
               size="medium"
               margin="medium"
-              bounds={['2020-09-08', '2025-12-13']}
+              bounds={[calendarBounds.Start, calendarBounds.End]}
+              disabled={disabledDates}
             // to customize the header
             // https://storybook.grommet.io/?path=/story/visualizations-calendar-header--custom-header-calendar
             />
@@ -169,11 +200,22 @@ const VisitForm = ({ artistEmail, artistName, openVisitDates }) => {
               ]}
             />
           </FormField>
+          <FormField label="Reason of visit" name="visit_reason">
+            <TextArea
+              name="visit_reason"
+              placeholder="Just curious, Want to collaborate on a project, or Want to buy a specific artwork, or something else ..."
+              fill
+              required
+              rows="3"
+            />
+          </FormField>
+          <br />
           <FormField label="Message to artist" name="message">
             <TextArea
               name="message"
               placeholder="Add a little something about you and why you want to visit the artist’s studio and what you like about their work. (optional)"
               fill
+              rows="6"
             />
           </FormField>
           <br />
