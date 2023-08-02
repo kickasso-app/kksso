@@ -4,6 +4,8 @@ import Link from "next/link";
 import ProgressiveImage from "react-progressive-image";
 import Image from "next/image";
 
+import { useMediaQuery, maxWidths } from "hooks/useMediaQuery";
+
 import styles from "./index.module.scss";
 
 import { Box, Heading, Text } from "grommet";
@@ -16,19 +18,31 @@ const Intro = () => {
   const margin = "medium";
   const sectionMargin = { vertical: "20em" };
 
+  const isTablet = useMediaQuery(`(max-width: ${maxWidths.tablet}px)`);
+
+
   return (
     <Grid fluid id={styles.intro} align="center">
       <section>
         <Row id={styles.intro}>
           <Col xs={12} md={12}>
             <Box margin={{ bottom: "1rem" }}>
-              <Image
-                src={`/img/intro/banner-0.jpg`}
-                alt="banner"
-                layout="responsive"
-                width="100%"
-                height="45%"
-              />
+              {isTablet ?
+                <Image
+                  src={`/img/intro/banner-0-vertical.jpg`}
+                  alt="banner"
+                  layout="responsive"
+                  width="100%"
+                  height="120%"
+                /> :
+                <Image
+                  src={`/img/intro/banner-0.jpg`}
+                  alt="banner"
+                  layout="responsive"
+                  width="100%"
+                  height="45%"
+                />}
+
               <Text alignSelf="start" margin={{ top: "xsmall" }}>
                 from {FEATURED_STUDIO.artist}'s <Link href={`/studio/${FEATURED_STUDIO.id}`}> studio</Link>
               </Text>
