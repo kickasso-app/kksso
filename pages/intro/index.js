@@ -6,6 +6,7 @@ import Image from "next/image";
 
 import { useMediaQuery, maxWidths } from "hooks/useMediaQuery";
 
+
 import styles from "./index.module.scss";
 
 import { Box, Heading, Text } from "grommet";
@@ -19,6 +20,7 @@ const Intro = () => {
   const sectionMargin = { vertical: "20em" };
 
   const isTablet = useMediaQuery(`(max-width: ${maxWidths.tablet}px)`);
+  // TO DO: replace by https://v2.grommet.io/responsivecontext
 
 
   return (
