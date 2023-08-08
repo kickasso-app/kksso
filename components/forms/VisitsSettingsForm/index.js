@@ -3,17 +3,14 @@ import { supabase } from "services/supabase";
 
 import { useAuth } from "services/auth";
 
-import { CheckCircle, XCircle } from "react-feather";
-
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
-
-
 
 import {
   Box,
   Form,
   FormField,
   MaskedInput,
+  Notification,
   CheckBoxGroup,
   Calendar,
   TextArea,
@@ -205,20 +202,20 @@ export default function VisitsSettingsForm({ profile: { visitRules, openDates, a
             {!loading && (
               <>
                 {isUpdateSuccess && (
-                  <Text>
-                    <CheckCircle size={24} color="#C0FFF4" strokeWidth={3} />
-                    <br />
-                    Thanks for updating your profile!
-                  </Text>
+                  <Notification
+                    toast
+                    status="normal"
+                    title="Your profile was updated."
+                  />
                 )}
                 {isUpdateError && (
-                  <Text>
-                    <XCircle size={24} color="#FFC0CB" strokeWidth={3} />
-                    <br />
-                    We couldn't send your request this time.
-                    <br />
-                    Please try again.
-                  </Text>
+                  <Notification
+                    toast
+                    status="warning"
+                    title="Your profile was not updated!"
+                    message="We couldn't complete your request this time. Please try again."
+                  // onClose={() => {}}
+                  />
                 )}
               </>
             )}

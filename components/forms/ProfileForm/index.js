@@ -5,12 +5,12 @@ import { useAuth } from "services/auth";
 
 import Button from "components/Button";
 
-import { CheckCircle, XCircle } from "react-feather";
+// import { CheckCircle, XCircle } from "react-feather";
 import {
   Box,
   Form,
   FormField,
-  MaskedInput,
+  Notification,
   CheckBoxGroup,
   TextArea,
   TextInput,
@@ -19,17 +19,6 @@ import {
   Grommet,
 } from "grommet";
 
-const emptyProfile = {
-  artist: "",
-  city: "",
-  styles: "",
-  accountType: [""],
-  textMini: "",
-  textLong: "",
-  textStudio: "",
-  website: "",
-  instagram: "",
-};
 
 export default function ProfileForm({ profile }) {
   const [values, setValues] = useState(profile);
@@ -227,20 +216,20 @@ export default function ProfileForm({ profile }) {
             {!loading && (
               <>
                 {isUpdateSuccess && (
-                  <Text>
-                    <CheckCircle size={24} color="#C0FFF4" strokeWidth={3} />
-                    <br />
-                    Thanks for updating your profile!
-                  </Text>
+                  <Notification
+                    toast
+                    status="normal"
+                    title="Your profile was updated."
+                  />
                 )}
                 {isUpdateError && (
-                  <Text>
-                    <XCircle size={24} color="#FFC0CB" strokeWidth={3} />
-                    <br />
-                    We couldn't send your request this time.
-                    <br />
-                    Please try again.
-                  </Text>
+                  <Notification
+                    toast
+                    status="warning"
+                    title="Your profile was not updated!"
+                    message="We couldn't complete your request this time. Please try again."
+                  // onClose={() => {}}
+                  />
                 )}
               </>
             )}
