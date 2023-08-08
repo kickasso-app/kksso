@@ -7,6 +7,7 @@ import { useAuth } from "services/auth";
 
 import { Box } from "grommet";
 
+// NOT USED
 export default function SignUp() {
   const router = useRouter();
 
