@@ -7,19 +7,13 @@ import { Edit2, X } from "react-feather";
 
 import {
   Box,
-  Form,
-  FormField,
-  MaskedInput,
-  CheckBoxGroup,
-  TextArea,
-  TextInput,
-  Text,
-  Heading,
+  Notification,
   FileInput,
-  Grommet,
 } from "grommet";
 
 import Button from "components/Button";
+
+const PHOTO_MAX_SIZE = 1048576; // 1 MB
 
 export default function PhotoInput({
   imgPath,
@@ -28,11 +22,11 @@ export default function PhotoInput({
   postUpload,
   //   onSetMain,
 }) {
+
   const [imgUrl, setImgUrl] = useState(null);
-
   const [editing, setEditing] = useState(true);
-
   const [uploading, setUploading] = useState(false);
+  const [isPhotoTooLarge, setIsPhotoTooLarge] = useState(false);
 
   const { user } = useAuth();
 
@@ -69,6 +63,7 @@ export default function PhotoInput({
   async function uploadImage({ event, imgName }) {
     try {
       setUploading(true);
+      setIsPhotoTooLarge(false);
       if (imgPath) await removeImage();
       if (!event.target.files || event.target.files.length === 0) {
         throw new Error("You must select an image to upload.");
@@ -79,24 +74,33 @@ export default function PhotoInput({
       const fileName = `${imgName}.${fileExt}`;
       const filePath = `${user.id}/${fileName}`;
 
-      let { error } = await supabase.storage
-        .from("studios-photos")
-        .upload(filePath, file, {
-          cacheControl: "30",
-          upsert: true,
-        });
-
-      if (error) {
-        throw error;
+      console.log(file.size);
+      if (file.size > PHOTO_MAX_SIZE) {
+        setIsPhotoTooLarge(true);
+        setUploading(false);
       }
-      await postUpload();
-      await downloadImage({ imgPath: filePath, postDownload: setImgUrl });
-      setEditing(false);
+      else {
+
+        let { error } = await supabase.storage
+          .from("studios-photos")
+          .upload(filePath, file, {
+            cacheControl: "30",
+            upsert: true,
+          });
+
+        if (error) {
+          throw error;
+        }
+        await postUpload();
+        await downloadImage({ imgPath: filePath, postDownload: setImgUrl });
+        setEditing(false);
+      }
     } catch (error) {
       alert(error.message);
     } finally {
       setUploading(false);
     }
+
   }
 
   return (
@@ -110,6 +114,8 @@ export default function PhotoInput({
         gap="large"
         margin="medium"
       >
+
+
         <Box align="center" width="small" height="small">
           {editing ? (
             <FileInput
@@ -118,7 +124,7 @@ export default function PhotoInput({
               id="fileInput"
               multiple={false}
               accept="image/*"
-              maxSize={1000000}
+              // maxSize={PHOTO_MAX_SIZE} // not working, using manual check
               disabled={uploading}
               onChange={async (event) =>
                 await uploadImage({ event, imgName: imgId })
@@ -153,8 +159,18 @@ export default function PhotoInput({
           )}
 
           {uploading && <img src={`/img/loader.svg`} />}
+
           <br />
           {isMainPhoto && <p>This is your main cover photo</p>}
+          {isPhotoTooLarge && (
+            <Notification
+              toast
+              status="warning"
+              title="Your photo was not uploaded"
+              message="Upload a smaller image, less than 1 Megabyte."
+            // onClose={() => {}}
+            />
+          )}
         </Box>
       </Box>
     </div>

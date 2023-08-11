@@ -121,7 +121,8 @@ export default function ProfileForm({ profile }) {
               <TextInput name="styles" placeholder="painting, prints, sound" />
             </FormField>
 
-            <FormField
+            {/* CHANGED FOR PILOT */}
+            {/* <FormField
               name="accountType"
               label="How would you use your account?"
               margin={fieldMargin}
@@ -135,7 +136,7 @@ export default function ProfileForm({ profile }) {
                   { label: "Collector", id: "Collector" },
                 ]}
               />
-            </FormField>
+            </FormField> */}
 
             <FormField
               label="A short intro (max 300 chars)"
