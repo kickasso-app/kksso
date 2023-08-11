@@ -1,3 +1,7 @@
-import Intro from "./intro";
+{/* CHANGED FOR PILOT */ }
+// import Intro from "./intro";
+// export default Intro;
 
-export default Intro;
+import Pilot from "./pilot";
+
+export default Pilot;
