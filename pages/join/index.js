@@ -9,13 +9,15 @@ import {
   Heading,
   Anchor,
   Paragraph,
-  Button as GrommetButton,
+  Notification,
+  // Button as GrommetButton,
 } from "grommet";
 import Button from "components/Button";
 
 export default function Join() {
   const [loading, setLoading] = useState(false);
   const [newUser, setNewUser] = useState(true);
+  const [signUpToast, setSignUpToast] = useState(false);
 
   const router = useRouter();
 
@@ -39,13 +41,14 @@ export default function Join() {
         password,
       });
       if (error) throw error;
-      if (user) {
-        router.push("/welcome?email=${user.email}");
-      }
+      // if (user) {
+      //   // router.push("/welcome?email=${user.email}");
+      // }
     } catch (error) {
       alert(error.error_description || error.message);
     } finally {
       setLoading(false);
+      setSignUpToast(true);
     }
   };
 
@@ -121,6 +124,16 @@ export default function Join() {
               Don't have an account?{" "}
               <Anchor onClick={() => setNewUser(true)}>Sign Up</Anchor>
             </Paragraph>
+          )}
+
+          {signUpToast && (
+            <Notification
+              toast
+              status="normal"
+              title="Almost there!"
+              message="Please check your inbox to verify your email."
+              onClose={() => { setSignUpToast(false) }}
+            />
           )}
         </Box>
       </form>

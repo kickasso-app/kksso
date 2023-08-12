@@ -3,15 +3,16 @@ import { supabase } from "services/supabase";
 
 import { useAuth } from "services/auth";
 
-import Button from "components/Button";
+import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 
-import { CheckCircle, XCircle } from "react-feather";
 import {
   Box,
   Form,
   FormField,
   MaskedInput,
+  Notification,
   CheckBoxGroup,
+  Calendar,
   TextArea,
   TextInput,
   Text,
@@ -19,13 +20,15 @@ import {
   Grommet,
 } from "grommet";
 
-const emptyProfile = {
-  address: "",
-  visitRules: "",
-  openDates: [],
-};
-export default function VisitsSettingsForm({ profile }) {
-  const [values, setValues] = useState(emptyProfile);
+
+import Button from "components/Button";
+
+import { calendarBounds } from "config/calendar";
+
+export default function VisitsSettingsForm({ profile: { visitRules, openDates, address } }) {
+  const [values, setValues] = useState({ visitRules, openDates, address });
+
+  // console.log(values);
 
   const [loading, setLoading] = useState(false);
   const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
@@ -33,14 +36,25 @@ export default function VisitsSettingsForm({ profile }) {
 
   const { user, session } = useAuth();
 
+
+  const [selectedDate, setSelectedDate] = useState(calendarBounds.Start);
+
+
+  const prepDates = (rawDate) => {
+    const date = moment(rawDate, "DD/MM/YYYY hh:mm").format("YYYY-MM-DD hh:mm");
+    return date;
+  }
+
+  // const readableDate = (calendarDate) => moment(calendarDate, "YYYY-MM-DD hh:mm").format("D MMMM - h:mm a");
+
+  //  const calendarDates = values?.openDates?.map(d => prepDates(d)) || prepDates(calendarBounds.Start);
+
+
+  const disabledDates = [["2023-09-01", "2023-09-15"]];
+
+
   // TO DO: get address from separate table with more security
-  useEffect(() => {
-    if (profile?.artist) {
-      setLoading(true);
-      setValues(profile);
-      setLoading(false);
-    }
-  }, [profile]);
+
 
   async function updateProfile(event) {
     console.log(event.touched);
@@ -74,17 +88,24 @@ export default function VisitsSettingsForm({ profile }) {
     }
   }
 
+  const onChangeDate = (date) => {
+    console.log(date);
+    setSelectedDate(date);
+  }
+
   const fieldMargin = { vertical: "large" };
   const textMargin = { bottom: "medium" };
 
   return (
     <Box fill align="center" justify="center">
       <Box width="large" pad="medium" gap="medium">
+
         <Heading level="3" size="medium" margin={fieldMargin}>
           Your Visit Settings
         </Heading>
+        <Grid fluid>
 
-        <Grommet>
+
           <Box>
             <Heading level="4" size="medium" margin={textMargin}>
               General Visit Tips
@@ -142,7 +163,33 @@ export default function VisitsSettingsForm({ profile }) {
               />
             </FormField>
 
-            <Heading level={3}>To do: add visit dates</Heading>
+            <Row>
+              <Col xs={12} md={8}>
+                <Calendar
+                  onSelect={onChangeDate}
+                  dates={[selectedDate]}
+                  size="medium"
+                  // margin="medium"
+                  bounds={[calendarBounds.Start, calendarBounds.End]}
+                  disabled={disabledDates}
+                // to customize the header
+                // https://storybook.grommet.io/?path=/story/visualizations-calendar-header--custom-header-calendar
+                />
+
+              </Col>
+              <Col xs={12} md={4}>
+                <Text>
+                  <b>
+                    hours
+
+                    of {selectedDate}
+
+
+                  </b>
+                </Text>
+              </Col>
+            </Row>
+
             <br />
             <br />
 
@@ -155,27 +202,27 @@ export default function VisitsSettingsForm({ profile }) {
             {!loading && (
               <>
                 {isUpdateSuccess && (
-                  <Text>
-                    <CheckCircle size={24} color="#C0FFF4" strokeWidth={3} />
-                    <br />
-                    Thanks for updating your profile!
-                  </Text>
+                  <Notification
+                    toast
+                    status="normal"
+                    title="Your profile was updated."
+                  />
                 )}
                 {isUpdateError && (
-                  <Text>
-                    <XCircle size={24} color="#FFC0CB" strokeWidth={3} />
-                    <br />
-                    We couldn't send your request this time.
-                    <br />
-                    Please try again.
-                  </Text>
+                  <Notification
+                    toast
+                    status="warning"
+                    title="Your profile was not updated!"
+                    message="We couldn't complete your request this time. Please try again."
+                  // onClose={() => {}}
+                  />
                 )}
               </>
             )}
           </Form>
-        </Grommet>
+        </Grid>
       </Box>
-    </Box>
+    </Box >
   );
 }
 

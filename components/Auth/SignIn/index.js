@@ -7,12 +7,13 @@ import { useAuth } from "services/auth";
 
 import { Box } from "grommet";
 
+// NOT USED
 export default function SignIn() {
   const router = useRouter();
 
   const { signIn, user } = useAuth();
 
-  const handleSignUp = async (event) => {
+  const handleSignIn = async (event) => {
     event.preventDefault();
 
     const email = event.target.email.value;
@@ -31,7 +32,7 @@ export default function SignIn() {
   };
 
   return (
-    <form onSubmit={handleSignUp}>
+    <form onSubmit={handleSignIn}>
       <Box width="large" pad="medium">
         <Box>
           <label htmlFor="email">Email</label>

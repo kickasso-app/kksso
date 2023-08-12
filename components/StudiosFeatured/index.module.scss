@@ -1,0 +1,26 @@
+.studois {
+  // padding: 0 1rem;
+  // display: block;
+  // overflow: auto;
+
+  p,
+  h4.secondary {
+    color: $color-primary;
+  }
+}
+
+// Grid
+
+.masonryGrid {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-left: -2rem;
+  width: auto;
+}
+
+.masonryGridColumn {
+  padding-left: 2rem;
+  background-clip: padding-box;
+  text-align: left;
+}

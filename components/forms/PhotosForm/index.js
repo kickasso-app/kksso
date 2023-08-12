@@ -70,9 +70,12 @@ export default function PhotosForm() {
         <Heading level="3" size="medium" margin={fieldMargin}>
           Your Photos
         </Heading>
-        {/* <Text size="medium" margin={textMargin}>
-          Update your photos
-        </Text> */}
+        <Text size="medium" margin={textMargin}>
+          Add up to 5 photos of your work, your studio, and yourself
+        </Text>
+        <Text size="small" margin={textMargin}>
+          Image files must be smaller than 1 MB per image
+        </Text>
         {[0, 1, 2, 3, 4].map((imgId) => {
           return (
             <PhotoInput
@@ -82,7 +85,7 @@ export default function PhotosForm() {
               postUpload={async () => {
                 await fetchImgsList();
               }}
-              //   onSetMain={(imgId) => setMainPhoto(imgId)}
+            //   onSetMain={(imgId) => setMainPhoto(imgId)}
             />
           );
         })}

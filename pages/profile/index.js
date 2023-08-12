@@ -42,6 +42,29 @@ export default function Profile() {
     }
   }, [session]);
 
+
+  async function createProfile() {
+    const randomId = 1 + Math.floor(Math.random() * 10000);
+    const newRow = {
+      uuid: user.id,
+      studio_id: randomId,
+      email: user.email,
+      city: "",
+      artist: "",
+      styles: "",
+    };
+
+    const { newProfile, error } = await supabase
+      .from('studios')
+      .insert([newRow])
+      .select();
+
+    if (error && status !== 406) {
+      throw error;
+    }
+    return newProfile;
+  }
+
   async function getProfile() {
     try {
       setLoading(true);
@@ -52,6 +75,11 @@ export default function Profile() {
         .select(profileFields.join(", "))
         .eq("uuid", user.id)
         .single();
+
+
+      if (!data) {
+        data = await createProfile();
+      }
 
       if (error && status !== 406) {
         throw error;
