@@ -86,6 +86,12 @@ const themeChanges = {
         background-color: ${isSelected && '#C0FFF4'}`,
     },
   },
+  checkBox: {
+    border: {
+      color: "black",
+    },
+    color: "black",
+  },
   // size is useless
   // size: {
   //   large: {

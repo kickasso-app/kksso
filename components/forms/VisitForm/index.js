@@ -48,6 +48,8 @@ const VisitForm = ({ artistEmail, artistName, openVisitDates }) => {
   const [isEmailSent, setIsEmailSent] = useState(false);
   const [sendEmailError, setSendEmailError] = useState(false);
 
+
+
   const prepDates = (rawDate) => {
     const date = moment(rawDate, "DD/MM/YYYY hh:mm").format("YYYY-MM-DD hh:mm");
     return date;
