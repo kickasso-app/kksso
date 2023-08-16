@@ -1,7 +1,18 @@
 button.outline:focus,
-button.filled:focus button.text:focus {
+button.filled:focus,
+button.text:focus {
   outline: 0;
 }
+
+button.outline:disabled,
+button.filled:disabled,
+button.text:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+
 
 button.text {
   background-color: $color--bg-white;
