@@ -6,8 +6,9 @@ import Masonry from "react-masonry-css";
 
 import SearchBar from "components/SearchBar";
 import StudioCard from "../StudioCard";
-import filterStudios from "./filterStudios";
+// import filterStudios from "./filterStudios";
 import styles from "./index.module.scss";
+import StudiosFeatured from "components/StudiosFeatured";
 
 const StudiosFilter = ({ studios }) => {
 
@@ -42,7 +43,11 @@ const StudiosFilter = ({ studios }) => {
             })}
           </Masonry>
         ) : (
-          <Text>No matching studios.</Text>
+          <>
+            <Text>No studios were found for your search. <br /><br />Update your search terms or explore the studios here.</Text>
+
+            <StudiosFeatured />
+          </>
         )}
       </Box>
     </div>

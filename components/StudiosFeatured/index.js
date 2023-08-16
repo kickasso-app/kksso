@@ -21,7 +21,7 @@ const StudiosFeatured = () => {
   }, [studios]);
 
   useEffect(() => {
-    if (studios.length > 3) {
+    if (studios.length > 2) {
       // Pilot To Do 
       // pick three random studios
 
