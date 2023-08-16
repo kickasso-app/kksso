@@ -20,11 +20,12 @@ const Studio = () => {
   const { studio, fetchStudio, loading, error } = useStudios();
 
   useEffect(() => {
-    fetchStudio({ id });
-    console.log(studio);
+    if (id > 0) {
+      fetchStudio({ id });
+    }
   }, [id]);
 
-  console.log(studio);
+  // console.log(studio);
 
   const paragraphSeperator = "\\";
 
@@ -155,12 +156,13 @@ const Studio = () => {
                   <li>Ask before taking photos of the artist and artworks</li>
                   <li>A gift is almost always a nice touch</li>
                 </ul>
-                {studio.openDates ? (
+                {studio?.openDates.length > 2 ? (
                   <VisitForm
-                    openDates={studio.openDates}
+                    openDates={studio.openDates || []}
                     artistEmail={studio.email}
                     artistName={studio.artist}
                   />
+                  // <>{studio.openDates}</>
                 ) : (
                   <>
                     <h3 className={styles.sectiontitle}>

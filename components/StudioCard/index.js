@@ -39,7 +39,7 @@ const StudioCard = ({
   const [hoveredImg, setHoveredImg] = useState(false);
 
   const nextVisit = openDates
-    ? moment(openDates.split(",")[0], "DD/MM/YYYY hh:mm").format("D MMM")
+    ? moment(openDates.split(",")[0], "YYYY-MM-DD hh:mm").format("D MMM")
     : false;
 
   function sleep(ms) {
