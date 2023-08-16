@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { supabase } from "services/supabase";
 
+import moment from "moment";
+
+
 import { useAuth } from "services/auth";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
@@ -9,7 +12,6 @@ import {
   Box,
   Form,
   FormField,
-  MaskedInput,
   Notification,
   CheckBoxGroup,
   Calendar,
@@ -17,7 +19,6 @@ import {
   TextInput,
   Text,
   Heading,
-  Grommet,
 } from "grommet";
 
 
@@ -26,49 +27,92 @@ import Button from "components/Button";
 import { calendarBounds } from "config/calendar";
 
 export default function VisitsSettingsForm({ profile: { visitRules, openDates, address } }) {
-  const [values, setValues] = useState({ visitRules, openDates, address });
-
-  // console.log(values);
-
-  const [loading, setLoading] = useState(false);
-  const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
-  const [isUpdateError, setIsUpdateError] = useState(false);
-
   const { user, session } = useAuth();
 
 
-  const [selectedDate, setSelectedDate] = useState(calendarBounds.Start);
+  const [values, setValues] = useState({ visitRules, openDates, address });
 
+  const initialDates = openDates?.split(",") ?? [];
 
-  const prepDates = (rawDate) => {
-    const date = moment(rawDate, "DD/MM/YYYY hh:mm").format("YYYY-MM-DD hh:mm");
-    return date;
+  const getSelectedTimes = (date, dates) => {
+    const timeData = dates.filter(s => s.startsWith(date)).map(d => d.split(" ")[1]);
+    return timeData;
+
   }
 
-  // const readableDate = (calendarDate) => moment(calendarDate, "YYYY-MM-DD hh:mm").format("D MMMM - h:mm a");
+  const [selectedDate, setSelectedDate] = useState(calendarBounds.Start);
+  const [selectedTimes, setSelectedTimes] = useState(getSelectedTimes(calendarBounds.Start, initialDates));
+  const [visitSlots, setVisitSlots] = useState(initialDates);
 
-  //  const calendarDates = values?.openDates?.map(d => prepDates(d)) || prepDates(calendarBounds.Start);
+
+  const onChangeTimes = (times) => {
+    setSelectedTimes(times);
+  }
+
+  const onChangeDate = (date) => {
+
+    updateTempSlots();
+
+    setSelectedDate(date);
+    setSelectedTimes(getSelectedTimes(date, visitSlots));
+
+  }
+
+  const updateTempSlots = () => {
+    console.log(selectedDate);
+    console.log(selectedTimes);
+
+    // remove old times
+    // then add new ones
+    const oldTimes = initialDates.filter(s => !s.startsWith(selectedDate));
+
+    selectedTimes.forEach(t => oldTimes.push(selectedDate + " " + t));
 
 
-  const disabledDates = [["2023-09-01", "2023-09-15"]];
+    const newTimes = oldTimes.filter(t => t.length > 2);
+    setVisitSlots(newTimes);
+
+    return newTimes;
+
+  }
+
+
+  const readableDate = (calendarDate) => moment(calendarDate, "YYYY-MM-DD hh:mm").format("D MMMM");
+
+
+  // const disabledDates = [["2023-09-01", "2023-09-15"]];
 
 
   // TO DO: get address from separate table with more security
 
 
+  const [loading, setLoading] = useState(false);
+  const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
+  const [isUpdateError, setIsUpdateError] = useState(false);
+
+
+
   async function updateProfile(event) {
-    console.log(event.touched);
-    // console.log("Submit", event.value, event.touched);
-    // console.log(values);
+
+    const newOpenDates = updateTempSlots();
+
+
     try {
       setIsUpdateError(false);
       setIsUpdateSuccess(false);
       setLoading(true);
 
+
+
+
       const updates = {
         ...values,
+        openDates: newOpenDates.join(","),
         // updated_at: new Date(),
       };
+
+      // console.log("updates");
+      // console.log(updates);
 
       let { error } = await supabase
         .from("studios")
@@ -88,10 +132,7 @@ export default function VisitsSettingsForm({ profile: { visitRules, openDates, a
     }
   }
 
-  const onChangeDate = (date) => {
-    console.log(date);
-    setSelectedDate(date);
-  }
+
 
   const fieldMargin = { vertical: "large" };
   const textMargin = { bottom: "medium" };
@@ -120,7 +161,6 @@ export default function VisitsSettingsForm({ profile: { visitRules, openDates, a
             value={values}
             onChange={(nextValue) => {
               setValues(nextValue);
-              //   console.log("Change", nextValue);
             }}
             onReset={() => setValues(profile)}
             onSubmit={updateProfile}
@@ -148,7 +188,7 @@ export default function VisitsSettingsForm({ profile: { visitRules, openDates, a
             >
               <Text>
                 <b>
-                  {"  "} We will only share your address with visitors after you
+                  We will only share your address with visitors after you
                   agree to host them
                 </b>
               </Text>
@@ -171,7 +211,7 @@ export default function VisitsSettingsForm({ profile: { visitRules, openDates, a
                   size="medium"
                   // margin="medium"
                   bounds={[calendarBounds.Start, calendarBounds.End]}
-                  disabled={disabledDates}
+                // disabled={disabledDates}
                 // to customize the header
                 // https://storybook.grommet.io/?path=/story/visualizations-calendar-header--custom-header-calendar
                 />
@@ -180,12 +220,23 @@ export default function VisitsSettingsForm({ profile: { visitRules, openDates, a
               <Col xs={12} md={4}>
                 <Text>
                   <b>
-                    hours
-
-                    of {selectedDate}
-
-
+                    {readableDate(selectedDate)}
+                    <br /><br />
                   </b>
+
+                  <CheckBoxGroup
+
+                    value={selectedTimes}
+                    onChange={({ value: nextValue }) => {
+                      onChangeTimes(nextValue);
+                    }}
+                    options={[
+                      '10:00', '11:00', '12:00', '13:00', '14:00', '15:00',
+                      '16:00', '17:00', '18:00', '19:00', '20:00', '21:00',
+                    ]}
+                  />
+
+
                 </Text>
               </Col>
             </Row>
@@ -224,41 +275,4 @@ export default function VisitsSettingsForm({ profile: { visitRules, openDates, a
       </Box>
     </Box >
   );
-}
-
-{
-  /* <FormField
-              name="from_name"
-              htmlfor="text-input-id"
-              label="Name"
-              required
-              margin={fieldMargin}
-            >
-              <TextInput
-                id="text-input-id"
-                name="from_name"
-                placeholder="Name"
-              />
-            </FormField>
-            <FormField
-              label="Email"
-              name="requestor_email"
-              required
-              validate={{
-                regexp: /\S+@\S+\.\S+/,
-                message: "Enter a valid email address",
-              }}
-              margin={fieldMargin}
-            >
-              <MaskedInput
-                name="requestor_email"
-                mask={[
-                  { regexp: /^[\w\-_.]+$/, placeholder: "your" },
-                  { fixed: "@" },
-                  { regexp: /^[\w]+$/, placeholder: "email" },
-                  { fixed: "." },
-                  { regexp: /^[\w]+$/, placeholder: "com" },
-                ]}
-              />
-            </FormField> */
 }

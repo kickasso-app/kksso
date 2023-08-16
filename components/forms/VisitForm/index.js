@@ -16,6 +16,7 @@ import {
   TextInput,
   Text,
   Calendar,
+  RadioButtonGroup,
 } from "grommet";
 
 import Button from "./../../Button";
@@ -26,12 +27,12 @@ const SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
 const TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
 const USER_ID = process.env.NEXT_PUBLIC_EMAILJS_USER_ID;
 
-const VisitForm = ({ artistEmail, artistName, openVisitDates }) => {
+const VisitForm = ({ artistEmail, artistName, openDates }) => {
   // TO DO: Remove in Production
   const sendingRealEmail = false;
 
 
-  const hasOpenDates = openVisitDates.length > 0;
+  const hasOpenDates = openDates.length > 0;
   const initValues = {
     to_email: artistEmail,
     to_name: artistName,
@@ -43,19 +44,26 @@ const VisitForm = ({ artistEmail, artistName, openVisitDates }) => {
   };
 
   const [values, setValues] = useState(initValues);
+  const [selectedDate, setSelectedDate] = useState(calendarBounds.Start);
+  const [selectedTime, setSelectedTime] = useState();
 
-  console.log(values);
+  const [openTimes, setOpenTimes] = useState([]);
+
+
+  // console.log(values);
   const [isEmailSent, setIsEmailSent] = useState(false);
   const [sendEmailError, setSendEmailError] = useState(false);
+
+
 
   const prepDates = (rawDate) => {
     const date = moment(rawDate, "DD/MM/YYYY hh:mm").format("YYYY-MM-DD hh:mm");
     return date;
   }
 
-  const readableDate = (calendarDate) => moment(calendarDate, "YYYY-MM-DD hh:mm").format("D MMMM - h:mm a");
+  const readableDate = (calendarDate) => moment(calendarDate, "YYYY-MM-DD hh:mm").format("D MMMM");
 
-  const calendarDates = openVisitDates.map(d => prepDates(d));
+  const calendarDates = openDates.split(","); // .map(d => prepDates(d));
 
   const getDaysArray = (start, end) => {
     for (var arr = [], dt = new Date(start); dt <= new Date(end); dt.setDate(dt.getDate() + 1)) {
@@ -85,19 +93,29 @@ const VisitForm = ({ artistEmail, artistName, openVisitDates }) => {
   const disabledDates = getDisabledArray(calendarBounds.Start, calendarBounds.End, calendarDates);
 
   const onSelectDate = (date) => {
-    setValues({ ...values, request_date: readableDate(date) });
+    setSelectedDate(date);
+    const times = getOpenTimes(date, calendarDates);
+    setOpenTimes(times);
+    setSelectedTime(times[0]);
+  }
+
+
+  const getOpenTimes = (date, dates) => {
+    const times = dates.filter(s => s.startsWith(date)).map(d => d.split(" ")[1]);
+    return times;
+
   }
 
   useEffect(() => {
     emailjs.init(USER_ID);
     if (hasOpenDates) {
-      const firstDate = readableDate(calendarDates[0]);
-      setValues({ ...values, request_date: firstDate });
+      onSelectDate(calendarDates[0]);
     }
   }, []);
 
   const handleSendEmail = () => {
-    var templateParams = values;
+    var templateParams = { ...values, request_date: readableDate(selectedDate) + " " + selectedTime };
+    console.log(templateParams);
 
     if (isEmailSent === false && sendingRealEmail) {
       emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, USER_ID).then(
@@ -156,14 +174,22 @@ const VisitForm = ({ artistEmail, artistName, openVisitDates }) => {
             // https://storybook.grommet.io/?path=/story/visualizations-calendar-header--custom-header-calendar
             />
 
-            {values.request_date &&
+            {selectedDate &&
               <>
                 <Text as="label" margin={{ top: "medium", bottom: "small", horizontial: "medium" }} >
-                  Request a visit on
+                  Request a visit on <b>  {readableDate(selectedDate)}</b>
                 </Text >
-                <Text margin={{ top: "small", bottom: "medium", horizontial: "medium" }} weight="bold">
-                  {values.request_date}
-                </Text>
+                <Box
+                  pad="small"
+                  margin={{ vertical: "medium" }}
+                >
+                  <RadioButtonGroup
+                    name="visitTime"
+                    options={openTimes}
+                    value={selectedTime}
+                    onChange={(event) => setSelectedTime(event.target.value)}
+                  />
+                </Box>
               </>
             }
           </Box>

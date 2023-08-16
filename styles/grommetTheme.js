@@ -86,6 +86,21 @@ const themeChanges = {
         background-color: ${isSelected && '#C0FFF4'}`,
     },
   },
+  checkBox: {
+    border: {
+      color: "black",
+    },
+    color: "black",
+  },
+  radioButton: {
+    color: "brand",
+    check: {
+      color: "brand",
+    },
+    border: {
+      color: "brand",
+    }
+  },
   // size is useless
   // size: {
   //   large: {
