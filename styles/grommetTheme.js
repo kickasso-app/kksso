@@ -92,6 +92,15 @@ const themeChanges = {
     },
     color: "black",
   },
+  radioButton: {
+    color: "brand",
+    check: {
+      color: "brand",
+    },
+    border: {
+      color: "brand",
+    }
+  },
   // size is useless
   // size: {
   //   large: {

@@ -1,15 +1,17 @@
+import { useContext } from "react";
+
+
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import Link from "next/link";
 
 import ProgressiveImage from "react-progressive-image";
 import Image from "next/image";
 
-import { useMediaQuery, maxWidths } from "hooks/useMediaQuery";
 
 
 import styles from "./index.module.scss";
 
-import { Box, Heading, Text } from "grommet";
+import { Box, Heading, Text, ResponsiveContext } from "grommet";
 import SearchBar from "components/SearchBar";
 import StudiosFeatured from "components/StudiosFeatured";
 
@@ -21,8 +23,11 @@ const Pilot = () => {
   const margin = "medium";
   const sectionMargin = { vertical: "20em" };
 
-  const isTablet = useMediaQuery(`(max-width: ${maxWidths.tablet}px)`);
-  // TO DO: replace by https://v2.grommet.io/responsivecontext
+  const size = useContext(ResponsiveContext);
+
+  // import { useMediaQuery, maxWidths } from "hooks/useMediaQuery";
+  // const isTablet = useMediaQuery(`(max-width: ${maxWidths.tablet}px)`);
+  // replaced by https://v2.grommet.io/responsivecontext
 
 
   return (
@@ -31,7 +36,7 @@ const Pilot = () => {
         <Row id={styles.intro}>
           <Col xs={12} md={12}>
             <Box margin={{ bottom: "1rem" }}>
-              {isTablet ?
+              {size === "small" ?
                 <Image
                   src={`/img/intro/banner-pilot-vertical.jpg`}
                   alt="banner"

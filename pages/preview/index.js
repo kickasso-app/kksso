@@ -143,7 +143,7 @@ const Preview = () => {
                 </ul>
                 {studio.openDates ? (
                   <VisitForm
-                    openVisitDates={studio.openDates.split(",")}
+                    openDates={studio.openDates}
                     artistEmail={studio.email}
                     artistName={studio.artist}
                   />

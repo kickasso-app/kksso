@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 
 import { useRouter } from "next/router";
 
@@ -9,7 +9,7 @@ import NavButton from "../NavButton";
 
 import { User } from "react-feather";
 
-import { DropButton, Box } from "grommet";
+import { DropButton, Box, ResponsiveContext } from "grommet";
 
 export default function ProfileButton() {
   const [open, setOpen] = useState(false);
@@ -18,6 +18,8 @@ export default function ProfileButton() {
   const router = useRouter();
 
   const { signOut } = useAuth();
+
+  const size = useContext(ResponsiveContext);
 
   const handleSignOut = async () => {
     try {
@@ -42,7 +44,7 @@ export default function ProfileButton() {
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
       dropContent={
-        <Box pad={"small"} onClick={() => setOpen(false)}>
+        <Box width={size === "small" ? "large" : "small"} pad={"small"} onClick={() => setOpen(false)}>
           <NavButton path={"/profile?section=0"} label={"Profile"} />
           <NavButton path={"/profile?section=3"} label={"Settings"} />
           <Box pad={{ vertical: "small" }}>
