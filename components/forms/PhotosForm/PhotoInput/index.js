@@ -161,7 +161,7 @@ export default function PhotoInput({
           {uploading && <img src={`/img/loader.svg`} />}
 
           <br />
-          {isMainPhoto && <p>This is your main cover photo</p>}
+          {isMainPhoto && <p>This is your main front photo</p>}
           {isPhotoTooLarge && (
             <Notification
               toast

@@ -26,11 +26,11 @@ import Button from "components/Button";
 
 import { calendarBounds } from "config/calendar";
 
-export default function VisitsSettingsForm({ profile: { visitRules, openDates, address } }) {
+export default function VisitsSettingsForm({ profile: { visitRules, openDates, textStudio, address, city, directions } }) {
   const { user, session } = useAuth();
 
 
-  const [values, setValues] = useState({ visitRules, openDates, address });
+  const [values, setValues] = useState({ visitRules, openDates, address, city, directions, textStudio });
 
   const initialDates = openDates?.split(",") ?? [];
 
@@ -102,9 +102,6 @@ export default function VisitsSettingsForm({ profile: { visitRules, openDates, a
       setIsUpdateSuccess(false);
       setLoading(true);
 
-
-
-
       const updates = {
         ...values,
         openDates: newOpenDates.join(","),
@@ -147,16 +144,7 @@ export default function VisitsSettingsForm({ profile: { visitRules, openDates, a
         <Grid fluid>
 
 
-          <Box>
-            <Heading level="4" size="medium" margin={textMargin}>
-              General Visit Tips
-            </Heading>
-            <ul>
-              <li>Show up on time</li>
-              <li>Ask before taking photos of the artist and artworks</li>
-              <li>A gift is almost always a nice touch</li>
-            </ul>
-          </Box>
+
           <Form
             value={values}
             onChange={(nextValue) => {
@@ -166,42 +154,6 @@ export default function VisitsSettingsForm({ profile: { visitRules, openDates, a
             onSubmit={updateProfile}
             validate="submit"
           >
-            <FormField
-              label="Your Visit Rules"
-              name="visitRules"
-              margin={fieldMargin}
-            >
-              <TextArea
-                name="visitRules"
-                placeholder="What do you expect from visitors at your studio?"
-                fill
-                rows={6}
-                maxLength={500}
-              />
-            </FormField>
-
-            <FormField
-              name="address"
-              label="Address (required if your studio is open for visits)"
-              margin={fieldMargin}
-              required
-            >
-              <Text>
-                <b>
-                  We will only share your address with visitors after you
-                  agree to host them
-                </b>
-              </Text>
-              <TextInput placeholder="" />
-              <TextArea
-                name="address"
-                placeholder="Your address"
-                fill
-                rows={3}
-                maxLength={200}
-                disabled
-              />
-            </FormField>
 
             <Row>
               <Col xs={12} md={8}>
@@ -240,6 +192,91 @@ export default function VisitsSettingsForm({ profile: { visitRules, openDates, a
                 </Text>
               </Col>
             </Row>
+
+
+            <FormField name="city" label="District in Berlin" margin={fieldMargin} required>
+              <TextInput name="city" placeholder="Wedding" />
+            </FormField>
+
+
+            <Text>
+              <b>
+                We will only share your address with visitors after you
+                agree to host them
+              </b>
+            </Text>
+
+            <FormField
+              name="address"
+              label="Address (required)"
+              margin={fieldMargin}
+              required
+            >
+              <TextInput placeholder="" />
+              <TextArea
+                name="address"
+                placeholder="Your address"
+                fill
+                rows={2}
+                maxLength={200}
+              // disabled
+              />
+            </FormField>
+            <FormField
+              label="Tips on finding the studio"
+              name="directions"
+              margin={fieldMargin}
+            >
+              <TextArea
+                name="directions"
+                placeholder="Any extra helpful directions of how to arrive to your studio. How to find the right entrance or name on doorbell, etc ..."
+                fill
+                rows={4}
+                maxLength={500}
+              />
+            </FormField>
+
+            <FormField
+              label="About your Studio"
+              name="textStudio"
+              margin={fieldMargin}
+            >
+              <TextArea
+                name="textStudio"
+                placeholder="Tell us about your space or studio"
+                fill
+                maxLength={1200}
+                rows={8}
+              />
+            </FormField>
+
+
+            <Box>
+              <Heading level="4" size="medium" margin={textMargin}>
+                General Visit Tips
+              </Heading>
+              <ul>
+                <li>Show up on time</li>
+                <li>Ask before taking photos of the artist and artworks</li>
+                <li>A gift is almost always a nice touch</li>
+              </ul>
+            </Box>
+
+            <FormField
+              label="Your Visit Rules"
+              name="visitRules"
+              margin={fieldMargin}
+            >
+              <TextArea
+                name="visitRules"
+                placeholder="What do you expect from visitors at your studio?
+
+                 ex: My Rule 1; My Rule 2  (semi-colon seperated) "
+                fill
+                rows={4}
+                maxLength={500}
+              />
+            </FormField>
 
             <br />
             <br />

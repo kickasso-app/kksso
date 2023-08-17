@@ -26,7 +26,7 @@ const StudiosFeatured = () => {
       // pick three random studios
 
       setFeaturedStudios(studios.slice(0, 3));
-      console.log(studios.slice(0, 3));
+      // console.log(studios.slice(0, 3));
     }
 
   }, [loading]);

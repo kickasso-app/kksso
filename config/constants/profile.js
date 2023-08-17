@@ -10,6 +10,7 @@ export const profileFields = [
   "website",
   "instagram",
   "address",
+  "directions",
   "accountType",
   "published",
   "studio_id",
