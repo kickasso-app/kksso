@@ -108,7 +108,7 @@ export default function Profile() {
             <Tabs activeIndex={index} onActive={onActive}>
               <Tab title="Profile">
                 <Box pad="medium">
-                  <ProfileForm profile={profile} />
+                  <ProfileForm profile={profile} goToTab={setIndex} />
                 </Box>
               </Tab>
               <Tab title="Photos">

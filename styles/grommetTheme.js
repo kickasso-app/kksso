@@ -16,7 +16,7 @@ const themeChanges = {
       "accent-1": "#C0FFF4",
       "dark-1": "4b4b4b",
       control: "accent-1",
-      focus: "#FFC0CB",
+      focus: "#FFF",
       icon: "#FFC0CB",
     },
     font: {

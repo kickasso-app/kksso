@@ -40,6 +40,7 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
     from_name: "Requestor Name",
     message: "Hello There Message",
     visit_reason: "Reason of Visit",
+    visitor_link: "Requestor Link",
     request_date: "",
   };
 
@@ -226,6 +227,29 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
               ]}
             />
           </FormField>
+          <FormField
+            name="visitor_link"
+            htmlfor="text-input-id"
+            label="Social or professional link"
+            required
+            validate={{
+              regexp: /\S+.\S+\.\S+/,
+              message: "Enter a valid url",
+            }}
+            type="url"
+          >
+            <MaskedInput
+              name="visitor_link"
+              mask={[
+                { regexp: /^[\w\-_.]+$/, placeholder: "https" },
+                { fixed: "://" },
+                { regexp: /^[\w]+$/, placeholder: "instagram" },
+                { fixed: "." },
+                { regexp: /^[\w]+$/, placeholder: "com/your.profile" },
+              ]}
+
+            />
+          </FormField>
           <FormField label="Reason of visit" name="visit_reason">
             <TextArea
               name="visit_reason"
@@ -246,7 +270,7 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
           </FormField>
           <br />
           <Box direction="row" gap="medium">
-            <Button type="submit" btnStyle="filled" disabled={isEmailSent}>
+            <Button type="submit" btnStyle="filled" disabled={true}>
               Request A Visit
             </Button>
           </Box>

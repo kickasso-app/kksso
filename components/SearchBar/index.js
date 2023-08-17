@@ -31,6 +31,11 @@ export const SearchBar = ({ isBarFullWidth = false }) => {
     updateQuery(tempQuery);
   }, [tempQuery]);
 
+  const onClearSearch = useCallback(() => {
+    setTempQuery("");
+    updateQuery("");
+  }, [tempQuery]);
+
 
   return (
     <Box
@@ -47,16 +52,16 @@ export const SearchBar = ({ isBarFullWidth = false }) => {
     >
       <Grid fluid>
         <Row middle="xs">
-          <Col xs={10}>
+          <Col xs={8}>
             <TextInput
-              placeholder={"Search artists, cities, styles"}
+              placeholder={"Search artists, styles, or Berlin districts"}
               plain
               value={tempQuery}
               onChange={onChangeQuery}
               onKeyDown={onSearchEnter}
             />
           </Col>
-          <Col xs={2}>
+          <Col xs={4}>
             <Row end="xs">
               <Box
                 width="38px"
@@ -76,14 +81,22 @@ export const SearchBar = ({ isBarFullWidth = false }) => {
               >
 
                 <Search size={18} color="#222222" strokeWidth={1.5} onClick={onSearch} />
-                {/* 
-                  {value.length === 0 ? (
-                    <Search size={24} color="#222222" strokeWidth={1.5} />
-                  ) : (
-                  <X onClick={() => {}}/>
-                  )} 
-                */}
+
               </Box>
+              {!isBarFullWidth && tempQuery.length > 2 &&
+                <Box
+                  width="38px"
+                  height="38px"
+                  align="center"
+                  alignContent="center"
+                  alignSelf="center"
+                  background="#FFF"
+                  round="large"
+                  pad={{ vertical: "10px" }}
+                >
+                  <X onClick={onClearSearch} />
+                </Box>
+              }
             </Row>
           </Col>
         </Row>

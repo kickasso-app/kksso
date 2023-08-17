@@ -21,12 +21,12 @@ const StudiosFeatured = () => {
   }, [studios]);
 
   useEffect(() => {
-    if (studios.length > 3) {
+    if (studios.length > 2) {
       // Pilot To Do 
       // pick three random studios
 
       setFeaturedStudios(studios.slice(0, 3));
-      console.log(studios.slice(0, 3));
+      // console.log(studios.slice(0, 3));
     }
 
   }, [loading]);

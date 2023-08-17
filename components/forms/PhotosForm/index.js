@@ -71,10 +71,10 @@ export default function PhotosForm() {
           Your Photos
         </Heading>
         <Text size="medium" margin={textMargin}>
-          Add up to 5 photos of your work, your studio, and yourself
+          Add up to 5 photos of your work, your studio, and yourself. Please include one of each.
         </Text>
-        <Text size="small" margin={textMargin}>
-          Image files must be smaller than 1 MB per image
+        <Text size="medium" margin={textMargin}>
+          Please make sure that your image files are smaller than <b>1 MB per image</b>
         </Text>
         {[0, 1, 2, 3, 4].map((imgId) => {
           return (
@@ -105,6 +105,6 @@ export default function PhotosForm() {
           </>
         )}
       </Box>
-    </Box>
+    </Box >
   );
 }

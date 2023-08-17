@@ -8,7 +8,7 @@ import { useAuth } from "services/auth";
 import { useStudios } from "services/studios";
 
 import Button from "components/Button";
-import { Box, Text, Heading } from "grommet";
+import { Box, Text, Heading, Notification } from "grommet";
 
 export default function AccountSettings({ profile }) {
   const [isPublished, setIsPublished] = useState(profile?.published);
@@ -112,7 +112,7 @@ export default function AccountSettings({ profile }) {
             Delete Account
           </Heading>
           <Text size="medium" margin={textMargin}>
-            We are to see you leave.
+            We are sad to see you leave.
           </Text>
           <Text size="medium" margin={textMargin}>
             Are you sure you want to delete your account?
@@ -122,6 +122,23 @@ export default function AccountSettings({ profile }) {
           </Button>
         </Box>
       </Box>
+      {isUpdateSuccess && (
+        <Notification
+          toast
+          status="normal"
+          title="Your profile is now updated."
+        />
+      )}
+      {isUpdateError && (
+        <Notification
+          toast
+          status="warning"
+          title="Your profile was not updated!"
+          message="We couldn't complete your request this time. Please try again."
+        // onClose={() => {}}
+        />
+      )}
+
     </Box>
   );
 }

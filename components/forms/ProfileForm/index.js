@@ -17,10 +17,11 @@ import {
   Text,
   Heading,
   Grommet,
+  Anchor,
 } from "grommet";
 
 
-export default function ProfileForm({ profile }) {
+export default function ProfileForm({ profile, goToTab }) {
   const [values, setValues] = useState(profile);
 
   const [loading, setLoading] = useState(false);
@@ -90,10 +91,11 @@ export default function ProfileForm({ profile }) {
     <Box fill align="center" justify="center">
       <Box width="large" pad="medium">
         <Heading level="3" size="medium" margin={fieldMargin}>
-          Welcome
+          Welcome to your Arti profile
         </Heading>
         <Text size="medium" margin={textMargin}>
-          Update your profile here
+          You can update your basic profile info below, add your photos and available visit dates and times.
+          Then you can preview your profile and publish it in <Anchor onClick={() => goToTab(3)}><b> Settings</b></Anchor>.
         </Text>
         <Grommet>
           <Form
@@ -108,17 +110,29 @@ export default function ProfileForm({ profile }) {
             <FormField name="artist" label="Name" margin={fieldMargin} required>
               <TextInput name="artist" placeholder="" />
             </FormField>
-
-            <FormField name="city" label="City" margin={fieldMargin} required>
-              <TextInput name="city" placeholder="Berlin" />
+            <FormField
+              label="A short intro (max 300 chars)"
+              name="textMini"
+              margin={fieldMargin}
+            >
+              <TextArea
+                name="textMini"
+                placeholder="Tell us about your art practice. This is the main text. (required)"
+                fill
+                maxLength={300}
+                rows={6}
+                required
+              />
             </FormField>
+
+
 
             <FormField
               name="styles"
               label="Mediums and styles"
               margin={fieldMargin}
             >
-              <TextInput name="styles" placeholder="painting, prints, sound" />
+              <TextInput name="styles" placeholder="painting, prints, sound (comma sepearted)" required />
             </FormField>
 
             {/* CHANGED FOR PILOT */}
@@ -138,20 +152,7 @@ export default function ProfileForm({ profile }) {
               />
             </FormField> */}
 
-            <FormField
-              label="A short intro (max 300 chars)"
-              name="textMini"
-              margin={fieldMargin}
-            >
-              <TextArea
-                name="textMini"
-                placeholder="Tell us about your art practice. This is the main text. (required)"
-                fill
-                maxLength={300}
-                rows={6}
-                required
-              />
-            </FormField>
+
 
             <FormField
               label="About your Art"
@@ -160,31 +161,18 @@ export default function ProfileForm({ profile }) {
             >
               <TextArea
                 name="textLong"
-                placeholder="Tell us about your artwork or collection in more detail"
+                placeholder="Tell us about your artwork in more detail"
                 fill
                 maxLength={1200}
                 rows={8}
               />
             </FormField>
 
-            <FormField
-              label="About your Studio"
-              name="textStudio"
-              margin={fieldMargin}
-            >
-              <TextArea
-                name="textStudio"
-                placeholder="Tell us about your space or studio"
-                fill
-                maxLength={1200}
-                rows={8}
-              />
-            </FormField>
 
             <FormField
               name="website"
               htmlfor="text-input-id"
-              label="Website (optional)"
+              label="Website"
               type="url"
               margin={fieldMargin}
             >
@@ -197,7 +185,7 @@ export default function ProfileForm({ profile }) {
             <FormField
               name="instagram"
               htmlfor="text-input-id"
-              label="Instagram (optional)"
+              label="Instagram"
               type="url"
               margin={fieldMargin}
             >

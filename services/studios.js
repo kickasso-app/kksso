@@ -52,7 +52,7 @@ const StudiosProvider = ({ children }) => {
   const updateQuery = (newQuery) => {
     setQuery(newQuery);
     if (!newQuery) {
-      setSearchStudios([]);
+      setSearchStudios(studios);
     } else {
       fetchSearchStudios(newQuery);
     }
@@ -67,7 +67,8 @@ const StudiosProvider = ({ children }) => {
       .textSearch('fts', newQuery, {
         type: 'websearch',
         config: 'english',
-      });
+      })
+      .order("studio_id", true);
     if (error) {
       setError(error);
       console.log(error);
