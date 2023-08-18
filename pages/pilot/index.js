@@ -14,7 +14,7 @@ import styles from "./index.module.scss";
 
 const Pilot = () => {
   const margin = "medium";
-  const sectionMargin = { vertical: "8em" };
+  const sectionMargin = { vertical: "4em" };
 
   const size = useContext(ResponsiveContext);
 
@@ -92,7 +92,8 @@ const Pilot = () => {
             <Box pad="medium">
               <Row>
                 <Col md={6}>
-                  <Box margin={{ top: "xlarge", bottom: "xlarge", left: "medium" }}>
+                  <Box margin={sectionMargin} >
+                    {/* // margin={{ vertical: "xlarge", left: "medium" }}> */}
                     <Heading level={2} margin={{ horizontal: "large" }}>
                       Art is an experience, <br />not an object.
                     </Heading>
