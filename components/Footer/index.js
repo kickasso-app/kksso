@@ -4,46 +4,74 @@ import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 
 // import { SimpleGrid } from "@chakra-ui/react";
 import { Box, Image, Text } from "grommet";
-import { Instagram } from "react-feather";
+import { Instagram, Rss, Radio, Zap, Mail } from "react-feather";
 // import { Facebook, Instagram } from "react-feather";
 
 import styles from "./index.module.scss";
 
 const Footer = () => {
   return (
-    <footer>
-      <Grid fluid className={styles.footer}>
+    <footer className={styles.footer}>
+      <Box pad={{ vertical: "large", horizontal: "xlarge" }}>
+
         <Row>
-          <Col xs={12} sm={12} md={8} lg={6} mdOffset={2} lgOffset={3}>
-            <center>
-              {/* <p>kickasso</p> */}
-              {/* <a href="https://www.facebook.com/">
-                <Ello size={24} fill="#4b4b4b" strokeWidth={0} />
-              </a>
-              &nbsp;&nbsp;&nbsp; */}
-              <a href="https://www.instagram.com/">
-                <Instagram
-                  size={40}
-                  fill="#4b4b4b"
-                  color="#fff"
-                // strokeWidth={2}
+          <Col md={4}>
+            <Box margin={{ vertical: "small" }} align="center">
+              <a target="_blank" href="https://arti.crd.co/#register">
+                <Zap
+                  size={30}
+                  color="#4b4b4b"
+                  strokeWidth={1.5}
                 />
               </a>
-              <p>
-                <b>contact</b>@arti.co
-              </p>
-              <Row>
-                {" "}
-                <Box height="50px" margin="medium">
-                  <Image fit="contain" src="/img/logo-only.png" />{" "}
-                </Box>
-              </Row>
-              <Text size="small">Arti, 2023</Text>
-            </center>
+
+              <Text size="medium" margin="medium">
+                Get our updates
+              </Text>
+            </Box>
+          </Col>
+
+          <Col md={4}>
+            <Box margin={{ vertical: "small" }} align="center">
+              <a target="_blank" href="https://www.instagram.com/studios.arti">
+                <Instagram
+                  size={30}
+                  color="#4b4b4b"
+                  strokeWidth={1.5}
+                />
+              </a>
+              <Text size="medium" margin="medium">
+                Follow us
+              </Text>
+            </Box>
+          </Col>
+          <Col md={4}>
+            <Box margin={{ vertical: "small" }} align="center">
+              <Mail
+                size={30}
+                color="#4b4b4b"
+                strokeWidth={1.5}
+              />
+              <Text size="medium" margin="medium" >
+                So you don't want either? <br /><b>arti.studiosapp</b>@gmail.com
+              </Text>
+            </Box>
           </Col>
         </Row>
-      </Grid>
-    </footer>
+
+        <Row>
+
+          <Col xs={12}>
+            <Box margin={"small"} align="center">
+              <Box height="50px" margin="small">
+                <Image fit="contain" src="/img/logo-only.png" />{" "}
+              </Box>
+              <Text size="small">arti, 2023</Text>
+            </Box>
+          </Col>
+        </Row>
+      </Box>
+    </footer >
   );
 };
 

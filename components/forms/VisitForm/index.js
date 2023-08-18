@@ -204,7 +204,7 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
             <TextInput
               id="text-input-id"
               name="from_name"
-              placeholder="Your Name"
+              placeholder="Your name"
             />
           </FormField>
           <FormField
@@ -250,7 +250,7 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
 
             />
           </FormField>
-          <FormField label="Reason of visit" name="visit_reason">
+          <FormField label="Reason of Visit" name="visit_reason">
             <TextArea
               name="visit_reason"
               placeholder="Just curious, Want to collaborate on a project, or Want to buy a specific artwork, or something else ..."
@@ -260,10 +260,10 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
             />
           </FormField>
           <br />
-          <FormField label="Message to artist" name="message">
+          <FormField label="Message to Artist" name="message">
             <TextArea
               name="message"
-              placeholder="Add a little something about you and why you want to visit the artist’s studio and what you like about their work. (optional)"
+              placeholder="Add a personal message, a little something about yourself, and what you like about their work. (optional)"
               fill
               rows="6"
             />

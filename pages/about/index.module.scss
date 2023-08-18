@@ -1,9 +1,12 @@
 .about {
+  color: $color-primary;
+
   h2 {
     margin-bottom: 2rem;
-    margin-top: 4rem;
+    margin-top: 2rem;
     color: $color-primary-black;
   }
+
   h3 {
     margin-top: 2rem;
     line-height: 1.75rem;
@@ -14,6 +17,7 @@
     margin-bottom: 1.25rem;
     color: $color-primary;
   }
+
   p {
     line-height: 1.75rem;
     font-size: 1.125rem;
@@ -23,6 +27,7 @@
     text-decoration: none;
     color: $color-secondary;
   }
+
   a:hover {
     text-decoration: underline;
     color: $color-secondary;
@@ -40,4 +45,18 @@
       color: $color-primary;
     }
   }
+
+
+
+
+}
+
+img.teamImg {
+  filter: grayscale(100%);
+  width: 100%;
+}
+
+img.teamImg:hover,
+img.team:focus {
+  filter: none;
 }

@@ -43,7 +43,9 @@ const StudiosFeatured = () => {
             {featuredStudios.map((studio) => {
               return (
                 <Col md={4} key={studio.uuid.slice(0, 3)}>
-                  <StudioCard studio={studio} />
+                  <Box fill pad="small">
+                    <StudioCard studio={studio} />
+                  </Box>
                 </Col>
               );
             })}
