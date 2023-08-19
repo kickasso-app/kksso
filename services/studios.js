@@ -94,8 +94,12 @@ const StudiosProvider = ({ children }) => {
       setError(error);
       console.log(error);
     } else {
-      setStudio(studio[0]);
-      // console.log(studio[0]);
+      const tempStudio = {
+        ...studio[0],
+        hasOpenDates: studio[0]?.openDates?.length ? true : false,
+      }
+      setStudio(tempStudio);
+      // console.log(tempStudio);
     }
     setLoading(false);
   };
@@ -116,8 +120,12 @@ const StudiosProvider = ({ children }) => {
       setError(error);
       console.log(error);
     } else {
-      setUserStudio(studio[0]);
-      // console.log(studio[0]);
+      const tempStudio = {
+        ...studio[0],
+        hasOpenDates: studio[0]?.openDates?.length ? true : false,
+      }
+      setUserStudio(tempStudio);
+      // console.log(tempStudio);
     }
     setLoading(false);
   };

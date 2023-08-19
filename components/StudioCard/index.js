@@ -19,6 +19,7 @@ const StudioCard = ({
     city,
     styles: artStyles,
     openDates,
+    // hasOpenDates,
     textMini,
   },
 }) => {
@@ -39,7 +40,7 @@ const StudioCard = ({
   const [hoveredImg, setHoveredImg] = useState(false);
 
   const nextVisit = openDates
-    ? moment(openDates.split(",")[0], "YYYY-MM-DD hh:mm").format("D MMM")
+    ? moment(openDates[0], "YYYY-MM-DD hh:mm").format("D MMM")
     : false;
 
   function sleep(ms) {
@@ -95,7 +96,7 @@ const StudioCard = ({
         {city.split(",")[0]}
       </h4>
 
-      {openDates && (
+      {nextVisit && (
         <h4 className={styles.secondary}>
           Next Visit <strong>{nextVisit}</strong>
         </h4>

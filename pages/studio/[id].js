@@ -157,7 +157,7 @@ const Studio = () => {
                   <li>Ask before taking photos of the artist and artworks</li>
                   <li>A gift is almost always a nice touch</li>
                 </ul>
-                {studio?.openDates?.length > 0 ? (
+                {studio.hasOpenDates === true ? (
                   <VisitForm
                     openDates={studio.openDates || []}
                     artistEmail={studio.email}
