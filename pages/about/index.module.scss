@@ -52,6 +52,10 @@
 }
 
 img.teamImg {
+  @media only screen and (min-width: 767px) {
+    filter: grayscale(100%);
+  }
+
   filter: grayscale(100%);
   width: 100%;
 }

@@ -42,10 +42,9 @@ const Pilot = () => {
               }
             </Box>
             <Box margin={{ vertical: "3rem" }} align="center">
-              <Heading level={2} className="first">
-                Join Us
+              <Heading level={size === "small" ? 2 : 3}>
+                Explore art studios near you
               </Heading>
-              <Text size="large"> and explore art studios near you</Text>
             </Box>
 
             <Box margin={{ vertical: "0rem", bottom: "12rem" }} align="center">

@@ -26,7 +26,7 @@ const Footer = () => {
               </a>
 
               <Text size="medium" margin="medium">
-                Get our updates
+                Get our newsletter
               </Text>
             </Box>
           </Col>
@@ -47,13 +47,16 @@ const Footer = () => {
           </Col>
           <Col md={4}>
             <Box margin={{ vertical: "small" }} align="center">
-              <Mail
-                size={30}
-                color="#4b4b4b"
-                strokeWidth={1.5}
-              />
+              <a href="mailto:arti.studiosapp@gmail.com">
+
+                <Mail
+                  size={30}
+                  color="#4b4b4b"
+                  strokeWidth={1.5}
+                />
+              </a>
               <Text size="medium" margin="medium" >
-                So you don't want either? <br /><b>arti.studiosapp</b>@gmail.com
+                Email us
               </Text>
             </Box>
           </Col>
@@ -64,7 +67,7 @@ const Footer = () => {
           <Col xs={12}>
             <Box margin={"small"} align="center">
               <Box height="50px" margin="small">
-                <Image fit="contain" src="/img/logo-only.png" />{" "}
+                <Image fit="contain" src="/img/logo-only.png" />
               </Box>
               <Text size="small">arti, 2023</Text>
             </Box>

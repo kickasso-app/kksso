@@ -52,16 +52,16 @@ export const SearchBar = ({ isBarFullWidth = false }) => {
     >
       <Grid fluid>
         <Row middle="xs">
-          <Col xs={8}>
+          <Col xs={9}>
             <TextInput
-              placeholder={"Search artists, styles, or Berlin districts"}
+              placeholder={"Search artists, styles, or districts"}
               plain
               value={tempQuery}
               onChange={onChangeQuery}
               onKeyDown={onSearchEnter}
             />
           </Col>
-          <Col xs={4}>
+          <Col xs={3}>
             <Row end="xs">
               <Box
                 width="38px"
