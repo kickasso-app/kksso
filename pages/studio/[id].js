@@ -106,7 +106,7 @@ const Studio = () => {
                     <h3 className={styles.sectiontitle}>Links</h3>
                     <br />
                     {studio.website && (
-                      <Link href={studio.website}>
+                      <a href={studio.website} target="_blank">
                         <Globe
                           className={styles.icon}
                           size={28}
@@ -114,16 +114,17 @@ const Studio = () => {
                           color="#4B4B4B"
                           fill="#FFF"
                         />
-                      </Link>
+                      </a>
                     )}
 
                     {studio.instagram && (
-                      <Link
+                      <a
                         href={
                           studio.instagram?.includes("instagram.com/")
                             ? studio.instagram
                             : `https://instagram.com/${studio.instagram}`
                         }
+                        target="_blank"
                       >
                         <Instagram
                           className={styles.icon}
@@ -132,7 +133,7 @@ const Studio = () => {
                           color="#4B4B4B"
                           fill="#FFF"
                         />
-                      </Link>
+                      </a>
                     )}
                   </>
                 )}
@@ -156,13 +157,12 @@ const Studio = () => {
                   <li>Ask before taking photos of the artist and artworks</li>
                   <li>A gift is almost always a nice touch</li>
                 </ul>
-                {studio?.openDates?.length > 0 ? (
+                {studio.hasOpenDates === true ? (
                   <VisitForm
                     openDates={studio.openDates || []}
                     artistEmail={studio.email}
                     artistName={studio.artist}
                   />
-                  // <>{studio.openDates}</>
                 ) : (
                   <>
                     <h3 className={styles.sectiontitle}>

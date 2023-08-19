@@ -26,13 +26,21 @@ import Button from "components/Button";
 
 import { calendarBounds } from "config/calendar";
 
-export default function VisitsSettingsForm({ profile: { visitRules, openDates, textStudio, address, city, directions } }) {
+export default function VisitsSettingsForm({
+  profile: {
+    visitRules,
+    openDates,
+    hasOpenDates,
+    textStudio,
+    address,
+    city,
+    directions
+  }
+}) {
   const { user, session } = useAuth();
 
 
   const [values, setValues] = useState({ visitRules, openDates, address, city, directions, textStudio });
-
-  const initialDates = openDates?.split(",") ?? [];
 
   const getSelectedTimes = (date, dates) => {
     const timeData = dates.filter(s => s.startsWith(date)).map(d => d.split(" ")[1]);
@@ -40,9 +48,24 @@ export default function VisitsSettingsForm({ profile: { visitRules, openDates, t
 
   }
 
+  useEffect(() => {
+    if (openDates?.length > 0) {
+      const tempDates = openDates;
+      const tempTimes = getSelectedTimes(calendarBounds.Start, tempDates);
+
+      setSelectedTimes(tempTimes);
+      setInitialDates(tempDates);
+      setVisitSlots(tempDates);
+      // console.log("once");
+    }
+  }, [openDates]);
+
+  const [initialDates, setInitialDates] = useState([]);
+  const [visitSlots, setVisitSlots] = useState([]);
+
   const [selectedDate, setSelectedDate] = useState(calendarBounds.Start);
-  const [selectedTimes, setSelectedTimes] = useState(getSelectedTimes(calendarBounds.Start, initialDates));
-  const [visitSlots, setVisitSlots] = useState(initialDates);
+  const [selectedTimes, setSelectedTimes] = useState([]);
+
 
 
   const onChangeTimes = (times) => {
@@ -77,7 +100,7 @@ export default function VisitsSettingsForm({ profile: { visitRules, openDates, t
   }
 
 
-  const readableDate = (calendarDate) => moment(calendarDate, "YYYY-MM-DD hh:mm").format("D MMMM");
+  const readableDate = (date) => moment(date, "YYYY-MM-DD hh:mm").format("D MMMM");
 
 
   // const disabledDates = [["2023-09-01", "2023-09-15"]];
@@ -104,7 +127,7 @@ export default function VisitsSettingsForm({ profile: { visitRules, openDates, t
 
       const updates = {
         ...values,
-        openDates: newOpenDates.join(","),
+        openDates: newOpenDates,
         // updated_at: new Date(),
       };
 

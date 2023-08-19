@@ -31,8 +31,6 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
   // TO DO: Remove in Production
   const sendingRealEmail = false;
 
-
-  const hasOpenDates = openDates.length > 0;
   const initValues = {
     to_email: artistEmail,
     to_name: artistName,
@@ -44,8 +42,12 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
     request_date: "",
   };
 
+
   const [values, setValues] = useState(initValues);
-  const [selectedDate, setSelectedDate] = useState(calendarBounds.Start);
+  const [calendarDates, setCalendarDates] = useState([]);
+  const [datesWithTimes, setDatesWithTimes] = useState([]);
+
+  const [selectedDate, setSelectedDate] = useState();
   const [selectedTime, setSelectedTime] = useState();
 
   const [openTimes, setOpenTimes] = useState([]);
@@ -56,15 +58,7 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
   const [sendEmailError, setSendEmailError] = useState(false);
 
 
-
-  const prepDates = (rawDate) => {
-    const date = moment(rawDate, "DD/MM/YYYY hh:mm").format("YYYY-MM-DD hh:mm");
-    return date;
-  }
-
-  const readableDate = (calendarDate) => moment(calendarDate, "YYYY-MM-DD hh:mm").format("D MMMM");
-
-  const calendarDates = openDates.split(","); // .map(d => prepDates(d));
+  const readableDate = (date) => moment(date, "YYYY-MM-DD hh:mm").format("D MMMM");
 
   const getDaysArray = (start, end) => {
     for (var arr = [], dt = new Date(start); dt <= new Date(end); dt.setDate(dt.getDate() + 1)) {
@@ -93,26 +87,49 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
 
   const disabledDates = getDisabledArray(calendarBounds.Start, calendarBounds.End, calendarDates);
 
-  const onSelectDate = (date) => {
+
+  const onSelectDate = (newdate, optionalDatesWithTimes) => {
+    const date = newdate.split("T")[0];
+    const dates = optionalDatesWithTimes || datesWithTimes;
     setSelectedDate(date);
-    const times = getOpenTimes(date, calendarDates);
-    setOpenTimes(times);
-    setSelectedTime(times[0]);
+    const newTimes = dates.filter(d => d.date === date)[0]?.times;
+    if (newTimes?.length > 0) {
+      setOpenTimes(newTimes);
+      setSelectedTime(newTimes[0]);
+    }
+    else {
+      setOpenTimes([]);
+    }
   }
 
-
-  const getOpenTimes = (date, dates) => {
-    const times = dates.filter(s => s.startsWith(date)).map(d => d.split(" ")[1]);
-    return times;
-
+  const prepCalendarDates = (dates) => {
+    const uniqueCalendarDates = dates.map(d => d.split(" ")[0] + "T12:22:00Z").filter((value, index, self) => self.indexOf(value) === index);
+    return uniqueCalendarDates;
   }
+
+  const prepDatesWithTimes = (dates) => {
+    const datesTimes = [];
+    const uniqueDatesOnly = dates.map(d => d.split(" ")[0]).filter((value, index, self) => self.indexOf(value) === index);
+
+    uniqueDatesOnly.forEach(date => {
+      const times = openDates.filter(s => s.startsWith(date)).map(d => d.split(" ")[1]);
+      datesTimes.push({ "date": date, "times": times });
+    });
+    return datesTimes;
+  }
+
 
   useEffect(() => {
     emailjs.init(USER_ID);
-    if (hasOpenDates) {
-      onSelectDate(calendarDates[0]);
+    if (openDates && !selectedDate) {
+      const tempCalendarDates = prepCalendarDates(openDates);
+      const tempDatesWithTimes = prepDatesWithTimes(openDates)
+      setCalendarDates(tempCalendarDates);
+      setDatesWithTimes(tempDatesWithTimes);
+      onSelectDate(tempCalendarDates[0], tempDatesWithTimes);
     }
   }, []);
+
 
   const handleSendEmail = () => {
     var templateParams = { ...values, request_date: readableDate(selectedDate) + " " + selectedTime };
@@ -166,7 +183,7 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
 
             <Calendar
               onSelect={onSelectDate}
-              dates={calendarDates}
+              date={selectedDate}
               size="medium"
               margin="medium"
               bounds={[calendarBounds.Start, calendarBounds.End]}
@@ -175,10 +192,10 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
             // https://storybook.grommet.io/?path=/story/visualizations-calendar-header--custom-header-calendar
             />
 
-            {selectedDate &&
+            {selectedTime &&
               <>
                 <Text as="label" margin={{ top: "medium", bottom: "small", horizontial: "medium" }} >
-                  Request a visit on <b>  {readableDate(selectedDate)}</b>
+                  Request a visit on <b>  {readableDate(selectedDate)}</b> at
                 </Text >
                 <Box
                   pad="small"
@@ -204,7 +221,7 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
             <TextInput
               id="text-input-id"
               name="from_name"
-              placeholder="Your Name"
+              placeholder="Your name"
             />
           </FormField>
           <FormField
@@ -250,7 +267,7 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
 
             />
           </FormField>
-          <FormField label="Reason of visit" name="visit_reason">
+          <FormField label="Reason of Visit" name="visit_reason">
             <TextArea
               name="visit_reason"
               placeholder="Just curious, Want to collaborate on a project, or Want to buy a specific artwork, or something else ..."
@@ -260,10 +277,10 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
             />
           </FormField>
           <br />
-          <FormField label="Message to artist" name="message">
+          <FormField label="Message to Artist" name="message">
             <TextArea
               name="message"
-              placeholder="Add a little something about you and why you want to visit the artist’s studio and what you like about their work. (optional)"
+              placeholder="Add a personal message, a little something about yourself, and what you like about their work. (optional)"
               fill
               rows="6"
             />

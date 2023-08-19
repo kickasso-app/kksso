@@ -141,7 +141,7 @@ const Preview = () => {
                   <li>Ask before taking photos of the artist and artworks</li>
                   <li>A gift is almost always a nice touch</li>
                 </ul>
-                {studio.openDates ? (
+                {studio.hasOpenDates === true ? (
                   <VisitForm
                     openDates={studio.openDates}
                     artistEmail={studio.email}
