@@ -68,7 +68,7 @@ const About = () => {
                       Youssef Faltas
                     </Text>
                     <p>
-                      Youssef is a creative technologist and a web developer.
+                      Youssef is a creative technologist, a visual artist, and a web developer.
                     </p>
                   </Box>
                 </Col>
@@ -81,7 +81,7 @@ const About = () => {
                     </Text>
                     <p>
 
-                      Ivana is a professional bohemian and a project manager and booster in areas connecting tech, art and education.
+                      Ivana is a professional bohemian and a project manager + booster in areas connecting tech, art and education.
                       {/* <br /> She realized Tango Nomado projects which hosted several nomadic musicians in Prague, Paris, or Buenos Aires. */}
                     </p>
                   </Box>
