@@ -18,9 +18,10 @@ const About = () => {
               </center>
               <h2>Why</h2>
 
+
               <p>
                 We believe that inspiring art stands out by itself.
-                This is one of our core philosophies that inspires to create a direct channel between artists, art lovers, and collectors
+                This is one of our core philosophies that inspires us to create a direct channel between artists, art lovers, and collectors
                 that can provide a wide inspiring network for all.
               </p>
 
