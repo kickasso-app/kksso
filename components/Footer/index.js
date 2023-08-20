@@ -15,7 +15,7 @@ const Footer = () => {
       <Box pad={{ vertical: "large", horizontal: "xlarge" }}>
 
         <Row>
-          <Col md={4}>
+          <Col md={4} xs={12}>
             <Box margin={{ vertical: "small" }} align="center">
               <a target="_blank" href="https://arti.crd.co/#register">
                 <Zap
@@ -31,7 +31,7 @@ const Footer = () => {
             </Box>
           </Col>
 
-          <Col md={4}>
+          <Col md={4} xs={6}>
             <Box margin={{ vertical: "small" }} align="center">
               <a target="_blank" href="https://www.instagram.com/studios.arti">
                 <Instagram
@@ -45,7 +45,7 @@ const Footer = () => {
               </Text>
             </Box>
           </Col>
-          <Col md={4}>
+          <Col md={4} xs={6}>
             <Box margin={{ vertical: "small" }} align="center">
               <a href="mailto:arti.studiosapp@gmail.com">
 

@@ -92,10 +92,11 @@ const Pilot = () => {
               <Row>
                 <Col md={6}>
                   <Box margin={sectionMargin} >
-                    {/* // margin={{ vertical: "xlarge", left: "medium" }}> */}
-                    <Heading level={2} margin={{ horizontal: "large" }}>
-                      Art is an experience, <br />not an object.
-                    </Heading>
+                    <Box margin={size === "small" ? { top: "medium", bottom: "xlarge" } : "none"}>
+                      <Heading level={2} margin={size === "small" ? { vertical: "large", horizontal: "medium" } : { horizontal: "large" }}>
+                        Art is an experience, <br />not an object.
+                      </Heading>
+                    </Box>
                   </Box>
                 </Col>
                 <Col md={6}>
@@ -104,10 +105,9 @@ const Pilot = () => {
                       A digital platform to connect artists, collectors, and art lovers.
                     </Text>
                     <Text size="medium" alignSelf="end" textAlign="start" margin={{ vertical: "medium" }}>
-                      We believe studios are a great place to share art.
-                      So we are building a platform to connect the art world by studio visits.
+                      We believe studios are a great place to share art, and that's why we want to connect the art world by studio visits.
                       <br /><br />
-                      Artists can offer to host studio visits, and art lovers and collectors get to explore the creative process more intimately and buy artworks directly.
+                      In arti, artists can offer to host studio visits, and collectors and art lovers get to explore the creative process more intimately and buy artworks directly.
                       {/* Studios are a great place to share art and creativity.
                       Studio visits help as well fill the gap of having a direct channel between artists and collectors.
                       This way artists can show their work how and to whom they prefer. */}
@@ -135,94 +135,7 @@ const Pilot = () => {
           </Col>
         </Row>
 
-        {/* 
-        <Box margin={sectionMargin} align="center">
-          <Heading level={2} margin={margin}>
-            For artists
-          </Heading>
-          <Text size="medium">
-            Show your work in your studio when and how you like.
-          </Text>
-        </Box>
-        <Box margin={margin} align="center">
-          <Heading level={2} margin={margin}>
-            For art lovers and collectors
-          </Heading>
-          <Text size="medium">
-            Explore new artists and visit their studios or show your own
-            collection.
-          </Text>
-        </Box> 
-        <Box margin={sectionMargin} align="center">
-          <Heading level={2} margin={margin}>
-            What we are preparing in our studio
-          </Heading>
-          <Text size="medium" margin={margin}>
-            As you are reading this, we are working on adding more core
-            features.
-          </Text>
-          <ul>
-            <li>Host a one-time mini event in your space</li>
-            <li>Review your visit experience</li>
-            <li>
-              Buy art in the app with a certficate of authencity and arrange
-              professional shipping
-            </li>
-            <li>Organize your art collection</li>
-          </ul>
-        </Box> 
-          
-        <Box margin={margin} align="center">
-          <Row>
-            <Heading level={2} margin={{ vertical: "1rem" }}>
-              Ready to give it a try?
-            </Heading>
-          </Row>
-          <Row>
-            <Col xs={12} md={6}>
-              <Box
-                align="center"
-                pad={{ vertical: "small" }}
-                margin={{ vertical: "xlarge" }}
-              >
-                <Button btnStyle="outline">
-                  <Box margin={{ vertical: "1rem", horizontal: "1rem" }}>
-                    <Link href="/studios">Explore Studios</Link>
-                  </Box>
-                </Button>
-                <br />
-                <Text size="medium" margin="medium">
-                  Discover artists by location or medium and plan a visit to
-                  their studios
-                </Text>
-                <Text size="small">
-                  We will help you get in touch with them.
-                </Text>
-              </Box>
-            </Col>
 
-            <Col xs={12} md={6}>
-              <Box
-                align="center"
-                pad={{ vertical: "small" }}
-                margin={{ vertical: "xlarge" }}
-              >
-                <Button btnStyle="outline">
-                  <Box margin={{ vertical: "1rem", horizontal: "1rem" }}>
-                    <Link href="/join">Add Your Space</Link>
-                  </Box>
-                </Button>
-                <br />
-                <Text size="medium" margin="medium">
-                  Have a studio or a space where you are creative and want to
-                  share your finished work?
-                </Text>
-
-                <Text size="small">Tell us about it and we will add it.</Text>
-              </Box>
-            </Col>
-          </Row>
-        </Box> */}
       </section>
     </Grid >
   );

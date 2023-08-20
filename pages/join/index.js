@@ -5,6 +5,8 @@ import { useAuth } from "services/auth";
 
 import { Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 
+import { Eye, EyeOff } from "react-feather";
+
 import {
   Box,
   FormField,
@@ -20,6 +22,8 @@ export default function Join() {
 
   const [loading, setLoading] = useState(false);
   const [newUser, setNewUser] = useState(true);
+  const [revealPass, setRevealPass] = useState(false);
+
   // const [forgotPassword, setForgotPassword] = useState(false);
 
   const [signUpToast, setSignUpToast] = useState(false);
@@ -124,7 +128,27 @@ export default function Join() {
                 margin={fieldMargin}
                 required
               >
-                <TextInput type="password" id="password" name="password" />
+                <Box
+                  direction="row"
+                  align="center"
+                  border={false}
+                >
+                  <TextInput
+                    type={revealPass ? 'text' : 'password'}
+                    id="password"
+                    name="password"
+                    placeholder={newUser ? "Your new password" : "Your passowrd"}
+                    plain
+                  />
+                  <Box margin="xsmall">
+                    {revealPass ?
+                      <Eye size={20} color="#4B4B4B" strokeWidth={1} onClick={() => setRevealPass(false)} />
+                      :
+                      <EyeOff size={20} color="#4B4B4B" strokeWidth={1} onClick={() => setRevealPass(true)} />
+                    }
+                  </Box>
+                </Box>
+
               </FormField>
 
             </Box>
@@ -155,7 +179,7 @@ export default function Join() {
                   <Anchor
                     onClick={() => {
                       setNewUser(true)
-                      setForgotPassword(false);
+                      // setForgotPassword(false);
                     }}>
                     Sign Up First</Anchor>
                   <br /> <br />
