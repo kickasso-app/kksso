@@ -17,15 +17,19 @@ import {
   Text,
   Calendar,
   RadioButtonGroup,
+  Notification,
 } from "grommet";
 
 import Button from "./../../Button";
 
 import { calendarBounds } from "config/calendar";
 
-const SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+const SERVICE_ID = "default_service"; // process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
 const TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
 const USER_ID = process.env.NEXT_PUBLIC_EMAILJS_USER_ID;
+
+// TO DO: Remove in Production
+const SEND_REAL_EMAIL = true;
 
 const VisitForm = ({ artistEmail, artistName, openDates }) => {
   // TO DO: Remove in Production
@@ -36,7 +40,7 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
     to_name: artistName,
     requestor_email: "kickasso@gmail.com",
     from_name: "Requestor Name",
-    message: "Hello There Message",
+    message_to_artist: "Hello There Message",
     visit_reason: "Reason of Visit",
     visitor_link: "Requestor Link",
     request_date: "",
@@ -54,8 +58,9 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
 
 
   // console.log(values);
+  // const [sendingEmail, setSendingEmail] = useState(false);
   const [isEmailSent, setIsEmailSent] = useState(false);
-  const [sendEmailError, setSendEmailError] = useState(false);
+  const [isEmailError, setIsEmailError] = useState(false);
 
 
   const readableDate = (date) => moment(date, "YYYY-MM-DD hh:mm").format("D MMMM");
@@ -132,10 +137,14 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
 
 
   const handleSendEmail = () => {
-    var templateParams = { ...values, request_date: readableDate(selectedDate) + " " + selectedTime };
+    const templateParams = {
+      ...values,
+      request_date: readableDate(selectedDate) + " " + selectedTime,
+
+    };
     console.log(templateParams);
 
-    if (isEmailSent === false && sendingRealEmail) {
+    if (SEND_REAL_EMAIL) {
       emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, USER_ID).then(
         function (response) {
           console.log(response.status, response.text);
@@ -143,15 +152,11 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
         },
         function (err) {
           console.log(err);
-          setSendEmailError(err);
+          setIsEmailError(err);
         }
       );
-      setIsEmailSent(true);
-    } else {
-      // Remove in Production
-      console.log("Not sending for now, just testing!");
-      setIsEmailSent(true);
     }
+
   };
 
   return (
@@ -279,7 +284,7 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
           <br />
           <FormField label="Message to Artist" name="message">
             <TextArea
-              name="message"
+              name="message_to_artist"
               placeholder="Add a personal message, a little something about yourself, and what you like about their work. (optional)"
               fill
               rows="6"
@@ -287,32 +292,36 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
           </FormField>
           <br />
           <Box direction="row" gap="medium">
-            <Button type="submit" btnStyle="filled" disabled={true}>
+            <Button type="submit" btnStyle="filled" disabled={false}>
               Request A Visit
             </Button>
           </Box>
 
           {isEmailSent ? (
-            <>
-              <Text>
-                <CheckCircle size={24} color="#C0FFF4" strokeWidth={3} />
-                <br />
-                We just sent your request to the artist!
-                <br /> Please wait to hear back from them to confirm the visit
-                details.
-              </Text>
-            </>
+            <Notification
+              toast={{
+                autoClose: false,
+                position: 'bottom-right',
+              }}
+              status="normal"
+              title="Your visit request was sent!"
+              message={<Text><br />Please wait to hear back from the artist's studio to confirm the visit.
+                We sent you an email with the request details.</Text>}
+              onClose={() => setIsEmailSent(false)}
+            />
           ) : (
-            sendEmailError && (
-              <Text>
-                <XCircle size={24} color="#FFC0CB" strokeWidth={3} />
-                <br />
-                We couldn't send your request this time.
-                <br />
-                Please try again.
-              </Text>
+            isEmailError && (
+              <Notification
+                toast
+                status="warning"
+                title="We couldn't send your request!"
+                message={<Text><br />Please try again, and if it doesn't work, reach out to us.</Text>}
+                onClose={() => setIsEmailError(false)}
+                time="2000"
+              />
             )
           )}
+
         </Form>
       </Box>
     </Box>

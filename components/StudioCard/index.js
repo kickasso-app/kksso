@@ -96,11 +96,13 @@ const StudioCard = ({
         {city.split(",")[0]}
       </h4>
 
+      {/* CHANGED FOR PILOT */}
+      {/* 
       {nextVisit && (
         <h4 className={styles.secondary}>
           Next Visit <strong>{nextVisit}</strong>
         </h4>
-      )}
+      )} */}
 
       <p className={styles.textMini}>{textMini}</p>
 
