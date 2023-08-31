@@ -185,12 +185,14 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
             <Text as="label" margin={{ vertical: "medium", horizontial: "medium" }} >
               When to Visit?
             </Text >
-            <Box alignSelf={size === "small" ? "center" : "start"}>
+            <Box>
+              {/* alignSelf={size === "small" ? "center" : "start"} */}
               <Calendar
                 onSelect={onSelectDate}
                 date={selectedDate}
-                size={size === "small" ? "small" : "medium"}
-                // margin={size === "small" ? "small" : "small"}
+                // size={size === "small" ? "small" : "medium"}
+                // margin={size === "small" ? "medium" : "small"}
+                size="medium"
                 margin="small"
                 bounds={[calendarBounds.Start, calendarBounds.End]}
                 disabled={disabledDates}
