@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 // import PropTypes from "prop-types";
 
 import * as emailjs from "emailjs-com";
 
 import moment from "moment";
-
-import { CheckCircle, XCircle } from "react-feather";
 
 import {
   Box,
@@ -17,26 +15,31 @@ import {
   Text,
   Calendar,
   RadioButtonGroup,
+  Notification,
+  ResponsiveContext,
 } from "grommet";
 
 import Button from "./../../Button";
 
 import { calendarBounds } from "config/calendar";
 
-const SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+const SERVICE_ID = "default_service"; // process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
 const TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
 const USER_ID = process.env.NEXT_PUBLIC_EMAILJS_USER_ID;
 
-const VisitForm = ({ artistEmail, artistName, openDates }) => {
-  // TO DO: Remove in Production
-  const sendingRealEmail = false;
+// TO DO: Remove in Production
+const SEND_REAL_EMAIL = true;
+
+const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
+
+  const size = useContext(ResponsiveContext);
 
   const initValues = {
     to_email: artistEmail,
     to_name: artistName,
     requestor_email: "kickasso@gmail.com",
     from_name: "Requestor Name",
-    message: "Hello There Message",
+    message_to_artist: "Hello There Message",
     visit_reason: "Reason of Visit",
     visitor_link: "Requestor Link",
     request_date: "",
@@ -54,8 +57,9 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
 
 
   // console.log(values);
+  // const [sendingEmail, setSendingEmail] = useState(false);
   const [isEmailSent, setIsEmailSent] = useState(false);
-  const [sendEmailError, setSendEmailError] = useState(false);
+  const [isEmailError, setIsEmailError] = useState(false);
 
 
   const readableDate = (date) => moment(date, "YYYY-MM-DD hh:mm").format("D MMMM");
@@ -132,10 +136,15 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
 
 
   const handleSendEmail = () => {
-    var templateParams = { ...values, request_date: readableDate(selectedDate) + " " + selectedTime };
-    console.log(templateParams);
+    const templateParams = {
+      ...values,
+      request_date: readableDate(selectedDate) + " at " + selectedTime,
+      studio_link: "https:/artiweek.vercel.app/studios/" + artistUUID,
+    };
 
-    if (isEmailSent === false && sendingRealEmail) {
+    // console.log(templateParams);
+
+    if (SEND_REAL_EMAIL) {
       emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, USER_ID).then(
         function (response) {
           console.log(response.status, response.text);
@@ -143,15 +152,11 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
         },
         function (err) {
           console.log(err);
-          setSendEmailError(err);
+          setIsEmailError(err);
         }
       );
-      setIsEmailSent(true);
-    } else {
-      // Remove in Production
-      console.log("Not sending for now, just testing!");
-      setIsEmailSent(true);
     }
+
   };
 
   return (
@@ -180,17 +185,19 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
             <Text as="label" margin={{ vertical: "medium", horizontial: "medium" }} >
               When to Visit?
             </Text >
-
-            <Calendar
-              onSelect={onSelectDate}
-              date={selectedDate}
-              size="medium"
-              margin="medium"
-              bounds={[calendarBounds.Start, calendarBounds.End]}
-              disabled={disabledDates}
-            // to customize the header
-            // https://storybook.grommet.io/?path=/story/visualizations-calendar-header--custom-header-calendar
-            />
+            <Box alignSelf={size === "small" ? "center" : "start"}>
+              <Calendar
+                onSelect={onSelectDate}
+                date={selectedDate}
+                size={size === "small" ? "small" : "medium"}
+                // margin={size === "small" ? "small" : "small"}
+                margin="small"
+                bounds={[calendarBounds.Start, calendarBounds.End]}
+                disabled={disabledDates}
+              // to customize the header
+              // https://storybook.grommet.io/?path=/story/visualizations-calendar-header--custom-header-calendar
+              />
+            </Box>
 
             {selectedTime &&
               <>
@@ -250,7 +257,8 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
             label="Social or professional link"
             required
             validate={{
-              regexp: /\S+.\S+\.\S+/,
+              // regexp: /\S+.\S+\.\S+/,
+              regex: /\S+.\S+\.\S+?.\S+/,
               message: "Enter a valid url",
             }}
             type="url"
@@ -260,9 +268,13 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
               mask={[
                 { regexp: /^[\w\-_.]+$/, placeholder: "https" },
                 { fixed: "://" },
+                { regexp: /^[\w]+$/, placeholder: "www" },
+                { fixed: "." },
                 { regexp: /^[\w]+$/, placeholder: "instagram" },
                 { fixed: "." },
-                { regexp: /^[\w]+$/, placeholder: "com/your.profile" },
+                { regexp: /^[\w]+$/, placeholder: "com" },
+                { fixed: "/" },
+                { regexp: /^[\w]+$/, placeholder: "yourProfile" }
               ]}
 
             />
@@ -279,7 +291,7 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
           <br />
           <FormField label="Message to Artist" name="message">
             <TextArea
-              name="message"
+              name="message_to_artist"
               placeholder="Add a personal message, a little something about yourself, and what you like about their work. (optional)"
               fill
               rows="6"
@@ -287,32 +299,36 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
           </FormField>
           <br />
           <Box direction="row" gap="medium">
-            <Button type="submit" btnStyle="filled" disabled={true}>
+            <Button type="submit" btnStyle="filled" disabled={false}>
               Request A Visit
             </Button>
           </Box>
 
           {isEmailSent ? (
-            <>
-              <Text>
-                <CheckCircle size={24} color="#C0FFF4" strokeWidth={3} />
-                <br />
-                We just sent your request to the artist!
-                <br /> Please wait to hear back from them to confirm the visit
-                details.
-              </Text>
-            </>
+            <Notification
+              toast={{
+                autoClose: false,
+                position: 'bottom-right',
+              }}
+              status="normal"
+              title="Your visit request was sent!"
+              message={<Text><br />Please wait to hear back from the artist's studio to confirm the visit.
+                We sent you an email with the request details.</Text>}
+              onClose={() => setIsEmailSent(false)}
+            />
           ) : (
-            sendEmailError && (
-              <Text>
-                <XCircle size={24} color="#FFC0CB" strokeWidth={3} />
-                <br />
-                We couldn't send your request this time.
-                <br />
-                Please try again.
-              </Text>
+            isEmailError && (
+              <Notification
+                toast
+                status="warning"
+                title="We couldn't send your request!"
+                message={<Text><br />Please try again, and if it doesn't work, reach out to us.</Text>}
+                onClose={() => setIsEmailError(false)}
+                time="2000"
+              />
             )
           )}
+
         </Form>
       </Box>
     </Box>
