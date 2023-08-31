@@ -162,6 +162,7 @@ const Studio = () => {
                     openDates={studio.openDates || []}
                     artistEmail={studio.email}
                     artistName={studio.artist}
+                    artistUUID={studio.uuid}
                   />
                 ) : (
                   <>

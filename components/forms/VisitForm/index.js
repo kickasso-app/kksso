@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 // import PropTypes from "prop-types";
 
 import * as emailjs from "emailjs-com";
 
 import moment from "moment";
-
-import { CheckCircle, XCircle } from "react-feather";
 
 import {
   Box,
@@ -18,6 +16,7 @@ import {
   Calendar,
   RadioButtonGroup,
   Notification,
+  ResponsiveContext,
 } from "grommet";
 
 import Button from "./../../Button";
@@ -31,9 +30,9 @@ const USER_ID = process.env.NEXT_PUBLIC_EMAILJS_USER_ID;
 // TO DO: Remove in Production
 const SEND_REAL_EMAIL = true;
 
-const VisitForm = ({ artistEmail, artistName, openDates }) => {
-  // TO DO: Remove in Production
-  const sendingRealEmail = false;
+const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
+
+  const size = useContext(ResponsiveContext);
 
   const initValues = {
     to_email: artistEmail,
@@ -139,10 +138,11 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
   const handleSendEmail = () => {
     const templateParams = {
       ...values,
-      request_date: readableDate(selectedDate) + " " + selectedTime,
-
+      request_date: readableDate(selectedDate) + " at " + selectedTime,
+      studio_link: "https:/artiweek.vercel.app/studios/" + artistUUID,
     };
-    console.log(templateParams);
+
+    // console.log(templateParams);
 
     if (SEND_REAL_EMAIL) {
       emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, USER_ID).then(
@@ -185,17 +185,19 @@ const VisitForm = ({ artistEmail, artistName, openDates }) => {
             <Text as="label" margin={{ vertical: "medium", horizontial: "medium" }} >
               When to Visit?
             </Text >
-
-            <Calendar
-              onSelect={onSelectDate}
-              date={selectedDate}
-              size="medium"
-              margin="medium"
-              bounds={[calendarBounds.Start, calendarBounds.End]}
-              disabled={disabledDates}
-            // to customize the header
-            // https://storybook.grommet.io/?path=/story/visualizations-calendar-header--custom-header-calendar
-            />
+            <Box alignSelf={size === "small" ? "center" : "start"}>
+              <Calendar
+                onSelect={onSelectDate}
+                date={selectedDate}
+                size={size === "small" ? "small" : "medium"}
+                // margin={size === "small" ? "small" : "small"}
+                margin="small"
+                bounds={[calendarBounds.Start, calendarBounds.End]}
+                disabled={disabledDates}
+              // to customize the header
+              // https://storybook.grommet.io/?path=/story/visualizations-calendar-header--custom-header-calendar
+              />
+            </Box>
 
             {selectedTime &&
               <>
