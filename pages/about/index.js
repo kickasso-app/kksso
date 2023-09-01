@@ -1,6 +1,8 @@
 import React from "react";
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import { Box, Heading, Text, ResponsiveContext } from "grommet";
+import { Circle } from "react-feather";
+
 
 import styles from "./index.module.scss";
 import { MoreHorizontal } from "react-feather";
@@ -33,7 +35,9 @@ const About = () => {
               </h3>
 
               <h3>
-                Art is more accessible to everyone
+                <Box direction="row" align="baseline">
+                  <Circle size={11} strokeWidth={2} /> &nbsp; Art is more accessible to everyone
+                </Box>
               </h3>
 
               <p>
@@ -41,14 +45,18 @@ const About = () => {
               </p>
 
               <h3>
-                The creative process is more visible
+                <Box direction="row" align="baseline">
+                  <Circle size={11} strokeWidth={2} />  &nbsp; The creative process is more visible
+                </Box>
               </h3>
 
               <p>A key difference between seeing an artist's work in a gallery and visiting their studio is the stories they share. The details of how and why they work are a significant part of their practice. We hope to bring the possibility of sharing and getting inspired by art to more art lovers.
               </p>
 
               <h3>
-                There are more independent artists
+                <Box direction="row" align="baseline">
+                  <Circle size={11} strokeWidth={2} /> &nbsp; There are more independent artists
+                </Box>
               </h3>
               {/* <h3> There is a wide spectrum of independent artists</h3> */}
 
