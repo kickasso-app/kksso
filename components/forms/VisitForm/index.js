@@ -216,12 +216,12 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
             <Text as="label" margin={{ vertical: "medium", horizontial: "medium" }} >
               When to Visit?
             </Text >
-            <Box alignSelf={size === "small" ? "center" : "start"}>
+            <Box>
               <Calendar
                 onSelect={(date) => { onSelectDate(date); }}
                 date={selectedDate}
-                size={size === "small" ? "small" : "medium"}
-                margin="small"
+                size={"medium"}
+                margin={"none"}
                 bounds={[calendarBounds.Start, calendarBounds.End]}
                 daysOfWeek={true}
                 firstDayOfWeek={1}
