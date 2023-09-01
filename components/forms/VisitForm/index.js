@@ -38,9 +38,9 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
   const initValues = {
     to_email: artistEmail,
     to_name: artistName,
-    requestor_email: "kickasso@gmail.com",
+    requestor_email: "arti.studiosapp@gmail.com",
     from_name: "Requestor Name",
-    message_to_artist: "Hello There Message",
+    message_to_artist: " ",
     visit_reason: "Reason of Visit",
     visitor_link: "Requestor Link",
     request_date: "",
@@ -96,23 +96,29 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
   }
 
 
-  const onSelectDate = (newdate, optionalDatesWithTimes) => {
+  const onSelectDate = (newdate, optionalDatesWithTimes = false) => {
+
+
     const date = newdate.split("T")[0];
-    const dates = optionalDatesWithTimes || datesWithTimes;
 
-    // console.log("date", date);
-    // console.log(dates);
+    if (date !== selectedDate) {
 
-    setSelectedDate(date);
-    const newTimes = dates.filter(d => d.date === date)[0]?.times;
-    // console.log("new times", newTimes);
-    if (newTimes?.length > 0) {
-      setOpenTimes(newTimes);
-      setSelectedTime(newTimes[0]);
+
+      const dates = optionalDatesWithTimes || datesWithTimes;
+
+      setSelectedDate([date]);
+      const newTimes = dates.filter(d => d.date === date)[0]?.times;
+      // console.log("new times", newTimes);
+      if (newTimes?.length > 0) {
+        setOpenTimes(newTimes);
+        setSelectedTime(newTimes[0]);
+      }
+      else {
+        setOpenTimes([]);
+      }
+      // console.log("new date");
     }
-    else {
-      setOpenTimes([]);
-    }
+    return true;
     // console.log("SELECTED DATE")
     // console.log(date + " " + newTimes[0])
   }
@@ -212,12 +218,15 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
             </Text >
             <Box alignSelf={size === "small" ? "center" : "start"}>
               <Calendar
-                onSelect={onSelectDate}
+                onSelect={(date) => { onSelectDate(date); }}
                 date={selectedDate}
+
                 size={size === "small" ? "small" : "medium"}
                 // margin={size === "small" ? "small" : "small"}
                 margin="small"
                 bounds={[calendarBounds.Start, calendarBounds.End]}
+                daysOfWeek={true}
+                firstDayOfWeek={1}
                 disabled={disabledDates}
               // to customize the header
               // https://storybook.grommet.io/?path=/story/visualizations-calendar-header--custom-header-calendar
@@ -247,12 +256,13 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
             }
           </Box>
 
-          {/* TEST 
-          <Anchor 
+          {/* TEST
+          <Anchor
             onClick={() => console.log(selectedDate + " " + selectedTime)}
-            >
-          Date Time
+          >
+            Date Time
           </Anchor> */}
+
 
           <FormField
             name="from_name"
