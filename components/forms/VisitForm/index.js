@@ -17,6 +17,7 @@ import {
   RadioButtonGroup,
   Notification,
   ResponsiveContext,
+  Anchor,
 } from "grommet";
 
 import Button from "./../../Button";
@@ -37,9 +38,9 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
   const initValues = {
     to_email: artistEmail,
     to_name: artistName,
-    requestor_email: "kickasso@gmail.com",
+    requestor_email: "arti.studiosapp@gmail.com",
     from_name: "Requestor Name",
-    message_to_artist: "Hello There Message",
+    message_to_artist: " ",
     visit_reason: "Reason of Visit",
     visitor_link: "Requestor Link",
     request_date: "",
@@ -48,10 +49,11 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
 
   const [values, setValues] = useState(initValues);
   const [calendarDates, setCalendarDates] = useState([]);
+  const [disabledDates, setDisabledDates] = useState([]);
   const [datesWithTimes, setDatesWithTimes] = useState([]);
 
-  const [selectedDate, setSelectedDate] = useState();
-  const [selectedTime, setSelectedTime] = useState();
+  const [selectedDate, setSelectedDate] = useState(false);
+  const [selectedTime, setSelectedTime] = useState(false);
 
   const [openTimes, setOpenTimes] = useState([]);
 
@@ -73,47 +75,68 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
 
   const getDisabledArray = (start, end, openDates) => {
 
-    const allDays = getDaysArray(new Date(start), new Date(end)).map((v) => v.toISOString().slice(0, 10));
-    const openIndexes = [];
+    if (selectedDate === false) {
+      const allDays = getDaysArray(new Date(start), new Date(end)).map((v) => v.toISOString().slice(0, 10));
+      const openIndexes = [];
 
-    openDates.forEach(d => {
-      const i = allDays.indexOf(d.slice(0, 10));
-      openIndexes.push(i);
-    });
+      openDates.forEach(d => {
+        const i = allDays.indexOf(d.slice(0, 10));
+        openIndexes.push(i);
+      });
 
-    for (let i = openIndexes.length - 1; i >= 0; i--) {
-      allDays.splice(openIndexes[i], 1);
+      for (let i = openIndexes.length - 1; i >= 0; i--) {
+        allDays.splice(openIndexes[i], 1);
+      }
+
+      const disabled = allDays;
+      // console.log("disabled");
+      // console.log(disabled);
+      return disabled;
     }
-
-    const disabled = allDays;
-    return disabled;
   }
 
-  const disabledDates = getDisabledArray(calendarBounds.Start, calendarBounds.End, calendarDates);
+
+  const onSelectDate = (newdate, optionalDatesWithTimes = false) => {
 
 
-  const onSelectDate = (newdate, optionalDatesWithTimes) => {
     const date = newdate.split("T")[0];
-    const dates = optionalDatesWithTimes || datesWithTimes;
-    setSelectedDate(date);
-    const newTimes = dates.filter(d => d.date === date)[0]?.times;
-    if (newTimes?.length > 0) {
-      setOpenTimes(newTimes);
-      setSelectedTime(newTimes[0]);
+
+    if (date !== selectedDate) {
+
+
+      const dates = optionalDatesWithTimes || datesWithTimes;
+
+      setSelectedDate([date]);
+      const newTimes = dates.filter(d => d.date === date)[0]?.times;
+      // console.log("new times", newTimes);
+      if (newTimes?.length > 0) {
+        setOpenTimes(newTimes);
+        setSelectedTime(newTimes[0]);
+      }
+      else {
+        setOpenTimes([]);
+      }
+      // console.log("new date");
     }
-    else {
-      setOpenTimes([]);
-    }
+    return true;
+    // console.log("SELECTED DATE")
+    // console.log(date + " " + newTimes[0])
   }
 
   const prepCalendarDates = (dates) => {
     const uniqueCalendarDates = dates.map(d => d.split(" ")[0] + "T12:22:00Z").filter((value, index, self) => self.indexOf(value) === index);
+
+    uniqueCalendarDates.sort();
+    //    console.log("unique", uniqueCalendarDates);
+
     return uniqueCalendarDates;
   }
 
   const prepDatesWithTimes = (dates) => {
     const datesTimes = [];
     const uniqueDatesOnly = dates.map(d => d.split(" ")[0]).filter((value, index, self) => self.indexOf(value) === index);
+
+    uniqueDatesOnly.sort();
 
     uniqueDatesOnly.forEach(date => {
       const times = openDates.filter(s => s.startsWith(date)).map(d => d.split(" ")[1]);
@@ -122,15 +145,23 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
     return datesTimes;
   }
 
+  // let disabledDates = [];
 
   useEffect(() => {
     emailjs.init(USER_ID);
-    if (openDates && !selectedDate) {
+    if (openDates?.length > 0) {
+
       const tempCalendarDates = prepCalendarDates(openDates);
-      const tempDatesWithTimes = prepDatesWithTimes(openDates)
+      const tempDatesWithTimes = prepDatesWithTimes(openDates);
+
       setCalendarDates(tempCalendarDates);
       setDatesWithTimes(tempDatesWithTimes);
+
+      // console.log("temp dates", tempCalendarDates);
+
       onSelectDate(tempCalendarDates[0], tempDatesWithTimes);
+      setDisabledDates(getDisabledArray(calendarBounds.Start, calendarBounds.End, tempCalendarDates));
+
     }
   }, []);
 
@@ -186,15 +217,16 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
               When to Visit?
             </Text >
             <Box>
-              {/* alignSelf={size === "small" ? "center" : "start"} */}
               <Calendar
-                onSelect={onSelectDate}
+                onSelect={(date) => { onSelectDate(date); }}
                 date={selectedDate}
                 // size={size === "small" ? "small" : "medium"}
                 // margin={size === "small" ? "medium" : "small"}
                 size="medium"
-                margin="small"
+                margin="none"
                 bounds={[calendarBounds.Start, calendarBounds.End]}
+                daysOfWeek={true}
+                firstDayOfWeek={1}
                 disabled={disabledDates}
               // to customize the header
               // https://storybook.grommet.io/?path=/story/visualizations-calendar-header--custom-header-calendar
@@ -214,12 +246,23 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
                     name="visitTime"
                     options={openTimes}
                     value={selectedTime}
-                    onChange={(event) => setSelectedTime(event.target.value)}
+                    onChange={(event) => {
+                      setSelectedTime(event.target.value);
+                      // console.log("selected " + event.target.value);
+                    }}
                   />
                 </Box>
               </>
             }
           </Box>
+
+          {/* TEST
+          <Anchor
+            onClick={() => console.log(selectedDate + " " + selectedTime)}
+          >
+            Date Time
+          </Anchor> */}
+
 
           <FormField
             name="from_name"

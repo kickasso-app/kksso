@@ -159,7 +159,7 @@ const Studio = () => {
                 </ul>
                 {studio.hasOpenDates === true ? (
                   <VisitForm
-                    openDates={studio.openDates || []}
+                    openDates={studio.openDates}
                     artistEmail={studio.email}
                     artistName={studio.artist}
                     artistUUID={studio.uuid}
