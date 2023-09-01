@@ -1,6 +1,8 @@
 import React from "react";
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import { Box, Heading, Text, ResponsiveContext } from "grommet";
+import { Circle } from "react-feather";
+
 
 import styles from "./index.module.scss";
 import { MoreHorizontal } from "react-feather";
@@ -18,38 +20,48 @@ const About = () => {
               </center>
               <h2>Why</h2>
 
-
               <p>
-                We believe that inspiring art stands out by itself.
-                This is one of our core philosophies that inspires us to create a direct channel between artists, art lovers, and collectors
-                that can provide a wide inspiring network for all.
-              </p>
+                We believe that original art stands out. This conviction drives us to create a direct channel between artists, art lovers, and collectors.
+              </p><p>There are more artists than there are spaces to show their work.
+              </p><p>The art world is complex but the market is archaic and exclusive. Access is rarely easy. Galleries take a large percentage off the artwork price. Online experience of viewing and buying art is impersonal. It can feel like buying an Ikea.
+              </p><p>
 
-              <p>
-                There are way more artists than there are spaces to show their work. Arti wants to redefine the art centers and to overcome the value-making crisis in the art world which results in few leaders and many followers situation.
+                By gaining more space in creativity and freedom in directing the journeys of their artworks, artists will make more powerful art. Studios are the optimal place to see and experience them.
+
               </p>
-              {/* <p>Arti is open to all artists creating work at any stage in their practice.</p> */}
 
 
               <h3>We want to help create a new art world where
               </h3>
 
-
-              <h3> Art is more accessible to everyone</h3>
-
-              <p>There is a lot of art out there and the majority of it gets little chance to be visible and shared with the audience who appreciates it. We see a chance to open up the established gates of exclusivity in the art world and market, and to make it easier for artists and collectors to define their practice in their own way.
-              </p>
-
-              <h3> The creative process is more visible</h3>
-
-              <p>One of the main differences between seeing an artist’s work in a gallery and visiting their studio is the stories they share. The details of how and why they work are a big part of their practice as a whole. We hope to bring this way of sharing and being inspired by art to more collectors and art lovers.
-              </p>
-
-              <h3> There is a wide spectrum of independent artists</h3>
+              <h3>
+                <Box direction="row" align="baseline">
+                  <Circle size={11} strokeWidth={2} /> &nbsp; Art is more accessible to everyone
+                </Box>
+              </h3>
 
               <p>
-                Someone issued the warning once to “Beware of artists. They mix with all classes of society and are therefore most dangerous."
-                We agree and want more mixing and a wider spectrum of artists of all backgrounds to thrive. We see the beauty and richness in the diversity, and we believe that the way forward is to have even more independent artists everywhere.
+                There is a lot of art out there and its majority gets little chance to reach the audience who appreciates it. Opening up the gates of exclusivity in the art world and market would help artists and collectors define their practice in their own ways.
+              </p>
+
+              <h3>
+                <Box direction="row" align="baseline">
+                  <Circle size={11} strokeWidth={2} />  &nbsp; The creative process is more visible
+                </Box>
+              </h3>
+
+              <p>A key difference between seeing an artist's work in a gallery and visiting their studio is the stories they share. The details of how and why they work are a significant part of their practice. We hope to bring the possibility of sharing and getting inspired by art to more art lovers.
+              </p>
+
+              <h3>
+                <Box direction="row" align="baseline">
+                  <Circle size={11} strokeWidth={2} /> &nbsp; There are more independent artists
+                </Box>
+              </h3>
+              {/* <h3> There is a wide spectrum of independent artists</h3> */}
+
+              <p>
+                Someone once warned “Beware of artists. They mix with all classes of society and are therefore most dangerous." We agree and want a wider spectrum of artists of all backgrounds to thrive. We see the beauty and richness in the diversity, and we believe that the way forward is to have even more independent artists creating original works everywhere.
               </p>
 
             </Box>

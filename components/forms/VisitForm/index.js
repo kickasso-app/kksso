@@ -220,8 +220,10 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
               <Calendar
                 onSelect={(date) => { onSelectDate(date); }}
                 date={selectedDate}
-                size={"medium"}
-                margin={"none"}
+                // size={size === "small" ? "small" : "medium"}
+                // margin={size === "small" ? "medium" : "small"}
+                size="medium"
+                margin="none"
                 bounds={[calendarBounds.Start, calendarBounds.End]}
                 daysOfWeek={true}
                 firstDayOfWeek={1}
