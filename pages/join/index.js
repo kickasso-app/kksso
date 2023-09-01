@@ -12,6 +12,7 @@ import {
   FormField,
   TextInput,
   Heading,
+  Text,
   Anchor,
   Paragraph,
   Notification,
@@ -21,7 +22,7 @@ import Button from "components/Button";
 export default function Join() {
 
   const [loading, setLoading] = useState(false);
-  const [newUser, setNewUser] = useState(true);
+  const [newUser, setNewUser] = useState(false);
   const [revealPass, setRevealPass] = useState(false);
 
   // const [forgotPassword, setForgotPassword] = useState(false);
@@ -163,40 +164,43 @@ export default function Join() {
             </Box>
 
             <br />
+            <Box margin={"small"}>
 
-            {newUser ? (
-              <>
-                <Paragraph>
-                  Already have an account?{" "}
-                  <Anchor onClick={() => setNewUser(false)}>Log In</Anchor>
-                </Paragraph>
-              </>
+              {newUser ? (
+                <>
+                  <Paragraph>
+                    Already have an account?{" "}
+                    <Anchor onClick={() => setNewUser(false)}>Log In</Anchor>
+                  </Paragraph>
+                </>
 
-            ) : (
-              <>
-                <Paragraph>
-                  Don't have an account?{" "}
-                  <Anchor
-                    onClick={() => {
-                      setNewUser(true)
-                      // setForgotPassword(false);
-                    }}>
-                    Sign Up First</Anchor>
-                  <br /> <br />
-                </Paragraph>
+              ) : (
+                <>
+                  <Paragraph>
+                    Don't have an account?{" "}
+                    <Anchor
+                      onClick={() => {
+                        setNewUser(true)
+                        // setForgotPassword(false);
+                      }}>
+                      Sign Up First</Anchor>
+                    <br /> <br />
+                  </Paragraph>
 
-                {/* {!forgotPassword && */}
-                <Paragraph>
+                  {/* {!forgotPassword && */}
+                  <Text weight="300" margin={{ vertical: "small" }}>
 
-                  Forgot your passoword?
-                  <br />
-                  Please let us know by email and we will send you a magic link.
-                  {/* <Anchor onClick={() => setForgotPassword(true)}>Send me a magic link</Anchor> */}
-                </Paragraph>
-                {/* } */}
-              </>
+                    Forgot your passoword?<br />
+                  </Text>
+                  <Text weight="200">
+                    Please let us know by email and we will send you a magic link.
+                    {/* <Anchor onClick={() => setForgotPassword(true)}>Send me a magic link</Anchor> */}
+                  </Text>
+                  {/* } */}
+                </>
 
-            )}
+              )}
+            </Box>
 
 
 
