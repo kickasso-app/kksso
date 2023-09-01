@@ -78,7 +78,12 @@ const themeChanges = {
   },
   calendar: {
     medium: {
-      daySize: "46px",
+      daySize: "36px",
+      lineHeight: 2.0,
+      fontSize: "16px",
+    },
+    small: {
+      daySize: "28px",
     },
     day: {
       extend: ({ isSelected }) => `
