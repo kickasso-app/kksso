@@ -41,13 +41,14 @@ const Pilot = () => {
                 />
               }
             </Box>
-            <Box margin={{ vertical: "3rem" }} align="center">
-              <Heading level={size === "small" ? 2 : 3}>
-                Explore art studios near you
+            <Box margin={{ vertical: "2.5rem" }} align="center">
+              <Heading level={2}>
+                Book a private studio visit
+                {/* <br />with artists near you */}
               </Heading>
             </Box>
 
-            <Box margin={{ vertical: "0rem", bottom: "12rem" }} align="center">
+            <Box margin={{ vertical: "1rem", bottom: "12rem" }} align="center">
               <SearchBar isBarFullWidth />
             </Box>
 
