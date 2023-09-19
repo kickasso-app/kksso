@@ -57,6 +57,7 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
 
   const [openTimes, setOpenTimes] = useState([]);
 
+  const [isDatePast, setIsDatePast] = useState(false);
 
   // console.log(values);
   // const [sendingEmail, setSendingEmail] = useState(false);
@@ -89,8 +90,6 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
       }
 
       const disabled = allDays;
-      // console.log("disabled");
-      // console.log(disabled);
       return disabled;
     }
   }
@@ -116,11 +115,15 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
       else {
         setOpenTimes([]);
       }
-      // console.log("new date");
+
+      const isPast = moment(date).diff(moment().format("YYYY-MM-DD")) < 0;
+      setIsDatePast(isPast);
+
     }
-    return true;
     // console.log("SELECTED DATE")
     // console.log(date + " " + newTimes[0])
+
+    return true;
   }
 
   const prepCalendarDates = (dates) => {
@@ -324,7 +327,7 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
 
             />
           </FormField>
-          <FormField label="Reason of Visit" name="visit_reason">
+          <FormField label={<Text>Reason of visit <br />/ Grund des Besuchs</Text>} name="visit_reason">
             <TextArea
               name="visit_reason"
               placeholder="Just curious, Want to collaborate on a project, or Want to buy a specific artwork, or something else ..."
@@ -334,7 +337,7 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
             />
           </FormField>
           <br />
-          <FormField label="Message to Artist" name="message">
+          <FormField label={<Text>Message to artist <br />/ Nachricht an den oder die Künstlerin*in </Text>} name="message">
             <TextArea
               name="message_to_artist"
               placeholder="Add a personal message, a little something about yourself, and what you like about their work. (optional)"
@@ -344,10 +347,16 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
           </FormField>
           <br />
           <Box direction="row" gap="medium">
-            <Button type="submit" btnStyle="filled" disabled={false}>
+            <Button type="submit" btnStyle="filled" disabled={isDatePast}>
               Request A Visit
             </Button>
           </Box>
+
+          {isDatePast &&
+            <Text color="#ffc0cb" size="medium">
+              You selected a day in the past
+            </Text>
+          }
 
           {isEmailSent ? (
             <Notification

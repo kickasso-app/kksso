@@ -22,11 +22,12 @@ const StudiosFeatured = () => {
 
   useEffect(() => {
     if (studios.length > 2) {
-      // Pilot To Do 
-      // pick three random studios
 
-      setFeaturedStudios(studios.slice(0, 3));
-      // console.log(studios.slice(0, 3));
+      {/* CHANGED FOR PILOT */ }
+      const featArtists = ['Nathalie', 'Salvatore', 'Friederike'];
+
+      setFeaturedStudios(studios.filter(s => featArtists.some(a => s.artist.includes(a))));
+
     }
 
   }, [loading]);
