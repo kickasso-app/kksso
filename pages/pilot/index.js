@@ -23,15 +23,25 @@ const Pilot = () => {
       <section>
         <Row id={styles.intro}>
           <Col xs={12} md={12}>
+            <Heading
+              level={4}
+              margin="small"
+              alignSelf="center"
+              textAlign="center"
+            >
+              Summer edition is coming soon. Stay tuned.
+            </Heading>
+
             <Box margin={{ bottom: "1rem" }}>
-              {size === "small" ?
+              {size === "small" ? (
                 <Image
                   src={`/img/pilot/MobileBanner.png`}
                   alt="banner"
                   layout="responsive"
                   width="100%"
                   height="100%"
-                /> :
+                />
+              ) : (
                 <Image
                   src={`/img/pilot/Banner.png`}
                   alt="banner"
@@ -39,7 +49,7 @@ const Pilot = () => {
                   width="100%"
                   height="45%"
                 />
-              }
+              )}
             </Box>
             <Box margin={{ vertical: "2.5rem" }} align="center">
               <Heading level={2}>
@@ -51,7 +61,6 @@ const Pilot = () => {
             <Box margin={{ vertical: "1rem", bottom: "12rem" }} align="center">
               <SearchBar isBarFullWidth />
             </Box>
-
 
             <Box margin={sectionMargin} pad="medium" align="center">
               <Heading level={2} margin={"xs"}>
@@ -68,21 +77,34 @@ const Pilot = () => {
               <Box fill pad="large">
                 <Row>
                   <Col md={4}>
-                    <Text size="xlarge" alignSelf="center" >1.</Text>
+                    <Text size="xlarge" alignSelf="center">
+                      1.
+                    </Text>
                     <Box margin={{ top: "medium", bottom: "xlarge" }}>
-                      <Text size="medium">Discover artist studios nearby. </Text>
+                      <Text size="medium">
+                        Discover artist studios nearby.{" "}
+                      </Text>
                     </Box>
                   </Col>
                   <Col md={4}>
-                    <Text size="xlarge" alignSelf="center">2.</Text>
+                    <Text size="xlarge" alignSelf="center">
+                      2.
+                    </Text>
                     <Box margin={{ top: "medium", bottom: "xlarge" }}>
-                      <Text size="medium">Find an artwork that you like and request a visit. </Text>
+                      <Text size="medium">
+                        Find an artwork that you like and request a visit.{" "}
+                      </Text>
                     </Box>
                   </Col>
                   <Col md={4}>
-                    <Text size="xlarge" alignSelf="center">3.</Text>
+                    <Text size="xlarge" alignSelf="center">
+                      3.
+                    </Text>
                     <Box margin={{ top: "medium", bottom: "xlarge" }}>
-                      <Text size="medium">Once they accept, make a visit and learn what inspires them.</Text>
+                      <Text size="medium">
+                        Once they accept, make a visit and learn what inspires
+                        them.
+                      </Text>
                     </Box>
                   </Col>
                 </Row>
@@ -92,10 +114,24 @@ const Pilot = () => {
             <Box pad="medium">
               <Row>
                 <Col md={6}>
-                  <Box margin={sectionMargin} >
-                    <Box margin={size === "small" ? { top: "medium", bottom: "xlarge" } : "none"}>
-                      <Heading level={2} margin={size === "small" ? { vertical: "large", horizontal: "medium" } : { horizontal: "large" }}>
-                        Art is an experience, <br />not an object.
+                  <Box margin={sectionMargin}>
+                    <Box
+                      margin={
+                        size === "small"
+                          ? { top: "medium", bottom: "xlarge" }
+                          : "none"
+                      }
+                    >
+                      <Heading
+                        level={2}
+                        margin={
+                          size === "small"
+                            ? { vertical: "large", horizontal: "medium" }
+                            : { horizontal: "large" }
+                        }
+                      >
+                        Art is an experience, <br />
+                        not an object.
                       </Heading>
                     </Box>
                   </Box>
@@ -103,15 +139,23 @@ const Pilot = () => {
                 <Col md={6}>
                   <Box margin="medium">
                     <Text size="large" margin="medium" weight="600">
-                      A digital platform to connect artists, collectors, and art lovers.
+                      A digital platform to connect artists, collectors, and art
+                      lovers.
                     </Text>
-                    <Text size="medium" alignSelf="end" textAlign="start" margin={{ vertical: "medium" }}>
-
-                      We believe studios are a great place to share art. That’s why we are building a platform to connect the art world by studio visits.
-                      <br /><br />
-
-                      Artists offer to open their studios, while art lovers and collectors explore the creative process more intimately and buy artworks directly.
-
+                    <Text
+                      size="medium"
+                      alignSelf="end"
+                      textAlign="start"
+                      margin={{ vertical: "medium" }}
+                    >
+                      We believe studios are a great place to share art. That’s
+                      why we are building a platform to connect the art world by
+                      studio visits.
+                      <br />
+                      <br />
+                      Artists offer to open their studios, while art lovers and
+                      collectors explore the creative process more intimately
+                      and buy artworks directly.
                       {/* 
                       In arti, artists can offer to host studio visits, and collectors and art lovers get to explore the creative process more intimately and buy artworks directly.
 
@@ -136,15 +180,12 @@ const Pilot = () => {
                     </Button>
                   </Box>
                 </Col>
-
               </Row>
             </Box>
           </Col>
         </Row>
-
-
       </section>
-    </Grid >
+    </Grid>
   );
 };
 
