@@ -23,14 +23,14 @@ const Pilot = () => {
       <section>
         <Row id={styles.intro}>
           <Col xs={12} md={12}>
-            <Heading
+            {/* <Heading
               level={4}
               margin="small"
               alignSelf="center"
               textAlign="center"
             >
               Summer edition is coming soon. Stay tuned.
-            </Heading>
+            </Heading> */}
 
             <Box margin={{ bottom: "1rem" }}>
               {size === "small" ? (
