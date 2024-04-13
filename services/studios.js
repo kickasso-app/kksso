@@ -6,7 +6,6 @@ const StudiosContext = createContext(null);
 const emptyQuery = "";
 
 const StudiosProvider = ({ children }) => {
-
   const [studios, setStudios] = useState([]);
 
   const [query, setQuery] = useState(emptyQuery);
@@ -18,7 +17,6 @@ const StudiosProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
 
-
   /**
    * This function fetches published studios from a Supabase database and sets them in state.
    */
@@ -26,7 +24,7 @@ const StudiosProvider = ({ children }) => {
   const fetchStudios = async () => {
     setLoading(true);
     let { data: supaStudios, error } = await supabase
-      .from("studios")
+      .from("studios_week")
       .select("*")
       .is("published", true)
       .order("studio_id", true);
@@ -39,7 +37,6 @@ const StudiosProvider = ({ children }) => {
     }
     setLoading(false);
   };
-
 
   /**
    * This function updates the search query and fetches search results from a Supabase database based on
@@ -64,9 +61,9 @@ const StudiosProvider = ({ children }) => {
       .from("studios")
       .select()
       .is("published", true)
-      .textSearch('fts', newQuery, {
-        type: 'websearch',
-        config: 'english',
+      .textSearch("fts", newQuery, {
+        type: "websearch",
+        config: "english",
       })
       .order("studio_id", true);
     if (error) {
@@ -97,13 +94,12 @@ const StudiosProvider = ({ children }) => {
       const tempStudio = {
         ...studio[0],
         hasOpenDates: studio[0]?.openDates?.length ? true : false,
-      }
+      };
       setStudio(tempStudio);
       // console.log(tempStudio);
     }
     setLoading(false);
   };
-
 
   /**
    * This is an asynchronous function that fetches a user's studio data from a Supabase database based on
@@ -123,7 +119,7 @@ const StudiosProvider = ({ children }) => {
       const tempStudio = {
         ...studio[0],
         hasOpenDates: studio[0]?.openDates?.length ? true : false,
-      }
+      };
       setUserStudio(tempStudio);
       // console.log(tempStudio);
     }
