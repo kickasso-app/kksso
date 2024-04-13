@@ -29,7 +29,7 @@ const Pilot = () => {
               alignSelf="center"
               textAlign="center"
             >
-              Summer edition is coming soon. Stay tuned.
+              Spring edition is coming soon. Stay tuned.
             </Heading>
 
             <Box margin={{ bottom: "1rem" }}>
