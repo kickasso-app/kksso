@@ -3,7 +3,6 @@ import { supabase } from "services/supabase";
 
 import moment from "moment";
 
-
 import { useAuth } from "services/auth";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
@@ -21,7 +20,6 @@ import {
   Heading,
 } from "grommet";
 
-
 import Button from "components/Button";
 
 import { calendarBounds } from "config/calendar";
@@ -32,21 +30,28 @@ export default function VisitsSettingsForm({
     openDates,
     hasOpenDates,
     textStudio,
-    address,
     city,
-    directions
-  }
+    // address,
+    // directions,
+  },
 }) {
   const { user, session } = useAuth();
 
-
-  const [values, setValues] = useState({ visitRules, openDates, address, city, directions, textStudio });
+  const [values, setValues] = useState({
+    visitRules,
+    openDates,
+    city,
+    textStudio,
+    // directions,
+    // address,
+  });
 
   const getSelectedTimes = (date, dates) => {
-    const timeData = dates.filter(s => s.startsWith(date)).map(d => d.split(" ")[1]);
+    const timeData = dates
+      .filter((s) => s.startsWith(date))
+      .map((d) => d.split(" ")[1]);
     return timeData;
-
-  }
+  };
 
   useEffect(() => {
     if (openDates?.length > 0) {
@@ -66,20 +71,16 @@ export default function VisitsSettingsForm({
   const [selectedDate, setSelectedDate] = useState(calendarBounds.Start);
   const [selectedTimes, setSelectedTimes] = useState([]);
 
-
-
   const onChangeTimes = (times) => {
     setSelectedTimes(times);
-  }
+  };
 
   const onChangeDate = (date) => {
-
     updateTempSlots();
 
     setSelectedDate(date);
     setSelectedTimes(getSelectedTimes(date, visitSlots));
-
-  }
+  };
 
   const updateTempSlots = () => {
     console.log(selectedDate);
@@ -87,38 +88,29 @@ export default function VisitsSettingsForm({
 
     // remove old times
     // then add new ones
-    const oldTimes = initialDates.filter(s => !s.startsWith(selectedDate));
+    const oldTimes = initialDates.filter((s) => !s.startsWith(selectedDate));
 
-    selectedTimes.forEach(t => oldTimes.push(selectedDate + " " + t));
+    selectedTimes.forEach((t) => oldTimes.push(selectedDate + " " + t));
 
-
-    const newTimes = oldTimes.filter(t => t.length > 2);
+    const newTimes = oldTimes.filter((t) => t.length > 2);
     setVisitSlots(newTimes);
 
     return newTimes;
+  };
 
-  }
-
-
-  const readableDate = (date) => moment(date, "YYYY-MM-DD hh:mm").format("D MMMM");
-
+  const readableDate = (date) =>
+    moment(date, "YYYY-MM-DD hh:mm").format("D MMMM");
 
   // const disabledDates = [["2023-09-01", "2023-09-15"]];
 
-
   // TO DO: get address from separate table with more security
-
 
   const [loading, setLoading] = useState(false);
   const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
   const [isUpdateError, setIsUpdateError] = useState(false);
 
-
-
   async function updateProfile(event) {
-
     const newOpenDates = updateTempSlots();
-
 
     try {
       setIsUpdateError(false);
@@ -152,22 +144,16 @@ export default function VisitsSettingsForm({
     }
   }
 
-
-
   const fieldMargin = { vertical: "large" };
   const textMargin = { bottom: "medium" };
 
   return (
     <Box fill align="center" justify="center">
       <Box width="large" pad="medium" gap="medium">
-
         <Heading level="3" size="medium" margin={fieldMargin}>
           Your Visit Settings
         </Heading>
         <Grid fluid>
-
-
-
           <Form
             value={values}
             onChange={(nextValue) => {
@@ -177,7 +163,6 @@ export default function VisitsSettingsForm({
             onSubmit={updateProfile}
             validate="submit"
           >
-
             <Row>
               <Col xs={12} md={8}>
                 <Calendar
@@ -186,49 +171,61 @@ export default function VisitsSettingsForm({
                   size="medium"
                   // margin="medium"
                   bounds={[calendarBounds.Start, calendarBounds.End]}
-                // disabled={disabledDates}
-                // to customize the header
-                // https://storybook.grommet.io/?path=/story/visualizations-calendar-header--custom-header-calendar
+                  // disabled={disabledDates}
+                  // to customize the header
+                  // https://storybook.grommet.io/?path=/story/visualizations-calendar-header--custom-header-calendar
                 />
-
               </Col>
               <Col xs={12} md={4}>
                 <Text>
                   <b>
                     {readableDate(selectedDate)}
-                    <br /><br />
+                    <br />
+                    <br />
                   </b>
 
                   <CheckBoxGroup
-
                     value={selectedTimes}
                     onChange={({ value: nextValue }) => {
                       onChangeTimes(nextValue);
                     }}
                     options={[
-                      '10:00', '11:00', '12:00', '13:00', '14:00', '15:00',
-                      '16:00', '17:00', '18:00', '19:00', '20:00', '21:00',
+                      "10:00",
+                      "11:00",
+                      "12:00",
+                      "13:00",
+                      "14:00",
+                      "15:00",
+                      "16:00",
+                      "17:00",
+                      "18:00",
+                      "19:00",
+                      "20:00",
+                      "21:00",
                     ]}
                   />
-
-
                 </Text>
               </Col>
             </Row>
 
-
-            <FormField name="city" label="District in Berlin" margin={fieldMargin} required>
+            <FormField
+              name="city"
+              label="District in Berlin"
+              margin={fieldMargin}
+              required
+            >
               <TextInput name="city" placeholder="Wedding" />
             </FormField>
 
-
+            {/* 
             <Text>
               <b>
-                We will only share your address with visitors after you
-                agree to host them
+                We will only share your address with visitors after you agree to
+                host them
               </b>
             </Text>
 
+            
             <FormField
               name="address"
               label="Address (required)"
@@ -244,7 +241,7 @@ export default function VisitsSettingsForm({
                 maxLength={200}
               // disabled
               />
-            </FormField>
+            </FormField> 
             <FormField
               label="Tips on finding the studio"
               name="directions"
@@ -258,6 +255,7 @@ export default function VisitsSettingsForm({
                 maxLength={500}
               />
             </FormField>
+            */}
 
             <FormField
               label="About your Studio"
@@ -272,7 +270,6 @@ export default function VisitsSettingsForm({
                 rows={8}
               />
             </FormField>
-
 
             <Box>
               <Heading level="4" size="medium" margin={textMargin}>
@@ -325,7 +322,7 @@ export default function VisitsSettingsForm({
                     status="warning"
                     title="Your profile was not updated!"
                     message="We couldn't complete your request this time. Please try again."
-                  // onClose={() => {}}
+                    // onClose={() => {}}
                   />
                 )}
               </>
@@ -333,6 +330,6 @@ export default function VisitsSettingsForm({
           </Form>
         </Grid>
       </Box>
-    </Box >
+    </Box>
   );
 }
