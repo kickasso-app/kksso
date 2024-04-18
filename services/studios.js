@@ -6,8 +6,8 @@ const StudiosContext = createContext(null);
 const emptyQuery = "";
 
 const StudiosProvider = ({ children }) => {
-
   const [studios, setStudios] = useState([]);
+  const [featuredStudios, setFeaturedStudios] = useState([]);
 
   const [query, setQuery] = useState(emptyQuery);
   const [searchStudios, setSearchStudios] = useState([]);
@@ -17,7 +17,6 @@ const StudiosProvider = ({ children }) => {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
-
 
   /**
    * This function fetches published studios from a Supabase database and sets them in state.
@@ -29,6 +28,7 @@ const StudiosProvider = ({ children }) => {
       .from("studios")
       .select("*")
       .is("published", true)
+      .is("displayed", true)
       .order("studio_id", true);
     if (error) {
       setError(error);
@@ -39,7 +39,6 @@ const StudiosProvider = ({ children }) => {
     }
     setLoading(false);
   };
-
 
   /**
    * This function updates the search query and fetches search results from a Supabase database based on
@@ -64,9 +63,10 @@ const StudiosProvider = ({ children }) => {
       .from("studios")
       .select()
       .is("published", true)
-      .textSearch('fts', newQuery, {
-        type: 'websearch',
-        config: 'english',
+      .is("displayed", true)
+      .textSearch("fts", newQuery, {
+        type: "websearch",
+        config: "english",
       })
       .order("studio_id", true);
     if (error) {
@@ -97,13 +97,12 @@ const StudiosProvider = ({ children }) => {
       const tempStudio = {
         ...studio[0],
         hasOpenDates: studio[0]?.openDates?.length ? true : false,
-      }
+      };
       setStudio(tempStudio);
       // console.log(tempStudio);
     }
     setLoading(false);
   };
-
 
   /**
    * This is an asynchronous function that fetches a user's studio data from a Supabase database based on
@@ -123,9 +122,27 @@ const StudiosProvider = ({ children }) => {
       const tempStudio = {
         ...studio[0],
         hasOpenDates: studio[0]?.openDates?.length ? true : false,
-      }
+      };
       setUserStudio(tempStudio);
       // console.log(tempStudio);
+    }
+    setLoading(false);
+  };
+
+  const fetchFeaturedStudios = async () => {
+    setLoading(true);
+    let { data: featStudios, error } = await supabase
+      .from("studios")
+      .select("*")
+      .is("published", true)
+      .is("displayed", true)
+      .is("featured", true)
+      .order("studio_id", true);
+    if (error) {
+      setError(error);
+      console.log(error);
+    } else {
+      setFeaturedStudios(featStudios);
     }
     setLoading(false);
   };
@@ -133,11 +150,13 @@ const StudiosProvider = ({ children }) => {
   const contextObj = {
     studios,
     searchStudios,
+    featuredStudios,
     studio,
     userStudio,
     query,
     updateQuery,
     fetchStudios,
+    fetchFeaturedStudios,
     fetchStudio,
     fetchUserStudio,
     loading,

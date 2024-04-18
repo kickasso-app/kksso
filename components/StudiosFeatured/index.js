@@ -9,37 +9,19 @@ import StudioCard from "../StudioCard";
 import styles from "./index.module.scss";
 
 const StudiosFeatured = () => {
-
-  const { studios, fetchStudios, loading, error } = useStudios();
-
-  const [featuredStudios, setFeaturedStudios] = useState([]);
+  const { featuredStudios, fetchFeaturedStudios, loading, error } =
+    useStudios();
 
   useEffect(() => {
-    if (!studios.length) {
-      fetchStudios();
+    if (!featuredStudios.length) {
+      fetchFeaturedStudios();
     }
-  }, [studios]);
-
-  useEffect(() => {
-    if (studios.length > 2) {
-
-      {/* CHANGED FOR PILOT */ }
-      const featArtists = ['Nathalie', 'Salvatore', 'Friederike'];
-
-      setFeaturedStudios(studios.filter(s => featArtists.some(a => s.artist.includes(a))));
-
-    }
-
-  }, [loading]);
-
-
-
+  }, [featuredStudios]);
 
   return (
     <div className={styles.studios}>
-
       <Box margin={{ vertical: "large" }}>
-        {featuredStudios.length > 0 ? (
+        {featuredStudios?.length > 0 ? (
           <Row>
             {featuredStudios.map((studio) => {
               return (
