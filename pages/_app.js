@@ -1,4 +1,5 @@
 import { AuthProvider } from "services/auth";
+import { AccountProvider } from "services/account";
 import { StudiosProvider } from "services/studios";
 
 // import { SupabaseContextProvider } from "use-supabase";
@@ -25,15 +26,17 @@ import Layout from "components/Layout";
 export default function MyApp({ Component, pageProps }) {
   return (
     <AuthProvider>
-      <StudiosProvider>
-        {/* <SupabaseContextProvider client={supabase}> 
+      <AccountProvider>
+        <StudiosProvider>
+          {/* <SupabaseContextProvider client={supabase}> 
         <ChakraProvider theme={theme}> */}
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-        {/* </SupabaseContextProvider> 
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+          {/* </SupabaseContextProvider> 
         </ChakraProvider> */}
-      </StudiosProvider>
+        </StudiosProvider>
+      </AccountProvider>
     </AuthProvider>
   );
 }

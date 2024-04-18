@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { supabase } from "services/supabase";
 
+import { useAccount } from "services/account";
 import { useAuth } from "services/auth";
 
 import Button from "components/Button";
@@ -20,68 +20,21 @@ import {
   Anchor,
 } from "grommet";
 
-
 export default function ProfileForm({ profile, goToTab }) {
-  const [values, setValues] = useState(profile);
-
-  const [loading, setLoading] = useState(false);
-  const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
-  const [isUpdateError, setIsUpdateError] = useState(false);
-
   const { user } = useAuth();
 
+  const { updateAccount, loading, isUpdateSuccess, isUpdateError } =
+    useAccount();
+
+  const [values, setValues] = useState(profile);
+
   async function updateProfile(event) {
-    //  console.log(event.touched);
-    try {
-      setIsUpdateError(false);
-      setIsUpdateSuccess(false);
-      setLoading(true);
+    const updates = {
+      ...values,
+      // updated_at: new Date(),
+    };
 
-      const updates = {
-        ...values,
-        // updated_at: new Date(),
-      };
-
-      let { error } = await supabase
-        .from("studios")
-        .update(updates, { returning: "minimal" })
-        .eq("uuid", user.id);
-
-      if (error) {
-        setIsUpdateError(true);
-        throw error;
-      } else {
-        setIsUpdateSuccess(true);
-      }
-    } catch (error) {
-      console.log(error.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function updatePhotosUrl(url) {
-    try {
-      setIsUpdateError(false);
-      setIsUpdateSuccess(false);
-      setLoading(true);
-
-      let { error } = await supabase
-        .from("studios")
-        .update({ photoUrl: url }, { returning: "minimal" })
-        .eq("uuid", user.id);
-
-      if (error) {
-        setIsUpdateError(true);
-        throw error;
-      } else {
-        setIsUpdateSuccess(true);
-      }
-    } catch (error) {
-      console.log(error.message);
-    } finally {
-      setLoading(false);
-    }
+    await updateAccount(updates, user);
   }
 
   const fieldMargin = { vertical: "large" };
@@ -94,8 +47,13 @@ export default function ProfileForm({ profile, goToTab }) {
           Welcome to your Arti profile
         </Heading>
         <Text size="medium" margin={textMargin}>
-          You can update your basic profile info below, add your photos and available visit dates and times.
-          Then you can preview your profile and publish it in <Anchor onClick={() => goToTab(3)}><b> Settings</b></Anchor>.
+          You can update your basic profile info below, add your photos and
+          available visit dates and times. Then you can preview your profile and
+          publish it in{" "}
+          <Anchor onClick={() => goToTab(3)}>
+            <b> Settings</b>
+          </Anchor>
+          .
         </Text>
         <Grommet>
           <Form
@@ -125,14 +83,16 @@ export default function ProfileForm({ profile, goToTab }) {
               />
             </FormField>
 
-
-
             <FormField
               name="styles"
               label="Mediums and styles"
               margin={fieldMargin}
             >
-              <TextInput name="styles" placeholder="painting, prints, sound (comma sepearted)" required />
+              <TextInput
+                name="styles"
+                placeholder="painting, prints, sound (comma sepearted)"
+                required
+              />
             </FormField>
 
             {/* CHANGED FOR PILOT */}
@@ -152,8 +112,6 @@ export default function ProfileForm({ profile, goToTab }) {
               />
             </FormField> */}
 
-
-
             <FormField
               label="About your Art"
               name="textLong"
@@ -167,7 +125,6 @@ export default function ProfileForm({ profile, goToTab }) {
                 rows={8}
               />
             </FormField>
-
 
             <FormField
               name="website"
@@ -217,7 +174,7 @@ export default function ProfileForm({ profile, goToTab }) {
                     status="warning"
                     title="Your profile was not updated!"
                     message="We couldn't complete your request this time. Please try again."
-                  // onClose={() => {}}
+                    // onClose={() => {}}
                   />
                 )}
               </>

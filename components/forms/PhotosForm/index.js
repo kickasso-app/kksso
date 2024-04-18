@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import { supabase } from "services/supabase";
 
 import { useAuth } from "services/auth";
+import { useAccount } from "services/account";
 import { listImages } from "services/images";
 
 import Button from "components/Button";
@@ -11,24 +11,19 @@ import { CheckCircle, XCircle } from "react-feather";
 
 import {
   Box,
-  //   Form,
-  //   FormField,
-  //   MaskedInput,
-  //   CheckBoxGroup,
-  //   TextArea,
-  //   TextInput,
   Text,
   Heading,
   //   Grommet,
 } from "grommet";
 
 export default function PhotosForm() {
+  const { user } = useAuth();
+  const { fetchProfile } = useAccount();
+
   const [imgPaths, setImgPaths] = useState([]);
 
   const [loading, setLoading] = useState(false);
   const [isUpdateError, setIsUpdateError] = useState(false);
-
-  const { user, session } = useAuth();
 
   const fetchImgsList = useCallback(async () => {
     setLoading(true);
@@ -71,10 +66,12 @@ export default function PhotosForm() {
           Your Photos
         </Heading>
         <Text size="medium" margin={textMargin}>
-          Add up to 5 photos of your work, your studio, and yourself. Please include one of each.
+          Add up to 5 photos of your work, your studio, and yourself. Please
+          include one of each.
         </Text>
         <Text size="medium" margin={textMargin}>
-          Please make sure that your image files are smaller than <b>1 MB per image</b>
+          Please make sure that your image files are smaller than{" "}
+          <b>1 MB per image</b>
         </Text>
         {[0, 1, 2, 3, 4].map((imgId) => {
           return (
@@ -84,8 +81,9 @@ export default function PhotosForm() {
               imgId={imgId}
               postUpload={async () => {
                 await fetchImgsList();
+                await fetchProfile(user);
               }}
-            //   onSetMain={(imgId) => setMainPhoto(imgId)}
+              //   onSetMain={(imgId) => setMainPhoto(imgId)}
             />
           );
         })}
@@ -105,6 +103,6 @@ export default function PhotosForm() {
           </>
         )}
       </Box>
-    </Box >
+    </Box>
   );
 }
