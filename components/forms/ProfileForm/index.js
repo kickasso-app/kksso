@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { supabase } from "services/supabase";
 
 import { useAccount } from "services/account";
 import { useAuth } from "services/auth";

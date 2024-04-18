@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { supabase } from "services/supabase";
 
 import moment from "moment";
 
@@ -143,6 +142,8 @@ export default function VisitsSettingsForm({
                   onSelect={onChangeDate}
                   dates={[selectedDate]}
                   size="medium"
+                  daysOfWeek={true}
+                  firstDayOfWeek={1}
                   // margin="medium"
                   bounds={[calendarBounds.Start, calendarBounds.End]}
                   // disabled={disabledDates}
