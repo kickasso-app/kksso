@@ -32,7 +32,6 @@ const USER_ID = process.env.NEXT_PUBLIC_EMAILJS_USER_ID;
 const SEND_REAL_EMAIL = true;
 
 const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
-
   const size = useContext(ResponsiveContext);
 
   const initValues = {
@@ -45,7 +44,6 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
     visitor_link: "Requestor Link",
     request_date: "",
   };
-
 
   const [values, setValues] = useState(initValues);
   const [calendarDates, setCalendarDates] = useState([]);
@@ -64,23 +62,28 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
   const [isEmailSent, setIsEmailSent] = useState(false);
   const [isEmailError, setIsEmailError] = useState(false);
 
-
-  const readableDate = (date) => moment(date, "YYYY-MM-DD hh:mm").format("D MMMM");
+  const readableDate = (date) =>
+    moment(date, "YYYY-MM-DD hh:mm").format("D MMMM");
 
   const getDaysArray = (start, end) => {
-    for (var arr = [], dt = new Date(start); dt <= new Date(end); dt.setDate(dt.getDate() + 1)) {
+    for (
+      var arr = [], dt = new Date(start);
+      dt <= new Date(end);
+      dt.setDate(dt.getDate() + 1)
+    ) {
       arr.push(new Date(dt));
     }
     return arr;
   };
 
   const getDisabledArray = (start, end, openDates) => {
-
     if (selectedDate === false) {
-      const allDays = getDaysArray(new Date(start), new Date(end)).map((v) => v.toISOString().slice(0, 10));
+      const allDays = getDaysArray(new Date(start), new Date(end)).map((v) =>
+        v.toISOString().slice(0, 10)
+      );
       const openIndexes = [];
 
-      openDates.forEach(d => {
+      openDates.forEach((d) => {
         const i = allDays.indexOf(d.slice(0, 10));
         openIndexes.push(i);
       });
@@ -92,68 +95,66 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
       const disabled = allDays;
       return disabled;
     }
-  }
-
+  };
 
   const onSelectDate = (newdate, optionalDatesWithTimes = false) => {
-
-
     const date = newdate.split("T")[0];
 
     if (date !== selectedDate) {
-
-
       const dates = optionalDatesWithTimes || datesWithTimes;
 
       setSelectedDate([date]);
-      const newTimes = dates.filter(d => d.date === date)[0]?.times;
+      const newTimes = dates.filter((d) => d.date === date)[0]?.times;
       // console.log("new times", newTimes);
       if (newTimes?.length > 0) {
         setOpenTimes(newTimes);
         setSelectedTime(newTimes[0]);
-      }
-      else {
+      } else {
         setOpenTimes([]);
       }
 
       const isPast = moment(date).diff(moment().format("YYYY-MM-DD")) < 0;
       setIsDatePast(isPast);
-
     }
     // console.log("SELECTED DATE")
     // console.log(date + " " + newTimes[0])
 
     return true;
-  }
+  };
 
   const prepCalendarDates = (dates) => {
-    const uniqueCalendarDates = dates.map(d => d.split(" ")[0] + "T12:22:00Z").filter((value, index, self) => self.indexOf(value) === index);
+    const uniqueCalendarDates = dates
+      .map((d) => d.split(" ")[0] + "T12:22:00Z")
+      .filter((value, index, self) => self.indexOf(value) === index);
 
     uniqueCalendarDates.sort();
     //    console.log("unique", uniqueCalendarDates);
 
     return uniqueCalendarDates;
-  }
+  };
 
   const prepDatesWithTimes = (dates) => {
     const datesTimes = [];
-    const uniqueDatesOnly = dates.map(d => d.split(" ")[0]).filter((value, index, self) => self.indexOf(value) === index);
+    const uniqueDatesOnly = dates
+      .map((d) => d.split(" ")[0])
+      .filter((value, index, self) => self.indexOf(value) === index);
 
     uniqueDatesOnly.sort();
 
-    uniqueDatesOnly.forEach(date => {
-      const times = openDates.filter(s => s.startsWith(date)).map(d => d.split(" ")[1]);
-      datesTimes.push({ "date": date, "times": times });
+    uniqueDatesOnly.forEach((date) => {
+      const times = openDates
+        .filter((s) => s.startsWith(date))
+        .map((d) => d.split(" ")[1]);
+      datesTimes.push({ date: date, times: times });
     });
     return datesTimes;
-  }
+  };
 
   // let disabledDates = [];
 
   useEffect(() => {
     emailjs.init(USER_ID);
     if (openDates?.length > 0) {
-
       const tempCalendarDates = prepCalendarDates(openDates);
       const tempDatesWithTimes = prepDatesWithTimes(openDates);
 
@@ -163,19 +164,22 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
       // console.log("temp dates", tempCalendarDates);
 
       onSelectDate(tempCalendarDates[0], tempDatesWithTimes);
-      setDisabledDates(getDisabledArray(calendarBounds.Start, calendarBounds.End, tempCalendarDates));
-
+      setDisabledDates(
+        getDisabledArray(
+          calendarBounds.Start,
+          calendarBounds.End,
+          tempCalendarDates
+        )
+      );
     }
   }, []);
-
 
   const handleSendEmail = () => {
     const templateParams = {
       ...values,
       request_date: readableDate(selectedDate) + " at " + selectedTime,
-      studio_link: "https:/artiweek.vercel.app/studios/" + artistUUID,
+      studio_link: "https:/artispring.vercel.app/studios/" + artistUUID,
     };
-
     // console.log(templateParams);
 
     if (SEND_REAL_EMAIL) {
@@ -190,7 +194,6 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
         }
       );
     }
-
   };
 
   return (
@@ -212,16 +215,18 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
           onSubmit={handleSendEmail}
           validate="blur"
         >
-          <Box
-            fill="horizontal"
-            width="medium"
-          >
-            <Text as="label" margin={{ vertical: "medium", horizontial: "medium" }} >
+          <Box fill="horizontal" width="medium">
+            <Text
+              as="label"
+              margin={{ vertical: "medium", horizontial: "medium" }}
+            >
               When to Visit?
-            </Text >
+            </Text>
             <Box>
               <Calendar
-                onSelect={(date) => { onSelectDate(date); }}
+                onSelect={(date) => {
+                  onSelectDate(date);
+                }}
                 date={selectedDate}
                 // size={size === "small" ? "small" : "medium"}
                 // margin={size === "small" ? "medium" : "small"}
@@ -231,20 +236,24 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
                 daysOfWeek={true}
                 firstDayOfWeek={1}
                 disabled={disabledDates}
-              // to customize the header
-              // https://storybook.grommet.io/?path=/story/visualizations-calendar-header--custom-header-calendar
+                // to customize the header
+                // https://storybook.grommet.io/?path=/story/visualizations-calendar-header--custom-header-calendar
               />
             </Box>
 
-            {selectedTime &&
+            {selectedTime && (
               <>
-                <Text as="label" margin={{ top: "medium", bottom: "small", horizontial: "medium" }} >
-                  Request a visit on <b>  {readableDate(selectedDate)}</b> at
-                </Text >
-                <Box
-                  pad="small"
-                  margin={{ vertical: "medium" }}
+                <Text
+                  as="label"
+                  margin={{
+                    top: "medium",
+                    bottom: "small",
+                    horizontial: "medium",
+                  }}
                 >
+                  Request a visit on <b> {readableDate(selectedDate)}</b> at
+                </Text>
+                <Box pad="small" margin={{ vertical: "medium" }}>
                   <RadioButtonGroup
                     name="visitTime"
                     options={openTimes}
@@ -256,7 +265,7 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
                   />
                 </Box>
               </>
-            }
+            )}
           </Box>
 
           {/* TEST
@@ -265,7 +274,6 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
           >
             Date Time
           </Anchor> */}
-
 
           <FormField
             name="from_name"
@@ -322,12 +330,18 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
                 { fixed: "." },
                 { regexp: /^[\w]+$/, placeholder: "com" },
                 { fixed: "/" },
-                { regexp: /^[\w]+$/, placeholder: "yourProfile" }
+                { regexp: /^[\w]+$/, placeholder: "yourProfile" },
               ]}
-
             />
           </FormField>
-          <FormField label={<Text>Reason of visit <br />/ Grund des Besuchs</Text>} name="visit_reason">
+          <FormField
+            label={
+              <Text>
+                Reason of visit <br />/ Grund des Besuchs
+              </Text>
+            }
+            name="visit_reason"
+          >
             <TextArea
               name="visit_reason"
               placeholder="Just curious, Want to collaborate on a project, or Want to buy a specific artwork, or something else ..."
@@ -337,7 +351,15 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
             />
           </FormField>
           <br />
-          <FormField label={<Text>Message to artist <br />/ Nachricht an den oder die Künstlerin*in </Text>} name="message">
+          <FormField
+            label={
+              <Text>
+                Message to artist <br />/ Nachricht an den oder die
+                Künstlerin*in{" "}
+              </Text>
+            }
+            name="message"
+          >
             <TextArea
               name="message_to_artist"
               placeholder="Add a personal message, a little something about yourself, and what you like about their work. (optional)"
@@ -352,22 +374,27 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
             </Button>
           </Box>
 
-          {isDatePast &&
+          {isDatePast && (
             <Text color="#ffc0cb" size="medium">
               You selected a day in the past
             </Text>
-          }
+          )}
 
           {isEmailSent ? (
             <Notification
               toast={{
                 autoClose: false,
-                position: 'bottom-right',
+                position: "bottom-right",
               }}
               status="normal"
               title="Your visit request was sent!"
-              message={<Text><br />Please wait to hear back from the artist's studio to confirm the visit.
-                We sent you an email with the request details.</Text>}
+              message={
+                <Text>
+                  <br />
+                  Please wait to hear back from the artist's studio to confirm
+                  the visit. We sent you an email with the request details.
+                </Text>
+              }
               onClose={() => setIsEmailSent(false)}
             />
           ) : (
@@ -376,13 +403,17 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
                 toast
                 status="warning"
                 title="We couldn't send your request!"
-                message={<Text><br />Please try again, and if it doesn't work, reach out to us.</Text>}
+                message={
+                  <Text>
+                    <br />
+                    Please try again, and if it doesn't work, reach out to us.
+                  </Text>
+                }
                 onClose={() => setIsEmailError(false)}
                 time="2000"
               />
             )
           )}
-
         </Form>
       </Box>
     </Box>

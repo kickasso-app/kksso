@@ -36,8 +36,14 @@ export default function VisitsSettingsForm({
   },
 }) {
   const { user } = useAuth();
-  const { updateAccount, loading, isUpdateSuccess, isUpdateError } =
-    useAccount();
+  const {
+    updateAccount,
+    calendarDate,
+    updateCalendarDate,
+    loading,
+    isUpdateSuccess,
+    isUpdateError,
+  } = useAccount();
 
   const [values, setValues] = useState({
     visitRules,
@@ -48,56 +54,56 @@ export default function VisitsSettingsForm({
     // address,
   });
 
+  const [selectedTimes, setSelectedTimes] = useState([]);
+
   const getSelectedTimes = (date, dates) => {
-    const timeData = dates
-      .filter((s) => s.startsWith(date))
-      .map((d) => d.split(" ")[1]);
+    const timeData = dates?.length
+      ? dates
+          .filter((s) => s.startsWith(date))
+          .map((d) => d.split(" ")[1])
+          .sort()
+      : [];
     return timeData;
   };
 
   useEffect(() => {
-    if (openDates?.length > 0) {
-      const tempDates = openDates;
-      const tempTimes = getSelectedTimes(calendarBounds.Start, tempDates);
-
+    if (!openDates) {
+      updateAccount({ openDates: [] }, user);
+    } else if (openDates?.length > 0) {
+      const tempTimes = getSelectedTimes(calendarDate, openDates);
       setSelectedTimes(tempTimes);
-      setInitialDates(tempDates);
-      setVisitSlots(tempDates);
-      // console.log("once");
     }
-  }, [openDates]);
-
-  const [initialDates, setInitialDates] = useState([]);
-  const [visitSlots, setVisitSlots] = useState([]);
-
-  const [selectedDate, setSelectedDate] = useState(calendarBounds.Start);
-  const [selectedTimes, setSelectedTimes] = useState([]);
+  }, [calendarDate]);
 
   const onChangeTimes = (times) => {
-    setSelectedTimes(times);
+    setSelectedTimes(times.sort());
   };
 
-  const onChangeDate = (date) => {
-    updateTempSlots();
-
-    setSelectedDate(date);
-    setSelectedTimes(getSelectedTimes(date, visitSlots));
+  const areTimesDifferent = () => {
+    const oldTimes = getSelectedTimes(calendarDate, openDates);
+    return JSON.stringify(selectedTimes) !== JSON.stringify(oldTimes);
   };
 
-  const updateTempSlots = () => {
-    console.log(selectedDate);
-    console.log(selectedTimes);
+  const onChangeDate = async (date) => {
+    const isUpdateNeeded = areTimesDifferent();
 
+    if (isUpdateNeeded) {
+      // console.log("update needed");
+      const newDates = updateOpenDates();
+      updateAccount({ openDates: newDates }, user);
+    }
+    updateCalendarDate(date);
+  };
+
+  const updateOpenDates = () => {
     // remove old times
     // then add new ones
-    const oldTimes = initialDates.filter((s) => !s.startsWith(selectedDate));
+    const dates = openDates.filter((s) => !s.startsWith(calendarDate));
 
-    selectedTimes.forEach((t) => oldTimes.push(selectedDate + " " + t));
+    selectedTimes.forEach((t) => dates.push(calendarDate + " " + t));
 
-    const newTimes = oldTimes.filter((t) => t.length > 2);
-    setVisitSlots(newTimes);
-
-    return newTimes;
+    const newDates = dates.sort();
+    return newDates;
   };
 
   const readableDate = (date) =>
@@ -106,12 +112,11 @@ export default function VisitsSettingsForm({
   // const disabledDates = [["2023-09-01", "2023-09-15"]];
 
   async function updateProfile(event) {
-    const newOpenDates = updateTempSlots();
+    const newDates = updateOpenDates();
 
     const updates = {
       ...values,
-      openDates: newOpenDates,
-      // updated_at: new Date(),
+      openDates: newDates,
     };
 
     await updateAccount(updates, user);
@@ -140,7 +145,7 @@ export default function VisitsSettingsForm({
               <Col xs={12} md={8}>
                 <Calendar
                   onSelect={onChangeDate}
-                  dates={[selectedDate]}
+                  dates={[calendarDate]}
                   size="medium"
                   daysOfWeek={true}
                   firstDayOfWeek={1}
@@ -154,7 +159,7 @@ export default function VisitsSettingsForm({
               <Col xs={12} md={4}>
                 <Text>
                   <b>
-                    {readableDate(selectedDate)}
+                    {readableDate(calendarDate)}
                     <br />
                     <br />
                   </b>

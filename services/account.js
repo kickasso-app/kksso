@@ -2,11 +2,13 @@ import { createContext, useContext, useState } from "react";
 import { supabase } from "./supabase";
 
 import { profileFields } from "config/constants/profile";
+import { calendarBounds } from "config/calendar";
 
 const AccountContext = createContext(null);
 
 const AccountProvider = ({ children }) => {
   const [profile, setProfile] = useState();
+  const [calendarDate, setCalendarDate] = useState(calendarBounds.Start);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
   const [isUpdateError, setIsUpdateError] = useState(false);
@@ -93,10 +95,16 @@ const AccountProvider = ({ children }) => {
     setLoading(false);
   };
 
+  const updateCalendarDate = (date) => {
+    setCalendarDate(date);
+  };
+
   const contextObj = {
     profile,
+    calendarDate,
     fetchProfile,
     updateAccount,
+    updateCalendarDate,
     isUpdateSuccess,
     isUpdateError,
     loading,
