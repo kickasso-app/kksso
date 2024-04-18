@@ -4,6 +4,7 @@ import { supabase } from "services/supabase";
 import moment from "moment";
 
 import { useAuth } from "services/auth";
+import { useAccount } from "services/account";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 
@@ -35,7 +36,9 @@ export default function VisitsSettingsForm({
     // directions,
   },
 }) {
-  const { user, session } = useAuth();
+  const { user } = useAuth();
+  const { updateAccount, loading, isUpdateSuccess, isUpdateError } =
+    useAccount();
 
   const [values, setValues] = useState({
     visitRules,
@@ -103,45 +106,16 @@ export default function VisitsSettingsForm({
 
   // const disabledDates = [["2023-09-01", "2023-09-15"]];
 
-  // TO DO: get address from separate table with more security
-
-  const [loading, setLoading] = useState(false);
-  const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
-  const [isUpdateError, setIsUpdateError] = useState(false);
-
   async function updateProfile(event) {
     const newOpenDates = updateTempSlots();
 
-    try {
-      setIsUpdateError(false);
-      setIsUpdateSuccess(false);
-      setLoading(true);
+    const updates = {
+      ...values,
+      openDates: newOpenDates,
+      // updated_at: new Date(),
+    };
 
-      const updates = {
-        ...values,
-        openDates: newOpenDates,
-        // updated_at: new Date(),
-      };
-
-      // console.log("updates");
-      // console.log(updates);
-
-      let { error } = await supabase
-        .from("studios")
-        .update(updates, { returning: "minimal" })
-        .eq("uuid", user.id);
-
-      if (error) {
-        setIsUpdateError(true);
-        throw error;
-      } else {
-        setIsUpdateSuccess(true);
-      }
-    } catch (error) {
-      console.log(error.message);
-    } finally {
-      setLoading(false);
-    }
+    await updateAccount(updates, user);
   }
 
   const fieldMargin = { vertical: "large" };
