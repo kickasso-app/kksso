@@ -31,6 +31,8 @@ export default function VisitsSettingsForm({
     hasOpenDates,
     textStudio,
     city,
+    events,
+    eventsContact,
     // address,
     // directions,
   },
@@ -50,6 +52,8 @@ export default function VisitsSettingsForm({
     openDates,
     city,
     textStudio,
+    events,
+    eventsContact,
     // directions,
     // address,
   });
@@ -131,6 +135,7 @@ export default function VisitsSettingsForm({
         <Heading level="3" size="medium" margin={fieldMargin}>
           Your Visit Settings
         </Heading>
+
         <Grid fluid>
           <Form
             value={values}
@@ -141,6 +146,32 @@ export default function VisitsSettingsForm({
             onSubmit={updateProfile}
             validate="submit"
           >
+            <FormField
+              name="city"
+              label="District in Berlin"
+              margin={textMargin}
+              required
+            >
+              <TextInput name="city" placeholder="Wedding" />
+            </FormField>
+
+            <FormField
+              label="About your Studio"
+              name="textStudio"
+              margin={fieldMargin}
+            >
+              <TextArea
+                name="textStudio"
+                placeholder="Tell us about your space or studio"
+                fill
+                maxLength={1200}
+                rows={8}
+              />
+            </FormField>
+            <br />
+            <Heading level="3" size="medium" margin={fieldMargin}>
+              Private Visits
+            </Heading>
             <Row>
               <Col xs={12} md={8}>
                 <Calendar
@@ -188,15 +219,6 @@ export default function VisitsSettingsForm({
               </Col>
             </Row>
 
-            <FormField
-              name="city"
-              label="District in Berlin"
-              margin={fieldMargin}
-              required
-            >
-              <TextInput name="city" placeholder="Wedding" />
-            </FormField>
-
             {/* 
             <Text>
               <b>
@@ -237,20 +259,6 @@ export default function VisitsSettingsForm({
             </FormField>
             */}
 
-            <FormField
-              label="About your Studio"
-              name="textStudio"
-              margin={fieldMargin}
-            >
-              <TextArea
-                name="textStudio"
-                placeholder="Tell us about your space or studio"
-                fill
-                maxLength={1200}
-                rows={8}
-              />
-            </FormField>
-
             <Box>
               <Heading level="4" size="medium" margin={textMargin}>
                 General Visit Tips
@@ -270,7 +278,6 @@ export default function VisitsSettingsForm({
               <TextArea
                 name="visitRules"
                 placeholder="What do you expect from visitors at your studio?
-
                  ex: My Rule 1; My Rule 2  (semi-colon seperated) "
                 fill
                 rows={4}
@@ -279,8 +286,48 @@ export default function VisitsSettingsForm({
             </FormField>
 
             <br />
-            <br />
+            <Heading level="3" size="medium" margin={fieldMargin}>
+              Events
+            </Heading>
 
+            <Box margin={fieldMargin}>
+              <Text>
+                If you want to host a public event like an open studio, mini
+                exhibition or workshop, you can add it here. Please include the
+                event's title, date and a short description using the following
+                format: <br />
+                <b> Event title / Event dates(s) / Event description </b>
+              </Text>
+            </Box>
+
+            <FormField label="Your events" name="events" margin={fieldMargin}>
+              <TextArea
+                name="events"
+                placeholder="e.g. Painting workshop / 20 May 6-8pm / It's workshop for beginners "
+                fill
+                maxLength={1200}
+                rows={4}
+              />
+            </FormField>
+            <Box margin={textMargin}>
+              <Text>
+                How can visitors or participants can contact you and RSVP for
+                the event if needed?
+              </Text>
+            </Box>
+
+            <FormField
+              name="eventsContact"
+              label="Contact channel for event"
+              margin={fieldMargin}
+            >
+              <TextInput
+                name="eventsContact"
+                placeholder="e.g. your email or instagram link. This will be shown publicly on your profile."
+              />
+            </FormField>
+            <br />
+            <br />
             <Box direction="row" gap="medium">
               <Button type="submit" btnStyle="filled" disabled={loading}>
                 Update

@@ -9,6 +9,8 @@ export const profileFields = [
   "openDates",
   "website",
   "instagram",
+  "events",
+  "eventsContact",
   // "address",
   // "directions",
   "accountType",

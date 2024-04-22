@@ -216,12 +216,6 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
           validate="blur"
         >
           <Box fill="horizontal" width="medium">
-            <Text
-              as="label"
-              margin={{ vertical: "medium", horizontial: "medium" }}
-            >
-              When to Visit?
-            </Text>
             <Box>
               <Calendar
                 onSelect={(date) => {

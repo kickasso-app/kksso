@@ -28,7 +28,18 @@ const Studio = () => {
   // console.log(studio);
 
   const paragraphSeperator = "\\";
+  const eventSeperator = "/";
 
+  const displayEvent = (eventText, eSeperator) => {
+    return eventText.split(eSeperator).map((text, index) => (
+      <p
+        key={index}
+        className={index < 2 ? styles.eventParagraph : styles.studioParagraph}
+      >
+        {text}
+      </p>
+    ));
+  };
   const makeParagraphs = (paragraphString, pSeparator) => {
     return paragraphString.split(pSeparator).map((paragraph, index) => (
       <p key={index} className={styles.studioParagraph}>
@@ -139,6 +150,27 @@ const Studio = () => {
                 )}
               </Col>
               <Col xs={12} md={5} mdOffset={1}>
+                {studio.events && (
+                  <>
+                    <h3 className={styles.sectiontitle}>Events in Studio</h3>
+                    {displayEvent(studio.events, eventSeperator)}
+                    {studio.eventsContact && (
+                      <>
+                        <h3 className={styles.sectiontitle}>
+                          Contact for event details
+                        </h3>
+
+                        {studio.eventsContact.startsWith("http") ? (
+                          <a href={studio.eventsContact} target="_blank">
+                            {studio.eventsContact}
+                          </a>
+                        ) : (
+                          <p>{studio.eventsContact}</p>
+                        )}
+                      </>
+                    )}
+                  </>
+                )}
                 {studio.visitRules && studio.visitRules.length > 0 && (
                   <>
                     <h3 className={styles.sectiontitle}>
@@ -157,6 +189,7 @@ const Studio = () => {
                   <li>Ask before taking photos of the artist and artworks</li>
                   <li>A gift is almost always a nice touch</li>
                 </ul>
+                <h3 className={styles.sectiontitle}>Private Studio Visits</h3>
                 {studio.hasOpenDates === true ? (
                   <VisitForm
                     openDates={studio.openDates}
@@ -167,7 +200,7 @@ const Studio = () => {
                 ) : (
                   <>
                     <h3 className={styles.sectiontitle}>
-                      The artist has no upcoming visit dates right now
+                      The artist has no upcoming private visit dates right now
                     </h3>
                     <h4 className={styles.subsectiontitle}>
                       Please check back again later
