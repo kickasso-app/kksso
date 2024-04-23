@@ -261,7 +261,7 @@ export default function VisitsSettingsForm({
 
             <Box>
               <Heading level="4" size="medium" margin={textMargin}>
-                General Visit Tips
+                General visit tips
               </Heading>
               <ul>
                 <li>Show up on time</li>
@@ -271,7 +271,7 @@ export default function VisitsSettingsForm({
             </Box>
 
             <FormField
-              label="Your Visit Rules"
+              label="Your visit rules"
               name="visitRules"
               margin={fieldMargin}
             >

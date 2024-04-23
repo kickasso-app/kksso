@@ -12,8 +12,6 @@ button.text:disabled {
   pointer-events: none;
 }
 
-
-
 button.text {
   background-color: $color--bg-white;
   color: $color-primary;
@@ -24,8 +22,7 @@ button.text {
   }
 
   font-size: 1.125rem;
-  font-family: "Nunito Sans",
-  sans-serif;
+  font-family: "Nunito Sans", sans-serif;
   padding: 0;
   border: 0;
   // margin: 0;
@@ -45,17 +42,15 @@ button.outline {
   }
 
   font-size: 1.125rem;
-  font-family: "Nunito Sans",
-  sans-serif;
+  font-family: "Nunito Sans", sans-serif;
 
   padding: 0.5rem 1.5rem;
   // margin-bottom: 0.5rem;
   // border-radius: 0.5rem;
   border: 1px solid $color-secondary;
   margin-right: 0.5rem;
-  transition: color 0.25s ease,
-  background-color 0.25s ease,
-  border-color 0.25s ease;
+  transition: color 0.25s ease, background-color 0.25s ease,
+    border-color 0.25s ease;
 }
 
 button.outline:hover {
@@ -72,17 +67,15 @@ button.filled {
   }
 
   font-size: 1.125rem;
-  font-family: "Nunito Sans",
-  sans-serif;
+  font-family: "Nunito Sans", sans-serif;
 
-  padding: 1rem 1.5rem;
+  padding: 1rem 3rem;
   margin-bottom: 1rem;
   // border-radius: 0.5rem;
   border: 1px solid $color-quad;
   margin-right: 0.5rem;
-  transition: color 0.25s ease,
-  background-color 0.25s ease,
-  border-color 0.25s ease;
+  transition: color 0.25s ease, background-color 0.25s ease,
+    border-color 0.25s ease;
 }
 
 button.filled:hover {

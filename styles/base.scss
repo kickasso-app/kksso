@@ -47,6 +47,11 @@ li {
 p {
   font-family: "Nunito Sans", sans-serif;
 }
+hr {
+  width: 100%;
+  background-color: $color-light-gray;
+  height: 1px;
+}
 
 .layout {
   width: 100%;
@@ -62,7 +67,6 @@ p {
 // temp gallery styles
 
 .image-gallery {
-
   .image-gallery-left-nav .image-gallery-svg,
   .image-gallery-right-nav .image-gallery-svg {
     height: 60px !important;
@@ -70,7 +74,6 @@ p {
 
     @media only screen and (max-width: 600px) {
       display: none;
-
     }
   }
 
@@ -80,11 +83,8 @@ p {
 
     @media only screen and (max-width: 600px) {
       display: none;
-
     }
   }
-
-
 
   .image-gallery-bullet {
     // box-shadow: none !important;

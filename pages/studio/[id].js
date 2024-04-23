@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useStudios } from "services/studios";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
-import { Box } from "grommet";
+import { Box, Heading, Paragraph, ResponsiveContext, Text } from "grommet";
 import { ChevronLeft, Disc, Instagram, Globe } from "react-feather";
 
 import VisitForm from "components/forms/VisitForm";
@@ -15,6 +15,8 @@ import styles from "./index.module.scss";
 
 const Studio = () => {
   const router = useRouter();
+  const size = useContext(ResponsiveContext);
+
   const { id } = router.query;
 
   const { studio, fetchStudio, loading, error } = useStudios();
@@ -27,24 +29,31 @@ const Studio = () => {
 
   // console.log(studio);
 
+  const headingMargin = { top: "large", bottom: "small" };
+  const paragraphMargin = { top: "xsmall", bottom: "medium" };
+
   const paragraphSeperator = "\\";
   const eventSeperator = "/";
 
   const displayEvent = (eventText, eSeperator) => {
     return eventText.split(eSeperator).map((text, index) => (
-      <p
+      <Text
         key={index}
-        className={index < 2 ? styles.eventParagraph : styles.studioParagraph}
+        size="medium"
+        margin={{ top: "xsmall", bottom: "small" }}
+        fill
+        weight={index < 2 ? "600" : ""}
       >
-        {text}
-      </p>
+        {text} <br />
+      </Text>
     ));
   };
   const makeParagraphs = (paragraphString, pSeparator) => {
     return paragraphString.split(pSeparator).map((paragraph, index) => (
-      <p key={index} className={styles.studioParagraph}>
+      <Paragraph key={index} size="medium" margin={paragraphMargin} fill>
+        {/* // key={index} className={styles.studioParagraph}>*/}
         {paragraph}
-      </p>
+      </Paragraph>
       // <ReactMarkdown key={index}>{paragraph}</ReactMarkdown>
     ));
   };
@@ -93,10 +102,14 @@ const Studio = () => {
                 {studio.textLong &&
                   makeParagraphs(studio.textLong, paragraphSeperator)}
 
-                <h3 className={styles.sectiontitle}>Mediums</h3>
-                <p>{studio.styles}</p>
-
-                <h3 className={styles.sectiontitle}>Studio</h3>
+                <Heading level="3" size="medium" margin={headingMargin}>
+                  Mediums
+                </Heading>
+                {makeParagraphs(studio.styles)}
+                <hr />
+                <Heading level="3" size="medium" margin={headingMargin}>
+                  Studio
+                </Heading>
 
                 <h4 className={styles.subsectiontitle}>
                   <Disc
@@ -112,39 +125,48 @@ const Studio = () => {
                 {studio.textStudio &&
                   makeParagraphs(studio.textStudio, paragraphSeperator)}
 
+                <hr />
                 {(studio.website || studio.instagram) && (
                   <>
-                    <h3 className={styles.sectiontitle}>Links</h3>
-                    <br />
-                    {studio.website && (
-                      <a href={studio.website} target="_blank">
-                        <Globe
-                          className={styles.icon}
-                          size={28}
-                          strokeWidth="1"
-                          color="#4B4B4B"
-                          fill="#FFF"
-                        />
-                      </a>
-                    )}
-
-                    {studio.instagram && (
-                      <a
-                        href={
-                          studio.instagram?.includes("instagram.com/")
-                            ? studio.instagram
-                            : `https://instagram.com/${studio.instagram}`
-                        }
-                        target="_blank"
-                      >
-                        <Instagram
-                          className={styles.icon}
-                          size={28}
-                          strokeWidth="1"
-                          color="#4B4B4B"
-                          fill="#FFF"
-                        />
-                      </a>
+                    <Heading level="3" size="medium" margin={headingMargin}>
+                      Links
+                    </Heading>
+                    <Paragraph fill margin={{ vertical: "medium" }}>
+                      {studio.website && (
+                        <a href={studio.website} target="_blank">
+                          <Globe
+                            className={styles.icon}
+                            size={28}
+                            strokeWidth="1"
+                            color="#4B4B4B"
+                            fill="#FFF"
+                          />
+                        </a>
+                      )}
+                      {studio.instagram && (
+                        <a
+                          href={
+                            studio.instagram?.includes("instagram.com/")
+                              ? studio.instagram
+                              : `https://instagram.com/${studio.instagram}`
+                          }
+                          target="_blank"
+                        >
+                          <Instagram
+                            className={styles.icon}
+                            size={28}
+                            strokeWidth="1"
+                            color="#4B4B4B"
+                            fill="#FFF"
+                          />
+                        </a>
+                      )}
+                    </Paragraph>
+                    {size === "small" && (
+                      <>
+                        <hr />
+                        <br />
+                      </>
                     )}
                   </>
                 )}
@@ -152,13 +174,20 @@ const Studio = () => {
               <Col xs={12} md={5} mdOffset={1}>
                 {studio.events && (
                   <>
-                    <h3 className={styles.sectiontitle}>Events in Studio</h3>
+                    <Heading
+                      level="3"
+                      size="medium"
+                      margin={{ vertical: "medium" }}
+                    >
+                      Studio events
+                    </Heading>
+
                     {displayEvent(studio.events, eventSeperator)}
                     {studio.eventsContact && (
                       <>
-                        <h3 className={styles.sectiontitle}>
-                          Contact for event details
-                        </h3>
+                        <Heading level="4" size="medium" margin={headingMargin}>
+                          Contact for event
+                        </Heading>
 
                         {studio.eventsContact.startsWith("http") ? (
                           <a href={studio.eventsContact} target="_blank">
@@ -167,15 +196,17 @@ const Studio = () => {
                         ) : (
                           <p>{studio.eventsContact}</p>
                         )}
+                        <br />
+                        <hr />
                       </>
                     )}
                   </>
                 )}
                 {studio.visitRules && studio.visitRules.length > 0 && (
                   <>
-                    <h3 className={styles.sectiontitle}>
-                      {studio.artist.split(" ")[0]}'s Visit Rules
-                    </h3>
+                    <Heading level="4" size="medium" margin={headingMargin}>
+                      {studio.artist.split(" ")[0]}'s visit rules
+                    </Heading>
                     <ul className={styles.rules}>
                       {studio.visitRules.split(";").map((rule, index) => (
                         <li key={index}>{rule}</li>
@@ -183,13 +214,20 @@ const Studio = () => {
                     </ul>
                   </>
                 )}
-                <h3 className={styles.sectiontitle}>General Visit Tips</h3>
+                <Heading level="4" size="medium" margin={headingMargin}>
+                  General visit tips
+                </Heading>
                 <ul className={styles.rules}>
                   <li>Show up on time</li>
                   <li>Ask before taking photos of the artist and artworks</li>
                   <li>A gift is almost always a nice touch</li>
                 </ul>
-                <h3 className={styles.sectiontitle}>Private Studio Visits</h3>
+                <br />
+                <br />
+                <hr />
+                <Heading level="3" size="medium" margin={headingMargin}>
+                  Private studio visits
+                </Heading>
                 {studio.hasOpenDates === true ? (
                   <VisitForm
                     openDates={studio.openDates}
@@ -199,9 +237,9 @@ const Studio = () => {
                   />
                 ) : (
                   <>
-                    <h3 className={styles.sectiontitle}>
+                    <Heading level="4" size="medium" margin={headingMargin}>
                       The artist has no upcoming private visit dates right now
-                    </h3>
+                    </Heading>
                     <h4 className={styles.subsectiontitle}>
                       Please check back again later
                     </h4>
