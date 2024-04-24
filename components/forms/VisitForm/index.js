@@ -62,8 +62,11 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
   const [isEmailSent, setIsEmailSent] = useState(false);
   const [isEmailError, setIsEmailError] = useState(false);
 
-  const readableDate = (date) =>
+  const shortReadableDate = (date) =>
     moment(date, "YYYY-MM-DD hh:mm").format("D MMMM");
+
+  const readableDate = (date) =>
+    moment(date, "YYYY-MM-DD hh:mm").format("dddd D MMMM");
 
   const getDaysArray = (start, end) => {
     for (
@@ -201,7 +204,7 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
       <Box
         width="large"
         // pad="medium"
-        margin={{ vertical: "large" }}
+        margin={{ vertical: "medium" }}
       >
         <Form
           id="dddd"
@@ -216,12 +219,6 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
           validate="blur"
         >
           <Box fill="horizontal" width="medium">
-            <Text
-              as="label"
-              margin={{ vertical: "medium", horizontial: "medium" }}
-            >
-              When to Visit?
-            </Text>
             <Box>
               <Calendar
                 onSelect={(date) => {
@@ -247,13 +244,14 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
                   as="label"
                   margin={{
                     top: "medium",
-                    bottom: "small",
+                    bottom: "xsmall",
                     horizontial: "medium",
                   }}
                 >
-                  Request a visit on <b> {readableDate(selectedDate)}</b> at
+                  Request a visit on <b> {shortReadableDate(selectedDate)}</b>{" "}
+                  at
                 </Text>
-                <Box pad="small" margin={{ vertical: "medium" }}>
+                <Box pad="small" margin={{ vertical: "small" }}>
                   <RadioButtonGroup
                     name="visitTime"
                     options={openTimes}
@@ -267,13 +265,6 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
               </>
             )}
           </Box>
-
-          {/* TEST
-          <Anchor
-            onClick={() => console.log(selectedDate + " " + selectedTime)}
-          >
-            Date Time
-          </Anchor> */}
 
           <FormField
             name="from_name"
@@ -335,23 +326,19 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
             />
           </FormField>
           <FormField
-            label={
-              <Text>
-                Reason of visit <br />/ Grund des Besuchs
-              </Text>
-            }
+            label={<Text>Reason of visit / Grund des Besuchs</Text>}
             name="visit_reason"
           >
             <TextArea
               name="visit_reason"
-              placeholder="Just curious, Want to collaborate on a project, or Want to buy a specific artwork, or something else ..."
+              placeholder="Just curious, Want to collaborate on a project, or Want to buy a specific artwork, or something else... &#10;. &#10;Feel free to add here a personal message, a little something about yourself, and what you like about their work."
               fill
               required
-              rows="3"
+              rows="7"
             />
           </FormField>
           <br />
-          <FormField
+          {/* <FormField
             label={
               <Text>
                 Message to artist <br />/ Nachricht an den oder die
@@ -366,13 +353,21 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
               fill
               rows="6"
             />
-          </FormField>
+          </FormField> */}
           <br />
+
           <Box direction="row" gap="medium">
             <Button type="submit" btnStyle="filled" disabled={isDatePast}>
-              Request A Visit
+              Request a visit
             </Button>
           </Box>
+          {selectedTime && (
+            <>
+              <Text>
+                on {readableDate(selectedDate)} at {selectedTime}
+              </Text>
+            </>
+          )}
 
           {isDatePast && (
             <Text color="#ffc0cb" size="medium">

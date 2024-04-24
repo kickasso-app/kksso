@@ -34,6 +34,22 @@ const themeChanges = {
     //   color: "brand",
     // },
   },
+  heading: {
+    level: {
+      3: {
+        medium: {
+          size: "22px",
+          height: "22px",
+        },
+      },
+      4: {
+        medium: {
+          size: "20px",
+          height: "20px",
+        },
+      },
+    },
+  },
   anchor: {
     color: "text",
   },
@@ -77,6 +93,9 @@ const themeChanges = {
     },
   },
   calendar: {
+    heading: {
+      level: "4",
+    },
     medium: {
       daySize: "36px",
       lineHeight: 2.0,
@@ -88,7 +107,7 @@ const themeChanges = {
     day: {
       extend: ({ isSelected }) => `
         border-radius: 100px;
-        background-color: ${isSelected && '#C0FFF4'}`,
+        background-color: ${isSelected && "#C0FFF4"}`,
     },
   },
   checkBox: {
@@ -104,7 +123,7 @@ const themeChanges = {
     },
     border: {
       color: "brand",
-    }
+    },
   },
   // size is useless
   // size: {

@@ -20,13 +20,13 @@ import {
 import Button from "components/Button";
 
 export default function Join() {
-
   const [loading, setLoading] = useState(false);
   const [newUser, setNewUser] = useState(false);
   const [revealPass, setRevealPass] = useState(false);
 
   // const [forgotPassword, setForgotPassword] = useState(false);
 
+  const [passwordHint, setPasswordHint] = useState(false);
   const [signUpToast, setSignUpToast] = useState(false);
   // const [magicLinkToastToast, setMagicLinkToast] = useState(false);
 
@@ -45,21 +45,37 @@ export default function Join() {
     const email = event.target.email.value;
     const password = event.target.password.value;
 
-    try {
-      setLoading(true);
-      const { error } = await signUp({
-        email,
-        password,
-      });
-      if (error) throw error;
-      // if (user) {
-      //   // router.push("/welcome?email=${user.email}");
-      // }
-    } catch (error) {
-      alert(error.error_description || error.message);
-    } finally {
-      setLoading(false);
-      setSignUpToast(true);
+    var passPattern = new RegExp(
+      "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[-+_!@#$%^&*.,?]).+$"
+    );
+
+    if (password.length >= 8 && passPattern.test(password)) {
+      setPasswordHint(false);
+      let isUserCreated = true;
+      try {
+        setLoading(true);
+        const { data, error } = await signUp({
+          email,
+          password,
+        });
+        if (error) {
+          isUserCreated = false;
+          throw error;
+        }
+
+        // console.log(data);
+
+        // if (user) {
+        //   // router.push("/welcome?email=${user.email}");
+        // }
+      } catch (error) {
+        alert(error.error_description || error.message);
+      } finally {
+        setLoading(false);
+        setSignUpToast(isUserCreated);
+      }
+    } else {
+      setPasswordHint(true);
     }
   };
 
@@ -71,8 +87,9 @@ export default function Join() {
 
     try {
       setLoading(true);
-      const { error } = await signIn({ email, password });
+      const { data, error } = await signIn({ email, password });
       if (error) throw error;
+      // console.log(data);
       // if (user) {
       //   router.push("/");
       //   // router.push("/welcome");
@@ -100,19 +117,24 @@ export default function Join() {
   //   }
   // };
 
-
   const fieldMargin = { vertical: "medium" };
   const textMargin = { bottom: "medium" };
 
   return (
-
     <Row around="xs">
       <Col xs={12} md={8}>
         <form onSubmit={newUser ? handleSignUp : handleLogIn}>
-          <Box pad="medium" >
-            <Heading level={3} alignSelf="center">{newUser ? "Sign Up as an Artist" : "Login"}</Heading>
-            <Box >
-              <FormField name="email" label="Email" margin={fieldMargin} required>
+          <Box pad="medium">
+            <Heading level={3} alignSelf="center">
+              {newUser ? "Sign Up as an Artist" : "Login"}
+            </Heading>
+            <Box>
+              <FormField
+                name="email"
+                label="Email"
+                margin={fieldMargin}
+                required
+              >
                 <TextInput
                   id="email"
                   name="email"
@@ -129,29 +151,40 @@ export default function Join() {
                 margin={fieldMargin}
                 required
               >
-                <Box
-                  direction="row"
-                  align="center"
-                  border={false}
-                >
+                <Box direction="row" align="center" border={false}>
                   <TextInput
-                    type={revealPass ? 'text' : 'password'}
+                    type={revealPass ? "text" : "password"}
                     id="password"
                     name="password"
-                    placeholder={newUser ? "Your new password" : "Your passowrd"}
+                    placeholder={newUser ? "********" : "Your password"}
                     plain
                   />
                   <Box margin="xsmall">
-                    {revealPass ?
-                      <Eye size={20} color="#4B4B4B" strokeWidth={1} onClick={() => setRevealPass(false)} />
-                      :
-                      <EyeOff size={20} color="#4B4B4B" strokeWidth={1} onClick={() => setRevealPass(true)} />
-                    }
+                    {revealPass ? (
+                      <Eye
+                        size={20}
+                        color="#4B4B4B"
+                        strokeWidth={1}
+                        onClick={() => setRevealPass(false)}
+                      />
+                    ) : (
+                      <EyeOff
+                        size={20}
+                        color="#4B4B4B"
+                        strokeWidth={1}
+                        onClick={() => setRevealPass(true)}
+                      />
+                    )}
                   </Box>
                 </Box>
-
               </FormField>
-
+              {passwordHint && (
+                <Text color="#ffc0cb">
+                  Your password must be at least 8 characters long and contain
+                  uppercase and lowercase letters and at least 1 number and 1
+                  special character.
+                </Text>
+              )}
             </Box>
             <Box margin={fieldMargin}>
               <Button btnStyle="filled" type="submit">
@@ -165,7 +198,6 @@ export default function Join() {
 
             <br />
             <Box margin={"small"}>
-
               {newUser ? (
                 <>
                   <Paragraph>
@@ -173,36 +205,35 @@ export default function Join() {
                     <Anchor onClick={() => setNewUser(false)}>Log In</Anchor>
                   </Paragraph>
                 </>
-
               ) : (
                 <>
                   <Paragraph>
                     Don't have an account?{" "}
                     <Anchor
                       onClick={() => {
-                        setNewUser(true)
+                        setNewUser(true);
                         // setForgotPassword(false);
-                      }}>
-                      Sign Up First</Anchor>
+                      }}
+                    >
+                      Sign Up First
+                    </Anchor>
                     <br /> <br />
                   </Paragraph>
 
                   {/* {!forgotPassword && */}
                   <Text weight="300" margin={{ vertical: "small" }}>
-
-                    Forgot your passoword?<br />
+                    Forgot your passoword?
+                    <br />
                   </Text>
                   <Text weight="200">
-                    Please let us know by email and we will send you a magic link.
+                    Please let us know by email and we will send you a magic
+                    link.
                     {/* <Anchor onClick={() => setForgotPassword(true)}>Send me a magic link</Anchor> */}
                   </Text>
                   {/* } */}
                 </>
-
               )}
             </Box>
-
-
 
             {signUpToast && (
               <Notification
@@ -210,7 +241,9 @@ export default function Join() {
                 status="normal"
                 title="Almost there!"
                 message="Please check your inbox to verify your email."
-                onClose={() => { setSignUpToast(false) }}
+                onClose={() => {
+                  setSignUpToast(false);
+                }}
               />
             )}
 
@@ -223,12 +256,9 @@ export default function Join() {
               onClose={() => { setSignUpToast(false) }}
             />
           )} */}
-
           </Box>
         </form>
       </Col>
     </Row>
-
-
   );
 }
