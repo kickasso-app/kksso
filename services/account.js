@@ -49,7 +49,7 @@ const AccountProvider = ({ children }) => {
    */
 
   const createProfile = async (user) => {
-    const randomId = 1 + Math.floor(Math.random() * 10000);
+    const randomId = 10000 + Math.floor(Math.random() * 10000);
     const newRow = {
       uuid: user.id,
       studio_id: randomId,
