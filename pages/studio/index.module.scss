@@ -55,6 +55,10 @@ ul.rules {
   padding-left: 0.5rem;
   list-style: outside circle;
   margin-left: 0.75rem;
+  font-size: 1.125rem;
+  li {
+    line-height: 1.5rem;
+  }
 }
 
 @media only screen and (min-width: 400px) {

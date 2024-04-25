@@ -9,6 +9,7 @@ import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import { Box, Heading, Paragraph, ResponsiveContext, Text } from "grommet";
 import { ChevronLeft, Disc, Instagram, Globe } from "react-feather";
 
+import EventCard from "components/EventCard";
 import VisitForm from "components/forms/VisitForm";
 import ImagesCarousel from "components/ImagesCarousel";
 import styles from "./index.module.scss";
@@ -33,21 +34,7 @@ const Studio = () => {
   const paragraphMargin = { top: "xsmall", bottom: "medium" };
 
   const paragraphSeperator = "\\";
-  const eventSeperator = "/";
 
-  const displayEvent = (eventText, eSeperator) => {
-    return eventText.split(eSeperator).map((text, index) => (
-      <Text
-        key={index}
-        size="medium"
-        margin={{ top: "xsmall", bottom: "small" }}
-        fill
-        weight={index < 2 ? "600" : ""}
-      >
-        {text} <br />
-      </Text>
-    ));
-  };
   const makeParagraphs = (paragraphString, pSeparator) => {
     return paragraphString.split(pSeparator).map((paragraph, index) => (
       <Paragraph key={index} size="medium" margin={paragraphMargin} fill>
@@ -173,34 +160,10 @@ const Studio = () => {
               </Col>
               <Col xs={12} md={5} mdOffset={1}>
                 {studio.events && (
-                  <>
-                    <Heading
-                      level="3"
-                      size="medium"
-                      margin={{ vertical: "medium" }}
-                    >
-                      Studio events
-                    </Heading>
-
-                    {displayEvent(studio.events, eventSeperator)}
-                    {studio.eventsContact && (
-                      <>
-                        <Heading level="4" size="medium" margin={headingMargin}>
-                          Contact for event
-                        </Heading>
-
-                        {studio.eventsContact.startsWith("http") ? (
-                          <a href={studio.eventsContact} target="_blank">
-                            {studio.eventsContact}
-                          </a>
-                        ) : (
-                          <p>{studio.eventsContact}</p>
-                        )}
-                        <br />
-                        <hr />
-                      </>
-                    )}
-                  </>
+                  <EventCard
+                    events={studio.events}
+                    eventsContact={studio?.eventsContact}
+                  />
                 )}
                 {studio.visitRules && studio.visitRules.length > 0 && (
                   <>
