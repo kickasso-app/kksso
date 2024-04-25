@@ -12,10 +12,10 @@ const Studios = () => {
   const { studios, fetchStudios, loading, error } = useStudios();
 
   useEffect(() => {
-    if (!studios.length) {
+    if (!studios.length && !error) {
       fetchStudios();
     }
-  }, [studios]);
+  }, [studios, error]);
 
   return (
     <Grid fluid align="center">

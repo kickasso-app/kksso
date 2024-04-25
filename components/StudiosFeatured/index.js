@@ -13,15 +13,15 @@ const StudiosFeatured = () => {
     useStudios();
 
   useEffect(() => {
-    if (!featuredStudios.length) {
+    if (!featuredStudios.length && !error) {
       fetchFeaturedStudios();
     }
-  }, [featuredStudios]);
+  }, [featuredStudios, error]);
 
   return (
     <div className={styles.studios}>
       <Box margin={{ vertical: "large" }}>
-        {featuredStudios?.length > 0 ? (
+        {!loading && featuredStudios?.length > 0 ? (
           <Row>
             {featuredStudios.map((studio) => {
               return (

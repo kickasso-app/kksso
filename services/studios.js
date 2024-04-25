@@ -71,7 +71,6 @@ const StudiosProvider = ({ children }) => {
       .order("studio_id", true);
     if (error) {
       setError(error);
-      console.log(error);
     } else {
       setSearchStudios(resultStudios);
       // console.log("new search"); console.log(resultStudios);
@@ -140,7 +139,6 @@ const StudiosProvider = ({ children }) => {
       .order("studio_id", true);
     if (error) {
       setError(error);
-      console.log(error);
     } else {
       setFeaturedStudios(featStudios);
     }

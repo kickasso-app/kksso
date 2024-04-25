@@ -72,7 +72,7 @@ const Pilot = () => {
             </Box>
             <Box margin={sectionMargin} pad="medium" align="center">
               <Heading level={2} margin={margin}>
-                How does it work?
+                How does it work
               </Heading>
               <Box fill pad="large">
                 <Row>
@@ -81,9 +81,7 @@ const Pilot = () => {
                       1.
                     </Text>
                     <Box margin={{ top: "medium", bottom: "xlarge" }}>
-                      <Text size="medium">
-                        Discover artist studios nearby.{" "}
-                      </Text>
+                      <Text size="medium">Discover artist studios nearby </Text>
                     </Box>
                   </Col>
                   <Col md={4}>
@@ -92,7 +90,7 @@ const Pilot = () => {
                     </Text>
                     <Box margin={{ top: "medium", bottom: "xlarge" }}>
                       <Text size="medium">
-                        Find an artwork that you like and request a visit.{" "}
+                        Find an artwork that you like and request a visit
                       </Text>
                     </Box>
                   </Col>
@@ -103,7 +101,7 @@ const Pilot = () => {
                     <Box margin={{ top: "medium", bottom: "xlarge" }}>
                       <Text size="medium">
                         Once they accept, make a visit and learn what inspires
-                        them.
+                        them
                       </Text>
                     </Box>
                   </Col>

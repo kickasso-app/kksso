@@ -1,19 +1,14 @@
-// import { useState } from "react";
+import { Calendar, Clock } from "react-feather";
 
-import Link from "next/link";
-
-import moment from "moment";
-import { Disc, Hash, Calendar, Clock } from "react-feather";
-
-import { Heading, Paragraph, Text } from "grommet";
+import { Heading, Paragraph } from "grommet";
 
 import styles from "./index.module.scss";
 
 const EventCard = ({ events, eventsContact }) => {
   const eventSeperator = "/";
   const headingMargin = { top: "large", bottom: "small" };
-
   const eventMargin = { top: "small", bottom: "small" };
+
   const [title, date, details, details2] = events.split(eventSeperator);
 
   return (

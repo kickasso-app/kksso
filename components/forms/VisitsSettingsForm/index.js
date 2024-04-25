@@ -148,7 +148,7 @@ export default function VisitsSettingsForm({
           >
             <FormField
               name="city"
-              label="District in Berlin"
+              label="Kiez or District in Berlin"
               margin={textMargin}
               required
             >

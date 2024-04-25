@@ -8,7 +8,6 @@ import { Search, X } from "react-feather";
 import { Box, TextInput } from "grommet";
 
 export const SearchBar = ({ isBarFullWidth = false }) => {
-
   const router = useRouter();
 
   const { query, updateQuery } = useStudios();
@@ -21,7 +20,7 @@ export const SearchBar = ({ isBarFullWidth = false }) => {
   }, []);
 
   const onSearchEnter = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       setTempQuery(tempQuery);
       onSearch();
     }
@@ -35,7 +34,6 @@ export const SearchBar = ({ isBarFullWidth = false }) => {
     setTempQuery("");
     updateQuery("");
   }, [tempQuery]);
-
 
   return (
     <Box
@@ -54,7 +52,7 @@ export const SearchBar = ({ isBarFullWidth = false }) => {
         <Row middle="xs">
           <Col xs={9}>
             <TextInput
-              placeholder={"Search artists, styles, or districts"}
+              placeholder={"Search artist, style, or kiez"}
               plain
               value={tempQuery}
               onChange={onChangeQuery}
@@ -79,11 +77,14 @@ export const SearchBar = ({ isBarFullWidth = false }) => {
                   }
                 }}
               >
-
-                <Search size={18} color="#222222" strokeWidth={1.5} onClick={onSearch} />
-
+                <Search
+                  size={18}
+                  color="#222222"
+                  strokeWidth={1.5}
+                  onClick={onSearch}
+                />
               </Box>
-              {!isBarFullWidth && tempQuery.length > 2 &&
+              {!isBarFullWidth && tempQuery.length > 2 && (
                 <Box
                   width="38px"
                   height="38px"
@@ -96,7 +97,7 @@ export const SearchBar = ({ isBarFullWidth = false }) => {
                 >
                   <X onClick={onClearSearch} />
                 </Box>
-              }
+              )}
             </Row>
           </Col>
         </Row>

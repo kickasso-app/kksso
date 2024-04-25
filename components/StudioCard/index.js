@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect } from "react";
 // import PropTypes from "prop-types";
 
 import { useRouter } from "next/router";
 import Link from "next/link";
 
 import ProgressiveImage from "react-progressive-image";
-import moment from "moment";
+// import moment from "moment";
 import { Disc, Hash } from "react-feather";
 
 import styles from "./index.module.scss";
@@ -36,44 +36,41 @@ const StudioCard = ({
 
   const [imgUrl, setImgUrl] = useState(false);
 
-  const [hoverImg, setHoverImg] = useState("0");
-  const [hoveredImg, setHoveredImg] = useState(false);
+  // const [hoverImg, setHoverImg] = useState("0");
+  // const [hoveredImg, setHoveredImg] = useState(false);
 
-  const nextVisit = openDates
-    ? moment(openDates[0], "YYYY-MM-DD hh:mm").format("D MMM")
-    : false;
+  // const nextVisit = openDates
+  //   ? moment(openDates[0], "YYYY-MM-DD hh:mm").format("D MMM")
+  //   : false;
 
-  function sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
+  // function sleep(ms) {
+  //   return new Promise((resolve) => setTimeout(resolve, ms));
+  // }
 
-  const fetchImg = useCallback(async () => {
-    const url = await downloadProfileImage({ userId: uuid });
+  // const fetchImg = useCallback(async () => {
+  //   const url = await downloadProfileImage({ userId: uuid });
 
-    if (url) {
-      // the DB version
-      setImgUrl(url);
-    } else {
-      // the file version
-      const teaserSrc = `/img/${artist}/0.jpg`;
-      setImgUrl(teaserSrc);
-    }
-    // console.log(url);
-  }, [uuid]);
+  //   if (url) {
+  //     // the DB version
+  //     setImgUrl(url);
+  //   } else {
+  //     // the file version
+  //     const teaserSrc = `/img/${artist}/0.jpg`;
+  //     setImgUrl(teaserSrc);
+  //   }
+  //   // console.log(url);
+  // }, [uuid]);
 
   useEffect(() => {
-    fetchImg();
-  }, [fetchImg]);
-
+    // fetchImg();
+    downloadProfileImage({ userId: uuid }).then((url) => setImgUrl(url));
+  }, [uuid]);
 
   return (
     <div className={styles.StudioCard}>
-      <div
-        className={styles.imgContainer}
-      >
+      <div className={styles.imgContainer}>
         <Link href={articleLink}>
           <a onClick={() => openArticle()}>
-
             <ProgressiveImage src={imgUrl} placeholder={`/img/loader.svg`}>
               {(src, loading) => (
                 <img className={styles.cardImg} src={src} alt={artist} />
