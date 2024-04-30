@@ -13,16 +13,11 @@ const Footer = () => {
   return (
     <footer className={styles.footer}>
       <Box pad={{ vertical: "large", horizontal: "xlarge" }}>
-
         <Row>
           <Col md={4} xs={12}>
             <Box margin={{ vertical: "small" }} align="center">
               <a target="_blank" href="https://arti.crd.co/#register">
-                <Zap
-                  size={30}
-                  color="#4b4b4b"
-                  strokeWidth={1.5}
-                />
+                <Zap size={30} color="#4b4b4b" strokeWidth={1.5} />
               </a>
 
               <Text size="medium" margin="medium">
@@ -34,11 +29,7 @@ const Footer = () => {
           <Col md={4} xs={6}>
             <Box margin={{ vertical: "small" }} align="center">
               <a target="_blank" href="https://www.instagram.com/studios.arti">
-                <Instagram
-                  size={30}
-                  color="#4b4b4b"
-                  strokeWidth={1.5}
-                />
+                <Instagram size={30} color="#4b4b4b" strokeWidth={1.5} />
               </a>
               <Text size="medium" margin="medium">
                 Follow us
@@ -48,14 +39,9 @@ const Footer = () => {
           <Col md={4} xs={6}>
             <Box margin={{ vertical: "small" }} align="center">
               <a href="mailto:arti.studiosapp@gmail.com">
-
-                <Mail
-                  size={30}
-                  color="#4b4b4b"
-                  strokeWidth={1.5}
-                />
+                <Mail size={30} color="#4b4b4b" strokeWidth={1.5} />
               </a>
-              <Text size="medium" margin="medium" >
+              <Text size="medium" margin="medium">
                 Email us
               </Text>
             </Box>
@@ -63,18 +49,23 @@ const Footer = () => {
         </Row>
 
         <Row>
-
           <Col xs={12}>
             <Box margin={"small"} align="center">
               <Box height="50px" margin="small">
                 <Image fit="contain" src="/img/logo-only.png" />
               </Box>
-              <Text size="small">© Arti, 2023</Text>
+              <Text size="small">© Arti, 2024</Text>
+              <br />
+              <Link href="/privacy">
+                <Text size="small">
+                  <u>Privacy Policy</u>
+                </Text>
+              </Link>
             </Box>
           </Col>
         </Row>
       </Box>
-    </footer >
+    </footer>
   );
 };
 

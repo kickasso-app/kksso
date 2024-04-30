@@ -9,6 +9,7 @@ import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import { Box, Heading, Paragraph, ResponsiveContext, Text } from "grommet";
 import { Disc, Instagram, Globe } from "react-feather";
 
+import Button from "components/Button";
 import EventCard from "components/EventCard";
 import VisitForm from "components/forms/VisitForm";
 import ImagesCarousel from "components/ImagesCarousel";
@@ -30,7 +31,7 @@ const Preview = () => {
   }, [userStudio]);
 
   const headingMargin = { top: "large", bottom: "small" };
-  const paragraphMargin = { top: "xsmall", bottom: "medium" };
+  const paragraphMargin = { top: "small", bottom: "medium" };
 
   const paragraphSeperator = "\\";
   const eventSeperator = "/";
@@ -85,10 +86,20 @@ const Preview = () => {
             <Row>
               <Col xs={12} md={6}>
                 <br />
-
-                {studio.artist && (
-                  <h2 className={styles.maintitle}>{studio.artist}</h2>
-                )}
+                <Row between="xs" middle="xs">
+                  <Col>
+                    {studio.artist && (
+                      <h2 className={styles.maintitle}>{studio.artist}</h2>
+                    )}
+                  </Col>
+                  {studio.hasOpenDates === true && (
+                    <Col>
+                      <Button btnStyle="outline">
+                        <Link href="#private-visits">Visit</Link>
+                      </Button>
+                    </Col>
+                  )}
+                </Row>
                 <br />
                 {studio.textLong &&
                   makeParagraphs(studio.textLong, paragraphSeperator)}
@@ -192,7 +203,12 @@ const Preview = () => {
                 <br />
                 <br />
                 <hr />
-                <Heading level="3" size="medium" margin={headingMargin}>
+                <Heading
+                  level="3"
+                  size="medium"
+                  margin={headingMargin}
+                  id="private-visits"
+                >
                   Private studio visits
                 </Heading>
                 {studio.hasOpenDates === true ? (
