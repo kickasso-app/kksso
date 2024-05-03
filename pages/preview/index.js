@@ -9,6 +9,7 @@ import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import { Box, Heading, Paragraph, ResponsiveContext, Text } from "grommet";
 import { Disc, Instagram, Globe } from "react-feather";
 
+import Button from "components/Button";
 import EventCard from "components/EventCard";
 import VisitForm from "components/forms/VisitForm";
 import ImagesCarousel from "components/ImagesCarousel";
@@ -30,28 +31,15 @@ const Preview = () => {
   }, [userStudio]);
 
   const headingMargin = { top: "large", bottom: "small" };
-  const paragraphMargin = { top: "xsmall", bottom: "medium" };
+  const paragraphMargin = { top: "small", bottom: "small" };
+  const sectionMargin = { top: "medium", bottom: "medium" };
 
-  const paragraphSeperator = "\\";
-  const eventSeperator = "/";
+  const paragraphSeperator = /\r\n|\n|\r/;
 
-  const displayEvent = (eventText, eSeperator) => {
-    return eventText.split(eSeperator).map((text, index) => (
-      <Text
-        key={index}
-        size="medium"
-        margin={{ top: "xsmall", bottom: "small" }}
-        fill
-        weight={index < 2 ? "600" : ""}
-      >
-        {text} <br />
-      </Text>
-    ));
-  };
   const makeParagraphs = (paragraphString, pSeparator) => {
+    console.log(paragraphString);
     return paragraphString.split(pSeparator).map((paragraph, index) => (
       <Paragraph key={index} size="medium" margin={paragraphMargin} fill>
-        {/* // key={index} className={styles.studioParagraph}>*/}
         {paragraph}
       </Paragraph>
       // <ReactMarkdown key={index}>{paragraph}</ReactMarkdown>
@@ -85,23 +73,32 @@ const Preview = () => {
             <Row>
               <Col xs={12} md={6}>
                 <br />
-
-                {studio.artist && (
-                  <h2 className={styles.maintitle}>{studio.artist}</h2>
-                )}
-                <br />
+                <Row between="xs" middle="xs">
+                  <Col>
+                    {studio.artist && (
+                      <h2 className={styles.maintitle}>{studio.artist}</h2>
+                    )}
+                  </Col>
+                  {studio.hasOpenDates === true && (
+                    <Col>
+                      <Button btnStyle="outline">
+                        <Link href="#private-visits">Visit</Link>
+                      </Button>
+                    </Col>
+                  )}
+                </Row>
                 {studio.textLong &&
                   makeParagraphs(studio.textLong, paragraphSeperator)}
-
                 <Heading level="3" size="medium" margin={headingMargin}>
                   Mediums
                 </Heading>
                 {makeParagraphs(studio.styles)}
-                <hr />
+                <Box margin={sectionMargin}>
+                  <hr />
+                </Box>
                 <Heading level="3" size="medium" margin={headingMargin}>
                   Studio
                 </Heading>
-
                 <h4 className={styles.subsectiontitle}>
                   <Disc
                     className={styles.icon}
@@ -112,11 +109,11 @@ const Preview = () => {
                   />{" "}
                   {studio.city}
                 </h4>
-
                 {studio.textStudio &&
                   makeParagraphs(studio.textStudio, paragraphSeperator)}
-
-                <hr />
+                <Box margin={sectionMargin}>
+                  <hr />
+                </Box>{" "}
                 {(studio.website || studio.instagram) && (
                   <>
                     <Heading level="3" size="medium" margin={headingMargin}>
@@ -155,8 +152,10 @@ const Preview = () => {
                     </Paragraph>
                     {size === "small" && (
                       <>
-                        <hr />
-                        <br />
+                        <Box margin={sectionMargin}>
+                          <hr />
+                          <br />
+                        </Box>
                       </>
                     )}
                   </>
@@ -190,9 +189,15 @@ const Preview = () => {
                   <li>A gift is almost always a nice touch</li>
                 </ul>
                 <br />
-                <br />
-                <hr />
-                <Heading level="3" size="medium" margin={headingMargin}>
+                <Box margin={sectionMargin}>
+                  <hr />
+                </Box>
+                <Heading
+                  level="3"
+                  size="medium"
+                  margin={headingMargin}
+                  id="private-visits"
+                >
                   Private studio visits
                 </Heading>
                 {studio.hasOpenDates === true ? (

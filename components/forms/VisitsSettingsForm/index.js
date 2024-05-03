@@ -162,7 +162,8 @@ export default function VisitsSettingsForm({
             >
               <TextArea
                 name="textStudio"
-                placeholder="Tell us about your space or studio"
+                placeholder="Tell us a bit about your studio.
+Describe the role it plays in your process, how it affects your practice, and about the relationship(s) you have with it."
                 fill
                 maxLength={1200}
                 rows={8}
@@ -278,13 +279,16 @@ export default function VisitsSettingsForm({
               <TextArea
                 name="visitRules"
                 placeholder="What do you expect from visitors at your studio?
-                 ex: My Rule 1; My Rule 2  (semi-colon seperated) "
+ex: Rule 1; Rule 2; Rule 3 (semi-colon seperated)"
                 fill
                 rows={4}
                 maxLength={500}
               />
             </FormField>
-
+            <Text margin={textMargin}>
+              {" "}
+              ex: Rule 1; Rule 2; Rule 3 (semi-colon seperated){" "}
+            </Text>
             <br />
             <Heading level="3" size="medium" margin={fieldMargin}>
               Events
