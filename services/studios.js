@@ -10,6 +10,7 @@ const StudiosProvider = ({ children }) => {
   const [featuredStudios, setFeaturedStudios] = useState([]);
 
   const [query, setQuery] = useState(emptyQuery);
+  const [hasQuery, setHasQuery] = useState(false);
   const [searchStudios, setSearchStudios] = useState([]);
 
   const [studio, setStudio] = useState(false);
@@ -52,8 +53,10 @@ const StudiosProvider = ({ children }) => {
     setQuery(newQuery);
     if (!newQuery) {
       setSearchStudios(studios);
+      setHasQuery(false);
     } else {
       fetchSearchStudios(newQuery);
+      setHasQuery(true);
     }
   };
 
@@ -152,6 +155,7 @@ const StudiosProvider = ({ children }) => {
     studio,
     userStudio,
     query,
+    hasQuery,
     updateQuery,
     fetchStudios,
     fetchFeaturedStudios,

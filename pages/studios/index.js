@@ -23,7 +23,7 @@ const Studios = () => {
         <Row id={styles.studio}>
           <Col xs={12} md={12}>
             {/* {error && <strong>Error: {JSON.stringify(error)}</strong>} */}
-            {loading ? (
+            {loading || !studios.length ? (
               <img src={`/img/loader.svg`} />
             ) : (
               <StudiosFilter studios={studios} />
