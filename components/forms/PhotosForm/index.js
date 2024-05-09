@@ -46,7 +46,7 @@ export default function PhotosForm() {
   //       setIsUpdateError(false);
   //       setLoading(true);
   //       let { error } = await supabase
-  //         .from("studios")
+  //         .from("studios_week")
   //         .update({ photoUrl: url }, { returning: "minimal" })
   //         .eq("uuid", user.id);
 
@@ -71,10 +71,12 @@ export default function PhotosForm() {
           Your Photos
         </Heading>
         <Text size="medium" margin={textMargin}>
-          Add up to 5 photos of your work, your studio, and yourself. Please include one of each.
+          Add up to 5 photos of your work, your studio, and yourself. Please
+          include one of each.
         </Text>
         <Text size="medium" margin={textMargin}>
-          Please make sure that your image files are smaller than <b>1 MB per image</b>
+          Please make sure that your image files are smaller than{" "}
+          <b>1 MB per image</b>
         </Text>
         {[0, 1, 2, 3, 4].map((imgId) => {
           return (
@@ -85,7 +87,7 @@ export default function PhotosForm() {
               postUpload={async () => {
                 await fetchImgsList();
               }}
-            //   onSetMain={(imgId) => setMainPhoto(imgId)}
+              //   onSetMain={(imgId) => setMainPhoto(imgId)}
             />
           );
         })}
@@ -105,6 +107,6 @@ export default function PhotosForm() {
           </>
         )}
       </Box>
-    </Box >
+    </Box>
   );
 }

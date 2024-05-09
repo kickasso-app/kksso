@@ -20,7 +20,6 @@ import {
   Anchor,
 } from "grommet";
 
-
 export default function ProfileForm({ profile, goToTab }) {
   const [values, setValues] = useState(profile);
 
@@ -43,7 +42,7 @@ export default function ProfileForm({ profile, goToTab }) {
       };
 
       let { error } = await supabase
-        .from("studios")
+        .from("studios_week")
         .update(updates, { returning: "minimal" })
         .eq("uuid", user.id);
 
@@ -67,7 +66,7 @@ export default function ProfileForm({ profile, goToTab }) {
       setLoading(true);
 
       let { error } = await supabase
-        .from("studios")
+        .from("studios_week")
         .update({ photoUrl: url }, { returning: "minimal" })
         .eq("uuid", user.id);
 
@@ -94,8 +93,13 @@ export default function ProfileForm({ profile, goToTab }) {
           Welcome to your Arti profile
         </Heading>
         <Text size="medium" margin={textMargin}>
-          You can update your basic profile info below, add your photos and available visit dates and times.
-          Then you can preview your profile and publish it in <Anchor onClick={() => goToTab(3)}><b> Settings</b></Anchor>.
+          You can update your basic profile info below, add your photos and
+          available visit dates and times. Then you can preview your profile and
+          publish it in{" "}
+          <Anchor onClick={() => goToTab(3)}>
+            <b> Settings</b>
+          </Anchor>
+          .
         </Text>
         <Grommet>
           <Form
@@ -125,14 +129,16 @@ export default function ProfileForm({ profile, goToTab }) {
               />
             </FormField>
 
-
-
             <FormField
               name="styles"
               label="Mediums and styles"
               margin={fieldMargin}
             >
-              <TextInput name="styles" placeholder="painting, prints, sound (comma sepearted)" required />
+              <TextInput
+                name="styles"
+                placeholder="painting, prints, sound (comma sepearted)"
+                required
+              />
             </FormField>
 
             {/* CHANGED FOR PILOT */}
@@ -152,8 +158,6 @@ export default function ProfileForm({ profile, goToTab }) {
               />
             </FormField> */}
 
-
-
             <FormField
               label="About your Art"
               name="textLong"
@@ -167,7 +171,6 @@ export default function ProfileForm({ profile, goToTab }) {
                 rows={8}
               />
             </FormField>
-
 
             <FormField
               name="website"
@@ -217,7 +220,7 @@ export default function ProfileForm({ profile, goToTab }) {
                     status="warning"
                     title="Your profile was not updated!"
                     message="We couldn't complete your request this time. Please try again."
-                  // onClose={() => {}}
+                    // onClose={() => {}}
                   />
                 )}
               </>

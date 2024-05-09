@@ -58,7 +58,7 @@ const StudiosProvider = ({ children }) => {
   const fetchSearchStudios = async (newQuery) => {
     setLoading(true);
     let { data: resultStudios, error } = await supabase
-      .from("studios")
+      .from("studios_week")
       .select()
       .is("published", true)
       .textSearch("fts", newQuery, {
@@ -84,7 +84,7 @@ const StudiosProvider = ({ children }) => {
   const fetchStudio = async ({ id }) => {
     setLoading(true);
     let { data: studio, error } = await supabase
-      .from("studios")
+      .from("studios_week")
       .select("*")
       .eq("studio_id", id);
     if (error) {
@@ -109,7 +109,7 @@ const StudiosProvider = ({ children }) => {
   const fetchUserStudio = async ({ uuid }) => {
     setLoading(true);
     let { data: studio, error } = await supabase
-      .from("studios")
+      .from("studios_week")
       .select("*")
       .eq("uuid", uuid);
     if (error) {

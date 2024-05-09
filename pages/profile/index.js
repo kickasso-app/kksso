@@ -42,7 +42,6 @@ export default function Profile() {
     }
   }, [session]);
 
-
   async function createProfile() {
     const randomId = 1 + Math.floor(Math.random() * 10000);
     const newRow = {
@@ -55,7 +54,7 @@ export default function Profile() {
     };
 
     const { newProfile, error } = await supabase
-      .from('studios')
+      .from("studios")
       .insert([newRow])
       .select();
 
@@ -71,11 +70,10 @@ export default function Profile() {
 
       // TO DO: add to services/studios
       let { data, error, status } = await supabase
-        .from("studios")
+        .from("studios_week")
         .select(profileFields.join(", "))
         .eq("uuid", user.id)
         .single();
-
 
       if (!data) {
         data = await createProfile();

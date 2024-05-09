@@ -32,7 +32,7 @@ export default function AccountSettings({ profile }) {
       setLoading(true);
 
       let { error } = await supabase
-        .from("studios")
+        .from("studios_week")
         .update({ published: isPublishedNew }, { returning: "minimal" })
         .eq("uuid", user.id);
 
@@ -135,10 +135,9 @@ export default function AccountSettings({ profile }) {
           status="warning"
           title="Your profile was not updated!"
           message="We couldn't complete your request this time. Please try again."
-        // onClose={() => {}}
+          // onClose={() => {}}
         />
       )}
-
     </Box>
   );
 }
