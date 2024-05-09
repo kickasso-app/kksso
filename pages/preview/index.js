@@ -165,6 +165,7 @@ const Preview = () => {
                 {studio.events && (
                   <EventCard
                     events={studio.events}
+                    eventsLink={studio?.eventsLink}
                     eventsContact={studio?.eventsContact}
                   />
                 )}

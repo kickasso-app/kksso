@@ -32,6 +32,7 @@ export default function VisitsSettingsForm({
     textStudio,
     city,
     events,
+    eventsLink,
     eventsContact,
     // address,
     // directions,
@@ -53,6 +54,7 @@ export default function VisitsSettingsForm({
     city,
     textStudio,
     events,
+    eventsLink,
     eventsContact,
     // directions,
     // address,
@@ -313,6 +315,19 @@ ex: Rule 1; Rule 2; Rule 3 (semi-colon seperated)"
                 rows={4}
               />
             </FormField>
+
+            <FormField
+              name="eventsLink"
+              label="Link for the event (if available)"
+              margin={fieldMargin}
+            >
+              <TextInput
+                name="eventsLink"
+                placeholder="e.g. https://www.studio-event-link.com"
+              />
+            </FormField>
+            <br />
+            <br />
             <Box margin={textMargin}>
               <Text>
                 How can visitors or participants can contact you and RSVP for

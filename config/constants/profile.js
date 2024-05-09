@@ -11,6 +11,7 @@ export const profileFields = [
   "instagram",
   "events",
   "eventsContact",
+  "eventsLink",
   // "address",
   // "directions",
   "accountType",
