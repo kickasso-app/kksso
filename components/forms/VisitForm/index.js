@@ -31,7 +31,7 @@ const USER_ID = process.env.NEXT_PUBLIC_EMAILJS_USER_ID;
 // TO DO: Remove in Production
 const SEND_REAL_EMAIL = true;
 
-const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
+const VisitForm = ({ artistEmail, artistName, openDates, studioID }) => {
   const size = useContext(ResponsiveContext);
 
   const initValues = {
@@ -39,7 +39,6 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
     to_name: artistName,
     requestor_email: "arti.studiosapp@gmail.com",
     from_name: "Requestor Name",
-    message_to_artist: " ",
     visit_reason: "Reason of Visit",
     visitor_link: "Requestor Link",
     request_date: "",
@@ -181,7 +180,7 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
     const templateParams = {
       ...values,
       request_date: readableDate(selectedDate) + " at " + selectedTime,
-      studio_link: "https:/artispring.vercel.app/studios/" + artistUUID,
+      studio_link: "https:/artispring.vercel.app/studio/" + studioID,
     };
     // console.log(templateParams);
 
