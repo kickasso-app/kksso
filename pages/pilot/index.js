@@ -69,10 +69,25 @@ const Pilot = () => {
               <Box fill pad="small">
                 <StudiosFeatured />
               </Box>
+
+              <Box
+                align="center"
+                pad={{ vertical: "small" }}
+                margin={{ vertical: "small" }}
+              >
+                <Button btnStyle="outline">
+                  <Box margin={{ vertical: "1rem", horizontal: "1rem" }}>
+                    <Link href="/studios">Explore All Studios</Link>
+                  </Box>
+                </Button>
+              </Box>
             </Box>
+
             <Box margin={sectionMargin} pad="medium" align="center">
+              <Box margin={{ vertical: "xlarge" }}></Box>
+
               <Heading level={2} margin={margin}>
-                How does it work
+                How it works
               </Heading>
               <Box fill pad="large">
                 <Row>
@@ -108,6 +123,7 @@ const Pilot = () => {
                 </Row>
               </Box>
             </Box>
+            <Box margin={{ vertical: "large" }}></Box>
 
             <Box pad="medium">
               <Row>
@@ -164,21 +180,8 @@ const Pilot = () => {
                     </Text>
                   </Box>
                 </Col>
-
-                <Col xs={12}>
-                  <Box
-                    align="center"
-                    pad={{ vertical: "small" }}
-                    margin={{ vertical: "xlarge" }}
-                  >
-                    <Button btnStyle="outline">
-                      <Box margin={{ vertical: "1rem", horizontal: "1rem" }}>
-                        <Link href="/studios">Explore Studios</Link>
-                      </Box>
-                    </Button>
-                  </Box>
-                </Col>
               </Row>
+              <Box margin={{ vertical: "large" }}></Box>
             </Box>
           </Col>
         </Row>
