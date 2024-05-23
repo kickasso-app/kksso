@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Analytics } from '@vercel/analytics/react';
+import { Analytics } from "@vercel/analytics/react";
 
 import { Grommet } from "grommet";
 
@@ -13,16 +13,32 @@ const Layout = (props) => {
   return (
     <>
       <Head>
-        <title>arti</title>
+        <title>Arti</title>
         <meta
           name="description"
-          content="arti is a web platform to connect artists, art lovers, and collectors in the studio space"
+          content="Arti is a web platform to connect artists, art lovers, and collectors in the studio space"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta charSet="utf-8" />
+        <meta property="og:title" content="Arti" />
+        <meta
+          property="og:description"
+          content="Arti is a web platform to connect artists, art lovers, and collectors in the studio space"
+        />
+        <meta property="og:image" content="/img/opengraph-image.png" />
+
         <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/img/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/img/favicon-16x16.png"
+        />
       </Head>
       <Grommet theme={grommetTheme}>
         <div className="layout">
