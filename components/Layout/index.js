@@ -24,7 +24,10 @@ const Layout = (props) => {
           property="og:description"
           content="Arti is a web platform to connect artists, art lovers, and collectors in the studio space"
         />
-        <meta property="og:image" content="/img/opengraph-image.png" />
+        <meta
+          property="og:image"
+          content="https://artispring.vercel.app/img/opengraph-image.png"
+        />
 
         <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
         <link
