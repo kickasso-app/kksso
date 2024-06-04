@@ -152,6 +152,22 @@ const VisitForm = ({ artistEmail, artistName, openDates, studioID }) => {
     return datesTimes;
   };
 
+  const getFirstFutureDate = (dates) => {
+    let firstFutureDate = dates[0];
+
+    for (let i = 0; i < dates.length; i++) {
+      const isDateinFuture =
+        moment(dates[i]).diff(moment().format("YYYY-MM-DD")) >= 0;
+
+      // console.log(dates[i], isDateinFuture);
+      if (isDateinFuture) {
+        firstFutureDate = dates[i];
+        break;
+      }
+    }
+    return firstFutureDate;
+  };
+
   // let disabledDates = [];
 
   useEffect(() => {
@@ -163,9 +179,14 @@ const VisitForm = ({ artistEmail, artistName, openDates, studioID }) => {
       setCalendarDates(tempCalendarDates);
       setDatesWithTimes(tempDatesWithTimes);
 
-      // console.log("temp dates", tempCalendarDates);
+      const isFirstDateinFuture =
+        moment(tempCalendarDates[0]).diff(moment().format("YYYY-MM-DD")) >= 0;
 
-      onSelectDate(tempCalendarDates[0], tempDatesWithTimes);
+      const firstSelectedDate = isFirstDateinFuture
+        ? tempCalendarDates[0]
+        : getFirstFutureDate(tempCalendarDates);
+
+      onSelectDate(firstSelectedDate, tempDatesWithTimes);
       setDisabledDates(
         getDisabledArray(
           calendarBounds.Start,
@@ -370,7 +391,7 @@ const VisitForm = ({ artistEmail, artistName, openDates, studioID }) => {
 
           {isDatePast && (
             <Text color="#ffc0cb" size="medium">
-              You selected a day in the past
+              <br /> You selected a day in the past
             </Text>
           )}
 
