@@ -26,7 +26,7 @@ const Layout = (props) => {
         />
         <meta
           property="og:image"
-          content="https://artispring.vercel.app/img/opengraph-image.png"
+          content="https://arti.my/img/opengraph-image.png"
         />
 
         <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />

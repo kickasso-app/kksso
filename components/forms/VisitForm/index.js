@@ -201,7 +201,7 @@ const VisitForm = ({ artistEmail, artistName, openDates, studioID }) => {
     const templateParams = {
       ...values,
       request_date: readableDate(selectedDate) + " at " + selectedTime,
-      studio_link: "https:/artispring.vercel.app/studio/" + studioID,
+      studio_link: "https:/arti.my/studio/" + studioID,
     };
     // console.log(templateParams);
 

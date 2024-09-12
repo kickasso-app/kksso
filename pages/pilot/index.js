@@ -35,7 +35,7 @@ const Pilot = () => {
             <Box margin={{ bottom: "1rem" }}>
               {size === "small" ? (
                 <Image
-                  src={`/img/pilot/MobileBanner.png`}
+                  src={`/img/intro/MobileBanner.png`}
                   alt="banner"
                   layout="responsive"
                   width="100%"
@@ -43,7 +43,7 @@ const Pilot = () => {
                 />
               ) : (
                 <Image
-                  src={`/img/pilot/Banner.png`}
+                  src={`/img/intro/Banner.png`}
                   alt="banner"
                   layout="responsive"
                   width="100%"
