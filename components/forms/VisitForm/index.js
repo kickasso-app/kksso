@@ -324,7 +324,6 @@ const VisitForm = ({ artistEmail, artistName, openDates, studioID }) => {
             label="Social or professional link"
             required
             validate={{
-              // regexp: /\S+.\S+\.\S+/,
               regex: /\S+.\S+\.\S+?.\S+/,
               message: "Enter a valid url",
             }}
@@ -341,7 +340,7 @@ const VisitForm = ({ artistEmail, artistName, openDates, studioID }) => {
                 { fixed: "." },
                 { regexp: /^[\w]+$/, placeholder: "com" },
                 { fixed: "/" },
-                { regexp: /^[\w]+$/, placeholder: "yourProfile" },
+                { regexp: /^.*$/, placeholder: "yourProfile" },
               ]}
             />
           </FormField>
