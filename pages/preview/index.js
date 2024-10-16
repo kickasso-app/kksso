@@ -37,7 +37,7 @@ const Preview = () => {
   const paragraphSeperator = /\r\n|\n|\r/;
 
   const makeParagraphs = (paragraphString, pSeparator) => {
-    console.log(paragraphString);
+    // console.log(paragraphString);
     return paragraphString.split(pSeparator).map((paragraph, index) => (
       <Paragraph key={index} size="medium" margin={paragraphMargin} fill>
         {paragraph}
@@ -165,6 +165,7 @@ const Preview = () => {
                 {studio.events && (
                   <EventCard
                     events={studio.events}
+                    eventsLink={studio?.eventsLink}
                     eventsContact={studio?.eventsContact}
                   />
                 )}
@@ -205,7 +206,7 @@ const Preview = () => {
                     openDates={studio.openDates}
                     artistEmail={studio.email}
                     artistName={studio.artist}
-                    artistUUID={studio.uuid}
+                    studioID={studio.studio_id}
                   />
                 ) : (
                   <>

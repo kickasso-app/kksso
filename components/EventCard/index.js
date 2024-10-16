@@ -1,10 +1,10 @@
-import { Calendar, Clock } from "react-feather";
+import { Calendar, Clock, Link } from "react-feather";
 
 import { Heading, Paragraph } from "grommet";
 
 import styles from "./index.module.scss";
 
-const EventCard = ({ events, eventsContact }) => {
+const EventCard = ({ events, eventsLink, eventsContact }) => {
   const eventSeperator = "/";
   const headingMargin = { top: "large", bottom: "small" };
   const eventMargin = { top: "small", bottom: "small" };
@@ -51,6 +51,22 @@ const EventCard = ({ events, eventsContact }) => {
         <Paragraph size="medium" margin={eventMargin} fill>
           {details2}
         </Paragraph>
+      )}
+
+      {eventsLink?.startsWith("http") && (
+        <>
+          <Paragraph size="medium" margin={headingMargin} fill>
+            <Link
+              className={styles.icon}
+              size={18}
+              strokeWidth="4"
+              color="#C0FFF4"
+            />
+            <a target="_blank" href={eventsLink}>
+              Event link
+            </a>
+          </Paragraph>
+        </>
       )}
 
       {eventsContact && (

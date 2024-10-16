@@ -31,7 +31,7 @@ const USER_ID = process.env.NEXT_PUBLIC_EMAILJS_USER_ID;
 // TO DO: Remove in Production
 const SEND_REAL_EMAIL = true;
 
-const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
+const VisitForm = ({ artistEmail, artistName, openDates, studioID }) => {
   const size = useContext(ResponsiveContext);
 
   const initValues = {
@@ -39,7 +39,6 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
     to_name: artistName,
     requestor_email: "arti.studiosapp@gmail.com",
     from_name: "Requestor Name",
-    message_to_artist: " ",
     visit_reason: "Reason of Visit",
     visitor_link: "Requestor Link",
     request_date: "",
@@ -153,6 +152,22 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
     return datesTimes;
   };
 
+  const getFirstFutureDate = (dates) => {
+    let firstFutureDate = dates[0];
+
+    for (let i = 0; i < dates.length; i++) {
+      const isDateinFuture =
+        moment(dates[i]).diff(moment().format("YYYY-MM-DD")) >= 0;
+
+      // console.log(dates[i], isDateinFuture);
+      if (isDateinFuture) {
+        firstFutureDate = dates[i];
+        break;
+      }
+    }
+    return firstFutureDate;
+  };
+
   // let disabledDates = [];
 
   useEffect(() => {
@@ -164,9 +179,14 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
       setCalendarDates(tempCalendarDates);
       setDatesWithTimes(tempDatesWithTimes);
 
-      // console.log("temp dates", tempCalendarDates);
+      const isFirstDateinFuture =
+        moment(tempCalendarDates[0]).diff(moment().format("YYYY-MM-DD")) >= 0;
 
-      onSelectDate(tempCalendarDates[0], tempDatesWithTimes);
+      const firstSelectedDate = isFirstDateinFuture
+        ? tempCalendarDates[0]
+        : getFirstFutureDate(tempCalendarDates);
+
+      onSelectDate(firstSelectedDate, tempDatesWithTimes);
       setDisabledDates(
         getDisabledArray(
           calendarBounds.Start,
@@ -181,7 +201,7 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
     const templateParams = {
       ...values,
       request_date: readableDate(selectedDate) + " at " + selectedTime,
-      studio_link: "https:/artispring.vercel.app/studios/" + artistUUID,
+      studio_link: "https:/arti.my/studio/" + studioID,
     };
     // console.log(templateParams);
 
@@ -304,7 +324,6 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
             label="Social or professional link"
             required
             validate={{
-              // regexp: /\S+.\S+\.\S+/,
               regex: /\S+.\S+\.\S+?.\S+/,
               message: "Enter a valid url",
             }}
@@ -321,7 +340,7 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
                 { fixed: "." },
                 { regexp: /^[\w]+$/, placeholder: "com" },
                 { fixed: "/" },
-                { regexp: /^[\w]+$/, placeholder: "yourProfile" },
+                { regexp: /^.*$/, placeholder: "yourProfile" },
               ]}
             />
           </FormField>
@@ -371,7 +390,7 @@ const VisitForm = ({ artistEmail, artistName, openDates, artistUUID }) => {
 
           {isDatePast && (
             <Text color="#ffc0cb" size="medium">
-              You selected a day in the past
+              <br /> You selected a day in the past
             </Text>
           )}
 

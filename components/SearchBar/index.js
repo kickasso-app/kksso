@@ -10,7 +10,7 @@ import { Box, TextInput } from "grommet";
 export const SearchBar = ({ isBarFullWidth = false }) => {
   const router = useRouter();
 
-  const { query, updateQuery } = useStudios();
+  const { query, hasQuery, updateQuery } = useStudios();
 
   const [tempQuery, setTempQuery] = useState(query);
 
@@ -84,7 +84,7 @@ export const SearchBar = ({ isBarFullWidth = false }) => {
                   onClick={onSearch}
                 />
               </Box>
-              {!isBarFullWidth && tempQuery.length > 2 && (
+              {hasQuery && !isBarFullWidth && (
                 <Box
                   width="38px"
                   height="38px"

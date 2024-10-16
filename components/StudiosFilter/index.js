@@ -11,15 +11,15 @@ import styles from "./index.module.scss";
 import StudiosFeatured from "components/StudiosFeatured";
 
 const StudiosFilter = ({ studios }) => {
+  const { hasQuery, searchStudios } = useStudios();
 
-  const { query, searchStudios } = useStudios();
-
-  const [visibleStudios, setVisibleStudios] =
-    useState(query ? searchStudios : studios);
+  const [visibleStudios, setVisibleStudios] = useState(
+    hasQuery ? searchStudios : studios
+  );
 
   useEffect(() => {
-    setVisibleStudios(query ? searchStudios : studios);
-  }, [searchStudios, query]);
+    setVisibleStudios(hasQuery ? searchStudios : studios);
+  }, [searchStudios, hasQuery]);
 
   return (
     <div className={styles.studios}>
@@ -39,12 +39,18 @@ const StudiosFilter = ({ studios }) => {
             columnClassName={styles.masonryGridColumn}
           >
             {visibleStudios.map((studio) => {
-              return <StudioCard studio={studio} key={studio.uuid.slice(0, 3)} />;
+              return (
+                <StudioCard studio={studio} key={studio.uuid.slice(0, 3)} />
+              );
             })}
           </Masonry>
         ) : (
           <>
-            <Text>No studios were found for your search. <br /><br />Update your search terms or explore the studios here.</Text>
+            <Text>
+              No studios were found for your search. <br />
+              <br />
+              Update your search terms or explore the studios here.
+            </Text>
 
             <StudiosFeatured />
           </>

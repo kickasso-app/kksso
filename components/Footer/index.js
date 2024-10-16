@@ -55,12 +55,17 @@ const Footer = () => {
                 <Image fit="contain" src="/img/logo-only.png" />
               </Box>
               <Text size="small">© Arti, 2024</Text>
+
               <br />
-              <Link href="/privacy">
-                <Text size="small">
+              <br />
+              <Text size="small">
+                We don't use cookies{"  .   "}
+                <Link href="/privacy">
+                  {/* <Text> */}
                   <u>Privacy Policy</u>
-                </Text>
-              </Link>
+                  {/* </Text> */}
+                </Link>
+              </Text>
             </Box>
           </Col>
         </Row>
