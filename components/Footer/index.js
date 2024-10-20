@@ -28,7 +28,7 @@ const Footer = () => {
 
           <Col md={4} xs={6}>
             <Box margin={{ vertical: "small" }} align="center">
-              <a target="_blank" href="https://www.instagram.com/studios.arti">
+              <a target="_blank" href="https://www.instagram.com/arti.mystudio">
                 <Instagram size={30} color="#4b4b4b" strokeWidth={1.5} />
               </a>
               <Text size="medium" margin="medium">
