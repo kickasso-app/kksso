@@ -7,6 +7,7 @@ import Image from "next/image";
 import { Box, Heading, Text, ResponsiveContext } from "grommet";
 
 import SearchBar from "components/SearchBar";
+import SelectLocation from "components/SelectLocation";
 import StudiosFeatured from "components/StudiosFeatured";
 import Button from "components/Button";
 
@@ -59,6 +60,8 @@ const Pilot = () => {
             </Box>
 
             <Box margin={{ vertical: "1rem", bottom: "12rem" }} align="center">
+              <SelectLocation isBarFullWidth />
+              {/* <br /><br /><br />               */}
               <SearchBar isBarFullWidth />
             </Box>
 
