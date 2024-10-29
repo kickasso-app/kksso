@@ -267,6 +267,7 @@ Describe the role it plays in your process, how it affects your practice, and ab
                 General visit tips
               </Heading>
               <ul>
+                <li>Visits are free</li>
                 <li>Show up on time</li>
                 <li>Ask before taking photos of the artist and artworks</li>
                 <li>A gift is almost always a nice touch</li>
