@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 
 import { Search, X } from "react-feather";
-import { Box, Button, TextInput } from "grommet";
+import { Box, Button, Text } from "grommet";
 
 import { LOCATIONS } from "config/locations";
 
@@ -54,15 +54,25 @@ export const SelectLocation = ({ isBarFullWidth = false }) => {
         <Row middle="xs">
           {LOCATIONS.cities.map((city) => {
             return (
-              <Button
-                label={city}
-                onClick={() => {}}
-                align="center"
-                gap="small"
-                color="#FFC0CB"
-                pad="small"
-                a11yTitle="X Available Updates"
-              />
+              <Box pad="small">
+                <Button
+                  label={
+                    <Box pad="xsmall">
+                      <Text size="large" weight="600" color="#4b4b4b">
+                        {city}
+                      </Text>
+                    </Box>
+                  }
+                  onClick={() => {}}
+                  align="center"
+                  gap="small"
+                  color="#FFC0CB"
+                  size="large"
+                  pad="medium"
+                  hoverIndicator="#FFC0CB"
+                  a11yTitle="X Available Updates"
+                />
+              </Box>
             );
           })}
 

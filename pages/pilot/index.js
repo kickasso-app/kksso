@@ -60,9 +60,8 @@ const Pilot = () => {
             </Box>
 
             <Box margin={{ vertical: "1rem", bottom: "12rem" }} align="center">
-              <SelectLocation isBarFullWidth />
-              {/* <br /><br /><br />               */}
               <SearchBar isBarFullWidth />
+              {/* <SelectLocation isBarFullWidth /> */}
             </Box>
 
             <Box margin={sectionMargin} pad="medium" align="center">
