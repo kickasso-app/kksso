@@ -30,7 +30,7 @@ export default function VisitsSettingsForm({
     openDates,
     hasOpenDates,
     textStudio,
-    city,
+    district,
     events,
     eventsLink,
     eventsContact,
@@ -51,7 +51,7 @@ export default function VisitsSettingsForm({
   const [values, setValues] = useState({
     visitRules,
     openDates,
-    city,
+    district,
     textStudio,
     events,
     eventsLink,
@@ -149,12 +149,12 @@ export default function VisitsSettingsForm({
             validate="submit"
           >
             <FormField
-              name="city"
+              name="district"
               label="Kiez or District in Berlin"
               margin={textMargin}
               required
             >
-              <TextInput name="city" placeholder="Wedding" />
+              <TextInput name="district" placeholder="Wedding" />
             </FormField>
 
             <FormField

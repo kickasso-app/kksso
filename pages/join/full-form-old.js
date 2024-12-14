@@ -28,7 +28,7 @@ const Join = () => {
     requestor_email: "Requestor email",
     from_name: "Requestor Name",
     about: "Hello There Message",
-    city: "Berlin",
+    district: "Berlin",
     mediums: "",
     types: "1",
     portfolio: "",
@@ -130,13 +130,17 @@ const Join = () => {
               />
             </FormField>
             <FormField
-              name="city"
+              name="district"
               htmlfor="text-input-id"
-              label="City"
+              label="district"
               margin={fieldMargin}
               required
             >
-              <TextInput id="text-input-id" name="city" placeholder="Berlin" />
+              <TextInput
+                id="text-input-id"
+                name="district"
+                placeholder="Berlin"
+              />
             </FormField>
 
             <FormField

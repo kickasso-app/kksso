@@ -16,7 +16,7 @@ const StudioCard = ({
     studio_id,
     uuid,
     artist,
-    city,
+    district,
     styles: artStyles,
     openDates,
     // hasOpenDates,
@@ -90,7 +90,7 @@ const StudioCard = ({
           color="#FFC0CB"
           fill="#fff"
         />
-        {city.split(",")[0]}
+        {district.split(",")[0]}
       </h4>
 
       {/* CHANGED FOR PILOT */}
@@ -124,7 +124,7 @@ const StudioCard = ({
 //     id: PropTypes.string.isRequired,
 //     artist: PropTypes.string.isRequired,
 //     openDates: PropTypes.array.isRequired,
-//     city: PropTypes.string.isRequired,
+//     district: PropTypes.string.isRequired,
 //     mediums: PropTypes.string.isRequired,
 //     textMini: PropTypes.string.isRequired,
 //   }).isRequired,

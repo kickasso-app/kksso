@@ -5,7 +5,22 @@ const StudiosContext = createContext(null);
 
 const emptyQuery = "";
 
+const getCityFromParams = () => {
+  const params = new URLSearchParams(window.location.search);
+  //  console.log(params);
+  const c = params.get("c");
+  const hasCity = params.has("c");
+
+  const currentCity = c
+    .split(" ")
+    .map((w) => w[0].toUpperCase() + w.substring(1).toLowerCase())[0];
+
+  return currentCity;
+};
+
 const StudiosProvider = ({ children }) => {
+  const [city, setCity] = useState("no city");
+
   const [studios, setStudios] = useState([]);
   const [featuredStudios, setFeaturedStudios] = useState([]);
 
@@ -24,12 +39,22 @@ const StudiosProvider = ({ children }) => {
    */
 
   const fetchStudios = async () => {
+    const currentCity = getCityFromParams();
+
+    if (city !== currentCity) {
+      setCity(currentCity);
+      //   console.log(currentCity);
+    } else {
+      console.log("no city");
+    }
+
     setLoading(true);
     let { data: supaStudios, error } = await supabase
       .from("studios")
       .select("*")
       .is("published", true)
       .is("displayed", true)
+      .contains("location", [currentCity])
       .order("studio_id", true);
     if (error) {
       setError(error);
@@ -149,6 +174,7 @@ const StudiosProvider = ({ children }) => {
   };
 
   const contextObj = {
+    city,
     studios,
     searchStudios,
     featuredStudios,
