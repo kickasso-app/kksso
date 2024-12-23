@@ -1,6 +1,7 @@
 export const profileFields = [
   "artist",
-  "city",
+  "location",
+  "district",
   "styles",
   "textMini",
   "textLong",

@@ -1,4 +1,6 @@
 import { useEffect } from "react";
+import { useRouter } from "next/router";
+
 import { useStudios } from "services/studios";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
@@ -9,27 +11,29 @@ import styles from "./index.module.scss";
 import StudiosFilter from "components/StudiosFilter/index.js";
 
 const Studios = () => {
+  const router = useRouter();
+
+  const { city } = router.query;
+
   const { studios, fetchStudios, loading, error } = useStudios();
 
   useEffect(() => {
-    if (!studios.length && !error) {
-      //  fetchStudios();
+    if (city && !studios.length && !error) {
+      fetchStudios(city);
     }
-  }, [studios, error]);
+  }, [city, studios, error]);
 
   return (
     <Grid fluid align="center">
-      {/* <section>
+      <section>
         <Row id={styles.studio}>
           <Col xs={12} md={12}>
-            {loading || !studios.length ? (
-              <img src={`/img/loader.svg`} />
-            ) : (
-              <StudiosFilter studios={studios} />
-            )}
+            {error && <strong>Error: {JSON.stringify(error)}</strong>}
+            {loading && <img src={`/img/loader.svg`} />}
+            {studios.length && <StudiosFilter studios={studios} />}
           </Col>
         </Row>
-      </section> */}
+      </section>
     </Grid>
   );
 };

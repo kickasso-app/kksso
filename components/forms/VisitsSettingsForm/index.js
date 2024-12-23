@@ -30,7 +30,8 @@ export default function VisitsSettingsForm({
     openDates,
     hasOpenDates,
     textStudio,
-    city,
+    location,
+    district,
     events,
     eventsLink,
     eventsContact,
@@ -51,7 +52,8 @@ export default function VisitsSettingsForm({
   const [values, setValues] = useState({
     visitRules,
     openDates,
-    city,
+    location: location.join(","),
+    district,
     textStudio,
     events,
     eventsLink,
@@ -122,6 +124,7 @@ export default function VisitsSettingsForm({
 
     const updates = {
       ...values,
+      location: values.location.split(","),
       openDates: newDates,
     };
 
@@ -149,12 +152,21 @@ export default function VisitsSettingsForm({
             validate="submit"
           >
             <FormField
-              name="city"
-              label="Kiez or District in Berlin"
+              name="location"
+              label="Your studio location: City, Country"
               margin={textMargin}
               required
             >
-              <TextInput name="city" placeholder="Wedding" />
+              <TextInput name="location" placeholder="Berlin, Germany" />
+            </FormField>
+
+            <FormField
+              name="district"
+              label="District or Kiez in your city"
+              margin={textMargin}
+              required
+            >
+              <TextInput name="district" placeholder="Kreuzberg" />
             </FormField>
 
             <FormField

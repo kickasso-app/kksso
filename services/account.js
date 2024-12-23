@@ -54,7 +54,8 @@ const AccountProvider = ({ children }) => {
       uuid: user.id,
       studio_id: randomId,
       email: user.email,
-      city: "",
+      location: "",
+      district: "",
       artist: "",
       styles: "",
     };

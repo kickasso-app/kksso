@@ -5,7 +5,15 @@ const StudiosContext = createContext(null);
 
 const emptyQuery = "";
 
+const titleCase = (text) => {
+  return text
+    .split(" ")
+    .map((w) => w[0].toUpperCase() + w.substring(1).toLowerCase())[0];
+};
+
 const StudiosProvider = ({ children }) => {
+  // const [city, setCity] = useState("none");
+
   const [studios, setStudios] = useState([]);
   const [featuredStudios, setFeaturedStudios] = useState([]);
 
@@ -23,20 +31,23 @@ const StudiosProvider = ({ children }) => {
    * This function fetches published studios from a Supabase database and sets them in state.
    */
 
-  const fetchStudios = async () => {
+  const fetchStudios = async (city) => {
+    const currentCity = titleCase(city);
     setLoading(true);
+    // console.log("fetching studios");
+
     let { data: supaStudios, error } = await supabase
       .from("studios")
       .select("*")
       .is("published", true)
       .is("displayed", true)
+      .contains("location", [currentCity])
       .order("studio_id", true);
-    if (error) {
-      setError(error);
-      console.log(error);
-    } else {
+    if (supaStudios?.length) {
       setStudios(supaStudios);
-      // console.log(supaStudios);
+    } else {
+      const returnError = error ?? "Some error occurred";
+      setError(returnError);
     }
     setLoading(false);
   };
@@ -92,16 +103,17 @@ const StudiosProvider = ({ children }) => {
       .from("studios")
       .select("*")
       .eq("studio_id", id);
-    if (error) {
-      setError(error);
-      console.log(error);
-    } else {
+
+    if (studio?.length) {
       const tempStudio = {
         ...studio[0],
         hasOpenDates: studio[0]?.openDates?.length ? true : false,
       };
       setStudio(tempStudio);
       // console.log(tempStudio);
+    } else {
+      const returnError = error ?? "Some error occurred";
+      setError(returnError);
     }
     setLoading(false);
   };
@@ -149,6 +161,7 @@ const StudiosProvider = ({ children }) => {
   };
 
   const contextObj = {
+    // city,
     studios,
     searchStudios,
     featuredStudios,
