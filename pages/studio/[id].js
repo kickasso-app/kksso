@@ -71,7 +71,7 @@ const Studio = () => {
           <>
             <ChevronLeft className={styles.icon} size={16} />{" "}
             <Link
-              href={`/studios?c=` + studio.location[0].toLowerCase()}
+              href={`/studios/` + studio.location[0].toLowerCase()}
               className={styles.backlink}
             >
               BACK

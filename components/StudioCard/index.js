@@ -90,7 +90,7 @@ const StudioCard = ({
           color="#FFC0CB"
           fill="#fff"
         />
-        {district.split(",")[0]}
+        {district}
       </h4>
 
       {/* CHANGED FOR PILOT */}
