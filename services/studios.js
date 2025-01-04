@@ -1,18 +1,12 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { supabase } from "./supabase";
 
 const StudiosContext = createContext(null);
 
 const emptyQuery = "";
 
-const titleCase = (text) => {
-  return text
-    .split(" ")
-    .map((w) => w[0].toUpperCase() + w.substring(1).toLowerCase())[0];
-};
-
 const StudiosProvider = ({ children }) => {
-  // const [city, setCity] = useState("none");
+  const [cities, setCities] = useState([]);
 
   const [studios, setStudios] = useState([]);
   const [featuredStudios, setFeaturedStudios] = useState([]);
@@ -28,29 +22,56 @@ const StudiosProvider = ({ children }) => {
   const [error, setError] = useState();
 
   /**
+   * This function fetches cities from a Supabase database, orders them,  and sets them in state.
+   */
+
+  const fetchCities = async () => {
+    setLoading(true);
+    let { data: supaCities, error } = await supabase
+      .from("cities")
+      .select("*")
+      .order("count", { ascending: false });
+    // .is("published", true);
+    if (supaCities?.length) {
+      // console.log(supaCities);
+      setCities(supaCities);
+      setError(false);
+    } else {
+      const returnError = error ?? "No cities were fetched";
+      setError(returnError);
+      console.log(returnError);
+    }
+    setLoading(false);
+  };
+
+  /**
    * This function fetches published studios from a Supabase database and sets them in state.
    */
 
   const fetchStudios = async (city) => {
-    const currentCity = titleCase(city);
     setLoading(true);
     // console.log("fetching studios");
+
+    // https://markustripp.medium.com/supabase-conditional-queries-with-filter-chaining-1c2bb48b8388
 
     let { data: supaStudios, error } = await supabase
       .from("studios")
       .select("*")
       .is("published", true)
       .is("displayed", true)
-      .contains("location", [currentCity])
+      .contains("location", [city])
       .order("studio_id", true);
     if (supaStudios?.length) {
       setStudios(supaStudios);
     } else {
-      const returnError = error ?? "Some error occurred";
+      const returnError = error ?? "No studios were fetched";
       setError(returnError);
     }
     setLoading(false);
   };
+
+  // fetch studios count
+  // https://www.restack.io/docs/supabase-knowledge-supabase-get-count-guide
 
   /**
    * This function updates the search query and fetches search results from a Supabase database based on
@@ -161,7 +182,7 @@ const StudiosProvider = ({ children }) => {
   };
 
   const contextObj = {
-    // city,
+    cities,
     studios,
     searchStudios,
     featuredStudios,
@@ -169,6 +190,7 @@ const StudiosProvider = ({ children }) => {
     userStudio,
     query,
     hasQuery,
+    fetchCities,
     updateQuery,
     fetchStudios,
     fetchFeaturedStudios,
