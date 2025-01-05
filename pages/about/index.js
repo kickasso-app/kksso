@@ -168,8 +168,7 @@ const About = () => {
                 </li>
                 <li> We will not spam you.</li>
                 <li>
-                  <Text weight="600">
-                    {" "}
+                  <Text weight={600}>
                     We do not tolerate any kind of sexism, racism and other
                     forms of discrimination.
                   </Text>

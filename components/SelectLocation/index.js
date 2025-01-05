@@ -40,7 +40,7 @@ export const SelectLocation = ({ isBarFullWidth = false }) => {
                   <Button
                     label={
                       <Box pad="xsmall">
-                        <Text size="large" weight="600" color="#4b4b4b">
+                        <Text size="large" weight={600} color="#4b4b4b">
                           {city}
                         </Text>
                       </Box>

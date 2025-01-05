@@ -154,7 +154,7 @@ const Pilot = () => {
                 </Col>
                 <Col md={6}>
                   <Box margin="medium">
-                    <Text size="large" margin="medium" weight="600">
+                    <Text size="large" margin="medium" weight={600}>
                       A digital platform to connect artists, collectors, and art
                       lovers.
                     </Text>
