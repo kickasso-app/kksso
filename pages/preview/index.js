@@ -107,7 +107,7 @@ const Preview = () => {
                     color="#FFC0CB"
                     fill="#fff"
                   />{" "}
-                  {studio.city}
+                  {studio.district}
                 </h4>
                 {studio.textStudio &&
                   makeParagraphs(studio.textStudio, paragraphSeperator)}

@@ -5,7 +5,7 @@ const nextWeek = moment().add(7, "days");
 const nextMonth = moment().add(1, "months");
 const nextYear = moment().add(1, "years");
 
-const filterStudios = ({ studios, query: { day, mediums, city } }) => {
+const filterStudios = ({ studios, query: { day, mediums, district } }) => {
   let filtered = studios;
   // sessionStorage.setItem("filters", JSON.stringify(filters));
 
@@ -33,9 +33,9 @@ const filterStudios = ({ studios, query: { day, mediums, city } }) => {
     });
   }
 
-  if (city && city !== false && city !== "All") {
+  if (district && district !== false && district !== "All") {
     filtered = filtered.filter((studio) => {
-      return studio.city.includes(city);
+      return studio.district.includes(district);
     });
   }
 
@@ -53,13 +53,13 @@ const filterStudios = ({ studios, query: { day, mediums, city } }) => {
 //     //   savedfilters = JSON.parse(savedfilters);
 //     //   setTheDay(savedfilters.day);
 //     //   setTheCat(savedfilters.cat);
-//     //   setTheCity(savedfilters.city);
+//     //   setThedistrict(savedfilters.district);
 //     //   filterstudios(savedfilters);
 //     // } else {
-//     //   filterstudios({ day: theDay, cat: theCat, city: theCity });
+//     //   filterstudios({ day: theDay, cat: theCat, district: thedistrict });
 //     // }
 
-//     filterstudios({ day: theDay, cat: theCat, city: theCity });
+//     filterstudios({ day: theDay, cat: theCat, district: thedistrict });
 //     // eslint-disable-next-line react-hooks/exhaustive-deps
 //   }, [studios]);
 
