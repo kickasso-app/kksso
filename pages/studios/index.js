@@ -9,17 +9,17 @@ import styles from "./index.module.scss";
 import StudiosFilter from "components/StudiosFilter/index.js";
 
 const Studios = () => {
-  const { studios, fetchStudios, loading, error } = useStudios();
+  const { studios, fetchAllStudios, loading, error } = useStudios();
 
   useEffect(() => {
     if (!studios.length && !error) {
-      //  fetchStudios();
+      fetchAllStudios();
     }
   }, [studios, error]);
 
   return (
     <Grid fluid align="center">
-      {/* <section>
+      <section>
         <Row id={styles.studio}>
           <Col xs={12} md={12}>
             {loading || !studios.length ? (
@@ -29,7 +29,7 @@ const Studios = () => {
             )}
           </Col>
         </Row>
-      </section> */}
+      </section>
     </Grid>
   );
 };

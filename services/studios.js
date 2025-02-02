@@ -73,6 +73,29 @@ const StudiosProvider = ({ children }) => {
   // fetch studios count
   // https://www.restack.io/docs/supabase-knowledge-supabase-get-count-guide
 
+  //REMOVE after feature-flag studiosByCities is activated
+
+  const fetchAllStudios = async () => {
+    setLoading(true);
+    // console.log("fetching studios");
+
+    // https://markustripp.medium.com/supabase-conditional-queries-with-filter-chaining-1c2bb48b8388
+
+    let { data: supaStudios, error } = await supabase
+      .from("studios")
+      .select("*")
+      .is("published", true)
+      .is("displayed", true)
+      .order("studio_id", true);
+    if (supaStudios?.length) {
+      setStudios(supaStudios);
+    } else {
+      const returnError = error ?? "No studios were fetched";
+      setError(returnError);
+    }
+    setLoading(false);
+  };
+
   /**
    * This function updates the search query and fetches search results from a Supabase database based on
    * the query.
@@ -193,6 +216,7 @@ const StudiosProvider = ({ children }) => {
     fetchCities,
     updateQuery,
     fetchStudios,
+    fetchAllStudios,
     fetchFeaturedStudios,
     fetchStudio,
     fetchUserStudio,
