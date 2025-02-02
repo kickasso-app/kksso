@@ -221,11 +221,11 @@ export default function Join() {
                   </Paragraph>
 
                   {/* {!forgotPassword && */}
-                  <Text weight="300" margin={{ vertical: "small" }}>
+                  <Text weight="normal" margin={{ vertical: "small" }}>
                     Forgot your passoword?
                     <br />
                   </Text>
-                  <Text weight="200">
+                  <Text weight="lighter">
                     Please let us know by email and we will send you a magic
                     link.
                     {/* <Anchor onClick={() => setForgotPassword(true)}>Send me a magic link</Anchor> */}

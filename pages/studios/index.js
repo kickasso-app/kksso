@@ -9,11 +9,11 @@ import styles from "./index.module.scss";
 import StudiosFilter from "components/StudiosFilter/index.js";
 
 const Studios = () => {
-  const { studios, fetchStudios, loading, error } = useStudios();
+  const { studios, fetchAllStudios, loading, error } = useStudios();
 
   useEffect(() => {
     if (!studios.length && !error) {
-      fetchStudios();
+      fetchAllStudios();
     }
   }, [studios, error]);
 
@@ -22,7 +22,6 @@ const Studios = () => {
       <section>
         <Row id={styles.studio}>
           <Col xs={12} md={12}>
-            {/* {error && <strong>Error: {JSON.stringify(error)}</strong>} */}
             {loading || !studios.length ? (
               <img src={`/img/loader.svg`} />
             ) : (

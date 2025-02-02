@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { useStudios } from "services/studios";
 
+import { featureFlags } from "config/feature-flags";
+
 import { Box, Text } from "grommet";
 import Masonry from "react-masonry-css";
 
 import SearchBar from "components/SearchBar";
+import SelectLocation from "components/SelectLocation";
 import StudioCard from "../StudioCard";
-// import filterStudios from "./filterStudios";
 import styles from "./index.module.scss";
 import StudiosFeatured from "components/StudiosFeatured";
 
@@ -25,6 +27,7 @@ const StudiosFilter = ({ studios }) => {
     <div className={styles.studios}>
       <Box align="center" margin="none">
         <SearchBar />
+        {featureFlags.studiosByCities && <SelectLocation isBarFullWidth />}
       </Box>
       <Box margin={{ vertical: "large" }}>
         {visibleStudios.length > 0 ? (

@@ -4,6 +4,8 @@ import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import Link from "next/link";
 import Image from "next/image";
 
+import { featureFlags } from "config/feature-flags";
+
 import { Box, Heading, Text, ResponsiveContext } from "grommet";
 
 import SearchBar from "components/SearchBar";
@@ -60,8 +62,11 @@ const Pilot = () => {
             </Box>
 
             <Box margin={{ vertical: "1rem", bottom: "12rem" }} align="center">
-              <SearchBar isBarFullWidth />
-              {/* <SelectLocation isBarFullWidth /> */}
+              {featureFlags.studiosByCities === false ? (
+                <SearchBar isBarFullWidth />
+              ) : (
+                <SelectLocation isBarFullWidth />
+              )}
             </Box>
 
             <Box margin={sectionMargin} pad="medium" align="center">
@@ -154,7 +159,7 @@ const Pilot = () => {
                 </Col>
                 <Col md={6}>
                   <Box margin="medium">
-                    <Text size="large" margin="medium" weight="600">
+                    <Text size="large" margin="medium" weight={600}>
                       A digital platform to connect artists, collectors, and art
                       lovers.
                     </Text>

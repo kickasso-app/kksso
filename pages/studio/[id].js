@@ -51,10 +51,6 @@ const Studio = () => {
   return (
     <Grid fluid className={styles.studio}>
       <Col xs={12}>
-        <ChevronLeft className={styles.icon} size={16} />{" "}
-        <Link href="/studios" className={styles.backlink}>
-          BACK
-        </Link>
         {/* TO DO
          Remove this error
          Error: {"hint":null,"details":null,"code":"22P02",
@@ -73,6 +69,13 @@ const Studio = () => {
           </Box>
         ) : (
           <>
+            <ChevronLeft className={styles.icon} size={16} />{" "}
+            <Link
+              href={`/studios/` + studio.location[0].toLowerCase()}
+              className={styles.backlink}
+            >
+              BACK
+            </Link>
             <Box align="center" margin="small">
               <ImagesCarousel userId={studio.uuid} />
             </Box>
@@ -113,7 +116,7 @@ const Studio = () => {
                     color="#FFC0CB"
                     fill="#fff"
                   />{" "}
-                  {studio.city}
+                  {studio.district}
                 </h4>
                 {studio.textStudio &&
                   makeParagraphs(studio.textStudio, paragraphSeperator)}
