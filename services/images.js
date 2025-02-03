@@ -5,12 +5,15 @@ async function listImages({ userId }) {
   try {
     const { data, error } = await supabase.storage
       .from("studios-photos")
-      .list(`${userId}`);
+      .list(`${userId}`, {
+        limit: 10,
+        sortBy: { column: "name", order: "asc" },
+      });
+
     if (error) {
       throw error;
     }
     imgs = data.filter((img) => img.metadata?.size > 0);
-    const imgNames = imgs.map((image) => image.name);
     paths = imgs.map((image) => `${userId}/${image.name}`);
   } catch (error) {
     console.log("Error listing images: ", error.message);
@@ -39,11 +42,12 @@ async function downloadImage({ imgPath, postDownload }) {
 }
 
 async function downloadProfileImage({ userId }) {
-  const { paths } = await listImages({ userId });
+  // REMOVED - might be needed if profile image is not .jpg
 
-  // console.log(paths);
-  const imgPath = paths.filter((path) => path.includes("/0."))[0];
-  // console.log(imgPath);
+  // const { paths } = await listImages({ userId });
+  // const imgPath = paths.filter((path) => path.includes("/0."))[0];
+
+  const imgPath = userId + "/0.jpg";
 
   const url = await downloadImage({
     imgPath,
@@ -71,31 +75,26 @@ async function downloadImages({ userId, postDownload }) {
   return urls;
 }
 
-async function getImagesUrls({ userId }) {
-  const { paths } = await listImages({ userId });
+// NOT NEEDED
+// async function getImagesUrls({ userId }) {
+//   const { paths } = await listImages({ userId });
 
-  const urls = [];
+//   const urls = [];
 
-  for (const path of paths) {
-    const { publicURL, error } = supabase.storage
-      .from("studios-photos")
-      .getPublicUrl(path);
+//   for (const path of paths) {
+//     const { publicURL, error } = supabase.storage
+//       .from("studios-photos")
+//       .getPublicUrl(path);
 
-    if (publicURL) {
-      urls.push(publicURL);
-      // console.log(publicURL);
-    } else {
-      console.log(error);
-    }
-  }
+//     if (publicURL) {
+//       urls.push(publicURL);
+//       // console.log(publicURL);
+//     } else {
+//       console.log(error);
+//     }
+//   }
 
-  return urls;
-}
+//   return urls;
+// }
 
-export {
-  listImages,
-  downloadImage,
-  downloadImages,
-  getImagesUrls,
-  downloadProfileImage,
-};
+export { listImages, downloadImage, downloadImages, downloadProfileImage };

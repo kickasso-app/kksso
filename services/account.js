@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import { supabase } from "./supabase";
 
-import { profileFields } from "config/constants/profile";
+import { studioColumns } from "config/constants/studioColumns";
 import { calendarBounds } from "config/calendar";
 
 const AccountContext = createContext(null);
@@ -25,7 +25,7 @@ const AccountProvider = ({ children }) => {
       setLoading(true);
       let { data, error, status } = await supabase
         .from("studios")
-        .select(profileFields.join(", "))
+        .select(studioColumns.join(", "))
         .eq("uuid", user.id)
         .single();
       if (!data) {

@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { supabase } from "./supabase";
 
+import { STUDIO_PREVIEW_COLUMNS } from "config/constants/studioPreviewColumns";
+
 const StudiosContext = createContext(null);
 
 const emptyQuery = "";
@@ -56,7 +58,7 @@ const StudiosProvider = ({ children }) => {
 
     let { data: supaStudios, error } = await supabase
       .from("studios")
-      .select("*")
+      .select(STUDIO_PREVIEW_COLUMNS)
       .is("published", true)
       .is("displayed", true)
       .contains("location", [city])
@@ -83,7 +85,7 @@ const StudiosProvider = ({ children }) => {
 
     let { data: supaStudios, error } = await supabase
       .from("studios")
-      .select("*")
+      .select(STUDIO_PREVIEW_COLUMNS)
       .is("published", true)
       .is("displayed", true)
       .order("studio_id", true);
@@ -119,7 +121,7 @@ const StudiosProvider = ({ children }) => {
     setLoading(true);
     let { data: resultStudios, error } = await supabase
       .from("studios")
-      .select()
+      .select(STUDIO_PREVIEW_COLUMNS)
       .is("published", true)
       .is("displayed", true)
       .textSearch("fts", newQuery, {
@@ -191,7 +193,7 @@ const StudiosProvider = ({ children }) => {
     setLoading(true);
     let { data: featStudios, error } = await supabase
       .from("studios")
-      .select("*")
+      .select(STUDIO_PREVIEW_COLUMNS)
       .is("published", true)
       .is("displayed", true)
       .is("featured", true)

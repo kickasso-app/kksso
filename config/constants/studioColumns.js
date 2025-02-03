@@ -1,4 +1,4 @@
-export const profileFields = [
+export const studioColumns = [
   "artist",
   "location",
   "district",
