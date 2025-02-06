@@ -206,6 +206,27 @@ const StudiosProvider = ({ children }) => {
     setLoading(false);
   };
 
+  const doesStudioExist = async ({ uuid }) => {
+    let doesExist = false;
+
+    if (uuid) {
+      setLoading(true);
+
+      let { data: supaStudios, error } = await supabase
+        .from("studios")
+        .select("uuid", "referrals")
+        .eq("uuid", uuid);
+      if (supaStudios?.length) {
+        doesExist = true;
+      } else {
+        const returnError = error ?? "No studios were found";
+        setError(returnError);
+      }
+      setLoading(false);
+    }
+    return doesExist;
+  };
+
   const contextObj = {
     cities,
     studios,
@@ -222,6 +243,7 @@ const StudiosProvider = ({ children }) => {
     fetchFeaturedStudios,
     fetchStudio,
     fetchUserStudio,
+    doesStudioExist,
     loading,
     error,
   };

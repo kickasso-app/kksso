@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 import { useAuth } from "services/auth";
+import { useStudios } from "services/studios";
 
 import { Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 
@@ -19,9 +20,12 @@ import {
 } from "grommet";
 import Button from "components/Button";
 
+import { featureFlags } from "config/feature-flags";
+
 export default function Join() {
   const [loading, setLoading] = useState(false);
   const [newUser, setNewUser] = useState(false);
+  const [referralApproved, setReferralApproved] = useState(false);
   const [revealPass, setRevealPass] = useState(false);
 
   // const [forgotPassword, setForgotPassword] = useState(false);
@@ -31,14 +35,27 @@ export default function Join() {
   // const [magicLinkToastToast, setMagicLinkToast] = useState(false);
 
   const router = useRouter();
+  const { referral } = router.query;
+  const { doesStudioExist } = useStudios();
 
   const { signUp, signIn, user } = useAuth();
+
+  useEffect(async () => {
+    if (referral && featureFlags.referrals) {
+      const isApproved = await doesStudioExist({ uuid: referral });
+      setReferralApproved(isApproved);
+    } else {
+      // TO DO: remove after FF is active
+      setReferralApproved(true);
+    }
+  }, [referral]);
 
   useEffect(() => {
     if (user) {
       router.push("/profile");
     }
   }, [user]);
+
   const handleSignUp = async (event) => {
     event.preventDefault();
 
@@ -62,12 +79,7 @@ export default function Join() {
           isUserCreated = false;
           throw error;
         }
-
         // console.log(data);
-
-        // if (user) {
-        //   // router.push("/welcome?email=${user.email}");
-        // }
       } catch (error) {
         alert(error.error_description || error.message);
       } finally {
@@ -118,7 +130,7 @@ export default function Join() {
   // };
 
   const fieldMargin = { vertical: "medium" };
-  const textMargin = { bottom: "medium" };
+  const textMargin = { vertical: "small" };
 
   return (
     <Row around="xs">
@@ -187,7 +199,11 @@ export default function Join() {
               )}
             </Box>
             <Box margin={fieldMargin}>
-              <Button btnStyle="filled" type="submit">
+              <Button
+                btnStyle="filled"
+                type="submit"
+                disabled={!newUser ? false : !referralApproved}
+              >
                 {/* Still something is wrong with grommet button styles
                can't pad or size correctly */}
                 {/* <GrommetButton primary size="large" type="submit"> */}
@@ -200,14 +216,32 @@ export default function Join() {
             <Box margin={"small"}>
               {newUser ? (
                 <>
-                  <Paragraph>
+                  {!referralApproved && featureFlags.referrals && (
+                    <>
+                      <Paragraph margin={textMargin}>
+                        At the moment, we are accepting new members based on
+                        referrals from the current studios. If one of them is a
+                        friend of yours, please ask them for an invite.
+                      </Paragraph>
+                      <Paragraph margin={textMargin}>
+                        Otherwise please write us via email to request an
+                        account and let us know a bit about your work, studio
+                        practice, and why you would like to join Arti.
+                      </Paragraph>
+                    </>
+                  )}
+                  <Text weight="normal" margin={fieldMargin}>
+                    As an art lover or collector, you don't need an account to
+                    use the platform.
+                  </Text>
+                  <Paragraph margin={textMargin}>
                     Already have an account?{" "}
                     <Anchor onClick={() => setNewUser(false)}>Log In</Anchor>
                   </Paragraph>
                 </>
               ) : (
                 <>
-                  <Paragraph>
+                  <Paragraph margin={fieldMargin}>
                     Don't have an account?{" "}
                     <Anchor
                       onClick={() => {
@@ -217,13 +251,11 @@ export default function Join() {
                     >
                       Sign Up First
                     </Anchor>
-                    <br /> <br />
                   </Paragraph>
 
                   {/* {!forgotPassword && */}
-                  <Text weight="normal" margin={{ vertical: "small" }}>
+                  <Text weight="normal" margin={fieldMargin}>
                     Forgot your passoword?
-                    <br />
                   </Text>
                   <Text weight="lighter">
                     Please let us know by email and we will send you a magic

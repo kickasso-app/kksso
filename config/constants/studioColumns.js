@@ -13,6 +13,7 @@ export const studioColumns = [
   "events",
   "eventsContact",
   "eventsLink",
+  "referrals",
   // "address",
   // "directions",
   "accountType",
