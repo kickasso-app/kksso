@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
-// import PropTypes from "prop-types";
-
+// TO DO: remove emailjs
 import * as emailjs from "emailjs-com";
+import { sendEmail } from "services/sendEmail";
 
 import moment from "moment";
 
@@ -57,7 +57,7 @@ const VisitForm = ({ artistEmail, artistName, openDates, studioID }) => {
   const [isDatePast, setIsDatePast] = useState(false);
 
   // console.log(values);
-  // const [sendingEmail, setSendingEmail] = useState(false);
+  const [isSendingRequest, setIsSendingRequest] = useState(false);
   const [isEmailSent, setIsEmailSent] = useState(false);
   const [isEmailError, setIsEmailError] = useState(false);
 
@@ -171,6 +171,7 @@ const VisitForm = ({ artistEmail, artistName, openDates, studioID }) => {
   // let disabledDates = [];
 
   useEffect(() => {
+    // TO DO : remove
     emailjs.init(USER_ID);
     if (openDates?.length > 0) {
       const tempCalendarDates = prepCalendarDates(openDates);
@@ -197,7 +198,7 @@ const VisitForm = ({ artistEmail, artistName, openDates, studioID }) => {
     }
   }, []);
 
-  const handleSendEmail = () => {
+  const handleSendEmail = async () => {
     const templateParams = {
       ...values,
       request_date: readableDate(selectedDate) + " at " + selectedTime,
@@ -206,6 +207,48 @@ const VisitForm = ({ artistEmail, artistName, openDates, studioID }) => {
     // console.log(templateParams);
 
     if (SEND_REAL_EMAIL) {
+      // TO DO: use reend
+      setIsSendingRequest(true);
+      /*
+      try {
+        const emailRequestDetails = {
+          subject: "You got a new studio visit request!",
+          toEmail: [values.to_email], // , "requests@arti.my"],
+          fromEmail: "requests@arti.my",
+        };
+
+        const { emailRequestSent, errorRequest } = await sendEmail({
+          emailTemplate: "visitRequest",
+          emailDetails: emailRequestDetails,
+          emailVariables: templateParams,
+        });
+
+        const emailRequestConfirmationDetails = {
+          subject: `We sent your studio visit request to ${to_name}`,
+          toEmail: [values.requestor_email],
+          fromEmail: "requests@arti.my",
+        };
+        const { emailConfirmationSent, errorConfirmation } = await sendEmail({
+          emailTemplate: "visitRequestConfirmation",
+          emailDetails: emailRequestConfirmationDetails,
+          emailVariables: templateParams,
+        });
+
+        if (emailRequestSent && emailConfirmationSent) {
+          console.log("2 emails were sent");
+          setIsEmailSent(true);
+        }
+        if (errorRequest || errorConfirmation) {
+          console.log(errorRequest);
+          console.log(errorConfirmation);
+          setIsEmailError(errorRequest);
+        }
+      } catch (error) {
+        setIsEmailError(err);
+      } finally {
+        setIsSendingRequest(false);
+      }*/
+
       emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, USER_ID).then(
         function (response) {
           console.log(response.status, response.text);
@@ -216,6 +259,7 @@ const VisitForm = ({ artistEmail, artistName, openDates, studioID }) => {
           setIsEmailError(err);
         }
       );
+      setIsSendingRequest(false);
     }
   };
 
@@ -391,6 +435,12 @@ const VisitForm = ({ artistEmail, artistName, openDates, studioID }) => {
           {isDatePast && (
             <Text color="#ffc0cb" size="medium">
               <br /> You selected a day in the past
+            </Text>
+          )}
+
+          {isSendingRequest && (
+            <Text color="#ffc0cb" size="medium">
+              <br /> Sending request ...
             </Text>
           )}
 
