@@ -42,11 +42,9 @@ export default function Join() {
 
   useEffect(async () => {
     if (referral && featureFlags.referrals) {
+      setNewUser(true);
       const isApproved = await doesStudioExist({ uuid: referral });
       setReferralApproved(isApproved);
-    } else {
-      // TO DO: remove after FF is active
-      setReferralApproved(true);
     }
   }, [referral]);
 
@@ -224,9 +222,10 @@ export default function Join() {
                         friend of yours, please ask them for an invite.
                       </Paragraph>
                       <Paragraph margin={textMargin}>
-                        Otherwise please write us via email to request an
-                        account and let us know a bit about your work, studio
-                        practice, and why you would like to join Arti.
+                        Otherwise please write us an email at{"  "}
+                        <b>join@arti.my</b> {"  "}to request an account and let
+                        us know a bit about your work, studio practice, and why
+                        you would like to join Arti.
                       </Paragraph>
                     </>
                   )}

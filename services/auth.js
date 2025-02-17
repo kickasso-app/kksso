@@ -24,8 +24,8 @@ export function AuthProvider({ children }) {
         setUser(session?.user ?? null);
         setEvent(event ?? null);
         setLoading(false);
-        console.log(session);
-        console.log(session?.user);
+        //console.log(session);
+        //console.log(session?.user);
       }
     );
 

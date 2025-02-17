@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 
 import { useAuth } from "services/auth";
 import { useAccount } from "services/account";
+import { sendEmail } from "services/sendEmail";
 
 import Button from "components/Button";
 import {
@@ -16,6 +17,7 @@ import {
   TextInput,
 } from "grommet";
 import { featureFlags } from "config/feature-flags";
+// import { TestTemplate } from "services/emails/testTemplate";
 
 const MAX_REFERRALS = 5;
 
@@ -40,32 +42,68 @@ export default function AccountSettings({ profile }) {
     await updateAccount({ published: isPublishedNew }, user);
   }
 
-  async function addReferral(event) {
+  // const sendTestEmail = async (event) => {
+  //   event.preventDefault();
+  //   const emailDetails = {
+  //     subject: "Arti Invite Test",
+  //     toEmail: "demo",
+  //     fromEmail: "default",
+  //   };
+  //   const emailVariables = {
+  //     name: "New User Name",
+  //     referredBy: profile.artist,
+  //     joinLink: `https://arti.my/join?referral=${profile.uuid}`,
+  //   };
+  //   const { emailSent, error } = await sendEmail({
+  //     emailTemplate: "referralTemplate",
+  //     emailDetails,
+  //     emailVariables,
+  //   });
+  //   console.log("email is sent =", emailSent);
+  // };
+
+  const addReferral = async (event) => {
     event.preventDefault();
-    const name = event.target.artistname.value;
-    const email = event.target.email.value;
+    const toName = event.target.artistname.value;
+    const toEmail = event.target.email.value;
     const newReferals = [
       ...(profile?.referrals || []),
-      { name: name, email: email },
+      { name: toName, email: toEmail },
     ];
     // console.log(newReferals);
 
     try {
       setSendingInvite(true);
 
-      // TO DO: ADD SEND INVITE EMAIL
-      const { data, error } = { data: "placeholder" };
-      // console.log(data);
-      // if (error) throw error;
-    } catch (error) {
-      alert(error.error_description || error.message);
-    } finally {
-      await updateAccount({ referrals: newReferals }, user);
-      setNumOfReferrals(numOfReferrals + 1);
+      const emailDetails = {
+        subject: "Arti Invite",
+        toEmail: [toEmail],
+        fromEmail: "default",
+      };
+      const emailVariables = {
+        name: toName,
+        referredBy: profile.artist,
+        joinLink: `https://arti.my/join?referral=${user.id}`,
+      };
 
+      const { emailSent, error } = await sendEmail({
+        emailTemplate: "referralTemplate",
+        emailDetails,
+        emailVariables,
+      });
+
+      if (emailSent === true) {
+        await updateAccount({ referrals: newReferals }, user);
+        setNumOfReferrals(numOfReferrals + 1);
+
+        setSendingInvite(false);
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
       setSendingInvite(false);
     }
-  }
+  };
 
   // TO DO: add delete function to BE
   const handleDeleteUser = async () => {
@@ -217,6 +255,11 @@ export default function AccountSettings({ profile }) {
           )}
         </>
       )}
+      {/* <br />
+      <br />
+      <Button onClick={sendTestEmail} btnStyle="outline">
+        test EMail Resend
+      </Button> */}
     </Box>
   );
 }
