@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-// TO DO: remove emailjs
-import * as emailjs from "emailjs-com";
+
 import { sendEmail } from "services/sendEmail";
 
 import moment from "moment";
@@ -24,20 +23,13 @@ import Button from "./../../Button";
 
 import { calendarBounds } from "config/calendar";
 
-const SERVICE_ID = "default_service"; // process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
-const TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
-const USER_ID = process.env.NEXT_PUBLIC_EMAILJS_USER_ID;
-
-// TO DO: Remove in Production
-const SEND_REAL_EMAIL = true;
-
 const VisitForm = ({ artistEmail, artistName, openDates, studioID }) => {
   const size = useContext(ResponsiveContext);
 
   const initValues = {
     to_email: artistEmail,
     to_name: artistName,
-    requestor_email: "arti.studiosapp@gmail.com",
+    requestor_email: "requests@arti.my",
     from_name: "Requestor Name",
     visit_reason: "Reason of Visit",
     visitor_link: "Requestor Link",
@@ -171,8 +163,6 @@ const VisitForm = ({ artistEmail, artistName, openDates, studioID }) => {
   // let disabledDates = [];
 
   useEffect(() => {
-    // TO DO : remove
-    emailjs.init(USER_ID);
     if (openDates?.length > 0) {
       const tempCalendarDates = prepCalendarDates(openDates);
       const tempDatesWithTimes = prepDatesWithTimes(openDates);
@@ -199,68 +189,56 @@ const VisitForm = ({ artistEmail, artistName, openDates, studioID }) => {
   }, []);
 
   const handleSendEmail = async () => {
-    const templateParams = {
+    const emailVariables = {
       ...values,
       request_date: readableDate(selectedDate) + " at " + selectedTime,
       studio_link: "https:/arti.my/studio/" + studioID,
     };
-    // console.log(templateParams);
+    // console.log(emailVariables);
 
-    if (SEND_REAL_EMAIL) {
-      // TO DO: use reend
-      setIsSendingRequest(true);
-      /*
-      try {
-        const emailRequestDetails = {
-          subject: "You got a new studio visit request!",
-          toEmail: [values.to_email], // , "requests@arti.my"],
-          fromEmail: "requests@arti.my",
-        };
+    setIsSendingRequest(true);
 
-        const { emailRequestSent, errorRequest } = await sendEmail({
+    try {
+      const emailRequestDetails = {
+        subject: "You got a new studio visit request!",
+        toEmail: [emailVariables.to_email],
+        fromEmail: "requests@arti.my",
+      };
+
+      const { emailSent: emailRequestSent, error: errorRequest } =
+        await sendEmail({
           emailTemplate: "visitRequest",
           emailDetails: emailRequestDetails,
-          emailVariables: templateParams,
+          emailVariables,
         });
 
-        const emailRequestConfirmationDetails = {
-          subject: `We sent your studio visit request to ${to_name}`,
-          toEmail: [values.requestor_email],
-          fromEmail: "requests@arti.my",
-        };
-        const { emailConfirmationSent, errorConfirmation } = await sendEmail({
+      const emailRequestConfirmationDetails = {
+        subject: `We sent your studio visit request to ${emailVariables.to_name}`,
+        toEmail: [emailVariables.requestor_email],
+        fromEmail: "requests@arti.my",
+      };
+
+      const { emailSent: emailConfirmationSent, error: errorConfirmation } =
+        await sendEmail({
           emailTemplate: "visitRequestConfirmation",
           emailDetails: emailRequestConfirmationDetails,
-          emailVariables: templateParams,
+          emailVariables,
         });
 
-        if (emailRequestSent && emailConfirmationSent) {
-          console.log("2 emails were sent");
-          setIsEmailSent(true);
-        }
-        if (errorRequest || errorConfirmation) {
-          console.log(errorRequest);
-          console.log(errorConfirmation);
-          setIsEmailError(errorRequest);
-        }
-      } catch (error) {
-        setIsEmailError(err);
-      } finally {
-        setIsSendingRequest(false);
-      }*/
-
-      emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, USER_ID).then(
-        function (response) {
-          console.log(response.status, response.text);
-          setIsEmailSent(true);
-        },
-        function (err) {
-          console.log(err);
-          setIsEmailError(err);
-        }
-      );
+      if (emailRequestSent && emailConfirmationSent) {
+        setIsEmailSent(true);
+      }
+      if (errorRequest || errorConfirmation) {
+        // console.log(errorRequest);
+        // console.log(errorConfirmation);
+        setIsEmailError(errorRequest?.message + errorConfirmation?.message);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
       setIsSendingRequest(false);
     }
+    setIsSendingRequest(false);
   };
 
   return (

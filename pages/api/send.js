@@ -3,12 +3,16 @@ import { render } from "@react-email/render";
 
 import { TestTemplate } from "services/emails/testTemplate";
 import { ReferralTemplate } from "services/emails/referralTemplate";
+import { VisitRequest } from "services/emails/visitRequest";
+import { VisitRequestConfirmation } from "services/emails/visitRequestConfirmation";
 
-const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const emailTemplates = {
   testTemplate: TestTemplate,
   referralTemplate: ReferralTemplate,
+  visitRequest: VisitRequest,
+  visitRequestConfirmation: VisitRequestConfirmation,
 };
 
 export default async (req, res) => {
@@ -24,7 +28,7 @@ export default async (req, res) => {
     pretty: true,
   });
 
-  console.log(emailHtml);
+  // console.log(emailHtml);
 
   try {
     const toEmail =
@@ -34,17 +38,19 @@ export default async (req, res) => {
     const fromEmail =
       emailDetails.fromEmail === "default"
         ? "Arti <hello@arti.my>"
-        : emailDetails.toEmail;
+        : emailDetails.fromEmail;
 
     const { data, error } = await resend.emails.send({
-      from: "Arti <hello@arti.my>",
+      from: fromEmail,
       to: toEmail,
       subject: emailDetails.subject,
       html: emailHtml,
     });
-
+    // FOR TEST
+    // const data = { dataisok: true };
+    // const error = false;
     if (error) {
-      // console.log("Error details:", error);
+      console.log("Error details:", error);
       return res.status(400).json(error);
     }
 
