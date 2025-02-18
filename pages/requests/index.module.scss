@@ -1,11 +1,26 @@
 // @import "./styles/colors.scss";
 
-.studio {
+.requests {
   color: $color-primary;
   background-color: $color--bg-white;
   margin-top: 0.5rem;
   // padding: 3rem 0;
   text-align: center;
+
+  a.backlink {
+    text-decoration: none !important;
+    color: $color-secondary;
+  }
+
+  a.backlink:hover {
+    text-decoration: underline;
+  }
+
+  svg.icon {
+    vertical-align: top;
+    margin-right: 0.333rem;
+  }
+
   ul {
     list-style-position: inside;
     li {

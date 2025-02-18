@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 
 import { sendEmail } from "services/sendEmail";
+import { useRequests } from "services/requests";
 
 import moment from "moment";
 
@@ -23,8 +24,19 @@ import Button from "./../../Button";
 
 import { calendarBounds } from "config/calendar";
 
-const VisitForm = ({ artistEmail, artistName, openDates, studioID }) => {
+const VisitForm = ({
+  artistEmail,
+  artistName,
+  openDates,
+  studioID,
+  studio_uuid,
+}) => {
   const size = useContext(ResponsiveContext);
+  const {
+    createRequest,
+    loading: loadingInsert,
+    error: errorInsert,
+  } = useRequests();
 
   const initValues = {
     to_email: artistEmail,
@@ -188,21 +200,46 @@ const VisitForm = ({ artistEmail, artistName, openDates, studioID }) => {
     }
   }, []);
 
-  const handleSendEmail = async () => {
+  const convertToTimestampTZ = (d, t) => {
+    const [year, month, day] = d.split("-");
+    const [hours, minutes] = t.split(":");
+
+    // Create a Date object
+    const dateObj = new Date(year, month - 1, day, hours, minutes);
+
+    // Format the Date object to include the time zone offset
+    const timestamptz = dateObj.toISOString();
+
+    return timestamptz;
+  };
+
+  const handleSendRequest = async () => {
     const emailVariables = {
       ...values,
       request_date: readableDate(selectedDate) + " at " + selectedTime,
+      request_date_tz: convertToTimestampTZ(String(selectedDate), selectedTime),
       studio_link: "https:/arti.my/studio/" + studioID,
     };
-    // console.log(emailVariables);
+    console.log(emailVariables);
 
+    console.log(selectedDate + " " + selectedTime);
+    console.log(readableDate(selectedDate));
     setIsSendingRequest(true);
 
     try {
+      const { insertedRequest } = await createRequest(
+        studio_uuid,
+        emailVariables
+      );
+
+      console.log(insertedRequest);
+      console.log(loadingInsert);
+      console.log(errorInsert);
+
       const emailRequestDetails = {
         subject: "You got a new studio visit request!",
         toEmail: [emailVariables.to_email],
-        fromEmail: "requests@arti.my",
+        fromEmail: "Arti <requests@arti.my>",
       };
 
       const { emailSent: emailRequestSent, error: errorRequest } =
@@ -215,7 +252,7 @@ const VisitForm = ({ artistEmail, artistName, openDates, studioID }) => {
       const emailRequestConfirmationDetails = {
         subject: `We sent your studio visit request to ${emailVariables.to_name}`,
         toEmail: [emailVariables.requestor_email],
-        fromEmail: "requests@arti.my",
+        fromEmail: "Arti <requests@arti.my>",
       };
 
       const { emailSent: emailConfirmationSent, error: errorConfirmation } =
@@ -257,7 +294,7 @@ const VisitForm = ({ artistEmail, artistName, openDates, studioID }) => {
           // onReset={() =>
           //   setValues(initValues)
           // }
-          onSubmit={handleSendEmail}
+          onSubmit={handleSendRequest}
           validate="blur"
         >
           <Box fill="horizontal" width="medium">

@@ -217,6 +217,7 @@ const Studio = () => {
                     artistEmail={studio.email}
                     artistName={studio.artist}
                     studioID={studio.studio_id}
+                    studio_uuid={studio.uuid}
                   />
                 ) : (
                   <>

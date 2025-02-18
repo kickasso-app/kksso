@@ -15,6 +15,8 @@ const emailTemplates = {
   visitRequestConfirmation: VisitRequestConfirmation,
 };
 
+const TEST_ENV = true;
+
 export default async (req, res) => {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -40,15 +42,21 @@ export default async (req, res) => {
         ? "Arti <hello@arti.my>"
         : emailDetails.fromEmail;
 
-    const { data, error } = await resend.emails.send({
-      from: fromEmail,
-      to: toEmail,
-      subject: emailDetails.subject,
-      html: emailHtml,
-    });
+    let data = { dataisok: true };
+    let error = false;
+
+    if (TEST_ENV === false) {
+      const { data, error } = await resend.emails.send({
+        from: fromEmail,
+        to: toEmail,
+        subject: emailDetails.subject,
+        html: emailHtml,
+      });
+    } else {
+      const data = { dataisok: true };
+      const error = false;
+    }
     // FOR TEST
-    // const data = { dataisok: true };
-    // const error = false;
     if (error) {
       console.log("Error details:", error);
       return res.status(400).json(error);
