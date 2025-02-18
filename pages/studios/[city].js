@@ -7,7 +7,6 @@ import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import Link from "next/link";
 
 import { Box, Heading, Text, ResponsiveContext } from "grommet";
-import styles from "./index.module.scss";
 
 import StudiosFilter from "components/StudiosFilter";
 import SelectLocation from "components/SelectLocation";
@@ -30,7 +29,7 @@ const Studios = () => {
   return (
     <Grid fluid align="center">
       <section>
-        <Row id={styles.studio}>
+        <Row>
           <Col xs={12} md={12}>
             {loading && <img src={`/img/loader.svg`} />}
             {error && (
