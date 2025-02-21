@@ -44,7 +44,12 @@ export default function ProfileButton() {
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
       dropContent={
-        <Box width={size === "small" ? "large" : "small"} pad={"small"} onClick={() => setOpen(false)}>
+        <Box
+          width={size === "small" ? "large" : "small"}
+          pad={"small"}
+          onClick={() => setOpen(false)}
+        >
+          <NavButton path={"/requests"} label={"Requests"} />
           <NavButton path={"/profile?section=0"} label={"Profile"} />
           <NavButton path={"/profile?section=3"} label={"Settings"} />
           <Box pad={{ vertical: "small" }}>

@@ -30,9 +30,10 @@ export default function Profile() {
     }
   }, []);
 
-  useEffect(() => {
+  useEffect(async () => {
     if (user?.role === "authenticated" && !profile) {
-      fetchProfile(user);
+      await fetchProfile(user);
+      setIndex(firstIndex);
     }
   }, [session, profile]);
 
