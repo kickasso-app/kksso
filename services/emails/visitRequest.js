@@ -6,7 +6,7 @@ export const VisitRequest = ({
   from_name,
   request_date,
   visit_reason,
-  visitor_link,
+  requestor_link,
   requestor_email,
 }) => (
   <html>
@@ -23,7 +23,7 @@ export const VisitRequest = ({
         </p>
         <p>
           You can know more about {from_name}{" "}
-          <a href={visitor_link} target="_blank">
+          <a href={requestor_link} target="_blank">
             here
           </a>
           .

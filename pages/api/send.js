@@ -5,6 +5,7 @@ import { TestTemplate } from "services/emails/testTemplate";
 import { ReferralTemplate } from "services/emails/referralTemplate";
 import { VisitRequest } from "services/emails/visitRequest";
 import { VisitRequestConfirmation } from "services/emails/visitRequestConfirmation";
+import { RequestResponse } from "services/emails/responseTemplate";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -13,6 +14,7 @@ const emailTemplates = {
   referralTemplate: ReferralTemplate,
   visitRequest: VisitRequest,
   visitRequestConfirmation: VisitRequestConfirmation,
+  responseTemplate: RequestResponse,
 };
 
 const TEST_ENV = true;

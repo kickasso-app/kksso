@@ -19,9 +19,10 @@ const AccountProvider = ({ children }) => {
    */
 
   const fetchProfile = async (user) => {
-    setIsUpdateSuccess(false);
-    setIsUpdateError(false);
-    try {
+    if (!profile) {
+      setIsUpdateSuccess(false);
+      setIsUpdateError(false);
+
       setLoading(true);
       let { data, error, status } = await supabase
         .from("studios")
@@ -32,14 +33,12 @@ const AccountProvider = ({ children }) => {
         data = await createProfile(user);
       }
       setProfile({ ...data });
+      console.log({ ...data });
 
       if (error && status !== 406) {
         setError(error);
         console.log(error);
       }
-    } catch (error) {
-      alert(error.message);
-    } finally {
       setLoading(false);
     }
   };
@@ -50,22 +49,31 @@ const AccountProvider = ({ children }) => {
 
   const createProfile = async (user) => {
     const randomId = 10000 + Math.floor(Math.random() * 10000);
-    const newRow = {
+    const newProfile = {
       uuid: user.id,
       studio_id: randomId,
       email: user.email,
-      location: "",
-      district: "",
-      artist: "",
-      styles: "",
+      created_at: new Date().toISOString(),
     };
+    try {
+      const response = await fetch("/api/create-studio", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ newProfile }),
+      });
 
-    const { newProfile, error } = await supabase
-      .from("studios")
-      .insert([newRow])
-      .select();
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to create studio");
+      }
 
-    return newProfile;
+      return await response.json();
+    } catch (error) {
+      console.error("Error creating studio:", error);
+      throw error;
+    }
   };
 
   /**
@@ -78,17 +86,18 @@ const AccountProvider = ({ children }) => {
     setLoading(true);
 
     if (updates) {
-      let { error } = await supabase
+      let { data, error } = await supabase
         .from("studios")
-        .update(updates, { returning: "minimal" })
-        .eq("uuid", user.id);
+        .update(updates)
+        .eq("uuid", user.id)
+        .select();
 
       if (error) {
         setIsUpdateError(true);
         setLoading(false);
         throw error;
       } else {
-        await fetchProfile(user);
+        await setProfile(data?.[0]);
         setIsUpdateSuccess(true);
       }
     }
@@ -122,3 +131,54 @@ const AccountProvider = ({ children }) => {
 const useAccount = () => useContext(AccountContext);
 
 export { useAccount, AccountContext, AccountProvider };
+
+// TODO B4 MERGE: remove
+// const createProfileOld = async (user) => {
+//   const randomId = 10000 + Math.floor(Math.random() * 10000);
+//   const newRow = {
+//     uuid: user.id,
+//     studio_id: randomId,
+//     email: user.email,
+//     location: "",
+//     district: "",
+//     artist: "",
+//     styles: "",
+//   };
+
+//   const { newProfile, error } = await supabase
+//     .from("studios")
+//     .insert([newRow])
+//     .select();
+
+//   return newProfile;
+// };
+
+// update count using API
+
+// try {
+//   const response = await fetch("/api/update-studio", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({ updates, userId: user.id }),
+//   });
+
+//   if (!response.ok) {
+//     const errorData = await response.json();
+//     setIsUpdateError(true);
+//     throw new Error(errorData.message || "Failed to update studio");
+//   }
+
+//   const updatedProfile = await response.json();
+//   console.log(updatedProfile);
+//   setProfile(updatedProfile.user);
+//   setIsUpdateSuccess(true);
+
+//   return updatedProfile;
+// } catch (error) {
+//   console.error("Error updating studio:", error);
+//   throw error;
+// } finally {
+//   setLoading(false);
+// }

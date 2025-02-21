@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState } from "react";
 import { supabase } from "./supabase";
 
 const RequestsContext = createContext(null);
@@ -25,7 +25,7 @@ const RequestsProvider = ({ children }) => {
       .from("requests_test")
       .select("*")
       .eq("studio_uuid", id)
-      .order("last_update", { ascending: false });
+      .order("request_date_tz", { ascending: false });
     if (supaRequests?.length) {
       // console.log(supaRequests);
       setRequests(supaRequests);
@@ -47,8 +47,8 @@ const RequestsProvider = ({ children }) => {
         .eq("request_id", id)
         .single();
       if (error) {
-        throw error;
         setError(error.message);
+        throw error;
       }
 
       setRequest(supaRequest);
@@ -59,6 +59,7 @@ const RequestsProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
+    // setLoading(false);
   };
 
   /**
@@ -66,9 +67,14 @@ const RequestsProvider = ({ children }) => {
    */
 
   const createRequest = async (id, request) => {
+    setLoading(true);
+    let requestCreated = false;
+    let errorMsg = false;
     const reqUUID = self.crypto.randomUUID();
+    const guestUUID = self.crypto.randomUUID();
     const {
       studio_name,
+      from_name,
       request_date,
       requestor_email,
       requestor_link,
@@ -78,8 +84,10 @@ const RequestsProvider = ({ children }) => {
 
     const newRequest = {
       request_id: reqUUID,
+      guest_id: guestUUID,
       studio_uuid: id,
       has_response: false,
+      requestor_name: from_name,
       studio_name,
       requestor_email,
       request_date,
@@ -93,18 +101,27 @@ const RequestsProvider = ({ children }) => {
       // response_date,: default NULL,
     };
 
-    const { data: insertedRequest, error } = await supabase
-      .from("requests_test")
-      .insert([newRequest])
-      .select();
+    try {
+      const response = await fetch("/api/create-request", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ newRequest }),
+      });
 
-    if (error) {
-      setError(true);
-      setLoading(false);
-      throw error;
+      if (response.ok) {
+        requestCreated = true;
+      } else {
+        setError(true);
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to create request");
+      }
+    } catch (error) {
+      console.error("Error creating request:", error);
     }
-
-    return insertedRequest;
+    setLoading(false);
+    return { requestCreated, error: { message: errorMsg } };
   };
 
   /**
@@ -117,22 +134,25 @@ const RequestsProvider = ({ children }) => {
     setLoading(true);
 
     if (updates) {
-      let { error } = await supabase
+      let { data, error } = await supabase
         .from("requests_test")
-        .update(updates, { returning: "minimal" })
-        .eq("request_id", id);
+        .update(updates)
+        .eq("request_id", id)
+        .select();
 
       if (error) {
         setError(true);
         setLoading(false);
+        return { error };
         throw error;
       } else {
-        await fetchRequests(studio_id);
+        await setRequest(data?.[0]);
         setIsUpdateSuccess(true);
       }
     }
 
     setLoading(false);
+    return { error: false };
   };
 
   const contextObj = {
@@ -157,17 +177,17 @@ const useRequests = () => useContext(RequestsContext);
 
 export { useRequests, RequestsContext, RequestsProvider };
 
-const sample = {
-  request_id: "1c546bb6-79f9-498e-8dd4-889e9d7a0ad9",
-  request_date: "2025-03-04 at 13:00",
-  request_date_tz: "",
-  reponse: null,
-  studio_uuid: "a67a18aa-551c-4ecf-9281-8f1f6b596ef2",
-  has_response: false,
-  response_date: null,
-  messages: null,
-  studio_name: "Should be last",
-  last_update: "2025-02-17T15:43:40.972084+00:00",
-  requestor_email: null,
-  requestor_link: null,
-};
+// const sample = {
+//   request_id: "1c546bb6-79f9-498e-8dd4-889e9d7a0ad9",
+//   request_date: "2025-03-04 at 13:00",
+//   request_date_tz: "",
+//   reponse: null,
+//   studio_uuid: "a67a18aa-551c-4ecf-9281-8f1f6b596ef2",
+//   has_response: false,
+//   response_date: null,
+//   messages: null,
+//   studio_name: "Should be last",
+//   last_update: "2025-02-17T15:43:40.972084+00:00",
+//   requestor_email: null,
+//   requestor_link: null,
+// };

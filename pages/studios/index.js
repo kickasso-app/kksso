@@ -18,7 +18,7 @@ const Studios = () => {
   return (
     <Grid fluid align="center">
       <section>
-        <Row id={styles.studio}>
+        <Row>
           <Col xs={12} md={12}>
             {loading || !studios.length ? (
               <img src={`/img/loader.svg`} />

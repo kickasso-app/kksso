@@ -32,11 +32,7 @@ const VisitForm = ({
   studio_uuid,
 }) => {
   const size = useContext(ResponsiveContext);
-  const {
-    createRequest,
-    loading: loadingInsert,
-    error: errorInsert,
-  } = useRequests();
+  const { createRequest } = useRequests();
 
   const initValues = {
     to_email: artistEmail,
@@ -44,7 +40,7 @@ const VisitForm = ({
     requestor_email: "requests@arti.my",
     from_name: "Requestor Name",
     visit_reason: "Reason of Visit",
-    visitor_link: "Requestor Link",
+    requestor_link: "Requestor Link",
     request_date: "",
   };
 
@@ -216,25 +212,20 @@ const VisitForm = ({
   const handleSendRequest = async () => {
     const emailVariables = {
       ...values,
+      studio_name: artistName,
       request_date: readableDate(selectedDate) + " at " + selectedTime,
       request_date_tz: convertToTimestampTZ(String(selectedDate), selectedTime),
       studio_link: "https:/arti.my/studio/" + studioID,
     };
-    console.log(emailVariables);
 
-    console.log(selectedDate + " " + selectedTime);
-    console.log(readableDate(selectedDate));
+    // console.log(emailVariables);
+    // console.log(selectedDate + " " + selectedTime);
+    // console.log(readableDate(selectedDate));
     setIsSendingRequest(true);
 
     try {
-      const { insertedRequest } = await createRequest(
-        studio_uuid,
-        emailVariables
-      );
-
-      console.log(insertedRequest);
-      console.log(loadingInsert);
-      console.log(errorInsert);
+      const { requestCreated: requestinDB, error: errorInsertDB } =
+        await createRequest(studio_uuid, emailVariables);
 
       const emailRequestDetails = {
         subject: "You got a new studio visit request!",
@@ -262,13 +253,18 @@ const VisitForm = ({
           emailVariables,
         });
 
-      if (emailRequestSent && emailConfirmationSent) {
+      if (requestinDB && emailRequestSent && emailConfirmationSent) {
         setIsEmailSent(true);
       }
-      if (errorRequest || errorConfirmation) {
-        // console.log(errorRequest);
-        // console.log(errorConfirmation);
-        setIsEmailError(errorRequest?.message + errorConfirmation?.message);
+      if (errorRequest || errorConfirmation || errorInsertDB) {
+        console.log(
+          errorDB?.message +
+            " " +
+            errorRequest?.message +
+            " " +
+            errorConfirmation?.message
+        );
+        setIsEmailError(true);
       }
     } catch (error) {
       console.log(error);
@@ -378,7 +374,7 @@ const VisitForm = ({
             />
           </FormField>
           <FormField
-            name="visitor_link"
+            name="requestor_link"
             htmlfor="text-input-id"
             label="Social or professional link"
             required
@@ -389,7 +385,7 @@ const VisitForm = ({
             type="url"
           >
             <MaskedInput
-              name="visitor_link"
+              name="requestor_link"
               mask={[
                 { regexp: /^[\w\-_.]+$/, placeholder: "https" },
                 { fixed: "://" },

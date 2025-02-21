@@ -14,7 +14,8 @@ const themeChanges = {
       // overriding colors
       brand: "#FFC0CB",
       "accent-1": "#C0FFF4",
-      "dark-1": "4b4b4b",
+      "dark-1": "#4b4b4b",
+      "brand-dark": "#D78EB7",
       control: "accent-1",
       focus: "#FFF",
       icon: "#FFC0CB",

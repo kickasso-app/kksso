@@ -13,21 +13,20 @@ import AccountSettings from "components/forms/AccountSettings";
 
 export default function Profile() {
   const router = useRouter();
-
   const { session, user, event } = useAuth();
   const { profile, fetchProfile, loading, error } = useAccount();
 
   const [index, setIndex] = useState(0);
 
+  const firstIndex = parseInt(router?.query?.section) ?? 0;
   const onActive = (nextIndex) => {
     router.push(`/profile/?section=${nextIndex}`, undefined, { shallow: true });
-    fetchProfile(user);
     setIndex(nextIndex);
   };
 
   useEffect(() => {
-    if (router?.query?.section) {
-      onActive(parseInt(router.query.section));
+    if (router.query?.section) {
+      setIndex(parseInt(router.query.section));
     }
   }, []);
 
@@ -56,10 +55,10 @@ export default function Profile() {
       {!loading && !error && user && (
         <>
           {user.role === "authenticated" ? (
-            <Tabs activeIndex={index} onActive={onActive}>
+            <Tabs activeIndex={firstIndex} onActive={onActive}>
               <Tab title="Profile">
                 <Box pad="medium">
-                  <ProfileForm profile={profile} goToTab={setIndex} />
+                  <ProfileForm profile={profile} goToTab={onActive} />
                 </Box>
               </Tab>
               <Tab title="Photos">
