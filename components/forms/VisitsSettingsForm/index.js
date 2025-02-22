@@ -305,59 +305,7 @@ ex: Rule 1; Rule 2; Rule 3 (semi-colon seperated)"
               ex: Rule 1; Rule 2; Rule 3 (semi-colon seperated){" "}
             </Text>
             <br />
-            <Heading level="3" size="medium" margin={fieldMargin}>
-              Events
-            </Heading>
 
-            <Box margin={fieldMargin}>
-              <Text>
-                If you want to host a public event like an open studio, mini
-                exhibition or workshop, you can add it here. Please include the
-                event's title, date and a short description using the following
-                format: <br />
-                <b> Event title / Event dates(s) / Event description </b>
-              </Text>
-            </Box>
-
-            <FormField label="Your events" name="events" margin={fieldMargin}>
-              <TextArea
-                name="events"
-                placeholder="e.g. Painting workshop / 20 May 6-8pm / It's workshop for beginners "
-                fill
-                maxLength={1200}
-                rows={4}
-              />
-            </FormField>
-
-            <FormField
-              name="eventsLink"
-              label="Link for the event (if available)"
-              margin={fieldMargin}
-            >
-              <TextInput
-                name="eventsLink"
-                placeholder="e.g. https://www.studio-event-link.com"
-              />
-            </FormField>
-            <br />
-            <br />
-            <Box margin={textMargin}>
-              <Text>
-                How can visitors or participants can contact you and RSVP for
-                the event if needed?
-              </Text>
-            </Box>
-
-            <FormField
-              name="eventsContact"
-              label="Contact channel for event"
-              margin={fieldMargin}
-            >
-              <TextInput
-                name="eventsContact"
-                placeholder="e.g. your email or instagram link. This will be shown publicly on your profile."
-              />
-            </FormField>
             <br />
             <br />
             <Box direction="row" gap="medium">

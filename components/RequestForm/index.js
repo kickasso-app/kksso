@@ -200,6 +200,9 @@ export default function RequestForm({
       >
         <Box gap="medium">
           <FormField name="message" required={values?.status === "Approved"}>
+            <Text size="small" color="dark-3">
+              Your message (* required if accepting)
+            </Text>
             <TextArea
               name="message"
               placeholder="Enter your response message...&#10;. &#10;Please include your address in case you accept the visit request"
@@ -217,7 +220,7 @@ export default function RequestForm({
               primary
               color={submitColors["Approve"]}
               icon={<Checkmark size="small" />}
-              label="Approve"
+              label="Accept"
               disabled={isResponding || !values.message}
               onClick={() => setValues({ ...values, status: "Approved" })}
               width="large"

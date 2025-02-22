@@ -70,9 +70,9 @@ const RequestsProvider = ({ children }) => {
     setLoading(true);
     let requestCreated = false;
     let errorMsg = false;
-    const reqUUID = self.crypto.randomUUID();
     const guestUUID = self.crypto.randomUUID();
     const {
+      request_id,
       studio_name,
       from_name,
       request_date,
@@ -83,7 +83,7 @@ const RequestsProvider = ({ children }) => {
     } = request;
 
     const newRequest = {
-      request_id: reqUUID,
+      request_id,
       guest_id: guestUUID,
       studio_uuid: id,
       has_response: false,
@@ -93,7 +93,7 @@ const RequestsProvider = ({ children }) => {
       request_date,
       request_date_tz,
       requestor_link,
-      messages: [`Visit Reason: ` + visit_reason],
+      messages: [{ reason: visit_reason }],
       // Default Values in DB
       // last_update: now(),
       // has_response: FALSE,

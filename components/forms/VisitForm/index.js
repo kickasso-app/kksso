@@ -210,12 +210,15 @@ const VisitForm = ({
   };
 
   const handleSendRequest = async () => {
+    const request_id = self.crypto.randomUUID();
+
     const emailVariables = {
       ...values,
       studio_name: artistName,
       request_date: readableDate(selectedDate) + " at " + selectedTime,
       request_date_tz: convertToTimestampTZ(String(selectedDate), selectedTime),
       studio_link: "https:/arti.my/studio/" + studioID,
+      request_id,
     };
 
     // console.log(emailVariables);
@@ -258,7 +261,7 @@ const VisitForm = ({
       }
       if (errorRequest || errorConfirmation || errorInsertDB) {
         console.log(
-          errorDB?.message +
+          errorInsertDB?.message +
             " " +
             errorRequest?.message +
             " " +

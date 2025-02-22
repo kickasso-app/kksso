@@ -17,7 +17,7 @@ const emailTemplates = {
   responseTemplate: RequestResponse,
 };
 
-const TEST_ENV = true;
+const TEST_ENV = false;
 
 export default async (req, res) => {
   if (req.method !== "POST") {
@@ -55,10 +55,10 @@ export default async (req, res) => {
         html: emailHtml,
       });
     } else {
+      // FOR TEST
       const data = { dataisok: true };
       const error = false;
     }
-    // FOR TEST
     if (error) {
       console.log("Error details:", error);
       return res.status(400).json(error);

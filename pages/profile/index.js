@@ -9,6 +9,7 @@ import { Box, Tab, Tabs } from "grommet";
 import ProfileForm from "components/forms/ProfileForm";
 import PhotosForm from "components/forms/PhotosForm";
 import VisitsSettingsForm from "components/forms/VisitsSettingsForm";
+import EventsSettingsForm from "components/forms/EventsSettingsForm";
 import AccountSettings from "components/forms/AccountSettings";
 
 export default function Profile() {
@@ -18,24 +19,22 @@ export default function Profile() {
 
   const [index, setIndex] = useState(0);
 
-  const firstIndex = parseInt(router?.query?.section) ?? 0;
+  const firstIndex = parseInt(router?.query?.section) || 0;
+  // console.log(firstIndex);
+
   const onActive = (nextIndex) => {
     router.push(`/profile/?section=${nextIndex}`, undefined, { shallow: true });
     setIndex(nextIndex);
   };
 
-  useEffect(() => {
-    if (router.query?.section) {
-      setIndex(parseInt(router.query.section));
-    }
-  }, []);
-
   useEffect(async () => {
     if (user?.role === "authenticated" && !profile) {
       await fetchProfile(user);
+    }
+    if (profile && router) {
       setIndex(firstIndex);
     }
-  }, [session, profile]);
+  }, [router, session, profile]);
 
   if (!session && event !== "SIGNED_OUT") {
     router.push("/join");
@@ -70,6 +69,11 @@ export default function Profile() {
               <Tab title="Visits">
                 <Box pad="medium">
                   <VisitsSettingsForm profile={profile} />
+                </Box>
+              </Tab>
+              <Tab title="Events">
+                <Box pad="medium">
+                  <EventsSettingsForm profile={profile} />
                 </Box>
               </Tab>
               <Tab title="Settings">
