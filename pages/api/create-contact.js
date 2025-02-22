@@ -23,37 +23,33 @@ export default async (req, res) => {
 
   try {
     // Destructure and validate incoming data
-    const { newRequest } = req.body;
+    const { newContact } = req.body;
 
-    // console.log(newProfile);
+    console.log(newContact);
     // Basic validation
-    if (
-      !newRequest?.request_id ||
-      !newRequest?.studio_uuid ||
-      !newRequest?.requestor_email
-    ) {
+    if (!newContact?.request_id || !newContact?.name || !newContact?.email) {
       return res.status(400).json({
-        message: "Email and IDs are required",
+        message: "Email, name and ID are required",
       });
     }
 
     // Perform insert operation
     const { error } = await supabase
-      .from("requests")
-      .insert([newRequest], { returning: "minimal" });
+      .from("contacts")
+      .insert([newContact], { returning: "minimal" });
 
     // Handle potential Supabase errors
     if (error) {
       console.error("Supabase insertion error:", error);
       return res.status(500).json({
-        message: "Failed to create request",
+        message: "Failed to create contact",
         error: error.message,
       });
     }
 
     // Successful response
     return res.status(201).json({
-      message: "Request created successfully",
+      message: "Contact created successfully",
     });
   } catch (err) {
     // Catch any unexpected errors

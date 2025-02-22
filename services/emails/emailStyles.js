@@ -1,7 +1,6 @@
 export const emailStyles = `
     h1 {
     font-family: Helvetica;
-    line-height: 20px;
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
     padding: 0;
@@ -9,9 +8,11 @@ export const emailStyles = `
     border: 0;
     box-sizing: border-box;
     font-weight: 600;
+    line-height: 2.25rem;
+    font-size: 1.75rem;
     margin-bottom: 2rem;
     margin-top: 2rem;
-    color: #222;
+    color: #4b4b4b;
     }
 
     p {

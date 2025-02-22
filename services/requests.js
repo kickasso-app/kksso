@@ -1,6 +1,8 @@
 import { createContext, useContext, useState } from "react";
 import { supabase } from "./supabase";
 
+import { createContact } from "./contacts";
+
 const RequestsContext = createContext(null);
 
 const RequestsProvider = ({ children }) => {
@@ -22,7 +24,7 @@ const RequestsProvider = ({ children }) => {
     // console.log("fetching Requests");
 
     let { data: supaRequests, error } = await supabase
-      .from("requests_test")
+      .from("requests")
       .select("*")
       .eq("studio_uuid", id)
       .order("request_date_tz", { ascending: false });
@@ -41,7 +43,7 @@ const RequestsProvider = ({ children }) => {
     // console.log("fetching Requests");
     try {
       let { data: supaRequest, error } = await supabase
-        .from("requests_test")
+        .from("requests")
         .select("*")
         .eq("studio_uuid", studio_uuid)
         .eq("request_id", id)
@@ -69,6 +71,7 @@ const RequestsProvider = ({ children }) => {
   const createRequest = async (id, request) => {
     setLoading(true);
     let requestCreated = false;
+    let isContactCreated = false;
     let errorMsg = false;
     const guestUUID = self.crypto.randomUUID();
     const {
@@ -120,6 +123,13 @@ const RequestsProvider = ({ children }) => {
     } catch (error) {
       console.error("Error creating request:", error);
     }
+
+    if (requestCreated === true) {
+      isContactCreated = await createContact(newRequest);
+      // console.log(isContactCreated);
+      // TODO: add isContactCreated check
+    }
+
     setLoading(false);
     return { requestCreated, error: { message: errorMsg } };
   };
@@ -135,7 +145,7 @@ const RequestsProvider = ({ children }) => {
 
     if (updates) {
       let { data, error } = await supabase
-        .from("requests_test")
+        .from("requests")
         .update(updates)
         .eq("request_id", id)
         .select();
