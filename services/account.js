@@ -19,10 +19,8 @@ const AccountProvider = ({ children }) => {
    */
 
   const fetchProfile = async (user) => {
+    resetNotification();
     if (!profile) {
-      setIsUpdateSuccess(false);
-      setIsUpdateError(false);
-
       setLoading(true);
       let { data, error, status } = await supabase
         .from("studios")
@@ -33,7 +31,7 @@ const AccountProvider = ({ children }) => {
         data = await createProfile(user);
       }
       setProfile({ ...data });
-      // console.log({ ...data });
+      console.log({ ...data });
 
       if (error && status !== 406) {
         setError(error);
@@ -81,32 +79,34 @@ const AccountProvider = ({ children }) => {
    */
 
   const updateAccount = async (updates, user) => {
-    setIsUpdateError(false);
-    setIsUpdateSuccess(false);
-    setLoading(true);
-
+    resetNotification();
+    setLoading(false);
     if (updates) {
-      let { data, error } = await supabase
+      setLoading(true);
+      const { data, error } = await supabase
         .from("studios")
         .update(updates)
         .eq("uuid", user.id)
         .select();
-
-      if (error) {
+      if (data) {
+        setProfile(data?.[0]);
+        setIsUpdateSuccess(true);
+      } else if (error) {
         setIsUpdateError(true);
         setLoading(false);
         throw error;
-      } else {
-        await setProfile(data?.[0]);
-        setIsUpdateSuccess(true);
       }
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   const updateCalendarDate = (date) => {
     setCalendarDate(date);
+  };
+
+  const resetNotification = () => {
+    setIsUpdateSuccess(false);
+    setIsUpdateError(false);
   };
 
   const contextObj = {
@@ -114,6 +114,7 @@ const AccountProvider = ({ children }) => {
     calendarDate,
     fetchProfile,
     updateAccount,
+    resetNotification,
     updateCalendarDate,
     isUpdateSuccess,
     isUpdateError,

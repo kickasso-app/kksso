@@ -20,22 +20,32 @@ import {
   Anchor,
 } from "grommet";
 
-export default function ProfileForm({ profile, goToTab }) {
+export default function ProfileForm({
+  profile: { artist, textMini, textLong, styles, website, instagram },
+  goToTab,
+}) {
   const { user } = useAuth();
 
   const { updateAccount, loading, isUpdateSuccess, isUpdateError } =
     useAccount();
 
-  const [values, setValues] = useState(profile);
+  const [values, setValues] = useState({
+    artist,
+    textMini,
+    textLong,
+    styles,
+    website,
+    instagram,
+  });
 
-  async function updateProfile(event) {
+  const updateProfile = async (event) => {
     const updates = {
       ...values,
       // updated_at: new Date(),
     };
 
     await updateAccount(updates, user);
-  }
+  };
 
   const fieldMargin = { vertical: "large" };
   const textMargin = { bottom: "medium" };
