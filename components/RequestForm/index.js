@@ -13,6 +13,7 @@ import {
 } from "grommet";
 import { Checkmark, Close } from "grommet-icons";
 import { sendEmail } from "services/sendEmail";
+import NotificationLayer from "components/NotificationLayer";
 
 const submitColors = {
   Reject: "brand",
@@ -240,22 +241,29 @@ export default function RequestForm({
           </Box>
         </Box>
       </Form>
+
       {!isResponding && (
         <>
           {isUpdateSuccess && (
-            <Notification
+            <NotificationLayer
               toast
               status="normal"
               title="Your response was sent."
+              time={1500}
             />
           )}
           {isUpdateError && (
-            <Notification
+            <NotificationLayer
               toast
               status="warning"
               title="Your response was not sent!"
-              message="We couldn't send your response this time. Please try again."
-              // onClose={() => {}}
+              message={
+                <Text>
+                  <br />
+                  We couldn't send your response this time. Please try again.
+                </Text>
+              }
+              time={2000}
             />
           )}
         </>

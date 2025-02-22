@@ -31,7 +31,7 @@ const AccountProvider = ({ children }) => {
         data = await createProfile(user);
       }
       setProfile({ ...data });
-      console.log({ ...data });
+      // console.log({ ...data });
 
       if (error && status !== 406) {
         setError(error);

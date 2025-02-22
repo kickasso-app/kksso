@@ -17,7 +17,7 @@ const emailTemplates = {
   responseTemplate: RequestResponse,
 };
 
-const TEST_ENV = false;
+const TEST_ENV = true;
 
 export default async (req, res) => {
   if (req.method !== "POST") {

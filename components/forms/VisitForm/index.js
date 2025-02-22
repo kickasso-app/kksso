@@ -23,6 +23,7 @@ import {
 import Button from "./../../Button";
 
 import { calendarBounds } from "config/calendar";
+import NotificationLayer from "components/NotificationLayer";
 
 const VisitForm = ({
   artistEmail,
@@ -459,32 +460,28 @@ const VisitForm = ({
           )}
 
           {isEmailSent ? (
-            <Notification
-              toast={{
-                autoClose: false,
-                position: "bottom-right",
-              }}
+            <NotificationLayer
               status="normal"
               title="Your visit request was sent!"
               message={
                 <Text>
                   <br />
-                  Please wait to hear back from the artist's studio to confirm
-                  the visit. We sent you an email with the request details.
+                  Please wait to hear back from us when the studio responds.
                 </Text>
               }
               onClose={() => setIsEmailSent(false)}
             />
           ) : (
             isEmailError && (
-              <Notification
+              <NotificationLayer
                 toast
                 status="warning"
                 title="We couldn't send your request!"
                 message={
                   <Text>
                     <br />
-                    Please try again, and if it doesn't work, reach out to us.
+                    Please try again, and reach out to us if you face an issue
+                    again.{" "}
                   </Text>
                 }
                 onClose={() => setIsEmailError(false)}
