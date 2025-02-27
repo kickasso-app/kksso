@@ -1,4 +1,4 @@
-const Start = "2024-05-16";
-const End = "2025-06-01";
+const Start = "2025-02-01";
+const End = "2026-03-01";
 
 export const calendarBounds = { Start, End };

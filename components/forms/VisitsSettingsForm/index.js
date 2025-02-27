@@ -23,11 +23,16 @@ import {
 import Button from "components/Button";
 
 import { calendarBounds } from "config/calendar";
+import WeekdayTimeSelector from "./weekday-time-selector";
+import DateRangeSelector from "./date-range-selector";
+import StudioSettingsForm from "./StudioSettingsForm";
+
+import { parseAvailability } from "services/helpers/parseAvailability";
 
 export default function VisitsSettingsForm({
   profile: {
     visitRules,
-    openDates,
+    availability,
     hasOpenDates,
     textStudio,
     location,
@@ -35,8 +40,6 @@ export default function VisitsSettingsForm({
     events,
     eventsLink,
     eventsContact,
-    // address,
-    // directions,
   },
 }) {
   const { user } = useAuth();
@@ -51,73 +54,66 @@ export default function VisitsSettingsForm({
 
   const [values, setValues] = useState({
     visitRules,
-    openDates,
     location: location.join(","),
     district,
     textStudio,
     events,
     eventsLink,
     eventsContact,
-    // directions,
-    // address,
   });
+  const [parsedDates, setParsedDates] = useState({});
 
-  const [selectedTimes, setSelectedTimes] = useState([]);
+  const [monthlyOpen, setMonthlyOpen] = useState([]);
+  const [monthlyDisabled, setMonthlyDisabled] = useState([]);
 
-  const getSelectedTimes = (date, dates) => {
-    const timeData = dates?.length
-      ? dates
-          .filter((s) => s.startsWith(date))
-          .map((d) => d.split(" ")[1])
-          .sort()
-      : [];
-    return timeData;
+  const toIsoDate = (date) => moment(date, "DD/MM/YYYY").format("YYYY-MM-DD");
+
+  // const readableDate = (date) =>
+  //   moment(date, "YYYY-MM-DD hh:mm").format("D MMMM");
+
+  const formatDisabled = (a) =>
+    a?.unavailableDates.map((x) => x.map(toIsoDate));
+
+  const onChangeMonth = (date) => {
+    const month = new Date(date).getMonth() + 1;
+    const m = month.toString();
+    const dates = parsedDates;
+
+    if (dates.hasOwnProperty(m)) {
+      // console.log(dates);
+
+      const tempOpen = dates[m].availableDates.map(
+        (item) => toIsoDate(item.date) + "T13:52:26.780Z"
+      );
+
+      // console.log(tempOpen);
+      setMonthlyOpen(tempOpen);
+
+      const tempDisabled = dates[m].unavailableDates.map((item) =>
+        toIsoDate(item.date)
+      );
+
+      setMonthlyDisabled(tempDisabled);
+    }
+  };
+
+  const getParsedDates = (availability) => {
+    if (availability && Object.keys(parsedDates).length === 0) {
+      // const exampleAvailaibity = {
+      //   openTimes: [{ days: ["Wednesday", "Tuesday"], times: [9, 11, 13, 14] }],
+      //   unavailableDates: [["11/03/2025", "14/03/2025"]],
+      // };
+
+      const parsedAvail = parseAvailability(availability);
+      return parsedAvail;
+    }
   };
 
   useEffect(() => {
-    if (!openDates) {
-      updateAccount({ openDates: [] }, user);
-    } else if (openDates?.length > 0) {
-      const tempTimes = getSelectedTimes(calendarDate, openDates);
-      setSelectedTimes(tempTimes);
+    if (availability && Object.keys(parsedDates).length === 0) {
+      setParsedDates(getParsedDates(availability));
     }
-  }, [calendarDate]);
-
-  const onChangeTimes = (times) => {
-    setSelectedTimes(times.sort());
-  };
-
-  const areTimesDifferent = () => {
-    const oldTimes = getSelectedTimes(calendarDate, openDates);
-    return JSON.stringify(selectedTimes) !== JSON.stringify(oldTimes);
-  };
-
-  const onChangeDate = async (date) => {
-    const isUpdateNeeded = areTimesDifferent();
-
-    if (isUpdateNeeded) {
-      // console.log("update needed");
-      const newDates = updateOpenDates();
-      updateAccount({ openDates: newDates }, user);
-    }
-    updateCalendarDate(date);
-  };
-
-  const updateOpenDates = () => {
-    // remove old times
-    // then add new ones
-    const dates = openDates.filter((s) => !s.startsWith(calendarDate));
-
-    selectedTimes.forEach((t) => dates.push(calendarDate + " " + t));
-
-    const newDates = dates.sort();
-    return newDates;
-  };
-
-  const readableDate = (date) =>
-    moment(date, "YYYY-MM-DD hh:mm").format("D MMMM");
-
-  // const disabledDates = [["2023-09-01", "2023-09-15"]];
+  }, [availability, parsedDates]);
 
   async function updateProfile(event) {
     const newDates = updateOpenDates();
@@ -132,16 +128,42 @@ export default function VisitsSettingsForm({
   }
 
   const fieldMargin = { vertical: "large" };
-  const textMargin = { bottom: "medium" };
+  const textMargin = { vertical: "medium" };
 
   return (
     <Box fill align="center" justify="center">
       <Box width="large" pad="medium" gap="medium">
         <Heading level="3" size="medium" margin={fieldMargin}>
-          Your Visit Settings
+          Your Studio
         </Heading>
+        {user && (
+          <StudioSettingsForm
+            profile={{ visitRules, textStudio, location, district }}
+          />
+        )}
+        {/* <Heading level="3" size="medium" margin={fieldMargin}>
+          Your Visit Settings
+        </Heading> */}
 
         <Grid fluid>
+          <Heading level="3" size="medium" margin={fieldMargin}>
+            Your Visit Times
+          </Heading>
+
+          <Heading level={4} size="medium" margin={textMargin}>
+            Weekly Availability
+          </Heading>
+          <WeekdayTimeSelector />
+
+          <Heading level={4} margin={textMargin}>
+            Unavailable Dates
+          </Heading>
+          <Text margin={textMargin}>
+            These are times when you are away from your studio or don't want to
+            recieve visit requests.
+          </Text>
+          <DateRangeSelector />
+
           <Form
             value={values}
             onChange={(nextValue) => {
@@ -151,58 +173,32 @@ export default function VisitsSettingsForm({
             onSubmit={updateProfile}
             validate="submit"
           >
-            <FormField
-              name="location"
-              label="Your studio location: City, Country"
-              margin={textMargin}
-              required
-            >
-              <TextInput name="location" placeholder="Berlin, Germany" />
-            </FormField>
-
-            <FormField
-              name="district"
-              label="District or Kiez in your city"
-              margin={textMargin}
-              required
-            >
-              <TextInput name="district" placeholder="Kreuzberg" />
-            </FormField>
-
-            <FormField
-              label="About your Studio"
-              name="textStudio"
-              margin={fieldMargin}
-            >
-              <TextArea
-                name="textStudio"
-                placeholder="Tell us a bit about your studio.
-Describe the role it plays in your process, how it affects your practice, and about the relationship(s) you have with it."
-                fill
-                maxLength={1200}
-                rows={8}
-              />
-            </FormField>
-            <br />
-            <Heading level="3" size="medium" margin={fieldMargin}>
-              Private Visits
-            </Heading>
             <Row>
               <Col xs={12} md={8}>
                 <Calendar
-                  onSelect={onChangeDate}
-                  dates={[calendarDate]}
+                  onSelect={() => false}
+                  dates={monthlyOpen}
                   size="medium"
                   daysOfWeek={true}
                   firstDayOfWeek={1}
                   // margin="medium"
                   bounds={[calendarBounds.Start, calendarBounds.End]}
-                  // disabled={disabledDates}
+                  showAdjacentDays={false}
+                  onReference={onChangeMonth}
+                  disabled={monthlyDisabled}
+                  // disabled={availability ? formatDisabled(availability) : []}
                   // to customize the header
                   // https://storybook.grommet.io/?path=/story/visualizations-calendar-header--custom-header-calendar
                 />
+                <Text>
+                  {" "}
+                  Please review your calendar and save the dates and times you
+                  entered.
+                </Text>
+                <br />
+                <br />
               </Col>
-              <Col xs={12} md={4}>
+              {/* <Col xs={12} md={4}>
                 <Text>
                   <b>
                     {readableDate(calendarDate)}
@@ -231,86 +227,12 @@ Describe the role it plays in your process, how it affects your practice, and ab
                     ]}
                   />
                 </Text>
-              </Col>
+              </Col> */}
             </Row>
 
-            {/* 
-            <Text>
-              <b>
-                We will only share your address with visitors after you agree to
-                host them
-              </b>
-            </Text>
-
-            
-            <FormField
-              name="address"
-              label="Address (required)"
-              margin={fieldMargin}
-              required
-            >
-              <TextInput placeholder="" />
-              <TextArea
-                name="address"
-                placeholder="Your address"
-                fill
-                rows={2}
-                maxLength={200}
-              // disabled
-              />
-            </FormField> 
-            <FormField
-              label="Tips on finding the studio"
-              name="directions"
-              margin={fieldMargin}
-            >
-              <TextArea
-                name="directions"
-                placeholder="Any extra helpful directions of how to arrive to your studio. How to find the right entrance or name on doorbell, etc ..."
-                fill
-                rows={4}
-                maxLength={500}
-              />
-            </FormField>
-            */}
-
-            <Box>
-              <Heading level="4" size="medium" margin={textMargin}>
-                General visit tips
-              </Heading>
-              <ul>
-                <li>Visits are free</li>
-                <li>Show up on time</li>
-                <li>Ask before taking photos of the artist and artworks</li>
-                <li>A gift is almost always a nice touch</li>
-              </ul>
-            </Box>
-
-            <FormField
-              label="Your visit rules"
-              name="visitRules"
-              margin={fieldMargin}
-            >
-              <TextArea
-                name="visitRules"
-                placeholder="What do you expect from visitors at your studio?
-ex: Rule 1; Rule 2; Rule 3 (semi-colon seperated)"
-                fill
-                rows={4}
-                maxLength={500}
-              />
-            </FormField>
-            <Text margin={textMargin}>
-              {" "}
-              ex: Rule 1; Rule 2; Rule 3 (semi-colon seperated){" "}
-            </Text>
-            <br />
-
-            <br />
-            <br />
-            <Box direction="row" gap="medium">
+            <Box direction="row" gap="medium" margin={fieldMargin}>
               <Button type="submit" btnStyle="filled" disabled={loading}>
-                Update
+                Save Changes
               </Button>
             </Box>
 

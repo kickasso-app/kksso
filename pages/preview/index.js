@@ -204,7 +204,7 @@ const Preview = () => {
                 </Heading>
                 {studio.hasOpenDates === true ? (
                   <VisitForm
-                    openDates={studio.openDates}
+                    availability={studio.availability}
                     artistEmail={studio.email}
                     artistName={studio.artist}
                     studioID={studio.studio_id}

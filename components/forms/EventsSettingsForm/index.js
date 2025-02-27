@@ -129,7 +129,7 @@ export default function EventsSettingsForm({
             <br />
             <Box direction="row" gap="medium">
               <Button type="submit" btnStyle="filled" disabled={loading}>
-                Update
+                Save Changes
               </Button>
             </Box>
 
