@@ -2,13 +2,11 @@ import { createContext, useContext, useState } from "react";
 import { supabase } from "./supabase";
 
 import { studioColumns } from "config/constants/studioColumns";
-import { calendarBounds } from "config/calendar";
 
 const AccountContext = createContext(null);
 
 const AccountProvider = ({ children }) => {
   const [profile, setProfile] = useState();
-  const [calendarDate, setCalendarDate] = useState(calendarBounds.Start);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
   const [isUpdateError, setIsUpdateError] = useState(false);
@@ -100,10 +98,6 @@ const AccountProvider = ({ children }) => {
     }
   };
 
-  const updateCalendarDate = (date) => {
-    setCalendarDate(date);
-  };
-
   const resetNotification = () => {
     setIsUpdateSuccess(false);
     setIsUpdateError(false);
@@ -111,11 +105,9 @@ const AccountProvider = ({ children }) => {
 
   const contextObj = {
     profile,
-    calendarDate,
     fetchProfile,
     updateAccount,
     resetNotification,
-    updateCalendarDate,
     isUpdateSuccess,
     isUpdateError,
     loading,

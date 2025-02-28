@@ -2,8 +2,36 @@ import { useState } from "react";
 import { Box, Button, Form, Select, Text } from "grommet";
 import { Clock, Trash, Plus } from "react-feather";
 
-export default function WeekdayTimeSelector() {
+const weekdays = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
+
+export default function WeekdayTimeSelector({ openTimes = [], onUpdate }) {
+  const formatToRow = (openTimes) =>
+    openTimes.map((r) => ({
+      id: Math.random().toString(),
+      weekdays: r.days,
+      selectedHours: r.times,
+      isSaved: true,
+    }));
+
+  const formatToOpenTimes = (rows) => {
+    return rows
+      .filter((r) => r.isSaved)
+      .map((row) => ({
+        days: row.weekdays,
+        times: row.selectedHours,
+      }));
+  };
+
   const [rows, setRows] = useState([
+    ...formatToRow(openTimes),
     {
       id: "1",
       weekdays: [],
@@ -12,21 +40,11 @@ export default function WeekdayTimeSelector() {
     },
   ]);
 
-  const weekdays = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ];
-
   const hours = Array.from({ length: 13 }, (_, i) => {
     const hour = i + 9;
     const period = hour >= 12 ? "pm" : "am";
     const displayHour = hour > 12 ? hour - 12 : hour;
-    return `${displayHour}:00 ${period}`;
+    return { label: `${displayHour}:00 ${period}`, value: hour };
   });
 
   const addRow = () => {
@@ -42,7 +60,12 @@ export default function WeekdayTimeSelector() {
   };
 
   const removeRow = (id) => {
-    setRows((prev) => prev.filter((row) => row.id !== id));
+    const newRows = rows.filter((row) => row.id !== id);
+    setRows(newRows);
+    // console.log(newRows);
+    onUpdate({
+      openTimes: formatToOpenTimes(newRows),
+    });
   };
 
   const updateRow = (id, field, value) => {
@@ -54,13 +77,14 @@ export default function WeekdayTimeSelector() {
   };
 
   const saveRow = (id) => {
-    setRows((prev) =>
-      prev.map((row) => (row.id === id ? { ...row, isSaved: true } : row))
+    const newRows = rows.map((row) =>
+      row.id === id ? { ...row, isSaved: true } : row
     );
-    console.log(
-      "Row saved:",
-      rows.find((row) => row.id === id)
-    );
+    setRows(newRows);
+    onUpdate({
+      openTimes: formatToOpenTimes(newRows),
+    });
+
     addRow();
   };
 
@@ -124,6 +148,8 @@ export default function WeekdayTimeSelector() {
                   }
                   placeholder="Select hours"
                   closeOnChange={false}
+                  labelKey="label"
+                  valueKey={{ key: "value", reduce: true }}
                   disabled={row.isSaved}
                   showSelectedInline
                 />

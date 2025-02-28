@@ -18,6 +18,7 @@ import {
   Notification,
   ResponsiveContext,
   Anchor,
+  Paragraph,
 } from "grommet";
 
 import Button from "./../../Button";
@@ -29,7 +30,8 @@ import {
   parseAvailability,
   getClosedDates,
   dateUtils,
-  getTimesForSelectedDate,
+  toIsoDate,
+  toReverseIsoDate,
 } from "services/helpers/parseAvailability";
 
 const VisitForm = ({
@@ -73,10 +75,6 @@ const VisitForm = ({
   const readableDate = (date) =>
     moment(date, "YYYY-MM-DD hh:mm").format("dddd D MMMM");
 
-  const toIsoDate = (date) => moment(date, "DD/MM/YYYY").format("YYYY-MM-DD");
-  const toReverseIsoDate = (date) =>
-    moment(date, "YYYY-MM-DD").format("DD/MM/YYYY");
-
   const onSelectDate = (date) => {
     setSelectedDate(date);
     const month = new Date(date).getMonth() + 1;
@@ -87,7 +85,7 @@ const VisitForm = ({
     )[0];
 
     const tempTimes = parsedDate.times.map((t) => dateUtils.toAmPm(t.hour));
-
+    console.log(tempTimes);
     setOpenTimes(tempTimes);
     setSelectedTime(tempTimes[0]);
   };
@@ -131,6 +129,8 @@ const VisitForm = ({
       // };
 
       const parsedAvail = parseAvailability(availability);
+
+      // console.log(parsedAvail);
       return parsedAvail;
     }
   };
@@ -237,141 +237,142 @@ const VisitForm = ({
         // pad="medium"
         margin={{ vertical: "medium" }}
       >
-        <Form
-          id="select-visit-date"
-          values={values}
-          onChange={(nextValue) => {
-            setValues({ ...values, ...nextValue });
-          }}
-          // onReset={() =>
-          //   setValues(initValues)
-          // }
-          onSubmit={handleSendRequest}
-          validate="blur"
-        >
-          <Box fill="horizontal" width="medium">
-            <Box>
-              <Calendar
-                onSelect={(date) => {
-                  onSelectDate(date);
-                }}
-                date={selectedDate}
-                onReference={onChangeMonth}
-                // size={size === "small" ? "small" : "medium"}
-                // margin={size === "small" ? "medium" : "small"}
-                size="medium"
-                margin="none"
-                bounds={[calendarBounds.Start, calendarBounds.End]}
-                daysOfWeek={true}
-                firstDayOfWeek={1}
-                disabled={monthlyDisabled}
-                showAdjacentDays={false}
+        {availability ? (
+          <Form
+            id="select-visit-date"
+            values={values}
+            onChange={(nextValue) => {
+              setValues({ ...values, ...nextValue });
+            }}
+            // onReset={() =>
+            //   setValues(initValues)
+            // }
+            onSubmit={handleSendRequest}
+            validate="blur"
+          >
+            <Box fill="horizontal" width="medium">
+              <Box>
+                <Calendar
+                  onSelect={(date) => {
+                    onSelectDate(date);
+                  }}
+                  date={selectedDate}
+                  onReference={onChangeMonth}
+                  // size={size === "small" ? "small" : "medium"}
+                  // margin={size === "small" ? "medium" : "small"}
+                  size="medium"
+                  margin="none"
+                  bounds={[calendarBounds.Start, calendarBounds.End]}
+                  daysOfWeek={true}
+                  firstDayOfWeek={1}
+                  disabled={monthlyDisabled}
+                  showAdjacentDays={false}
 
-                // to customize the header
-                // https://storybook.grommet.io/?path=/story/visualizations-calendar-header--custom-header-calendar
-              />
+                  // to customize the header
+                  // https://storybook.grommet.io/?path=/story/visualizations-calendar-header--custom-header-calendar
+                />
+              </Box>
+
+              {selectedTime && (
+                <>
+                  <Text
+                    as="label"
+                    margin={{
+                      top: "medium",
+                      bottom: "xsmall",
+                      horizontial: "medium",
+                    }}
+                  >
+                    Request a visit on <b> {shortReadableDate(selectedDate)}</b>{" "}
+                    at
+                  </Text>
+                  <Box pad="small" margin={{ vertical: "small" }}>
+                    <RadioButtonGroup
+                      name="visitTime"
+                      options={openTimes}
+                      value={selectedTime}
+                      onChange={(event) => {
+                        setSelectedTime(event.target.value);
+                        // console.log("selected " + event.target.value);
+                      }}
+                    />
+                  </Box>
+                </>
+              )}
             </Box>
 
-            {selectedTime && (
-              <>
-                <Text
-                  as="label"
-                  margin={{
-                    top: "medium",
-                    bottom: "xsmall",
-                    horizontial: "medium",
-                  }}
-                >
-                  Request a visit on <b> {shortReadableDate(selectedDate)}</b>{" "}
-                  at
-                </Text>
-                <Box pad="small" margin={{ vertical: "small" }}>
-                  <RadioButtonGroup
-                    name="visitTime"
-                    options={openTimes}
-                    value={selectedTime}
-                    onChange={(event) => {
-                      setSelectedTime(event.target.value);
-                      // console.log("selected " + event.target.value);
-                    }}
-                  />
-                </Box>
-              </>
-            )}
-          </Box>
-
-          <FormField
-            name="from_name"
-            htmlfor="text-input-id"
-            label="Name"
-            required
-          >
-            <TextInput
-              id="text-input-id"
+            <FormField
               name="from_name"
-              placeholder="Your name"
-            />
-          </FormField>
-          <FormField
-            label="Email"
-            name="requestor_email"
-            required
-            validate={{
-              regexp: /\S+@\S+\.\S+/,
-              message: "Enter a valid email address",
-            }}
-          >
-            <MaskedInput
-              name="requestor_email"
-              mask={[
-                { regexp: /^[\w\-_.]+$/, placeholder: "your" },
-                { fixed: "@" },
-                { regexp: /^[\w]+$/, placeholder: "email" },
-                { fixed: "." },
-                { regexp: /^[\w]+$/, placeholder: "com" },
-              ]}
-            />
-          </FormField>
-          <FormField
-            name="requestor_link"
-            htmlfor="text-input-id"
-            label="Social or professional link"
-            required
-            validate={{
-              regex: /\S+.\S+\.\S+?.\S+/,
-              message: "Enter a valid url",
-            }}
-            type="url"
-          >
-            <MaskedInput
-              name="requestor_link"
-              mask={[
-                { regexp: /^[\w\-_.]+$/, placeholder: "https" },
-                { fixed: "://" },
-                { regexp: /^[\w]+$/, placeholder: "www" },
-                { fixed: "." },
-                { regexp: /^[\w]+$/, placeholder: "instagram" },
-                { fixed: "." },
-                { regexp: /^[\w]+$/, placeholder: "com" },
-                { fixed: "/" },
-                { regexp: /^.*$/, placeholder: "yourProfile" },
-              ]}
-            />
-          </FormField>
-          <FormField
-            label={<Text>Reason of visit / Grund des Besuchs</Text>}
-            name="visit_reason"
-          >
-            <TextArea
-              name="visit_reason"
-              placeholder="Just curious, Want to collaborate on a project, or Want to buy a specific artwork, or something else... &#10;. &#10;Feel free to add here a personal message, a little something about yourself, and what you like about their work."
-              fill
+              htmlfor="text-input-id"
+              label="Name"
               required
-              rows="7"
-            />
-          </FormField>
-          <br />
-          {/* <FormField
+            >
+              <TextInput
+                id="text-input-id"
+                name="from_name"
+                placeholder="Your name"
+              />
+            </FormField>
+            <FormField
+              label="Email"
+              name="requestor_email"
+              required
+              validate={{
+                regexp: /\S+@\S+\.\S+/,
+                message: "Enter a valid email address",
+              }}
+            >
+              <MaskedInput
+                name="requestor_email"
+                mask={[
+                  { regexp: /^[\w\-_.]+$/, placeholder: "your" },
+                  { fixed: "@" },
+                  { regexp: /^[\w]+$/, placeholder: "email" },
+                  { fixed: "." },
+                  { regexp: /^[\w]+$/, placeholder: "com" },
+                ]}
+              />
+            </FormField>
+            <FormField
+              name="requestor_link"
+              htmlfor="text-input-id"
+              label="Social or professional link"
+              required
+              validate={{
+                regex: /\S+.\S+\.\S+?.\S+/,
+                message: "Enter a valid url",
+              }}
+              type="url"
+            >
+              <MaskedInput
+                name="requestor_link"
+                mask={[
+                  { regexp: /^[\w\-_.]+$/, placeholder: "https" },
+                  { fixed: "://" },
+                  { regexp: /^[\w]+$/, placeholder: "www" },
+                  { fixed: "." },
+                  { regexp: /^[\w]+$/, placeholder: "instagram" },
+                  { fixed: "." },
+                  { regexp: /^[\w]+$/, placeholder: "com" },
+                  { fixed: "/" },
+                  { regexp: /^.*$/, placeholder: "yourProfile" },
+                ]}
+              />
+            </FormField>
+            <FormField
+              label={<Text>Reason of visit / Grund des Besuchs</Text>}
+              name="visit_reason"
+            >
+              <TextArea
+                name="visit_reason"
+                placeholder="Just curious, Want to collaborate on a project, or Want to buy a specific artwork, or something else... &#10;. &#10;Feel free to add here a personal message, a little something about yourself, and what you like about their work."
+                fill
+                required
+                rows="7"
+              />
+            </FormField>
+            <br />
+            {/* <FormField
             label={
               <Text>
                 Message to artist <br />/ Nachricht an den oder die
@@ -387,64 +388,69 @@ const VisitForm = ({
               rows="6"
             />
           </FormField> */}
-          <br />
+            <br />
 
-          <Box direction="row" gap="medium">
-            <Button type="submit" btnStyle="filled" disabled={!selectedDate}>
-              Request a visit
-            </Button>
-          </Box>
-          {selectedTime && (
-            <>
-              <Text>
-                on {readableDate(selectedDate)} at {selectedTime}
-              </Text>
-            </>
-          )}
+            <Box direction="row" gap="medium">
+              <Button type="submit" btnStyle="filled" disabled={!selectedDate}>
+                Request a visit
+              </Button>
+            </Box>
+            {selectedTime && (
+              <>
+                <Text>
+                  on {readableDate(selectedDate)} at {selectedTime}
+                </Text>
+              </>
+            )}
 
-          {/* {isDatePast && (
+            {/* {isDatePast && (
             <Text color="#ffc0cb" size="medium">
               <br /> You selected a day in the past
             </Text>
           )} */}
 
-          {isSendingRequest && (
-            <Text color="#ffc0cb" size="medium">
-              <br /> Sending request ...
-            </Text>
-          )}
+            {isSendingRequest && (
+              <Text color="#ffc0cb" size="medium">
+                <br /> Sending request ...
+              </Text>
+            )}
 
-          {isEmailSent ? (
-            <NotificationLayer
-              status="normal"
-              title="Your visit request was sent!"
-              message={
-                <Text>
-                  <br />
-                  Please wait to hear back from us when the studio responds.
-                </Text>
-              }
-              onClose={() => setIsEmailSent(false)}
-            />
-          ) : (
-            isEmailError && (
+            {isEmailSent ? (
               <NotificationLayer
-                toast
-                status="warning"
-                title="We couldn't send your request!"
+                status="normal"
+                title="Your visit request was sent!"
                 message={
                   <Text>
                     <br />
-                    Please try again, and reach out to us if you face an issue
-                    again.{" "}
+                    Please wait to hear back from us when the studio responds.
                   </Text>
                 }
-                onClose={() => setIsEmailError(false)}
-                time="2000"
+                onClose={() => setIsEmailSent(false)}
               />
-            )
-          )}
-        </Form>
+            ) : (
+              isEmailError && (
+                <NotificationLayer
+                  toast
+                  status="warning"
+                  title="We couldn't send your request!"
+                  message={
+                    <Text>
+                      <br />
+                      Please try again, and reach out to us if you face an issue
+                      again.{" "}
+                    </Text>
+                  }
+                  onClose={() => setIsEmailError(false)}
+                  time="2000"
+                />
+              )
+            )}
+          </Form>
+        ) : (
+          <Paragraph size="medium">
+            There are no available dates yet for this studio.
+          </Paragraph>
+        )}
       </Box>
     </Box>
   );

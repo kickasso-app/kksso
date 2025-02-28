@@ -28,14 +28,8 @@ export default function EventsSettingsForm({
   profile: { events, eventsLink, eventsContact },
 }) {
   const { user } = useAuth();
-  const {
-    updateAccount,
-    calendarDate,
-    updateCalendarDate,
-    loading,
-    isUpdateSuccess,
-    isUpdateError,
-  } = useAccount();
+  const { updateAccount, loading, isUpdateSuccess, isUpdateError } =
+    useAccount();
 
   const [values, setValues] = useState({
     events,

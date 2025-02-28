@@ -1,5 +1,9 @@
 import moment from "moment";
 
+const toIsoDate = (date) => moment(date, "DD/MM/YYYY").format("YYYY-MM-DD");
+const toReverseIsoDate = (date) =>
+  moment(date, "YYYY-MM-DD").format("DD/MM/YYYY");
+
 /**
  * Parses availability object and returns available and unavailable dates by month
  * @param {Object} availability - Availability object with openTimes and unavailableDates
@@ -181,8 +185,6 @@ const exampleAvailability = {
 //   "Is 13/03/2025 unavailable:",
 //   isDateUnavailable(availability, "13/03/2025")
 // );
-
-const toIsoDate = (date) => moment(date, "DD/MM/YYYY").format("YYYY-MM-DD");
 
 /**
  * Gets all dates in a month except the open dates
@@ -416,6 +418,22 @@ const dateUtils = {
     }
     return `${hours}:${minutes || "00"}`;
   },
+  convertTimesToHours: (times) => {
+    return times.map((timeStr) => {
+      // Extract hour and period (am/pm)
+      const [time, period] = timeStr.toLowerCase().split(" ");
+      let hour = parseInt(time.split(":")[0]);
+
+      // Convert to 24-hour format
+      if (period === "pm" && hour !== 12) {
+        hour += 12;
+      } else if (period === "am" && hour === 12) {
+        hour = 0;
+      }
+
+      return hour;
+    });
+  },
 };
 
 // Example usage
@@ -428,12 +446,12 @@ const dates = [
 ];
 
 // Using simple version
-console.log("Next date:", findNextDate(dates));
+// console.log("Next date:", findNextDate(dates));
 
-// Using enhanced version
-console.log("Next date (enhanced):", dateUtils.findNext(dates));
-console.log("All future dates:", dateUtils.findAllFuture(dates));
-console.log("Is future date:", dateUtils.isFutureOrToday("30/03/2024"));
+// // Using enhanced version
+// console.log("Next date (enhanced):", dateUtils.findNext(dates));
+// console.log("All future dates:", dateUtils.findAllFuture(dates));
+// console.log("Is future date:", dateUtils.isFutureOrToday("30/03/2024"));
 
 // Example with invalid dates
 const mixedDates = [
@@ -442,10 +460,10 @@ const mixedDates = [
   "15/03/2024",
   "30/03/2024",
 ];
-console.log("Handling invalid dates:", findNextDate(mixedDates));
+// console.log("Handling invalid dates:", findNextDate(mixedDates));
 
 // Example with empty array
-console.log("Empty array:", findNextDate([]));
+// console.log("Empty array:", findNextDate([]));
 
 // Example with today's date
 const today = new Date();
@@ -453,6 +471,13 @@ const todayFormatted = `${String(today.getDate()).padStart(2, "0")}/${String(
   today.getMonth() + 1
 ).padStart(2, "0")}/${today.getFullYear()}`;
 const datesWithToday = [...dates, todayFormatted];
-console.log("Including today:", findNextDate(datesWithToday));
+// console.log("Including today:", findNextDate(datesWithToday));
 
-export { parseAvailability, isDateUnavailable, getClosedDates, dateUtils };
+export {
+  parseAvailability,
+  isDateUnavailable,
+  getClosedDates,
+  dateUtils,
+  toIsoDate,
+  toReverseIsoDate,
+};

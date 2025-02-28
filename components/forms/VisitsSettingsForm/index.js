@@ -27,46 +27,38 @@ import WeekdayTimeSelector from "./weekday-time-selector";
 import DateRangeSelector from "./date-range-selector";
 import StudioSettingsForm from "./StudioSettingsForm";
 
-import { parseAvailability } from "services/helpers/parseAvailability";
+import {
+  parseAvailability,
+  toIsoDate,
+} from "services/helpers/parseAvailability";
 
 export default function VisitsSettingsForm({
   profile: {
-    visitRules,
     availability,
     hasOpenDates,
+    visitRules,
     textStudio,
     location,
     district,
-    events,
-    eventsLink,
-    eventsContact,
   },
 }) {
   const { user } = useAuth();
   const {
     updateAccount,
-    calendarDate,
-    updateCalendarDate,
+    contextAvailailbity,
+    updateContextAvailailbity,
     loading,
     isUpdateSuccess,
     isUpdateError,
   } = useAccount();
 
   const [values, setValues] = useState({
-    visitRules,
-    location: location.join(","),
-    district,
-    textStudio,
-    events,
-    eventsLink,
-    eventsContact,
+    availability,
   });
   const [parsedDates, setParsedDates] = useState({});
 
   const [monthlyOpen, setMonthlyOpen] = useState([]);
   const [monthlyDisabled, setMonthlyDisabled] = useState([]);
-
-  const toIsoDate = (date) => moment(date, "DD/MM/YYYY").format("YYYY-MM-DD");
 
   // const readableDate = (date) =>
   //   moment(date, "YYYY-MM-DD hh:mm").format("D MMMM");
@@ -115,14 +107,26 @@ export default function VisitsSettingsForm({
     }
   }, [availability, parsedDates]);
 
-  async function updateProfile(event) {
-    const newDates = updateOpenDates();
+  useEffect(() => {
+    if (Object.keys(parsedDates).length !== 0) {
+      const today = new Date();
+      onChangeMonth(today.toISOString());
+    }
+  }, [parsedDates]);
 
-    const updates = {
-      ...values,
-      location: values.location.split(","),
-      openDates: newDates,
-    };
+  const onChangeAvailability = ({ openTimes, unavailableDates }) => {
+    if (openTimes) {
+      setValues({ availability: { ...values.availability, openTimes } });
+    }
+
+    if (unavailableDates) {
+      setValues({ availability: { ...values.availability, unavailableDates } });
+    }
+  };
+  async function updateProfile(event) {
+    const updates = values;
+
+    //console.log(updates);
 
     await updateAccount(updates, user);
   }
@@ -153,7 +157,10 @@ export default function VisitsSettingsForm({
           <Heading level={4} size="medium" margin={textMargin}>
             Weekly Availability
           </Heading>
-          <WeekdayTimeSelector />
+          <WeekdayTimeSelector
+            openTimes={availability?.openTimes}
+            onUpdate={onChangeAvailability}
+          />
 
           <Heading level={4} margin={textMargin}>
             Unavailable Dates
@@ -162,7 +169,10 @@ export default function VisitsSettingsForm({
             These are times when you are away from your studio or don't want to
             recieve visit requests.
           </Text>
-          <DateRangeSelector />
+          <DateRangeSelector
+            unavailableDates={availability?.unavailableDates}
+            onUpdate={onChangeAvailability}
+          />
 
           <Form
             value={values}
@@ -198,36 +208,6 @@ export default function VisitsSettingsForm({
                 <br />
                 <br />
               </Col>
-              {/* <Col xs={12} md={4}>
-                <Text>
-                  <b>
-                    {readableDate(calendarDate)}
-                    <br />
-                    <br />
-                  </b>
-
-                  <CheckBoxGroup
-                    value={selectedTimes}
-                    onChange={({ value: nextValue }) => {
-                      onChangeTimes(nextValue);
-                    }}
-                    options={[
-                      "10:00",
-                      "11:00",
-                      "12:00",
-                      "13:00",
-                      "14:00",
-                      "15:00",
-                      "16:00",
-                      "17:00",
-                      "18:00",
-                      "19:00",
-                      "20:00",
-                      "21:00",
-                    ]}
-                  />
-                </Text>
-              </Col> */}
             </Row>
 
             <Box direction="row" gap="medium" margin={fieldMargin}>
