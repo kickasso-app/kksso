@@ -175,6 +175,8 @@ const VisitForm = ({
     // console.log(emailVariables);
     // console.log(selectedDate + " " + selectedTime);
     // console.log(readableDate(selectedDate));
+    setIsEmailSent(false);
+    setIsEmailError(false);
     setIsSendingRequest(true);
 
     try {
