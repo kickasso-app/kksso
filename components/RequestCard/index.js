@@ -53,7 +53,7 @@ const RequestCard = ({
   // }, [uuid]);
 
   return (
-    <div>
+    <div onClick={() => onOpen(request_id)}>
       <Card
         background="background-front"
         pad="medium"

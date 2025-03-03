@@ -226,9 +226,9 @@ const getClosedDates = (openDates) => {
 
 // Example usage
 const openDates = ["05/03/2025", "19/03/2025", "26/03/2025"];
-console.log(openDates);
+// console.log(openDates);
 const closedDates = getClosedDates(openDates);
-console.log("Closed dates:", closedDates);
+// console.log("Closed dates:", closedDates);
 
 /**
  * Alternative version that returns an object with both open and closed dates

@@ -128,19 +128,29 @@ const Studio = () => {
                     <Heading level="3" size="medium" margin={headingMargin}>
                       Links
                     </Heading>
-                    <Paragraph fill margin={{ vertical: "medium" }}>
-                      {studio.website && (
+                    {studio.website && (
+                      <Paragraph fill margin={{ vertical: "medium" }}>
+                        <Globe
+                          className={styles.icon}
+                          size={24}
+                          strokeWidth="1"
+                          color="#4B4B4B"
+                          fill="#FFF"
+                        />{" "}
                         <a href={studio.website} target="_blank">
-                          <Globe
-                            className={styles.icon}
-                            size={28}
-                            strokeWidth="1"
-                            color="#4B4B4B"
-                            fill="#FFF"
-                          />
+                          {studio.website}
                         </a>
-                      )}
-                      {studio.instagram && (
+                      </Paragraph>
+                    )}
+                    {studio.instagram && (
+                      <Paragraph fill margin={{ vertical: "medium" }}>
+                        <Instagram
+                          className={styles.icon}
+                          size={24}
+                          strokeWidth="1"
+                          color="#4B4B4B"
+                          fill="#FFF"
+                        />{" "}
                         <a
                           href={
                             studio.instagram?.includes("instagram.com/")
@@ -149,16 +159,10 @@ const Studio = () => {
                           }
                           target="_blank"
                         >
-                          <Instagram
-                            className={styles.icon}
-                            size={28}
-                            strokeWidth="1"
-                            color="#4B4B4B"
-                            fill="#FFF"
-                          />
+                          Instagram
                         </a>
-                      )}
-                    </Paragraph>
+                      </Paragraph>
+                    )}
                     {size === "small" && (
                       <>
                         <Box margin={sectionMargin}>

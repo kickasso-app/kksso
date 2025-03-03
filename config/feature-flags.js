@@ -1,5 +1,5 @@
 const featureFlags = {
-  studiosByCities: false,
+  studiosByCities: true,
   referrals: true,
   visitsSettingsPage: false,
   requestModal: false,
