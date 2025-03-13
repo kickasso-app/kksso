@@ -254,7 +254,7 @@ export default function Join() {
 
                   {/* {!forgotPassword && */}
                   <Text weight="normal" margin={fieldMargin}>
-                    Forgot your passoword?
+                    Forgot your password?
                   </Text>
                   <Text weight="lighter">
                     Please let us know by email and we will send you a magic

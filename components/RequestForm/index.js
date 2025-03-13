@@ -14,6 +14,8 @@ import {
 import { Checkmark, Close } from "grommet-icons";
 import { sendEmail } from "services/sendEmail";
 import NotificationLayer from "components/NotificationLayer";
+import { useAccount } from "services/account";
+import { useAuth } from "services/auth";
 
 const submitColors = {
   Reject: "brand",
@@ -45,6 +47,9 @@ export default function RequestForm({
     messages,
     requestor_link,
   } = request;
+
+  const { user } = useAuth();
+  const { profile, updateAccount } = useAccount();
 
   const [values, setValues] = useState({
     message: "",
@@ -85,8 +90,6 @@ export default function RequestForm({
       emailError = error?.message;
     }
 
-    // TODO: remove time from openTimes
-    //  await updateAccount({ openTimes }, user);
     const requestUpdates = {
       has_response: true,
       response: boolStatus,
@@ -96,6 +99,15 @@ export default function RequestForm({
       requestUpdates,
       request_id
     );
+
+    if (boolStatus) {
+      let newAvailability = profile.availability;
+      newAvailability.bookedTimes.push(request_date_tz.replace("T", " "));
+      const updates = {
+        availability: newAvailability,
+      };
+      await updateAccount(updates, user);
+    }
 
     if (updateError || (message && emailError)) {
       setIsUpdateError(true);

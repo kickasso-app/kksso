@@ -11,7 +11,11 @@ const toReverseIsoDate = (date) =>
  * @returns {Object} Monthly availability with available and unavailable dates
  */
 const parseAvailability = (availability, monthsAhead = 6) => {
-  const { openTimes = [], unavailableDates = [] } = availability;
+  const {
+    openTimes = [],
+    unavailableDates = [],
+    bookedTimes = [],
+  } = availability;
 
   // Create map of days to their available times
   const availableTimesByDay = openTimes.reduce((acc, { days, times }) => {
@@ -30,6 +34,17 @@ const parseAvailability = (availability, monthsAhead = 6) => {
     return [parseDate(start), parseDate(end)];
   });
 
+  // Parse booked times
+  const bookedTimesMap = bookedTimes.reduce((acc, bookedTime) => {
+    const date = moment(bookedTime).format("DD/MM/YYYY");
+    const time = moment(bookedTime).format("HH:mm");
+    if (!acc[date]) {
+      acc[date] = [];
+    }
+    acc[date].push(time);
+    return acc;
+  }, {});
+
   // Initialize result object
   const result = {};
 
@@ -46,12 +61,13 @@ const parseAvailability = (availability, monthsAhead = 6) => {
 
     const monthKey = currentMonth.toLocaleString("default", {
       month: "numeric",
-      //   year: "numeric",
+      // year: "numeric",
     });
 
     result[monthKey] = {
       availableDates: [],
       unavailableDates: [],
+      bookedTimes: [],
     };
 
     // Get last day of month
@@ -104,11 +120,18 @@ const parseAvailability = (availability, monthsAhead = 6) => {
       } else if (availableTimes?.length > 0) {
         result[monthKey].availableDates.push({
           date: formattedDate,
-          // dayName,
           times: availableTimes.map((time) => ({
             hour: time,
             formatted: `${String(time).padStart(2, "0")}:00`,
           })),
+        });
+      }
+
+      // Add booked times if any
+      if (bookedTimesMap[formattedDate]) {
+        result[monthKey].bookedTimes.push({
+          date: formattedDate,
+          times: bookedTimesMap[formattedDate],
         });
       }
     }

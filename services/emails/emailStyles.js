@@ -1,5 +1,5 @@
 export const emailStyles = `
-    h1 {
+     h1 {
     font-family: Helvetica;
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
@@ -8,10 +8,10 @@ export const emailStyles = `
     border: 0;
     box-sizing: border-box;
     font-weight: 600;
-    line-height: 2.25rem;
-    font-size: 1.75rem;
-    margin-bottom: 2rem;
-    margin-top: 2rem;
+    line-height: 1.5rem; 
+    font-size: 1.25rem;    
+    margin-bottom: 1.5rem; 
+    margin-top: 1.25rem;     
     color: #4b4b4b;
     }
 
@@ -24,10 +24,10 @@ export const emailStyles = `
     box-sizing: border-box;
     font-weight: 300;
     font-family: Helvetica, sans-serif;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem; 
     color: #4b4b4b;
-    line-height: 1.75rem;
-    font-size: 1.125rem;
+    line-height: 1.125rem;   
+    font-size: 1rem;    
     }
 
     li {

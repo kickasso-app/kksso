@@ -57,6 +57,7 @@ const VisitForm = ({
 
   const [values, setValues] = useState(initValues);
   const [openTimes, setOpenTimes] = useState([]);
+  const [bookedTimes, setBookedTimes] = useState([]);
   const [parsedDates, setParsedDates] = useState({});
 
   const [monthlyOpen, setMonthlyOpen] = useState([]);
@@ -84,8 +85,24 @@ const VisitForm = ({
       (d) => d.date === toReverseIsoDate(date)
     )[0];
 
-    const tempTimes = parsedDate.times.map((t) => dateUtils.toAmPm(t.hour));
-    console.log(tempTimes);
+    // console.log(parsedDate);
+
+    let tempTimes = parsedDate.times.map((t) => dateUtils.toAmPm(t.hour));
+
+    // onsole.log(tempTimes);
+    // Check if bookedTimes has the same date and remove the times from tempTimes
+    const bookedDate = bookedTimes.find(
+      (bt) => bt.date === toReverseIsoDate(date)
+    );
+    if (bookedDate) {
+      const bookedHours = bookedDate.times.map((t) =>
+        dateUtils.toAmPm(t.split(":")[0])
+      );
+
+      // console.log(bookedHours);
+      tempTimes = tempTimes.filter((time) => !bookedHours.includes(time));
+    }
+
     setOpenTimes(tempTimes);
     setSelectedTime(tempTimes[0]);
   };
@@ -96,6 +113,7 @@ const VisitForm = ({
     const m = month.toString();
     const dates = parsedDates;
     if (dates.hasOwnProperty(m)) {
+      setBookedTimes(dates[m].bookedTimes);
       // console.log(dates[m]);
 
       const tempOpen = dates[m].availableDates.map((item) => item.date);
@@ -130,7 +148,7 @@ const VisitForm = ({
 
       const parsedAvail = parseAvailability(availability);
 
-      // console.log(parsedAvail);
+      console.log(parsedAvail);
       return parsedAvail;
     }
   };
