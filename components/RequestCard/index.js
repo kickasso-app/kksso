@@ -53,7 +53,7 @@ const RequestCard = ({
   // }, [uuid]);
 
   return (
-    <div onClick={() => onOpen(request_id)}>
+    <Box fill onClick={() => onOpen(request_id)}>
       <Card
         background="background-front"
         pad="medium"
@@ -119,7 +119,7 @@ const RequestCard = ({
           </Box>
         </Grid>
       </Card>
-    </div>
+    </Box>
   );
 };
 
