@@ -1,12 +1,8 @@
-import { useState, useEffect } from "react";
-
+import React, { useState, useEffect } from "react";
 import moment from "moment";
-
 import { useAuth } from "services/auth";
 import { useAccount } from "services/account";
-
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
-
 import {
   Box,
   Form,
@@ -19,10 +15,9 @@ import {
   Text,
   Heading,
 } from "grommet";
-
 import Button from "components/Button";
-
 import { calendarBounds } from "config/calendar";
+import EventsPhotoInput from "components/forms/EventsPhotoInput"; // import EventsPhotoInput
 
 export default function EventsSettingsForm({
   profile: { events, eventsLink, eventsContact },
@@ -35,18 +30,32 @@ export default function EventsSettingsForm({
     events,
     eventsLink,
     eventsContact,
+    photoPath: "",
+    photoId: "",
   });
 
   const readableDate = (date) =>
     moment(date, "YYYY-MM-DD hh:mm").format("D MMMM");
 
   async function updateProfile(event) {
+    event.preventDefault();
     const updates = {
       ...values,
     };
 
     await updateAccount(updates, user);
   }
+
+  // Handler to refresh after image upload
+  const handlePostUpload = async (newPhotoPath, newPhotoId) => {
+    setValues((prev) => ({
+      ...prev,
+      photoPath: newPhotoPath,
+      photoId: newPhotoId,
+    }));
+    // Optionally update account immediately:
+    // await updateAccount({ photoPath: newPhotoPath, photoId: newPhotoId });
+  };
 
   const fieldMargin = { vertical: "large" };
   const textMargin = { bottom: "medium" };
@@ -57,6 +66,8 @@ export default function EventsSettingsForm({
         <Heading level="3" size="medium" margin={fieldMargin}>
           Your Events
         </Heading>
+
+        <EventsPhotoInput userId={user.id} postUpload={handlePostUpload} />
 
         <Grid fluid>
           <Form

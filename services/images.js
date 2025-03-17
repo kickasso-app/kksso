@@ -1,5 +1,25 @@
-import { supabase } from "services/supabase";
+"use client";
 
+import { supabase } from "services/supabase";
+import convert from "client-side-image-resize";
+
+async function fileExists(bucketName, filePath, fileName) {
+  const { data, error } = await supabase.storage
+    .from(bucketName)
+    .list(filePath, {
+      limit: 3,
+      // offset: 0,
+      sortBy: { column: "name", order: "asc" },
+    });
+
+  if (error) {
+    console.error("Error:", error);
+    return false;
+  }
+  // console.log(data);
+  const doesItExist = data.filter((img) => img.name === fileName)?.length > 0;
+  return doesItExist;
+}
 async function listImages({ userId }) {
   let imgs, paths;
   try {
@@ -41,6 +61,24 @@ async function downloadImage({ imgPath, postDownload }) {
   return false;
 }
 
+async function downloadEventImage({ imgPath, postDownload }) {
+  try {
+    const { data, error } = await supabase.storage
+      .from("events")
+      .download(imgPath);
+    if (error) {
+      throw error;
+    }
+    const url = URL.createObjectURL(data);
+    if (postDownload) {
+      postDownload(url);
+    }
+    return url;
+  } catch (error) {
+    console.log("Error downloading image: ", error.message);
+  }
+  return false;
+}
 async function downloadProfileImage({ userId }) {
   // REMOVED - might be needed if profile image is not .jpg
 
@@ -75,6 +113,40 @@ async function downloadImages({ userId, postDownload }) {
   return urls;
 }
 
+async function resizeImage({ file, returnSmallerImage = false }) {
+  // let imgRatio = 1;
+  // const img = new Image();
+  // img.src = URL.createObjectURL(file);
+  // img.onload = async () => {
+  //   const width = img.width;
+  //   const height = img.height;
+  //   imgRatio = width / height;
+  //   // console.log(`Width: ${width}, Height: ${height}, Ratio: ${ratio}`);
+  //   URL.revokeObjectURL(img.src);
+  // };
+  const fileLarge = await convert({
+    file: file,
+    width: 1200,
+    // height: 1200 / imgRatio,
+    type: "jpg",
+  });
+
+  // console.log(fileLarge.size);
+
+  const fileSmall = returnSmallerImage
+    ? await convert({
+        file: file,
+        width: 600,
+        //   height: 600 / imgRatio,
+        type: "jpg",
+      })
+    : false;
+
+  // console.log(fileSmall.size);
+
+  return [fileLarge, fileSmall];
+}
+
 // NOT NEEDED
 // async function getImagesUrls({ userId }) {
 //   const { paths } = await listImages({ userId });
@@ -97,4 +169,12 @@ async function downloadImages({ userId, postDownload }) {
 //   return urls;
 // }
 
-export { listImages, downloadImage, downloadImages, downloadProfileImage };
+export {
+  fileExists,
+  listImages,
+  downloadImage,
+  downloadImages,
+  downloadProfileImage,
+  downloadEventImage,
+  resizeImage,
+};
