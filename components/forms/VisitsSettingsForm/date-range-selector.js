@@ -9,6 +9,7 @@ import {
   toIsoDate,
   toReverseIsoDate,
 } from "services/helpers/parseAvailability";
+import { calendarBounds } from "config/calendar";
 
 export default function DateRangeSelector({ unavailableDates = [], onUpdate }) {
   // to DD/MM/YYYY
@@ -44,6 +45,11 @@ export default function DateRangeSelector({ unavailableDates = [], onUpdate }) {
         return [toReverseIsoDate(startDate), toReverseIsoDate(endDate)];
       });
 
+  const today = new Date();
+  console.log(today);
+
+  const todayDate = moment(today).format("YYYY-MM-DD");
+
   const readableDate = (date) => moment(date, "YYYY-MM-DD").format("D MMMM");
   const readableDatewithYear = (date) =>
     moment(date, "YYYY-MM-DD").format("D MMMM, YYYY");
@@ -52,12 +58,13 @@ export default function DateRangeSelector({ unavailableDates = [], onUpdate }) {
   const [disableAddButton, setDisableAddButton] = useState(false);
 
   const addRow = () => {
+    const todayIso = moment(new Date()).format("YYYY-MM-DD");
     setRows((prev) => [
       ...prev,
       {
         id: Math.random().toString(),
-        startDate: "",
-        endDate: "",
+        startDate: todayIso,
+        endDate: todayIso,
         isSaved: false,
       },
     ]);
@@ -140,23 +147,38 @@ export default function DateRangeSelector({ unavailableDates = [], onUpdate }) {
                     : undefined
                 }
               >
-                <Box basis="1/2">
+                <Box basis="1">
                   <Calendar
-                    date={row.startDate}
-                    onSelect={(date) => updateRow(row.id, "startDate", date)}
+                    range={true}
+                    // Supply an extra array wrapper as required by Grommet Calendar component
+                    dates={[
+                      row.startDate
+                        ? row.endDate
+                          ? [row.startDate, row.endDate]
+                          : [row.startDate, row.startDate]
+                        : [],
+                    ]}
+                    onSelect={(selectedDates) => {
+                      console.log(selectedDates);
+                      // Use moment to ensure valid ISO date strings
+                      if (Array.isArray(selectedDates)) {
+                        const [start, end] = selectedDates[0];
+                        const formattedStart =
+                          moment(start).format("YYYY-MM-DD");
+                        const formattedEnd = moment(end).format("YYYY-MM-DD");
+                        updateRow(row.id, "startDate", formattedStart);
+                        updateRow(row.id, "endDate", formattedEnd);
+                      } else {
+                        const formattedStart =
+                          moment(selectedDates).format("YYYY-MM-DD");
+                        updateRow(row.id, "startDate", formattedStart);
+                        updateRow(row.id, "endDate", "");
+                      }
+                    }}
                     disabled={row.isSaved}
-                    bounds={["2025-01-01", "2026-12-31"]}
-                    size="small"
-                  />
-                </Box>
-
-                <Box basis="1/2">
-                  <Calendar
-                    date={row.endDate}
-                    onSelect={(date) => updateRow(row.id, "endDate", date)}
-                    disabled={row.isSaved || !row.startDate}
-                    bounds={[row.startDate || "2025-01-01", "2026-12-31"]}
-                    size="small"
+                    bounds={calendarBounds}
+                    showAdjacentDays={false}
+                    size="medium"
                   />
                 </Box>
 
@@ -165,18 +187,6 @@ export default function DateRangeSelector({ unavailableDates = [], onUpdate }) {
                     size="medium"
                     icon={<Plus />}
                     onClick={() => saveRow(row.id)}
-                    primary
-                    disabled={!row.startDate || !row.endDate}
-                  />
-                  <br />
-                  <Button
-                    margin={"small"}
-                    size="small"
-                    color="brand"
-                    icon={<Trash />}
-                    onClick={() => removeRow(row.id)}
-                    plain
-                    hoverIndicator
                   />
                 </Box>
               </Box>

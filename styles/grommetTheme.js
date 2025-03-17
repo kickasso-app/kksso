@@ -98,17 +98,17 @@ const themeChanges = {
       level: "4",
     },
     medium: {
-      daySize: "36px",
-      lineHeight: 2.0,
-      fontSize: "16px",
+      daySize: "30px",
+      lineHeight: 1.6,
+      fontSize: "14px",
     },
     small: {
       daySize: "28px",
     },
     day: {
-      extend: ({ isSelected }) => `
+      extend: ({ isSelected, isInRange }) => `
         border-radius: 100px;
-        background-color: ${isSelected && "#C0FFF4"}`,
+        background-color: ${(isSelected || isInRange) && "#C0FFF4"}`,
     },
   },
   checkBox: {

@@ -280,7 +280,7 @@ const VisitForm = ({
                   // margin={size === "small" ? "medium" : "small"}
                   size="medium"
                   margin="none"
-                  bounds={[calendarBounds.Start, calendarBounds.End]}
+                  bounds={calendarBounds}
                   daysOfWeek={true}
                   firstDayOfWeek={1}
                   disabled={monthlyDisabled}

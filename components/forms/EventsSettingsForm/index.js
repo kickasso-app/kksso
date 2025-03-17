@@ -40,8 +40,6 @@ export default function EventsSettingsForm({
   const readableDate = (date) =>
     moment(date, "YYYY-MM-DD hh:mm").format("D MMMM");
 
-  // const disabledDates = [["2023-09-01", "2023-09-15"]];
-
   async function updateProfile(event) {
     const updates = {
       ...values,

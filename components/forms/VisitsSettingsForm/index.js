@@ -183,6 +183,16 @@ export default function VisitsSettingsForm({
             onSubmit={updateProfile}
             validate="submit"
           >
+            <Text>
+              Please save the dates and times you entered and review them in the
+              calendar below.
+            </Text>
+
+            <Box direction="row" gap="medium" margin={fieldMargin}>
+              <Button type="submit" btnStyle="filled" disabled={loading}>
+                Save Changes
+              </Button>
+            </Box>
             <Row>
               <Col xs={12} md={8}>
                 <Calendar
@@ -191,30 +201,13 @@ export default function VisitsSettingsForm({
                   size="medium"
                   daysOfWeek={true}
                   firstDayOfWeek={1}
-                  // margin="medium"
-                  bounds={[calendarBounds.Start, calendarBounds.End]}
+                  bounds={calendarBounds}
                   showAdjacentDays={false}
                   onReference={onChangeMonth}
                   disabled={monthlyDisabled}
-                  // disabled={availability ? formatDisabled(availability) : []}
-                  // to customize the header
-                  // https://storybook.grommet.io/?path=/story/visualizations-calendar-header--custom-header-calendar
                 />
-                <Text>
-                  {" "}
-                  Please review your calendar and save the dates and times you
-                  entered.
-                </Text>
-                <br />
-                <br />
               </Col>
             </Row>
-
-            <Box direction="row" gap="medium" margin={fieldMargin}>
-              <Button type="submit" btnStyle="filled" disabled={loading}>
-                Save Changes
-              </Button>
-            </Box>
 
             {!loading && (
               <>
