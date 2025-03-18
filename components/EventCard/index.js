@@ -1,15 +1,23 @@
-import { Calendar, Clock, Link } from "react-feather";
-
-import { Heading, Paragraph } from "grommet";
-
+import React, { useState, useEffect } from "react";
+import { Heading, Paragraph, Image } from "grommet";
+import { Calendar, Clock } from "react-feather";
+import { downloadEventImage } from "services/images";
 import styles from "./index.module.scss";
 
-const EventCard = ({ events, eventsLink, eventsContact }) => {
-  const eventSeperator = "/";
-  const headingMargin = { top: "large", bottom: "small" };
-  const eventMargin = { top: "small", bottom: "small" };
+export default function EventCard({ event, userId }) {
+  const [photoUrl, setPhotoUrl] = useState(null);
+  const eventMargin = { vertical: "1rem" };
 
-  const [title, date, details, details2] = events.split(eventSeperator);
+  useEffect(() => {
+    async function fetchPhoto() {
+      // Download the event photo using the fixed path "event-small.jpg"
+      const url = await downloadEventImage({
+        imgPath: userId + "/event-small.jpg",
+      });
+      setPhotoUrl(url);
+    }
+    fetchPhoto();
+  }, [event]);
 
   return (
     <>
@@ -17,7 +25,17 @@ const EventCard = ({ events, eventsLink, eventsContact }) => {
         Studio events
       </Heading>
 
-      {title && (
+      {photoUrl && (
+        <Image
+          src={photoUrl}
+          fit="cover"
+          width="100%"
+          height="200px"
+          margin={{ bottom: "1rem" }}
+        />
+      )}
+
+      {event.title && (
         <Paragraph size="medium" margin={eventMargin} fill>
           <Calendar
             className={styles.icon}
@@ -26,11 +44,11 @@ const EventCard = ({ events, eventsLink, eventsContact }) => {
             color="#FFC0CB"
             fill="#fff"
           />
-          <b>{title}</b>
+          <b>{event.title}</b>
         </Paragraph>
       )}
 
-      {date && (
+      {event.date && (
         <Paragraph size="medium" margin={eventMargin} fill>
           <Clock
             className={styles.icon}
@@ -39,57 +57,27 @@ const EventCard = ({ events, eventsLink, eventsContact }) => {
             color="#FFC0CB"
             fill="#fff"
           />
-          {date}
+          {event.date}
         </Paragraph>
       )}
-      {details && (
+
+      {event.miniDescription && (
         <Paragraph size="medium" margin={eventMargin} fill>
-          {details}
+          {event.miniDescription}
         </Paragraph>
       )}
-      {details2 && (
+
+      {event.link && (
         <Paragraph size="medium" margin={eventMargin} fill>
-          {details2}
+          {event.link}
         </Paragraph>
       )}
 
-      {eventsLink?.startsWith("http") && (
-        <>
-          <Paragraph size="medium" margin={headingMargin} fill>
-            <Link
-              className={styles.icon}
-              size={18}
-              strokeWidth="4"
-              color="#C0FFF4"
-            />
-            <a target="_blank" href={eventsLink}>
-              Event link
-            </a>
-          </Paragraph>
-        </>
-      )}
-
-      {eventsContact && (
-        <>
-          <Heading level="4" size="medium" margin={headingMargin}>
-            Contact for event
-          </Heading>
-
-          {eventsContact.startsWith("http") ? (
-            <a href={eventsContact} target="_blank">
-              {eventsContact}
-            </a>
-          ) : (
-            <Paragraph size="medium" margin={eventMargin} fill>
-              {eventsContact}
-            </Paragraph>
-          )}
-          <br />
-          <hr />
-        </>
+      {event.contact && (
+        <Paragraph size="medium" margin={eventMargin} fill>
+          Contact: {event.contact}
+        </Paragraph>
       )}
     </>
   );
-};
-
-export default EventCard;
+}

@@ -1,5 +1,3 @@
-"use client";
-
 import { supabase } from "services/supabase";
 import convert from "client-side-image-resize";
 

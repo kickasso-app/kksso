@@ -176,11 +176,7 @@ const Studio = () => {
               </Col>
               <Col xs={12} md={5} mdOffset={1}>
                 {studio.events && (
-                  <EventCard
-                    events={studio.events}
-                    eventsLink={studio?.eventsLink}
-                    eventsContact={studio?.eventsContact}
-                  />
+                  <EventCard event={studio.event} userId={studio.uuid} />
                 )}
                 {studio.visitRules && studio.visitRules.length > 0 && (
                   <>

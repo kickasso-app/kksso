@@ -11,10 +11,12 @@ export const studioColumns = [
   "availability",
   "website",
   "instagram",
+  //TODO: remove
   "events",
   "eventsContact",
   "eventsLink",
   "referrals",
+  "event",
   // "address",
   // "directions",
   "accountType",

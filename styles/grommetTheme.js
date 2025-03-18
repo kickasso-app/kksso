@@ -126,6 +126,14 @@ const themeChanges = {
       color: "brand",
     },
   },
+  // New changes for Select component
+  select: {
+    background: { color: "light-1" },
+
+    icons: {
+      color: "brand",
+    },
+  },
   // size is useless
   // size: {
   //   large: {
