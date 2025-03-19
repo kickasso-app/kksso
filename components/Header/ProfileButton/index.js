@@ -49,9 +49,10 @@ export default function ProfileButton() {
           pad={"small"}
           onClick={() => setOpen(false)}
         >
-          <NavButton path={"/requests"} label={"Requests"} />
           <NavButton path={"/profile?section=0"} label={"Profile"} />
-          <NavButton path={"/profile?section=3"} label={"Settings"} />
+          <NavButton path={"/requests"} label={"Requests"} />
+          <NavButton path={"/profile?section=3"} label={"Events"} />
+          <NavButton path={"/profile?section=4"} label={"Settings"} />
           <Box pad={{ vertical: "small" }}>
             {loading ? (
               <img src={`/img/loader.svg`} />

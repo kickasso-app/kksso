@@ -47,9 +47,9 @@ const EventCardEdit = ({
       align="center"
       justify="between"
       border={{ color: "light-4", size: "xsmall" }}
-      pad="medium"
+      pad="small"
       round="small"
-      margin={{ vertical: "small" }}
+      margin={{ vertical: "medium" }}
       fill="horizontal"
     >
       <Box direction="row" gap="medium" align="center">
@@ -58,7 +58,7 @@ const EventCardEdit = ({
         ) : (
           <Box
             width="60px"
-            height="60px"
+            height="100px"
             background="light-3"
             align="center"
             justify="center"
@@ -70,21 +70,19 @@ const EventCardEdit = ({
           <Heading level="4" margin={{ vertical: "small" }}>
             {event.title || "Untitled"}
           </Heading>
-          <Text>{event.type}</Text>
+          <Text size="small">{event.type}</Text>
 
           {event?.date ? (
-            <Text size="small">
-              On {event.date} at {event.time}{" "}
-            </Text>
+            <Text size="small">On {event.date}</Text>
           ) : (
             <Text size="small">On unspecified date</Text>
           )}
-          <Text size="small">
+          <Text size="small" margin={{ top: "small" }}>
             <b>{published ? "Published" : "Not Published"}</b>
           </Text>
         </Box>
       </Box>
-      <Box align="center">
+      <Box align="right">
         <Box direction="row" gap="xsmall">
           {event.isPublished && (
             <Button

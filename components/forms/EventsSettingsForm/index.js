@@ -91,7 +91,10 @@ export default function EventsSettingsForm({ profile }) {
 
         <Row>
           <Col xs={12} md={12}>
-            <Box align="start" margin="medium">
+            <Box
+              align="start"
+              margin={{ vertical: "medium", horizontal: "none" }}
+            >
               {/* <Heading level={2} margin={{ vertical: "medium" }}>
                 Events
               </Heading> */}

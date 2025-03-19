@@ -38,21 +38,21 @@ const EventsProvider = ({ children }) => {
     setLoading(false);
   };
 
-  const fetchEvent = async ({ event_id, studio_uuid }) => {
+  const fetchEvent = async ({ event_id }) => {
     setLoading(true);
     // console.log("fetching Events");
     try {
       let { data: supaEvent, error } = await supabase
         .from("events")
         .select("*")
-        .eq("studio_uuid", studio_uuid)
+        // .eq("studio_uuid", studio_uuid) // not needed
         .eq("id", event_id)
         .single();
       if (error) {
         setError(error.message);
         throw error;
       }
-      console.log(supaEvent);
+      // console.log(supaEvent);
       setEvent(supaEvent);
     } catch (error) {
       const returnError = error.message ?? "No Event were fetched";

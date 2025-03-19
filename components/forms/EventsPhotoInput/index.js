@@ -22,23 +22,23 @@ const EventsPhotoInput = ({ userId, event, postUpload }) => {
   const [uploading, setUploading] = useState(false);
   const [isPhotoTooLarge, setIsPhotoTooLarge] = useState(false);
 
-  console.log("event is", event);
+  // console.log("event is", event);
   const imgDirectory = `${userId}/${event.id}`;
-  console.log(imgDirectory);
+  // console.log(imgDirectory);
   const filePathLarge = `${imgDirectory}/event-large.jpg`;
   const filePathSmall = `${imgDirectory}/event-small.jpg`;
 
   useEffect(async () => {
     if (event) {
       const imgPath = filePathSmall;
-      console.log(imgPath);
+      // console.log(imgPath);
       const doesImageExist = await fileExists(
         "events",
         imgDirectory,
         "event-small.jpg"
       );
       if (doesImageExist) {
-        console.log(imgPath);
+        // console.log(imgPath);
         await downloadEventImage({
           imgPath: imgPath,
           postDownload: setImgUrl,

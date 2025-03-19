@@ -1,0 +1,214 @@
+import { useState, useEffect, useContext } from "react";
+
+import { useRouter } from "next/router";
+import Link from "next/link";
+
+import moment from "moment";
+
+import { useEvents } from "services/events";
+import { downloadEventImage, fileExists } from "services/images";
+
+import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
+import { Box, Heading, Paragraph, ResponsiveContext, Text } from "grommet";
+import { ChevronLeft, Disc, Instagram, Globe } from "react-feather";
+
+import Button from "components/Button";
+
+import styles from "./index.module.scss";
+
+const readableDate = (date) =>
+  moment(date, "YYYY-MM-DD").format("dddd D MMM, YYYY");
+
+const Studio = () => {
+  const router = useRouter();
+  const size = useContext(ResponsiveContext);
+  const { event, fetchEvent, loading, error } = useEvents();
+
+  const { id } = router.query;
+
+  const [imgUrl, setImgUrl] = useState(null);
+
+  useEffect(async () => {
+    if (id && (!event || event?.id !== id)) {
+      console.log("fetching event", id);
+      await fetchEvent({ event_id: id });
+    }
+  }, [id, event]);
+
+  useEffect(async () => {
+    if (event && !imgUrl) {
+      const imgPath = `${event.studio_uuid}/${event.id}`;
+
+      const doesImageExist = await fileExists(
+        "events",
+        imgPath,
+        "event-large.jpg"
+      );
+      if (doesImageExist) {
+        console.log("img exists");
+        await downloadEventImage({
+          imgPath: imgPath + "/event-large.jpg",
+          postDownload: setImgUrl,
+        });
+      }
+    }
+  }, [imgUrl, event]);
+
+  // console.log(studio);
+
+  const headingMargin = { top: "large", bottom: "small" };
+  const paragraphMargin = { top: "small", bottom: "small" };
+  const sectionMargin = { top: "medium", bottom: "medium" };
+
+  const paragraphSeperator = /\r\n|\n|\r/;
+
+  const makeParagraphs = (paragraphString, pSeparator) => {
+    // console.log(paragraphString);
+    return paragraphString.split(pSeparator).map((paragraph, index) => (
+      <Paragraph key={index} size="medium" margin={paragraphMargin} fill>
+        {paragraph}
+      </Paragraph>
+      // <ReactMarkdown key={index}>{paragraph}</ReactMarkdown>
+    ));
+  };
+
+  return (
+    <Grid fluid className={styles.event}>
+      <Col xs={12}>
+        {error && error.code !== "22P02" && (
+          <strong>Error: {JSON.stringify(error)}</strong>
+        )}
+        {loading ? (
+          <Box align="center" pad="large">
+            <img src={`/img/loader.svg`} />
+          </Box>
+        ) : !event || !event?.isPublished ? (
+          <Box align="center" margin="large">
+            There is no published event here {":("}
+          </Box>
+        ) : (
+          <>
+            {/* <ChevronLeft className={styles.icon} size={16} />{" "}
+            <Link
+              href={`/events/` + event.location[0].toLowerCase()}
+              className={styles.backlink}
+            >
+              BACK
+            </Link> */}
+            {imgUrl && (
+              <Box
+                align="center"
+                margin={{ vertical: "medium", horizontal: "xsmall" }}
+              >
+                <Box margin={{ bottom: "1rem" }}>
+                  <img
+                    src={imgUrl}
+                    alt="banner"
+                    layout="responsive"
+                    width="100%"
+                    style={{
+                      height: size === "small" ? "100%" : "auto",
+                      maxHeight: size !== "small" ? "60vh" : "none",
+                    }}
+                  />
+                </Box>
+              </Box>
+            )}
+            <Row>
+              <Col xs={12} md={6}>
+                <Row between="xs" middle="xs">
+                  <Col>
+                    {event.title && (
+                      <h2 className={styles.maintitle}>{event.title}</h2>
+                    )}
+                  </Col>
+                  {event.type && (
+                    <Box
+                      border="1px"
+                      round="xsmall"
+                      pad={{ vertical: "small", horizontal: "medium" }}
+                    >
+                      {event.type}
+                    </Box>
+                  )}
+                </Row>
+                {makeParagraphs(event.miniDescription)}
+                <Heading level="3" size="medium" margin={headingMargin}>
+                  Details
+                </Heading>
+                {makeParagraphs(event.longDescription, paragraphSeperator)}
+                <Box margin={sectionMargin}>
+                  <hr />
+                </Box>
+                <Heading level="3" size="medium" margin={headingMargin}>
+                  Location
+                </Heading>
+                <Paragraph>
+                  <Disc
+                    className={styles.icon}
+                    size={18}
+                    strokeWidth="2"
+                    color="#FFC0CB"
+                    fill="#fff"
+                  />{" "}
+                  <Text> {event.location}</Text>
+                </Paragraph>
+                <Box margin={sectionMargin}>
+                  <hr />
+                </Box>
+                {event.link && (
+                  <>
+                    <Heading level="3" size="medium" margin={headingMargin}>
+                      Links
+                    </Heading>
+                    <Paragraph fill margin={{ vertical: "medium" }}>
+                      <Globe
+                        className={styles.icon}
+                        size={24}
+                        strokeWidth="1"
+                        color="#4B4B4B"
+                        fill="#FFF"
+                      />{" "}
+                      <a href={event.link} target="_blank">
+                        {event.link}
+                      </a>
+                    </Paragraph>
+                    {size === "small" && (
+                      <>
+                        <Box margin={sectionMargin}>
+                          <hr />
+                          <br />
+                        </Box>
+                      </>
+                    )}
+                  </>
+                )}
+              </Col>
+              <Col xs={12} md={5} mdOffset={1}>
+                <Heading level="3" size="medium" margin={headingMargin}>
+                  Date and time
+                </Heading>
+                <Paragraph>
+                  {readableDate(event.date)} <br /> {event.time}
+                </Paragraph>
+                <Box margin={sectionMargin}>
+                  <hr />
+                </Box>
+                {event?.contact && (
+                  <>
+                    <Heading level="3" size="medium" margin={headingMargin}>
+                      Contact
+                    </Heading>
+                    <Paragraph>{event.contact}</Paragraph>
+                  </>
+                )}
+              </Col>
+            </Row>
+          </>
+        )}
+      </Col>
+    </Grid>
+  );
+};
+
+export default Studio;

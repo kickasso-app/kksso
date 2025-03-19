@@ -96,7 +96,7 @@ const EventEditForm = () => {
     async function fetchData() {
       if (user && id && (!event || event?.id !== id)) {
         console.log("fetching event", id);
-        await fetchEvent({ event_id: id, studio_uuid: user.id });
+        await fetchEvent({ event_id: id });
       }
       if (user && id && event && event.id === id) {
         setValues({
@@ -160,6 +160,7 @@ const EventEditForm = () => {
                         option !== "Other" ? "" : prev.eventTypeOther,
                     }))
                   }
+                  required
                 />
               </FormField>
 
@@ -179,6 +180,7 @@ const EventEditForm = () => {
                         eventTypeOther: e.target.value,
                       }))
                     }
+                    required
                   />
                 </FormField>
               )}
@@ -194,7 +196,11 @@ const EventEditForm = () => {
                 name="eventTitle"
                 margin={fieldMargin}
               >
-                <TextInput name="eventTitle" placeholder="Enter event title" />
+                <TextInput
+                  name="eventTitle"
+                  placeholder="Enter event title"
+                  required
+                />
               </FormField>
 
               <FormField
@@ -202,7 +208,19 @@ const EventEditForm = () => {
                 name="eventDate"
                 margin={fieldMargin}
               >
-                <TextInput name="eventDate" placeholder="YYYY-MM-DD" />
+                <TextInput name="eventDate" placeholder="YYYY-MM-DD" required />
+              </FormField>
+
+              <FormField
+                label="Event Time"
+                name="eventTime"
+                margin={fieldMargin}
+              >
+                <TextInput
+                  name="eventTime"
+                  placeholder="e.g. 6-8 pm"
+                  required
+                />
               </FormField>
 
               <FormField label="Location" name="location" margin={fieldMargin}>
@@ -218,6 +236,7 @@ const EventEditForm = () => {
                         option === "Other" ? prev.locationOther : "",
                     }))
                   }
+                  required
                 />
               </FormField>
 
@@ -237,41 +256,10 @@ const EventEditForm = () => {
                         locationOther: e.target.value,
                       }))
                     }
+                    required
                   />
                 </FormField>
               )}
-
-              <FormField
-                label="Event Time"
-                name="eventTime"
-                margin={fieldMargin}
-              >
-                <TextInput name="eventTime" placeholder="e.g. 6-8 pm" />
-              </FormField>
-
-              <FormField
-                label="Current Number Joined"
-                name="currentNJoined"
-                margin={fieldMargin}
-              >
-                <TextInput
-                  name="currentNJoined"
-                  placeholder="Optional: current number joined"
-                  type="number"
-                />
-              </FormField>
-
-              <FormField
-                label="Maximum Number Joined"
-                name="maxNJoined"
-                margin={fieldMargin}
-              >
-                <TextInput
-                  name="maxNJoined"
-                  placeholder="Optional: max number joined"
-                  type="number"
-                />
-              </FormField>
 
               <FormField
                 label="Short Description"
@@ -283,6 +271,7 @@ const EventEditForm = () => {
                   placeholder="A brief event description"
                   maxLength={300}
                   rows={4}
+                  required
                 />
               </FormField>
 
@@ -296,15 +285,50 @@ const EventEditForm = () => {
                   placeholder="Detailed event description to show in the event's page"
                   maxLength={1000}
                   rows={8}
+                  required
+                />
+              </FormField>
+              {/* <FormField
+                label="Current Number Joined"
+                name="currentNJoined"
+                margin={fieldMargin}
+              >
+                <TextInput
+                  name="currentNJoined"
+                  placeholder="Optional: current number joined"
+                  type="number"
+                />
+              </FormField> */}
+
+              <FormField
+                label="Maximum number of participants (optional)"
+                name="maxNJoined"
+                margin={fieldMargin}
+              >
+                <TextInput
+                  name="maxNJoined"
+                  placeholder="Optional: max number of participants"
+                  type="number"
                 />
               </FormField>
 
-              <FormField label="Contact" name="contact" margin={fieldMargin}>
+              <FormField
+                label="Contact (optional)"
+                name="contact"
+                margin={fieldMargin}
+              >
                 <TextInput name="contact" placeholder="Enter contact details" />
               </FormField>
 
-              <FormField label="Event Link" name="link" margin={fieldMargin}>
-                <TextInput name="link" placeholder="Optional: event link" />
+              <FormField
+                label="Event Link (Optional)"
+                name="link"
+                margin={fieldMargin}
+              >
+                <TextInput
+                  name="link"
+                  placeholder="htttp://www.your-event-link.com"
+                />
               </FormField>
               <Box direction="row" gap="medium">
                 <Button type="submit" btnStyle="filled" disabled={loading}>

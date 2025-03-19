@@ -46,7 +46,7 @@ export default function DateRangeSelector({ unavailableDates = [], onUpdate }) {
       });
 
   const today = new Date();
-  console.log(today);
+  // console.log(today);
 
   const todayDate = moment(today).format("YYYY-MM-DD");
 
