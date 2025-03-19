@@ -1,34 +1,44 @@
-import { useEffect, useState } from "react";
-
+import React, { useEffect, useState } from "react";
 import { supabase } from "services/supabase";
 import { useAuth } from "services/auth";
 import { downloadEventImage, fileExists, resizeImage } from "services/images";
-
+import {
+  Grid,
+  Box,
+  Button,
+  FileInput,
+  Image,
+  Text,
+  Notification,
+  Paragraph,
+} from "grommet";
 import { Edit2, X } from "react-feather";
 
-import { Box, Notification, FileInput } from "grommet";
-
-import Button from "components/Button";
 const PHOTO_MAX_SIZE = 1048576; // 1 MB
 
-export default function EventsPhotoInput({ userId, postUpload }) {
+const EventsPhotoInput = ({ userId, event, postUpload }) => {
   const [imgUrl, setImgUrl] = useState(null);
   const [editing, setEditing] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [isPhotoTooLarge, setIsPhotoTooLarge] = useState(false);
 
-  const { user } = useAuth();
+  console.log("event is", event);
+  const imgDirectory = `${userId}/${event.id}`;
+  console.log(imgDirectory);
+  const filePathLarge = `${imgDirectory}/event-large.jpg`;
+  const filePathSmall = `${imgDirectory}/event-small.jpg`;
 
   useEffect(async () => {
-    if (userId) {
-      const imgPath = `${userId}/event-small.jpg`;
+    if (event) {
+      const imgPath = filePathSmall;
+      console.log(imgPath);
       const doesImageExist = await fileExists(
         "events",
-        userId,
+        imgDirectory,
         "event-small.jpg"
       );
       if (doesImageExist) {
-        // console.log(imgPath);
+        console.log(imgPath);
         await downloadEventImage({
           imgPath: imgPath,
           postDownload: setImgUrl,
@@ -36,13 +46,13 @@ export default function EventsPhotoInput({ userId, postUpload }) {
         setEditing(!imgPath);
       }
     }
-  }, [userId]);
+  }, [event]);
 
   async function removeImage() {
     try {
       let { error } = await supabase.storage
         .from("events")
-        .move(`${userId}/event-large.jpg`, `${userId}/removed/${Date.now()}-`);
+        .move(filePathLarge, `${imgDirectory}/removed/${Date.now()}-`);
 
       if (error) {
         throw error;
@@ -52,7 +62,7 @@ export default function EventsPhotoInput({ userId, postUpload }) {
 
       let { errorRemove } = await supabase.storage
         .from("events")
-        .remove([`${userId}/event-small.jpg`]);
+        .remove([filePathSmall]);
       if (errorRemove) {
         throw errorRemove;
       }
@@ -75,9 +85,6 @@ export default function EventsPhotoInput({ userId, postUpload }) {
       const file = event.target.files[0];
       const fileExt = file.name.split(".").pop();
       const fileName = `${imgName}.${fileExt}`;
-      //       const filePath = `${user.id}/${fileName}`;
-      const filePathLarge = `${user.id}/event-large.jpg`;
-      const filePathSmall = `${user.id}/event-small.jpg`;
 
       if (file.size > PHOTO_MAX_SIZE) {
         setIsPhotoTooLarge(true);
@@ -124,68 +131,51 @@ export default function EventsPhotoInput({ userId, postUpload }) {
   }
 
   return (
-    <div>
-      <Box
-        width="medium"
-        height="small"
-        direction="row-responsive"
-        align="center"
-        pad="medium"
-        gap="large"
-        margin="medium"
-      >
-        <Box align="center" width="small" height="small">
-          {editing || !imgUrl ? (
-            <FileInput
-              //   style={{ width: size }}
-              name="fileInput"
-              id="fileInput"
-              multiple={false}
-              accept="image/*"
-              // maxSize={PHOTO_MAX_SIZE} // not working, using manual check
-              disabled={uploading}
-              onChange={async (event) => await uploadImage({ event })}
-            />
-          ) : (
-            <>
-              {imgUrl && (
-                <img src={imgUrl} alt="Photo" style={{ height: "100%" }} />
-              )}
-            </>
-          )}
-        </Box>
-        <Box width="small" pad="small">
-          {imgUrl && (
-            <Box direction="row" gap="large" pad="small">
-              <Edit2
-                size={24}
-                color="#222222"
-                strokeWidth={1.5}
-                onClick={() => setEditing(!editing)}
-              />
-              <X
-                size={24}
-                color="#222222"
-                strokeWidth={1.5}
-                onClick={removeImage}
-              />
-            </Box>
-          )}
-
-          {uploading && <img src={`/img/loader.svg`} />}
-
-          <br />
-          {isPhotoTooLarge && (
-            <Notification
-              toast
-              status="warning"
-              title="Your photo was not uploaded"
-              message="Upload a smaller image, less than 1 Megabyte."
-              // onClose={() => {}}
-            />
-          )}
-        </Box>
+    <Grid
+      rows={["small", "xxsmall"]}
+      columns={["1fr", "auto"]}
+      gap="small"
+      areas={[
+        { name: "photo", start: [0, 0], end: [0, 0] },
+        { name: "icons", start: [0, 1], end: [0, 1] },
+      ]}
+      justify="start"
+      align="center"
+      pad="small"
+    >
+      <Box gridArea="photo">
+        {editing || !imgUrl ? (
+          <FileInput
+            name="fileInput"
+            id="fileInput"
+            multiple={false}
+            accept="image/*"
+            disabled={uploading}
+            onChange={async (event) => await uploadImage({ event })}
+          />
+        ) : (
+          <>{imgUrl && <Image src={imgUrl} alt="Photo" height="200px" />}</>
+        )}
       </Box>
-    </div>
+      <Box gridArea="icons" direction="row" justify="center" gap="large">
+        <Button
+          icon={<Edit2 size={24} color="#222222" />}
+          onClick={() => setEditing(!editing)}
+        />
+        <Button icon={<X size={24} color="#222222" />} onClick={removeImage} />
+      </Box>
+      {uploading && <img src={`/img/loader.svg`} />}
+      <br />
+      {isPhotoTooLarge && (
+        <Notification
+          toast
+          status="warning"
+          title="Your photo was not uploaded"
+          message="Upload a smaller image, less than 1 Megabyte."
+        />
+      )}
+    </Grid>
   );
-}
+};
+
+export default EventsPhotoInput;

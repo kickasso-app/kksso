@@ -5,7 +5,7 @@ async function fileExists(bucketName, filePath, fileName) {
   const { data, error } = await supabase.storage
     .from(bucketName)
     .list(filePath, {
-      limit: 3,
+      limit: 4,
       // offset: 0,
       sortBy: { column: "name", order: "asc" },
     });
@@ -67,6 +67,7 @@ async function downloadEventImage({ imgPath, postDownload }) {
     if (error) {
       throw error;
     }
+
     const url = URL.createObjectURL(data);
     if (postDownload) {
       postDownload(url);

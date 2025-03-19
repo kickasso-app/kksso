@@ -36,7 +36,7 @@ export const SelectLocation = ({ isBarFullWidth = false }) => {
           {cities?.length > 0 &&
             cities.map(({ city }) => {
               return (
-                <Box pad="small">
+                <Box pad="small" key={city}>
                   <Button
                     label={
                       <Box pad="xsmall">

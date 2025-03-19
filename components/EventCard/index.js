@@ -12,7 +12,7 @@ export default function EventCard({ event, userId }) {
     async function fetchPhoto() {
       // Download the event photo using the fixed path "event-small.jpg"
       const url = await downloadEventImage({
-        imgPath: userId + "/event-small.jpg",
+        imgPath: event.id + "/event-small.jpg",
       });
       setPhotoUrl(url);
     }
