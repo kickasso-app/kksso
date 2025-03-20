@@ -3,43 +3,10 @@ import { Box, Image, Heading, Text, Button } from "grommet";
 // import { Edit, Trash } from "grommet-icons";
 
 import { Edit3, Eye } from "react-feather";
-import { downloadEventImage, fileExists } from "services/images";
+import useEventImage from "hooks/useEventImage";
 
-const EventCardEdit = ({
-  event,
-  imgPath,
-  onEdit,
-  onView,
-  //onDelete, onTogglePublish
-}) => {
-  const [imgUrl, setImgUrl] = useState(null);
-
-  const [published, setPublished] = useState(event.isPublished);
-
-  useEffect(async () => {
-    if (event && imgPath && !imgUrl) {
-      const doesImageExist = await fileExists(
-        "events",
-        imgPath,
-        "event-small.jpg"
-      );
-      if (doesImageExist) {
-        console.log("exists");
-        await downloadEventImage({
-          imgPath: imgPath + "/event-small.jpg",
-          postDownload: setImgUrl,
-        });
-      }
-    }
-  }, [event]);
-
-  //   const handleToggle = () => {
-  //     const newStatus = !published;
-  //     setPublished(newStatus);
-  //     if (onTogglePublish) {
-  //       onTogglePublish(event.id, newStatus);
-  //     }
-  //   };
+const EventCardEdit = ({ event, imgPath, onEdit, onView }) => {
+  const [imgUrl, setImgUrl] = useEventImage(event, "small");
 
   return (
     <Box
@@ -54,7 +21,7 @@ const EventCardEdit = ({
     >
       <Box direction="row" gap="medium" align="center">
         {imgUrl ? (
-          <Image src={imgUrl} alt="Event" height="100px" />
+          <img src={imgUrl} alt="Event" width="80px" />
         ) : (
           <Box
             width="60px"
@@ -78,7 +45,7 @@ const EventCardEdit = ({
             <Text size="small">On unspecified date</Text>
           )}
           <Text size="small" margin={{ top: "small" }}>
-            <b>{published ? "Published" : "Not Published"}</b>
+            <b>{event?.isPublished ? "Published" : "Not Published"}</b>
           </Text>
         </Box>
       </Box>

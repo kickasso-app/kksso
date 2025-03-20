@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
+import Link from "next/link";
+import { ChevronLeft } from "react-feather";
+
 import {
   Box,
   Grid,
@@ -13,7 +16,6 @@ import {
   TextArea,
   Select,
   Button as GrommetButton,
-  generate,
 } from "grommet";
 
 import EventsPhotoInput from "components/forms/EventsPhotoInput";
@@ -37,6 +39,7 @@ const initialValues = {
   link: "",
   location: "Studio",
   locationOther: "",
+  isPublished: false,
 };
 
 const EventEditForm = () => {
@@ -44,16 +47,15 @@ const EventEditForm = () => {
   const { id } = router.query;
 
   const { session, user } = useAuth();
+  const { profile, fetchProfile } = useAccount();
   const {
-    profile,
-    fetchProfile,
+    event,
+    fetchEvent,
+    updateEvent,
+    loading,
     isUpdateSuccess,
     isUpdateError,
-    loading,
-    error,
-  } = useAccount();
-
-  const { event, fetchEvent, updateEvent } = useEvents();
+  } = useEvents();
 
   const [values, setValues] = useState(initialValues);
 
@@ -79,6 +81,7 @@ const EventEditForm = () => {
       longDescription: values.longDescription,
       contact: values.contact,
       link: values.link,
+      isPublished: values.isPublished ? true : false,
     };
     await updateEvent(eventData, id);
   }
@@ -112,6 +115,7 @@ const EventEditForm = () => {
           longDescription: event.longDescription ?? "",
           contact: event.contact ?? "",
           link: event.link ?? "",
+          isPublished: event.isPublished ?? false,
           location: event.location ?? "Studio",
           locationOther:
             event.location === "Other" ? event.locationOther ?? "" : "",
@@ -123,16 +127,16 @@ const EventEditForm = () => {
 
   return (
     <Box fill align="center" justify="center">
-      <Box
-        fill="horizontal"
-        pad="medium"
-        gap="medium"
-        width={{ max: "large" }} // on larger screens, limit to "large"
-      >
-        <Heading level="3" size="medium" margin={fieldMargin}>
+      <Box fill="horizontal" pad="medium" gap="medium" width={{ max: "large" }}>
+        <br />
+        <Box direction="col">
+          {" "}
+          <ChevronLeft size={16} />{" "}
+          <Link href={"/profile?section=3"}>BACK</Link>
+        </Box>
+        <Heading level="3" size="medium" margin={textMargin}>
           {event?.title || "New Event"}
         </Heading>
-
         {event && (
           <Grid fluid>
             <Form
@@ -163,7 +167,6 @@ const EventEditForm = () => {
                   required
                 />
               </FormField>
-
               {values.eventType === "Other" && (
                 <FormField
                   label="Specify Event Type"
@@ -184,13 +187,21 @@ const EventEditForm = () => {
                   />
                 </FormField>
               )}
-
+              <Box margin={textMargin}>
+                <Heading level="4" size="medium" margin={{ bottom: "small" }}>
+                  Event Photo
+                </Heading>
+                <Text>
+                  We suggest a sqaure ratio (1:1) for this image. <br />
+                  Please make sure that your image file are smaller than{" "}
+                  <b>1 MB </b>
+                </Text>
+              </Box>
               <EventsPhotoInput
                 event={event}
                 userId={user.id}
                 // postUpload={handlePostUpload}
               />
-
               <FormField
                 label="Event Title"
                 name="eventTitle"
@@ -202,7 +213,6 @@ const EventEditForm = () => {
                   required
                 />
               </FormField>
-
               <FormField
                 label="Event Date"
                 name="eventDate"
@@ -210,7 +220,6 @@ const EventEditForm = () => {
               >
                 <TextInput name="eventDate" placeholder="YYYY-MM-DD" required />
               </FormField>
-
               <FormField
                 label="Event Time"
                 name="eventTime"
@@ -222,7 +231,6 @@ const EventEditForm = () => {
                   required
                 />
               </FormField>
-
               <FormField label="Location" name="location" margin={fieldMargin}>
                 <Select
                   name="location"
@@ -239,7 +247,6 @@ const EventEditForm = () => {
                   required
                 />
               </FormField>
-
               {values.location === "Other" && (
                 <FormField
                   label="Specify Location"
@@ -260,7 +267,6 @@ const EventEditForm = () => {
                   />
                 </FormField>
               )}
-
               <FormField
                 label="Short Description"
                 name="miniDescription"
@@ -274,7 +280,6 @@ const EventEditForm = () => {
                   required
                 />
               </FormField>
-
               <FormField
                 label="Long Description"
                 name="longDescription"
@@ -288,7 +293,7 @@ const EventEditForm = () => {
                   required
                 />
               </FormField>
-              {/* <FormField
+              <FormField
                 label="Current Number Joined"
                 name="currentNJoined"
                 margin={fieldMargin}
@@ -298,8 +303,7 @@ const EventEditForm = () => {
                   placeholder="Optional: current number joined"
                   type="number"
                 />
-              </FormField> */}
-
+              </FormField>{" "}
               <FormField
                 label="Maximum number of participants (optional)"
                 name="maxNJoined"
@@ -311,7 +315,6 @@ const EventEditForm = () => {
                   type="number"
                 />
               </FormField>
-
               <FormField
                 label="Contact (optional)"
                 name="contact"
@@ -319,7 +322,6 @@ const EventEditForm = () => {
               >
                 <TextInput name="contact" placeholder="Enter contact details" />
               </FormField>
-
               <FormField
                 label="Event Link (Optional)"
                 name="link"
@@ -330,26 +332,45 @@ const EventEditForm = () => {
                   placeholder="htttp://www.your-event-link.com"
                 />
               </FormField>
+              <FormField label="Status" name="isPublished" margin={fieldMargin}>
+                <Select
+                  name="isPublished"
+                  options={[
+                    { label: "Published", value: true },
+                    { label: "Not Published", value: false },
+                  ]}
+                  labelKey="label"
+                  valueKey={{ key: "value", reduce: true }}
+                  placeholder="Select"
+                  value={values.isPublished}
+                  onChange={({ value: nextValue }) =>
+                    setValues((prev) => ({
+                      ...prev,
+                      isPublished: nextValue,
+                    }))
+                  }
+                  required
+                />
+              </FormField>
               <Box direction="row" gap="medium">
                 <Button type="submit" btnStyle="filled" disabled={loading}>
                   Save Changes
                 </Button>
               </Box>
-
               {!loading && (
                 <>
                   {isUpdateSuccess && (
                     <Notification
                       toast
                       status="normal"
-                      title="Your profile was updated."
+                      title="Your event was updated."
                     />
                   )}
                   {isUpdateError && (
                     <Notification
                       toast
                       status="warning"
-                      title="Your profile was not updated!"
+                      title="Your event was not updated!"
                       message="We couldn't complete your request this time. Please try again."
                       // onClose={() => {}}
                     />

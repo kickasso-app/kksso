@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "services/supabase";
 import { useAuth } from "services/auth";
 import { downloadEventImage, fileExists, resizeImage } from "services/images";
+
 import {
   Grid,
   Box,
@@ -115,7 +116,7 @@ const EventsPhotoInput = ({ userId, event, postUpload }) => {
         if (errorLarge || errorSmall) {
           throw errorLarge || errorSmall;
         }
-        await postUpload();
+        // await postUpload();
         // Append a timestamp query parameter to force a fresh download and bypass cache
         await downloadEventImage({
           imgPath: `${filePathSmall}?t=${Date.now()}`,

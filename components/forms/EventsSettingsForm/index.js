@@ -120,7 +120,7 @@ export default function EventsSettingsForm({ profile }) {
                       router.push("/profile/events/" + e.id);
                     }}
                     onView={() => {
-                      router.push("/events/" + e.id);
+                      router.push("/event/" + e.id);
                     }}
                   />
                 ))

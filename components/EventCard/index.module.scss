@@ -1,3 +1,40 @@
+.imgContainer {
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid $color--bg-white;
+  border-radius: 0.5rem;
+}
+
+img.cardImg {
+  width: 100%;
+  margin: 0 auto;
+  display: block;
+  transition: 0.1s ease-in-out all;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+@keyframes burns {
+  0% {
+    transform: scale(1);
+  }
+
+  // 50% {
+  //   transform: scale(1.125);
+  // }
+  // 51% {
+  //   transform: scale(1);
+  // }
+  100% {
+    transform: scale(1.125);
+  }
+}
+
+img.cardImg:hover {
+  animation: burns 12s;
+}
+
 svg.icon {
   vertical-align: top;
   margin-right: 0.5rem;

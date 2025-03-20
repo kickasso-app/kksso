@@ -1,83 +1,47 @@
-import React, { useState, useEffect } from "react";
-import { Heading, Paragraph, Image } from "grommet";
-import { Calendar, Clock } from "react-feather";
-import { downloadEventImage } from "services/images";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { Box, Heading, Text } from "grommet";
+import Link from "next/link";
+import ProgressiveImage from "react-progressive-image";
+import useEventImage from "hooks/useEventImage";
 import styles from "./index.module.scss";
 
-export default function EventCard({ event, userId }) {
-  const [photoUrl, setPhotoUrl] = useState(null);
+export default function EventCard({ event }) {
+  const router = useRouter();
+  const [imgUrl] = useEventImage(event, "small");
   const eventMargin = { vertical: "1rem" };
 
-  useEffect(() => {
-    async function fetchPhoto() {
-      // Download the event photo using the fixed path "event-small.jpg"
-      const url = await downloadEventImage({
-        imgPath: event.id + "/event-small.jpg",
-      });
-      setPhotoUrl(url);
-    }
-    fetchPhoto();
-  }, [event]);
+  const eventLink = "/event/" + event.id;
+  const openEvent = () => {
+    router.push(eventLink);
+  };
 
   return (
-    <>
-      <Heading level="3" size="medium" margin={{ vertical: "2rem" }}>
-        Studio events
-      </Heading>
-
-      {photoUrl && (
-        <Image
-          src={photoUrl}
-          fit="cover"
-          width="100%"
-          height="200px"
-          margin={{ bottom: "1rem" }}
-        />
-      )}
-
-      {event.title && (
-        <Paragraph size="medium" margin={eventMargin} fill>
-          <Calendar
-            className={styles.icon}
-            size={18}
-            strokeWidth="2"
-            color="#FFC0CB"
-            fill="#fff"
-          />
-          <b>{event.title}</b>
-        </Paragraph>
-      )}
-
-      {event.date && (
-        <Paragraph size="medium" margin={eventMargin} fill>
-          <Clock
-            className={styles.icon}
-            size={18}
-            strokeWidth="2"
-            color="#FFC0CB"
-            fill="#fff"
-          />
-          {event.date}
-        </Paragraph>
-      )}
-
-      {event.miniDescription && (
-        <Paragraph size="medium" margin={eventMargin} fill>
-          {event.miniDescription}
-        </Paragraph>
-      )}
-
-      {event.link && (
-        <Paragraph size="medium" margin={eventMargin} fill>
-          {event.link}
-        </Paragraph>
-      )}
-
-      {event.contact && (
-        <Paragraph size="medium" margin={eventMargin} fill>
-          Contact: {event.contact}
-        </Paragraph>
-      )}
-    </>
+    <div className={styles.EventCard}>
+      <div className={styles.imgContainer}>
+        <Link href={eventLink}>
+          <a onClick={openEvent}>
+            {imgUrl && (
+              <ProgressiveImage src={imgUrl} placeholder={`/img/loader.svg`}>
+                {(src, loading) => (
+                  <img
+                    className={styles.cardImg}
+                    src={src}
+                    alt={event.title}
+                    style={{ opacity: loading ? 0.5 : 1 }}
+                  />
+                )}
+              </ProgressiveImage>
+            )}
+          </a>
+        </Link>
+      </div>
+      <Box pad="small">
+        <Heading level="3" margin={eventMargin}>
+          {event.title}
+        </Heading>
+        <Text>{event.miniDescription}</Text>
+      </Box>
+    </div>
   );
 }

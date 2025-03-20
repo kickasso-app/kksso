@@ -1,12 +1,11 @@
 import { useState, useEffect, useContext } from "react";
 
 import { useRouter } from "next/router";
-import Link from "next/link";
 
 import moment from "moment";
 
 import { useEvents } from "services/events";
-import { downloadEventImage, fileExists } from "services/images";
+import useEventImage from "hooks/useEventImage";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import { Box, Heading, Paragraph, ResponsiveContext, Text } from "grommet";
@@ -26,7 +25,7 @@ const Studio = () => {
 
   const { id } = router.query;
 
-  const [imgUrl, setImgUrl] = useState(null);
+  const [imgUrl] = useEventImage(event, "large");
 
   useEffect(async () => {
     if (id && (!event || event?.id !== id)) {
@@ -34,27 +33,6 @@ const Studio = () => {
       await fetchEvent({ event_id: id });
     }
   }, [id, event]);
-
-  useEffect(async () => {
-    if (event && !imgUrl) {
-      const imgPath = `${event.studio_uuid}/${event.id}`;
-
-      const doesImageExist = await fileExists(
-        "events",
-        imgPath,
-        "event-large.jpg"
-      );
-      if (doesImageExist) {
-        console.log("img exists");
-        await downloadEventImage({
-          imgPath: imgPath + "/event-large.jpg",
-          postDownload: setImgUrl,
-        });
-      }
-    }
-  }, [imgUrl, event]);
-
-  // console.log(studio);
 
   const headingMargin = { top: "large", bottom: "small" };
   const paragraphMargin = { top: "small", bottom: "small" };

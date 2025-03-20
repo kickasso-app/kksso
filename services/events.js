@@ -1,16 +1,13 @@
-import { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { supabase } from "./supabase";
-
-import { createContact } from "./contacts";
 
 const EventsContext = createContext(null);
 
 const EventsProvider = ({ children }) => {
   const [events, setEvents] = useState([]);
-  const [event, setEvent] = useState();
-
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState();
+  const [event, setEvent] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const [isUpdateError, setIsUpdateError] = useState(false);
   const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
@@ -26,7 +23,26 @@ const EventsProvider = ({ children }) => {
     let { data: supaEvents, error } = await supabase
       .from("events")
       .select("*")
-      .eq("studio_uuid", id)
+      // .eq("studio_uuid", id)
+      .order("created_at", { ascending: false });
+    if (supaEvents?.length) {
+      // console.log(supaEvents);
+      setEvents(supaEvents);
+    } else {
+      const returnError = error ?? "No Events were fetched";
+      setError(returnError);
+    }
+    setLoading(false);
+  };
+
+  const fetchPublishedEvents = async (id) => {
+    setLoading(true);
+    // console.log("fetching Events");
+
+    let { data: supaEvents, error } = await supabase
+      .from("events")
+      .select("*")
+      .eq("isPublished", true)
       .order("created_at", { ascending: false });
     if (supaEvents?.length) {
       // console.log(supaEvents);
@@ -40,6 +56,7 @@ const EventsProvider = ({ children }) => {
 
   const fetchEvent = async ({ event_id }) => {
     setLoading(true);
+    resetNotification;
     // console.log("fetching Events");
     try {
       let { data: supaEvent, error } = await supabase
@@ -123,10 +140,8 @@ const EventsProvider = ({ children }) => {
    */
 
   const updateEvent = async (updates, id) => {
-    console.log(updates, id);
-    setIsUpdateError(false);
-    setIsUpdateSuccess(false);
     setLoading(true);
+    resetNotification();
 
     if (updates) {
       let { data, error } = await supabase
@@ -150,6 +165,11 @@ const EventsProvider = ({ children }) => {
     return { error: false };
   };
 
+  const resetNotification = () => {
+    setIsUpdateSuccess(false);
+    setIsUpdateError(false);
+  };
+
   const contextObj = {
     events,
     event,
@@ -157,8 +177,11 @@ const EventsProvider = ({ children }) => {
     updateEvent,
     fetchEvent,
     fetchEvents,
+    fetchPublishedEvents,
     loading,
     error,
+    isUpdateSuccess,
+    isUpdateError,
   };
 
   return (
