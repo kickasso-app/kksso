@@ -1,11 +1,5 @@
-import { useState, useEffect } from "react";
-
 import { useRouter } from "next/router";
-import Link from "next/link";
 
-import ProgressiveImage from "react-progressive-image";
-// import moment from "moment";
-import { Disc, Hash } from "react-feather";
 import { Box, Button, Card, Grid, Text } from "grommet";
 import { FormNext } from "grommet-icons";
 

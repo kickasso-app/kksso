@@ -148,7 +148,7 @@ const VisitForm = ({
 
       const parsedAvail = parseAvailability(availability);
 
-      console.log(parsedAvail);
+      // console.log(parsedAvail);
       return parsedAvail;
     }
   };

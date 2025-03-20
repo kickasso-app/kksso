@@ -15,6 +15,7 @@ import {
   Notification,
   TextArea,
   Select,
+  CheckBox,
   Button as GrommetButton,
 } from "grommet";
 
@@ -40,7 +41,11 @@ const initialValues = {
   location: "Studio",
   locationOther: "",
   isPublished: false,
+  isMainEvent: false,
 };
+
+TODO: move this file and somewhere else and give it a better name
+
 
 const EventEditForm = () => {
   const router = useRouter();
@@ -82,9 +87,14 @@ const EventEditForm = () => {
       contact: values.contact,
       link: values.link,
       isPublished: values.isPublished ? true : false,
+      isMainEvent: values.isMainEvent ? true : false,
     };
     await updateEvent(eventData, id);
-  }
+
+    // TODO:
+    // if isStuidoEvent is true, then update the studio page with the event 
+// remove the isMainEvent from the event object
+
 
   const fieldMargin = { vertical: "large" };
   const textMargin = { bottom: "medium" };
@@ -116,6 +126,7 @@ const EventEditForm = () => {
           contact: event.contact ?? "",
           link: event.link ?? "",
           isPublished: event.isPublished ?? false,
+          isMainEvent: event.isMainEvent ?? false,
           location: event.location ?? "Studio",
           locationOther:
             event.location === "Other" ? event.locationOther ?? "" : "",
@@ -350,6 +361,19 @@ const EventEditForm = () => {
                     }))
                   }
                   required
+                />
+              </FormField>
+              <FormField margin={fieldMargin}>
+                <CheckBox
+                  name="isMainEvent"
+                  label="Show this event in my studio page"
+                  checked={values.isMainEvent}
+                  onChange={(e) =>
+                    setValues((prev) => ({
+                      ...prev,
+                      isMainEvent: e.target.checked,
+                    }))
+                  }
                 />
               </FormField>
               <Box direction="row" gap="medium">

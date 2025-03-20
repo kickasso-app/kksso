@@ -45,7 +45,10 @@ const EventCardEdit = ({ event, imgPath, onEdit, onView }) => {
             <Text size="small">On unspecified date</Text>
           )}
           <Text size="small" margin={{ top: "small" }}>
-            <b>{event?.isPublished ? "Published" : "Not Published"}</b>
+            <b>
+              {event?.isPublished ? "Published" : "Not Published"}{" "}
+              {event?.isMainEvent && "(main)"}
+            </b>
           </Text>
         </Box>
       </Box>

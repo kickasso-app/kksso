@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 
 import { useStudios } from "services/studios";
+import { useEvents } from "services/events";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import { Box, Heading, Paragraph, ResponsiveContext, Text } from "grommet";
@@ -23,12 +24,19 @@ const Studio = () => {
   const { id } = router.query;
 
   const { studio, fetchStudio, loading, error } = useStudios();
+  const { event, fetchEvent } = useEvents();
 
   useEffect(() => {
     if (id > 0) {
       fetchStudio({ id });
     }
   }, [id]);
+
+  useEffect(() => {
+    if (studio && studio?.event) {
+      fetchEvent({ event_id: studio.event });
+    }
+  }, [studio]);
 
   // console.log(studio);
 
@@ -175,9 +183,7 @@ const Studio = () => {
                 )}
               </Col>
               <Col xs={12} md={5} mdOffset={1}>
-                {studio.events && (
-                  <EventCard event={studio.event} userId={studio.uuid} />
-                )}
+                {event && <EventCard event={event} />}
                 {studio.visitRules && studio.visitRules.length > 0 && (
                   <>
                     <Heading level="4" size="medium" margin={headingMargin}>

@@ -22,16 +22,18 @@ export default function EventCard({ event }) {
         <Link href={eventLink}>
           <a onClick={openEvent}>
             {imgUrl && (
-              <ProgressiveImage src={imgUrl} placeholder={`/img/loader.svg`}>
-                {(src, loading) => (
-                  <img
-                    className={styles.cardImg}
-                    src={src}
-                    alt={event.title}
-                    style={{ opacity: loading ? 0.5 : 1 }}
-                  />
-                )}
-              </ProgressiveImage>
+              <Box pad="medium">
+                <ProgressiveImage src={imgUrl} placeholder={`/img/loader.svg`}>
+                  {(src, loading) => (
+                    <img
+                      className={styles.cardImg}
+                      src={src}
+                      alt={event.title}
+                      style={{ opacity: loading ? 0.5 : 1 }}
+                    />
+                  )}
+                </ProgressiveImage>
+              </Box>
             )}
           </a>
         </Link>
