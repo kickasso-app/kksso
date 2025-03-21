@@ -73,7 +73,7 @@ const RequestsProvider = ({ children }) => {
     let requestCreated = false;
     let isContactCreated = false;
     let errorMsg = false;
-    const guestUUID = self.crypto.randomUUID();
+
     const {
       request_id,
       studio_name,
@@ -87,7 +87,6 @@ const RequestsProvider = ({ children }) => {
 
     const newRequest = {
       request_id,
-      guest_id: guestUUID,
       studio_uuid: id,
       has_response: false,
       requestor_name: from_name,
@@ -125,7 +124,7 @@ const RequestsProvider = ({ children }) => {
     }
 
     if (requestCreated === true) {
-      isContactCreated = await createContact(newRequest);
+      isContactCreated = await createContact({ newRequest: newRequest });
       // console.log(isContactCreated);
       // TODO: add isContactCreated check
     }

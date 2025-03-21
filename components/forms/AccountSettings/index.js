@@ -6,8 +6,6 @@ import { useAccount } from "services/account";
 
 import Button from "components/Button";
 import { Box, Text, Heading, Notification } from "grommet";
-import { featureFlags } from "config/feature-flags";
-import ReferralsForm from "components/forms/ReferralsForm";
 
 export default function AccountSettings({ profile }) {
   const [isPublished, setIsPublished] = useState(profile?.published);
@@ -76,14 +74,6 @@ export default function AccountSettings({ profile }) {
             </>
           )}
         </Box>
-
-        {/* {featureFlags.referrals && (
-          <ReferralsForm
-            profile={profile}
-            user={user}
-            updateAccount={updateAccount}
-          />
-        )} */}
 
         <Box width="medium">
           <Heading level="3" size="medium" margin={fieldMargin}>
