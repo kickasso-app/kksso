@@ -1,4 +1,7 @@
 export const emailStyles = `
+
+div{ background-color: #ffffff; }
+
      h1 {
     font-family: Helvetica;
     -webkit-text-size-adjust: 100%;
@@ -80,12 +83,12 @@ export const emailStyles = `
     padding: 0;
     border: 0;
     box-sizing: border-box;
-    font-weight: bold;
+    font-weight: 600;
     font-family: Helvetica, sans-serif;
     margin-bottom: 1.25rem;
     color: #4b4b4b;
-    line-height: 1.75rem;
-    font-size: 1.125rem;
+    line-height: 1.5rem;
+    font-size: 1.05rem;
     margin: 1rem;
     }
     `;

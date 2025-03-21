@@ -165,6 +165,28 @@ const StudiosProvider = ({ children }) => {
   };
 
   /**
+   * This is an asynchronous function that fetches data from a Supabase database table called "studios"
+   * based on a given ID (studio_id) and sets the fetched data to a state variable called "studio".
+   */
+
+  const fetchStudioBasic = async ({ uuid }) => {
+    setLoading(true);
+    let { data: studioBasic, error } = await supabase
+      .from("studios")
+      .select("artist, studio_id, published")
+      .eq("uuid", uuid)
+      .single();
+
+    if (studioBasic) {
+      return studioBasic;
+    } else {
+      const returnError = error ?? "Some error occurred";
+      setError(returnError);
+    }
+    // setLoading(false);
+  };
+
+  /**
    * This is an asynchronous function that fetches a user's studio data from a Supabase database based on
    * their UUID.
    */
@@ -243,6 +265,7 @@ const StudiosProvider = ({ children }) => {
     fetchFeaturedStudios,
     fetchStudio,
     fetchUserStudio,
+    fetchStudioBasic,
     doesStudioExist,
     loading,
     error,

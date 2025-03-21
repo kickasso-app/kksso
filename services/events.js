@@ -62,7 +62,7 @@ const EventsProvider = ({ children }) => {
       let { data: supaEvent, error } = await supabase
         .from("events")
         .select("*")
-        // .eq("studio_uuid", studio_uuid) // not needed
+
         .eq("id", event_id)
         .single();
       if (error) {
@@ -90,7 +90,7 @@ const EventsProvider = ({ children }) => {
     let eventCreated = false;
     let errorMsg = false;
 
-    console.log("createEvent", studio_uuid, event_id);
+    // console.log("createEvent", studio_uuid, event_id);
 
     const newEvent = {
       id: event_id, // uuid from event
@@ -110,7 +110,7 @@ const EventsProvider = ({ children }) => {
       //   link: eventor_link, // text
     };
 
-    console.log(newEvent);
+    // console.log(newEvent);
     try {
       const response = await fetch("/api/create-event", {
         method: "POST",

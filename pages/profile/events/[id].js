@@ -43,6 +43,19 @@ const initialValues = {
   isPublished: false,
 };
 
+const EVENT_TYPES = [
+  "Workshop",
+  "Open Studio",
+  "Exhibition",
+  "Art Salon",
+  "Studio Tour",
+  "Artist Dinner",
+  "Talk",
+  "Film Screening",
+  "Community",
+  "Other",
+];
+
 // TODO: move this file and somewhere else and give it a better name
 
 const EventEditForm = () => {
@@ -174,7 +187,7 @@ const EventEditForm = () => {
               >
                 <Select
                   name="eventType"
-                  options={["Workshop", "Open Studio", "Exhibition", "Other"]}
+                  options={EVENT_TYPES}
                   value={values.eventType}
                   placeholder="Select event type"
                   onChange={({ option }) =>

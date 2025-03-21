@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import moment from "moment";
 
 import { useEvents } from "services/events";
+import { useStudios } from "services/studios";
 import useEventImage from "hooks/useEventImage";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
@@ -22,16 +23,38 @@ const Studio = () => {
   const router = useRouter();
   const size = useContext(ResponsiveContext);
   const { event, fetchEvent, loading, error } = useEvents();
+  const { fetchStudioBasic } = useStudios();
 
   const { id } = router.query;
+  const [studioName, setStudioName] = useState(null);
+  const [studioLink, setStudioLink] = useState(null);
 
   const [imgUrl, isImgLoaded] = useEventImage(event, "large");
 
-  useEffect(async () => {
-    if (id && (!event || event?.id !== id)) {
-      console.log("fetching event", id);
-      await fetchEvent({ event_id: id });
+  useEffect(() => {
+    async function fetchData() {
+      if (id && (!event || event?.id !== id)) {
+        // console.log("fetching event", id);
+        await fetchEvent({ event_id: id });
+      }
     }
+    fetchData();
+  }, [id, event, fetchEvent]);
+
+  useEffect(() => {
+    async function fetchStudioNameAndLink() {
+      if (id && event && event?.id === id) {
+        // console.log("fetching studio name and link", event.studio_uuid);
+        const studioBasic = await fetchStudioBasic({
+          uuid: event.studio_uuid,
+        });
+        setStudioName(studioBasic?.artist);
+        if (studioBasic?.published) {
+          setStudioLink(`/studio/${studioBasic?.studio_id}`);
+        }
+      }
+    }
+    fetchStudioNameAndLink();
   }, [id, event]);
 
   const headingMargin = { top: "large", bottom: "small" };
@@ -103,7 +126,7 @@ const Studio = () => {
                   </Col>
                   {event.type && (
                     <Box
-                      border="1px"
+                      border
                       round="xsmall"
                       pad={{ vertical: "small", horizontal: "medium" }}
                     >
@@ -111,7 +134,28 @@ const Studio = () => {
                     </Box>
                   )}
                 </Row>
-                {makeParagraphs(event.miniDescription)}
+                {/* {makeParagraphs(event.miniDescription)} */}
+
+                {studioName && (
+                  <Heading
+                    level="4"
+                    size="small"
+                    margin={{ top: "small", bottom: "small" }}
+                  >
+                    by{" "}
+                    {studioLink ? (
+                      <a
+                        href={studioLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {studioName}
+                      </a>
+                    ) : (
+                      studioName
+                    )}
+                  </Heading>
+                )}
                 <Heading level="3" size="medium" margin={headingMargin}>
                   Details
                 </Heading>
@@ -132,34 +176,24 @@ const Studio = () => {
                   />{" "}
                   <Text> {event.location}</Text>
                 </Paragraph>
-                <Box margin={sectionMargin}>
-                  <hr />
-                </Box>
-                {event.link && (
+
+                {studioName && studioLink && (
                   <>
+                    <Box margin={sectionMargin}>
+                      <hr />
+                    </Box>
                     <Heading level="3" size="medium" margin={headingMargin}>
-                      Links
+                      Studio
                     </Heading>
-                    <Paragraph fill margin={{ vertical: "medium" }}>
-                      <Globe
-                        className={styles.icon}
-                        size={24}
-                        strokeWidth="1"
-                        color="#4B4B4B"
-                        fill="#FFF"
-                      />{" "}
-                      <a href={event.link} target="_blank">
-                        {event.link}
+                    <Paragraph>
+                      <a
+                        href={studioLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {studioName}
                       </a>
                     </Paragraph>
-                    {size === "small" && (
-                      <>
-                        <Box margin={sectionMargin}>
-                          <hr />
-                          <br />
-                        </Box>
-                      </>
-                    )}
                   </>
                 )}
               </Col>
@@ -173,12 +207,47 @@ const Studio = () => {
                 <Box margin={sectionMargin}>
                   <hr />
                 </Box>
+
                 {event?.contact && (
                   <>
                     <Heading level="3" size="medium" margin={headingMargin}>
                       Contact
                     </Heading>
                     <Paragraph>{event.contact}</Paragraph>
+                  </>
+                )}
+                <Box margin={sectionMargin}>
+                  <hr />
+                </Box>
+                {event.link && (
+                  <>
+                    <Heading level="3" size="medium" margin={headingMargin}>
+                      External Link
+                    </Heading>
+                    <Paragraph fill margin={{ vertical: "medium" }}>
+                      <Globe
+                        className={styles.icon}
+                        size={24}
+                        strokeWidth="1"
+                        color="#4B4B4B"
+                        fill="#FFF"
+                      />{" "}
+                      <a
+                        href={event.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {event.link}
+                      </a>
+                    </Paragraph>
+                    {size === "small" && (
+                      <>
+                        <Box margin={sectionMargin}>
+                          <hr />
+                          <br />
+                        </Box>
+                      </>
+                    )}
                   </>
                 )}
               </Col>

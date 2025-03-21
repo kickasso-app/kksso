@@ -11,6 +11,7 @@ import {
   Text,
   FormField,
   TextInput,
+  CheckBox,
   Button as GrommetButton,
 } from "grommet";
 import Button from "components/Button";
@@ -31,6 +32,7 @@ export default function ReferralsForm({ profile }) {
   const [sendingInvite, setSendingInvite] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [previewName, setPreviewName] = useState("");
+  const [includeStudioLink, setIncludeStudioLink] = useState(true);
 
   const fieldMargin = { vertical: "medium" };
   const textMargin = { bottom: "medium" };
@@ -43,7 +45,6 @@ export default function ReferralsForm({ profile }) {
     let newArtistReferrals;
     let emailTemplate;
     let subject;
-    let referredBy;
     let referralLink;
     let isContactCreated = false;
 
@@ -54,13 +55,11 @@ export default function ReferralsForm({ profile }) {
       ];
       emailTemplate = "referralTemplate";
       subject = "Arti Invite";
-      referredBy = profile.artist;
-      referralLink = `https://arti.my/join?referral=${user.id}`;
+      referralLink = { joinLink: `https://arti.my/join?referral=${user.id}` };
     } else if (type === "artlover") {
       emailTemplate = "collectorReferralTemplate";
       subject = "Arti Invite";
-      referredBy = profile.artist;
-      referralLink = `https://arti.my/studio/${user.id}`;
+      referralLink = { studioLink: `https://arti.my/studio/${user.id}` };
     }
 
     try {
@@ -68,14 +67,14 @@ export default function ReferralsForm({ profile }) {
 
       const emailDetails = {
         subject: subject,
-        toEmail: "demo", // [toEmail],
+        toEmail: toEmail,
         fromEmail: "default",
       };
       const emailVariables = {
         name: toName,
-        referredBy: referredBy,
-        studioName: profile.artist,
-        joinLink: referralLink,
+        referredBy: profile.artist,
+        ...referralLink,
+        includeStudioLink: type === "artlover" ? includeStudioLink : undefined,
       };
 
       const { emailSent, error } = await sendEmail({
@@ -107,10 +106,10 @@ export default function ReferralsForm({ profile }) {
     }
   };
 
-  const handlePreview = (e) => {
+  const handleTogglePreview = (e) => {
     e.preventDefault();
-    setPreviewName(e.target.name.value);
-    setShowPreview(true);
+    setPreviewName(e.target?.name?.value || "");
+    setShowPreview(!showPreview);
   };
 
   return (
@@ -129,7 +128,7 @@ export default function ReferralsForm({ profile }) {
           your network to try it out.
         </Text>
         {/* Artist Referral Form */}
-        <Heading level={4} size="small" margin={fieldMargin}>
+        <Heading level={3} margin={fieldMargin}>
           Invite an artist
         </Heading>
         {numOfArtistReferrals < MAX_ARTIST_REFERRALS && (
@@ -174,9 +173,10 @@ export default function ReferralsForm({ profile }) {
         <Box margin={{ vertical: "large" }}>
           <hr />
         </Box>
-        <Heading level={4} size="small" margin={fieldMargin}>
+        <Heading level={3} margin={fieldMargin}>
           Invite art lovers and collectors
         </Heading>
+        <Text size="medium"> </Text>
         <form onSubmit={(e) => addReferral(e, "artlover")}>
           <Box width="medium">
             <Box>
@@ -203,16 +203,24 @@ export default function ReferralsForm({ profile }) {
                   placeholder="Email"
                 />
               </FormField>
+              <FormField name="includeStudioLink" margin={fieldMargin}>
+                <CheckBox
+                  name="includeStudioLink"
+                  label="Include a link to my studio page"
+                  checked={includeStudioLink}
+                  onChange={(e) => setIncludeStudioLink(e.target.checked)}
+                />
+              </FormField>
             </Box>
           </Box>
           <br />
-          {/* <Box direction="row" gap="medium" align="center"> */}}
+          {/* <Box direction="row" gap="medium" align="center"> */}
           <Button type="submit" btnStyle="filled">
             {sendingInvite ? "Sending ..." : "Send Invite"}
           </Button>
-          <Button btnStyle="outline" onClick={handlePreview}>
-            <Text margin={{ horizontal: "medium", vertical: "large" }}>
-              Preview
+          <Button btnStyle="outline" onClick={handleTogglePreview}>
+            <Text margin={{ horizontal: "small", vertical: "large" }}>
+              Preview {showPreview && "[x]"}
             </Text>
           </Button>
           {/* </Box> */}
@@ -230,8 +238,8 @@ export default function ReferralsForm({ profile }) {
             <CollectorReferralTemplate
               name={previewName || ""}
               referredBy={profile.artist}
-              studioName={profile.artist}
-              joinLink={`https://arti.my/studio/${user.id}`}
+              studioLink={`https://arti.my/studio/${user.id}`}
+              includeStudioLink={includeStudioLink}
             />
           </Box>
         )}

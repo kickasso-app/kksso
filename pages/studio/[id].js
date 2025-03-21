@@ -183,7 +183,7 @@ const Studio = () => {
                 )}
               </Col>
               <Col xs={12} md={5} mdOffset={1}>
-                {studio.eventId && event && (
+                {studio.eventId && event?.isPublished && (
                   <EventCard event={event} inStudio />
                 )}
                 {studio.visitRules && studio.visitRules.length > 0 && (

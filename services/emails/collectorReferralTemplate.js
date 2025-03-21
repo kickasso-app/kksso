@@ -4,8 +4,8 @@ import { emailStyles } from "./emailStyles";
 export const CollectorReferralTemplate = ({
   name,
   referredBy,
-  studioName,
-  joinLink,
+  studioLink,
+  includeStudioLink,
 }) => (
   <html>
     <head>
@@ -14,34 +14,56 @@ export const CollectorReferralTemplate = ({
     <body>
       <div>
         <h1>Hello {name}!</h1>
-        <p>{referredBy} invited you to check out their studio page on Arti!</p>
         <p>
+          We are delighted to send you this exclusive invitation to explore the
+          art world with us.
+        </p>
+
+        <p>
+          What is Arti?
           <blockquote>
             Arti is a digital platform to connect artists, collectors, and art
             lovers.
           </blockquote>
         </p>
+
         <p>
-          Visit {studioName}'s studio page to explore their artworks and learn
-          more about their creative process.
+          Join us today to attend studio visits and events, and create with us a
+          new art world where art is more accessible, the creative process is
+          more visible, and independent artists thrive.
         </p>
 
         <p>
-          <a class="pinkbutton" href={joinLink}>
-            Visit Studio
-          </a>
-          <br />
+          <b>Visit our platform</b> at{" "}
+          <a href="https://www.arti.my">www.arti.my</a>
+        </p>
+
+        <p>
+          Explore each artist's page, discover original artworks, and book
+          private <b> studio visits</b>. See the creative process more
+          intimately, learn the stories behind their work and inspiration, and
+          if you are a collector, buy artworks directly from them.
         </p>
         <p>
-          If you're interested in discovering more artists and artworks, sign up
-          on Arti to connect with artists and explore their studios.
+          In addition, join <b>events</b> {""}
+          such as workshops and studio tours that allow you to network with
+          other art lovers and artists and know more about your local art scene.
         </p>
+
+        {includeStudioLink && (
+          <p>
+            You were sent this invitation by {referredBy}.
+            <br />
+            Explore their Arti studio page <a href={studioLink}>here</a>.
+          </p>
+        )}
+
         <p>
           Best wishes,
           <br />
           Arti team
           <br />
-          <a href="https://arti.my"> https://www.arti.my</a>.
+          {/* <a href="https://arti.my"> https://www.arti.my</a>. */}
         </p>
         <img src="https://arti.my/img/logo-name-web.png"></img>
       </div>
