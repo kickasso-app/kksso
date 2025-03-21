@@ -24,26 +24,23 @@ import { useEvents } from "services/events";
 import EventCardEdit from "../EventCardEdit";
 
 import Button from "components/Button";
+
+const MAX_EVENTS = 3;
 export default function EventsSettingsForm({ profile }) {
   const router = useRouter();
 
   const { session, user } = useAuth();
 
-  const { updateAccount, loading, isUpdateSuccess, isUpdateError } =
-    useAccount();
-  const {
-    createEvent,
-    fetchEvents,
-    events,
-    loading: isEventsLoading,
-    error,
-  } = useEvents();
+  const { updateAccount, isUpdateSuccess, isUpdateError } = useAccount();
+  const { createEvent, fetchEvents, events, loading, error } = useEvents();
 
   useEffect(() => {
     if (user?.role === "authenticated" && user.id) {
       fetchEvents(user.id);
     }
   }, [session, user]);
+
+  const studioEventId = profile?.eventId || "";
 
   const createNewEvent = async () => {
     const event_id = self.crypto.randomUUID();
@@ -53,7 +50,9 @@ export default function EventsSettingsForm({ profile }) {
       studio_uuid: user.id,
     };
     await createEvent(newEvent);
-    await updateAccount({ eventId: event_id }, user);
+    if (events?.length === 0) {
+      await updateAccount({ eventId: event_id }, user);
+    }
     router.push("/profile/events/" + event_id);
   };
 
@@ -75,19 +74,13 @@ export default function EventsSettingsForm({ profile }) {
         <Box margin={textMargin}>
           <Text>
             If you want to host a public event like an open studio, mini
-            exhibition or workshop, you can add it here. Please fill out the
-            details below and upload a photo for the event.
-            <br /> Your event will be visible in your profile and on our events
-            page.
+            exhibition or workshop, you can add it here. You can create up to 3
+            events.
+            <br />
+            Your events will be visible in our events page and your main event
+            will be visible in your profile.
           </Text>
         </Box>
-
-        {/* <GrommetButton
-          primary
-          label="New Event"
-          onClick={createNewEvent}
-          margin={{ top: "large" }}
-        /> */}
 
         <Row>
           <Col xs={12} md={12}>
@@ -95,9 +88,6 @@ export default function EventsSettingsForm({ profile }) {
               align="start"
               margin={{ vertical: "medium", horizontal: "none" }}
             >
-              {/* <Heading level={2} margin={{ vertical: "medium" }}>
-                Events
-              </Heading> */}
               {loading ? (
                 <img src="/img/loader.svg" alt="Loading" />
               ) : error || !events.length ? (
@@ -105,7 +95,7 @@ export default function EventsSettingsForm({ profile }) {
                   <Text>No events found.</Text>
                   <GrommetButton
                     primary
-                    label="New Event"
+                    label="Create Event"
                     onClick={createNewEvent}
                     margin={{ top: "large" }}
                   />
@@ -126,6 +116,61 @@ export default function EventsSettingsForm({ profile }) {
                 ))
               )}
             </Box>
+            <Box margin={{ top: "large" }}>
+              <FormField
+                label="Select Main Event"
+                name="mainEvent"
+                margin={fieldMargin}
+              >
+                <Text margin="small">
+                  This is the event that is shown in your studio page
+                </Text>
+                <Select
+                  name="mainEvent"
+                  options={events
+                    .filter((e) => e.isPublished)
+                    .map((e) => ({ label: e.title, value: e.id }))}
+                  labelKey="label"
+                  valueKey={{ key: "value", reduce: true }}
+                  placeholder={
+                    events.find((e) => e.id === studioEventId)?.title ||
+                    "Choose main event"
+                  }
+                  value={studioEventId}
+                  onChange={({ value: mainEventId }) => {
+                    updateAccount({ eventId: mainEventId }, user);
+                  }}
+                />
+              </FormField>
+            </Box>
+            {events.length < MAX_EVENTS && (
+              <GrommetButton
+                primary
+                label="Add New Event"
+                onClick={createNewEvent}
+                margin={{ vertical: "large" }}
+              />
+            )}
+            {!loading && (
+              <>
+                {isUpdateSuccess && (
+                  <Notification
+                    toast
+                    status="normal"
+                    title="Your profile was updated."
+                  />
+                )}
+                {isUpdateError && (
+                  <Notification
+                    toast
+                    status="warning"
+                    title="Your profile was not updated!"
+                    message="We couldn't complete your request this time. Please try again."
+                    // onClose={() => {}}
+                  />
+                )}
+              </>
+            )}
           </Col>
         </Row>
       </Box>

@@ -60,7 +60,7 @@ async function downloadImage({ imgPath, postDownload }) {
 }
 
 async function downloadEventImage({ imgPath, postDownload }) {
-  console.log("downloadEventImage", imgPath);
+  // console.log("downloadEventImage", imgPath);
   try {
     const { data, error } = await supabase.storage
       .from("events")

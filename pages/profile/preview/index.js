@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 
 import { useAuth } from "services/auth";
 import { useStudios } from "services/studios";
+import { useEvents } from "services/events";
 
 import Link from "next/link";
 
@@ -19,6 +20,7 @@ const Preview = () => {
   const { user } = useAuth();
   const size = useContext(ResponsiveContext);
   const { userStudio, fetchUserStudio, loading, error } = useStudios();
+  const { event, fetchEvent } = useEvents();
 
   const [studio, setStudio] = useState();
 
@@ -29,6 +31,12 @@ const Preview = () => {
       setStudio(userStudio);
     }
   }, [userStudio]);
+
+  useEffect(() => {
+    if (studio && studio?.eventId) {
+      fetchEvent({ event_id: studio.eventId });
+    }
+  }, [studio]);
 
   const headingMargin = { top: "large", bottom: "small" };
   const paragraphMargin = { top: "small", bottom: "small" };
@@ -166,9 +174,10 @@ const Preview = () => {
                 )}
               </Col>
               <Col xs={12} md={5} mdOffset={1}>
-                {studio.events && (
-                  <EventCard event={studio.event} userId={studio.uuid} />
+                {studio.eventId && event && (
+                  <EventCard event={event} inStudio />
                 )}
+
                 {studio.visitRules && studio.visitRules.length > 0 && (
                   <>
                     <Heading level="4" size="medium" margin={headingMargin}>

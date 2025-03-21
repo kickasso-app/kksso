@@ -5,11 +5,7 @@ import { downloadImage } from "services/images";
 
 import { Edit2, X } from "react-feather";
 
-import {
-  Box,
-  Notification,
-  FileInput,
-} from "grommet";
+import { Box, Notification, FileInput } from "grommet";
 
 import Button from "components/Button";
 
@@ -22,7 +18,6 @@ export default function PhotoInput({
   postUpload,
   //   onSetMain,
 }) {
-
   const [imgUrl, setImgUrl] = useState(null);
   const [editing, setEditing] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -78,9 +73,7 @@ export default function PhotoInput({
       if (file.size > PHOTO_MAX_SIZE) {
         setIsPhotoTooLarge(true);
         setUploading(false);
-      }
-      else {
-
+      } else {
         let { error } = await supabase.storage
           .from("studios-photos")
           .upload(filePath, file, {
@@ -100,7 +93,6 @@ export default function PhotoInput({
     } finally {
       setUploading(false);
     }
-
   }
 
   return (
@@ -114,8 +106,6 @@ export default function PhotoInput({
         gap="large"
         margin="medium"
       >
-
-
         <Box align="center" width="small" height="small">
           {editing ? (
             <FileInput
@@ -168,7 +158,7 @@ export default function PhotoInput({
               status="warning"
               title="Your photo was not uploaded"
               message="Upload a smaller image, less than 1 Megabyte."
-            // onClose={() => {}}
+              // onClose={() => {}}
             />
           )}
         </Box>

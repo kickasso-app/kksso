@@ -25,7 +25,7 @@ const Studio = () => {
 
   const { id } = router.query;
 
-  const [imgUrl] = useEventImage(event, "large");
+  const [imgUrl, isImgLoaded] = useEventImage(event, "large");
 
   useEffect(async () => {
     if (id && (!event || event?.id !== id)) {
@@ -73,13 +73,14 @@ const Studio = () => {
             >
               BACK
             </Link> */}
-            {imgUrl && (
+            {imgUrl && isImgLoaded && (
               <Box
                 align="center"
                 margin={{ vertical: "medium", horizontal: "xsmall" }}
               >
                 <Box margin={{ bottom: "1rem" }}>
                   <img
+                    key={event.id} // Force remount when event changes
                     src={imgUrl}
                     alt="banner"
                     layout="responsive"
@@ -167,7 +168,7 @@ const Studio = () => {
                   Date and time
                 </Heading>
                 <Paragraph>
-                  {readableDate(event.date)} <br /> {event.time}
+                  {readableDate(event.date)} <br /> {event.time.toLowerCase()}
                 </Paragraph>
                 <Box margin={sectionMargin}>
                   <hr />

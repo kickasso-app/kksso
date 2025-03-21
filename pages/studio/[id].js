@@ -33,8 +33,8 @@ const Studio = () => {
   }, [id]);
 
   useEffect(() => {
-    if (studio && studio?.event) {
-      fetchEvent({ event_id: studio.event });
+    if (studio && studio?.eventId) {
+      fetchEvent({ event_id: studio.eventId });
     }
   }, [studio]);
 
@@ -183,7 +183,9 @@ const Studio = () => {
                 )}
               </Col>
               <Col xs={12} md={5} mdOffset={1}>
-                {event && <EventCard event={event} />}
+                {studio.eventId && event && (
+                  <EventCard event={event} inStudio />
+                )}
                 {studio.visitRules && studio.visitRules.length > 0 && (
                   <>
                     <Heading level="4" size="medium" margin={headingMargin}>

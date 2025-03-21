@@ -67,7 +67,7 @@ export default function AccountSettings({ profile }) {
                 Are you ready to publish you profile?
               </Text>
               <Text size="medium" margin={textMargin}>
-                You can preview it <Link href={`/preview`}> here</Link>.
+                You can preview it <Link href={`/profile/preview`}> here</Link>.
               </Text>
               <br />
               <Button onClick={togglePublishProfile} btnStyle="filled">
