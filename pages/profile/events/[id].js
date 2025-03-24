@@ -25,6 +25,7 @@ import { useAuth } from "services/auth";
 import { useEvents } from "services/events";
 
 import Button from "components/Button";
+import { lang } from "moment";
 
 const initialValues = {
   eventType: "Workshop",
@@ -36,6 +37,7 @@ const initialValues = {
   maxNJoined: "",
   miniDescription: "",
   longDescription: "",
+  languages: "",
   contact: "",
   link: "",
   location: "Studio",
@@ -95,6 +97,7 @@ const EventEditForm = () => {
       maxNJoined: values.maxNJoined,
       miniDescription: values.miniDescription,
       longDescription: values.longDescription,
+      languages: values.languages,
       contact: values.contact,
       link: values.link,
       isPublished: values.isPublished ? true : false,
@@ -132,6 +135,7 @@ const EventEditForm = () => {
           maxNJoined: event.maxNJoined ?? "",
           miniDescription: event.miniDescription ?? "",
           longDescription: event.longDescription ?? "",
+          languages: event.languages ?? "",
           contact: event.contact ?? "",
           link: event.link ?? "",
           isPublished: event.isPublished ?? false,
@@ -292,6 +296,13 @@ const EventEditForm = () => {
                 </FormField>
               )}
               <FormField
+                label="Languages"
+                name="languages"
+                margin={fieldMargin}
+              >
+                <TextInput name="languages" placeholder="English, Spainsh" />
+              </FormField>
+              <FormField
                 label="Short Description"
                 name="miniDescription"
                 margin={fieldMargin}
@@ -318,27 +329,33 @@ const EventEditForm = () => {
                 />
               </FormField>
               <FormField
-                label="Current Number Joined"
-                name="currentNJoined"
-                margin={fieldMargin}
-              >
-                <TextInput
-                  name="currentNJoined"
-                  placeholder="Optional: current number joined"
-                  type="number"
-                />
-              </FormField>{" "}
-              <FormField
                 label="Maximum number of participants (optional)"
                 name="maxNJoined"
                 margin={fieldMargin}
               >
                 <TextInput
                   name="maxNJoined"
-                  placeholder="Optional: max number of participants"
-                  type="number"
+                  placeholder="Enter a number 10 or leave it empty"
                 />
               </FormField>
+              {values?.maxNJoined && (
+                <FormField
+                  label="Current Number of Participants (optional)"
+                  name="currentNJoined"
+                  margin={fieldMargin}
+                >
+                  <Text size="small" margin="small">
+                    Update this number when participants register for your event
+                    and it will be shown in the event page
+                  </Text>
+                  <TextInput
+                    name="currentNJoined"
+                    placeholder="Optional: current number joined"
+                    type="number"
+                    max={values.maxNJoined}
+                  />
+                </FormField>
+              )}
               <FormField
                 label="Contact (optional)"
                 name="contact"
@@ -405,7 +422,7 @@ const EventEditForm = () => {
           </Grid>
         )}
       </Box>
-      <GrommetButton
+      {/* <GrommetButton
         primary
         label="Populate Demo Data"
         onClick={() =>
@@ -425,7 +442,7 @@ const EventEditForm = () => {
           })
         }
         margin={{ top: "large" }}
-      />
+      /> */}
     </Box>
   );
 };

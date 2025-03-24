@@ -126,11 +126,21 @@ const Studio = () => {
                   />{" "}
                   {studio.district}
                 </h4>
-                {studio.textStudio &&
-                  makeParagraphs(studio.textStudio, paragraphSeperator)}
+
                 <Box margin={sectionMargin}>
                   <hr />
-                </Box>{" "}
+                </Box>
+                {studio?.languages && (
+                  <>
+                    <Heading level="3" size="medium" margin={headingMargin}>
+                      Langauges
+                    </Heading>
+                    {makeParagraphs(studio.languages)}
+                    <Box margin={sectionMargin}>
+                      <hr />
+                    </Box>
+                  </>
+                )}
                 {(studio.website || studio.instagram) && (
                   <>
                     <Heading level="3" size="medium" margin={headingMargin}>

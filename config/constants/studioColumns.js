@@ -9,6 +9,7 @@ export const studioColumns = [
   "visitRules",
   "openDates",
   "availability",
+  "languages",
   "website",
   "instagram",
   "eventId",

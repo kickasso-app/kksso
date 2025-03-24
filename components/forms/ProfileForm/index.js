@@ -21,7 +21,15 @@ import {
 } from "grommet";
 
 export default function ProfileForm({
-  profile: { artist, textMini, textLong, styles, website, instagram },
+  profile: {
+    artist,
+    textMini,
+    textLong,
+    styles,
+    languages,
+    website,
+    instagram,
+  },
   goToTab,
 }) {
   const { user } = useAuth();
@@ -34,6 +42,7 @@ export default function ProfileForm({
     textMini,
     textLong,
     styles,
+    languages,
     website,
     instagram,
   });
@@ -133,6 +142,18 @@ export default function ProfileForm({
                 fill
                 maxLength={1200}
                 rows={8}
+              />
+            </FormField>
+
+            <FormField
+              name="languages"
+              label="Languages you speak"
+              margin={fieldMargin}
+            >
+              <TextInput
+                name="languages"
+                placeholder="Deutsch, English, Español, Arabic"
+                required
               />
             </FormField>
 

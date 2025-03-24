@@ -177,6 +177,18 @@ const Studio = () => {
                   <Text> {event.location}</Text>
                 </Paragraph>
 
+                {event?.languages && (
+                  <>
+                    <Box margin={sectionMargin}>
+                      <hr />
+                    </Box>
+                    <Heading level="3" size="medium" margin={headingMargin}>
+                      Langauges
+                    </Heading>
+                    {makeParagraphs(event.languages)}
+                  </>
+                )}
+
                 {studioName && studioLink && (
                   <>
                     <Box margin={sectionMargin}>
@@ -207,7 +219,23 @@ const Studio = () => {
                 <Box margin={sectionMargin}>
                   <hr />
                 </Box>
-
+                {event?.maxNJoined && (
+                  <>
+                    <Heading level="3" size="medium" margin={headingMargin}>
+                      Capacity
+                    </Heading>
+                    <Paragraph>
+                      {" "}
+                      {event?.currentNJoined
+                        ? event.currentNJoined + "/"
+                        : "For "}
+                      {event.maxNJoined} participants
+                    </Paragraph>{" "}
+                    <Box margin={sectionMargin}>
+                      <hr />
+                    </Box>
+                  </>
+                )}
                 {event?.contact && (
                   <>
                     <Heading level="3" size="medium" margin={headingMargin}>
