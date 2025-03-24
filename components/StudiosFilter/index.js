@@ -26,8 +26,8 @@ const StudiosFilter = ({ studios }) => {
   return (
     <div className={styles.studios}>
       <Box align="center" margin="none">
-        <SearchBar />
         {featureFlags.studiosByCities && <SelectLocation isBarFullWidth />}
+        <SearchBar />
       </Box>
       <Box margin={{ vertical: "large" }}>
         {visibleStudios.length > 0 ? (

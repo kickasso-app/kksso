@@ -70,15 +70,20 @@ const Pilot = () => {
               </Heading>
             </Box>
 
-            <Box margin={{ vertical: "1rem", bottom: "12rem" }} align="center">
+            {/* <Box margin={{ vertical: "1rem", bottom: "12rem" }} align="center">
               {featureFlags.studiosByCities === false ? (
                 <SearchBar isBarFullWidth />
               ) : (
                 <SelectLocation isBarFullWidth />
               )}
-            </Box>
+            </Box> */}
 
-            <Box margin={sectionMargin} pad="medium" align="center">
+            <Box
+              margin={sectionMargin}
+              pad="medium"
+              align="center"
+              direction="row"
+            >
               {/* <Heading level={2} margin={"xs"}>
                 Featured Studios
               </Heading>
@@ -90,16 +95,46 @@ const Pilot = () => {
                 align="center"
                 pad={{ vertical: "small" }}
                 margin={{ vertical: "small" }}
+                fill
               >
                 <Button btnStyle="outline">
                   <Box margin={{ vertical: "1rem", horizontal: "1rem" }}>
                     <Link
-                      href={"/studios/" + createSlug(selectedCity)}
-                      onClick={() =>
-                        router.push("/studios/" + createSlug(selectedCity))
-                      }
+                      href={"/studios/" + createSlug(selectedCity ?? "Berlin")}
+                      onClick={async () => {
+                        {
+                          if (!selectedCity) {
+                            await selectCity("Berlin");
+                          }
+                          router.push("/studios/" + createSlug(selectedCity));
+                        }
+                      }}
                     >
                       Explore Studios
+                    </Link>
+                  </Box>
+                </Button>
+              </Box>
+              <Box
+                align="center"
+                pad={{ vertical: "small" }}
+                margin={{ vertical: "small" }}
+                fill
+              >
+                <Button btnStyle="outline">
+                  <Box margin={{ vertical: "1rem", horizontal: "1rem" }}>
+                    <Link
+                      href={"/events/" + createSlug(selectedCity ?? "Berlin")}
+                      onClick={async () => {
+                        {
+                          if (!selectedCity) {
+                            await selectCity("Berlin");
+                          }
+                          router.push("/events/" + createSlug(selectedCity));
+                        }
+                      }}
+                    >
+                      Explore Events
                     </Link>
                   </Box>
                 </Button>

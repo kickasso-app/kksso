@@ -38,7 +38,7 @@ const CityProvider = ({ children }) => {
       await fetchCities();
     }
     if (citiesRef.current.map((c) => c.city).includes(city)) {
-      console.log("selecting city", city);
+      // console.log("selecting city", city);
       setSelectedCity(city);
     } else {
       setError("City not found");

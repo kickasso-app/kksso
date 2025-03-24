@@ -1,9 +1,13 @@
 import React, { createContext, useContext, useState } from "react";
 import { supabase } from "./supabase";
 
+import { useCities } from "services/city";
+
 const EventsContext = createContext(null);
 
 const EventsProvider = ({ children }) => {
+  const { selectedCity } = useCities();
+
   const [events, setEvents] = useState([]);
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -16,7 +20,7 @@ const EventsProvider = ({ children }) => {
    * This function fetches published Events from a Supabase database and sets them in state.
    */
 
-  const fetchEvents = async (id) => {
+  const fetchAllEvents = async () => {
     setLoading(true);
     // console.log("fetching Events");
 
@@ -35,14 +39,19 @@ const EventsProvider = ({ children }) => {
     setLoading(false);
   };
 
-  const fetchPublishedEvents = async (id) => {
+  const fetchEvents = async () => {
     setLoading(true);
     // console.log("fetching Events");
 
-    let { data: supaEvents, error } = await supabase
-      .from("events")
-      .select("*")
-      .eq("isPublished", true)
+    let supabaseQuery = supabase.from("events").select("*");
+
+    if (selectedCity) {
+      supabaseQuery = supabaseQuery.contains("cityLocation", [selectedCity]);
+    }
+
+    let { data: supaEvents, error } = await supabaseQuery
+
+      .is("isPublished", true)
       .order("created_at", { ascending: false });
     if (supaEvents?.length) {
       // console.log(supaEvents);
@@ -177,7 +186,7 @@ const EventsProvider = ({ children }) => {
     updateEvent,
     fetchEvent,
     fetchEvents,
-    fetchPublishedEvents,
+    fetchAllEvents,
     loading,
     error,
     isUpdateSuccess,

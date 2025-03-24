@@ -36,6 +36,8 @@ const themeChanges = {
     // },
   },
   heading: {
+    color: "#4b4b4b",
+
     level: {
       3: {
         medium: {
