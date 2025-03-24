@@ -32,11 +32,12 @@ export default function EventsSettingsForm({ profile }) {
   const { session, user } = useAuth();
 
   const { updateAccount, isUpdateSuccess, isUpdateError } = useAccount();
-  const { createEvent, fetchEvents, events, loading, error } = useEvents();
+  const { createEvent, fetchAccountEvents, events, loading, error } =
+    useEvents();
 
   useEffect(() => {
     if (user?.role === "authenticated" && user.id) {
-      fetchEvents(user.id);
+      fetchAccountEvents(user.id);
     }
   }, [session, user]);
 

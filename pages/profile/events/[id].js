@@ -33,6 +33,7 @@ const initialValues = {
   eventTitle: "",
   eventDate: "",
   eventTime: "",
+  fee: "",
   currentNJoined: "",
   maxNJoined: "",
   miniDescription: "",
@@ -95,6 +96,7 @@ const EventEditForm = () => {
       time: values.eventTime,
       currentNJoined: values.currentNJoined,
       maxNJoined: values.maxNJoined,
+      fee: values.fee,
       miniDescription: values.miniDescription,
       longDescription: values.longDescription,
       languages: values.languages,
@@ -136,6 +138,7 @@ const EventEditForm = () => {
           miniDescription: event.miniDescription ?? "",
           longDescription: event.longDescription ?? "",
           languages: event.languages ?? "",
+          fee: event.fee ?? "",
           contact: event.contact ?? "",
           link: event.link ?? "",
           isPublished: event.isPublished ?? false,
@@ -258,6 +261,13 @@ const EventEditForm = () => {
                   placeholder="e.g. 6-8 pm"
                   required
                 />
+              </FormField>
+              <FormField
+                label="Participation Fee (per person)"
+                name="fee"
+                margin={fieldMargin}
+              >
+                <TextInput name="fee" placeholder="e.g. 30 Euros" required />
               </FormField>
               <FormField label="Location" name="location" margin={fieldMargin}>
                 <Select

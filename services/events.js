@@ -20,6 +20,30 @@ const EventsProvider = ({ children }) => {
    * This function fetches published Events from a Supabase database and sets them in state.
    */
 
+  const fetchEvents = async () => {
+    setLoading(true);
+    // console.log("fetching Events");
+
+    let supabaseQuery = supabase.from("events").select("*");
+
+    if (selectedCity) {
+      supabaseQuery = supabaseQuery.contains("cityLocation", [selectedCity]);
+    }
+
+    let { data: supaEvents, error } = await supabaseQuery
+
+      .is("isPublished", true)
+      .order("created_at", { ascending: false });
+    if (supaEvents?.length) {
+      // console.log(supaEvents);
+      setEvents(supaEvents);
+    } else {
+      const returnError = error ?? "No Events were fetched";
+      setError(returnError);
+    }
+    setLoading(false);
+  };
+
   const fetchAllEvents = async () => {
     setLoading(true);
     // console.log("fetching Events");
@@ -39,19 +63,16 @@ const EventsProvider = ({ children }) => {
     setLoading(false);
   };
 
-  const fetchEvents = async () => {
+  // Fetchs all account events including unpublished ones
+
+  const fetchAccountEvents = async (id) => {
     setLoading(true);
     // console.log("fetching Events");
 
-    let supabaseQuery = supabase.from("events").select("*");
-
-    if (selectedCity) {
-      supabaseQuery = supabaseQuery.contains("cityLocation", [selectedCity]);
-    }
-
-    let { data: supaEvents, error } = await supabaseQuery
-
-      .is("isPublished", true)
+    let { data: supaEvents, error } = await supabase
+      .from("events")
+      .select("*")
+      .eq("studio_uuid", id)
       .order("created_at", { ascending: false });
     if (supaEvents?.length) {
       // console.log(supaEvents);
@@ -186,6 +207,7 @@ const EventsProvider = ({ children }) => {
     updateEvent,
     fetchEvent,
     fetchEvents,
+    fetchAccountEvents,
     fetchAllEvents,
     loading,
     error,

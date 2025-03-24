@@ -216,21 +216,37 @@ const Studio = () => {
                 <Paragraph>
                   {readableDate(event.date)} <br /> {event.time.toLowerCase()}
                 </Paragraph>
+                {event?.fee && (
+                  <Paragraph margin={{ top: "medium" }}>
+                    Participation Fee (per person) <br /> <b>{event.fee}</b>
+                  </Paragraph>
+                )}
                 <Box margin={sectionMargin}>
                   <hr />
                 </Box>
+
                 {event?.maxNJoined && (
                   <>
                     <Heading level="3" size="medium" margin={headingMargin}>
                       Capacity
                     </Heading>
                     <Paragraph>
-                      {" "}
                       {event?.currentNJoined
                         ? event.currentNJoined + "/"
                         : "For "}
                       {event.maxNJoined} participants
-                    </Paragraph>{" "}
+                    </Paragraph>
+                    <Box margin={sectionMargin}>
+                      <hr />
+                    </Box>
+                  </>
+                )}
+                {event?.participationFee && (
+                  <>
+                    <Heading level="3" size="medium" margin={headingMargin}>
+                      Participation Fee
+                    </Heading>
+                    <Paragraph>RM {event.participationFee}</Paragraph>
                     <Box margin={sectionMargin}>
                       <hr />
                     </Box>
