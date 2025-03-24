@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { supabase } from "./supabase";
 
+import { useCities } from "services/city";
+
 import { STUDIO_PREVIEW_COLUMNS } from "config/constants/studioPreviewColumns";
 
 const StudiosContext = createContext(null);
@@ -8,7 +10,7 @@ const StudiosContext = createContext(null);
 const emptyQuery = "";
 
 const StudiosProvider = ({ children }) => {
-  const [cities, setCities] = useState([]);
+  const { selectedCity } = useCities();
 
   const [studios, setStudios] = useState([]);
   const [featuredStudios, setFeaturedStudios] = useState([]);
@@ -24,44 +26,23 @@ const StudiosProvider = ({ children }) => {
   const [error, setError] = useState();
 
   /**
-   * This function fetches cities from a Supabase database, orders them,  and sets them in state.
-   */
-
-  const fetchCities = async () => {
-    setLoading(true);
-    let { data: supaCities, error } = await supabase
-      .from("cities")
-      .select("*")
-      .order("count", { ascending: false });
-    // .is("published", true);
-    if (supaCities?.length) {
-      // console.log(supaCities);
-      setCities(supaCities);
-      setError(false);
-    } else {
-      const returnError = error ?? "No cities were fetched";
-      setError(returnError);
-      console.log(returnError);
-    }
-    setLoading(false);
-  };
-
-  /**
    * This function fetches published studios from a Supabase database and sets them in state.
    */
 
-  const fetchStudios = async (city) => {
+  const fetchStudios = async () => {
     setLoading(true);
     // console.log("fetching studios");
 
     // https://markustripp.medium.com/supabase-conditional-queries-with-filter-chaining-1c2bb48b8388
 
-    let { data: supaStudios, error } = await supabase
-      .from("studios")
-      .select(STUDIO_PREVIEW_COLUMNS)
+    let supabaseQuery = supabase.from("studios").select(STUDIO_PREVIEW_COLUMNS);
+
+    if (selectedCity) {
+      supabaseQuery = supabaseQuery.contains("location", [selectedCity]);
+    }
+    let { data: supaStudios, error } = await supabaseQuery
       .is("published", true)
       .is("displayed", true)
-      .contains("location", [city])
       .order("studio_id", true);
     if (supaStudios?.length) {
       setStudios(supaStudios);
@@ -250,7 +231,6 @@ const StudiosProvider = ({ children }) => {
   };
 
   const contextObj = {
-    cities,
     studios,
     searchStudios,
     featuredStudios,
@@ -258,7 +238,6 @@ const StudiosProvider = ({ children }) => {
     userStudio,
     query,
     hasQuery,
-    fetchCities,
     updateQuery,
     fetchStudios,
     fetchAllStudios,

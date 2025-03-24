@@ -1,5 +1,8 @@
 import { useContext } from "react";
 
+import { useCities } from "services/city";
+import { useRouter } from "next/router";
+
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import Link from "next/link";
 import Image from "next/image";
@@ -13,6 +16,8 @@ import SelectLocation from "components/SelectLocation";
 import StudiosFeatured from "components/StudiosFeatured";
 import Button from "components/Button";
 
+import { createSlug } from "services/helpers/textFormat";
+
 import styles from "./index.module.scss";
 
 const Pilot = () => {
@@ -20,6 +25,10 @@ const Pilot = () => {
   const sectionMargin = { vertical: "4em" };
 
   const size = useContext(ResponsiveContext);
+
+  const router = useRouter();
+
+  const { selectedCity } = useCities();
 
   return (
     <Grid fluid id={styles.pilot} align="center">
@@ -70,12 +79,12 @@ const Pilot = () => {
             </Box>
 
             <Box margin={sectionMargin} pad="medium" align="center">
-              <Heading level={2} margin={"xs"}>
+              {/* <Heading level={2} margin={"xs"}>
                 Featured Studios
               </Heading>
               <Box fill pad="small">
                 <StudiosFeatured />
-              </Box>
+              </Box> */}
 
               <Box
                 align="center"
@@ -84,7 +93,14 @@ const Pilot = () => {
               >
                 <Button btnStyle="outline">
                   <Box margin={{ vertical: "1rem", horizontal: "1rem" }}>
-                    <Link href="/studios">Explore All Studios</Link>
+                    <Link
+                      href={"/studios/" + createSlug(selectedCity)}
+                      onClick={() =>
+                        router.push("/studios/" + createSlug(selectedCity))
+                      }
+                    >
+                      Explore Studios
+                    </Link>
                   </Box>
                 </Button>
               </Box>

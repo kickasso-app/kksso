@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 import { useStudios } from "services/studios";
+import { useCities } from "services/city";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import Link from "next/link";
@@ -19,12 +20,28 @@ const Studios = () => {
   const { city } = router.query;
 
   const { studios, fetchStudios, loading, error } = useStudios();
+  const { selectedCity, selectCity } = useCities();
 
+  const [isDifferentCity, setIsDifferentCity] = useState(true);
+
+  // First Effect: Handle city selection
   useEffect(() => {
-    if (city && !studios.length && !error) {
-      fetchStudios(titleCase(city));
+    if (!city) return; // Guard clause
+
+    const cityName = titleCase(undoSlug(city));
+    if (cityName !== selectedCity) {
+      setIsDifferentCity(true);
+      selectCity(cityName);
     }
-  }, [city, studios, error]);
+  }, [city]); // Only depend on URL param changes
+
+  // Second Effect: Fetch studios when city changes
+  useEffect(() => {
+    if (selectedCity && isDifferentCity) {
+      fetchStudios();
+      setIsDifferentCity(false);
+    }
+  }, [selectedCity, isDifferentCity]);
 
   return (
     <Grid fluid align="center">

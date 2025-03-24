@@ -1,3 +1,4 @@
+import { CityProvider } from "services/city";
 import { AuthProvider } from "services/auth";
 import { AccountProvider } from "services/account";
 import { StudiosProvider } from "services/studios";
@@ -27,22 +28,24 @@ import Layout from "components/Layout";
 
 export default function MyApp({ Component, pageProps }) {
   return (
-    <AuthProvider>
-      <AccountProvider>
-        <RequestsProvider>
-          <EventsProvider>
-            <StudiosProvider>
-              {/* <SupabaseContextProvider client={supabase}> 
+    <CityProvider>
+      <AuthProvider>
+        <AccountProvider>
+          <RequestsProvider>
+            <EventsProvider>
+              <StudiosProvider>
+                {/* <SupabaseContextProvider client={supabase}> 
         <ChakraProvider theme={theme}> */}
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-              {/* </SupabaseContextProvider> 
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+                {/* </SupabaseContextProvider> 
         </ChakraProvider> */}
-            </StudiosProvider>
-          </EventsProvider>
-        </RequestsProvider>
-      </AccountProvider>
-    </AuthProvider>
+              </StudiosProvider>
+            </EventsProvider>
+          </RequestsProvider>
+        </AccountProvider>
+      </AuthProvider>
+    </CityProvider>
   );
 }

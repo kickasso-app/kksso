@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
-// import Link from "next/link";
 
-import { useStudios } from "services/studios";
+import { useRouter } from "next/router";
+
+import { useCities } from "services/city";
 
 import { Grid, Row } from "react-flexbox-grid/dist/react-flexbox-grid";
 
@@ -10,12 +11,26 @@ import { Box, Button, Text } from "grommet";
 import { createSlug } from "services/helpers/textFormat";
 
 export const SelectLocation = ({ isBarFullWidth = false }) => {
-  const { cities, fetchCities } = useStudios();
+  const { cities, fetchCities, selectCity, selectedCity } = useCities();
+
+  const router = useRouter();
+
+  const isStudiosPage = router.pathname.includes("/studios/");
+  const isEventsPage = router.pathname.includes("/events/");
+
+  const baseRedirect = isStudiosPage
+    ? "/studios/"
+    : isEventsPage
+    ? "/events/"
+    : null;
 
   useEffect(() => {
-    if (!cities.length) {
-      fetchCities();
+    async function fetchData() {
+      if (!cities.length) {
+        await fetchCities();
+      }
     }
+    fetchData();
   }, [cities]);
 
   return (
@@ -45,7 +60,10 @@ export const SelectLocation = ({ isBarFullWidth = false }) => {
                         </Text>
                       </Box>
                     }
-                    // onClick={() => {}}
+                    active={selectedCity === city}
+                    onClick={async () => {
+                      await selectCity(city);
+                    }}
                     align="center"
                     gap="small"
                     color="#FFC0CB"
@@ -53,7 +71,7 @@ export const SelectLocation = ({ isBarFullWidth = false }) => {
                     pad="medium"
                     hoverIndicator="#FFC0CB"
                     a11yTitle="X Available Updates"
-                    href={`/studios/${createSlug(city)}`}
+                    href={baseRedirect ? baseRedirect + createSlug(city) : null}
                   />
                 </Box>
               );

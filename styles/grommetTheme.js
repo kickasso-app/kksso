@@ -26,10 +26,10 @@ const themeChanges = {
       height: "20px",
       color: "#4b4b4b",
     },
-    // active: {
-    //   background: "white",
-    //   color: "brand",
-    // },
+    active: {
+      background: "brand",
+      // color: "brand",
+    },
     // selected: {
     //   background: "white",
     //   color: "brand",
@@ -68,14 +68,16 @@ const themeChanges = {
       color: "accent-1",
       active: {
         background: {
-          color: "#000",
+          color: "#C0FFF4",
         },
       },
     },
     secondary: {
       color: "brand",
       active: {
-        color: "#C0FFF4",
+        background: {
+          color: "brand",
+        },
       },
     },
   },
