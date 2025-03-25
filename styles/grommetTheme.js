@@ -1,4 +1,4 @@
-import { grommet, base } from "grommet";
+import { grommet, base, Paragraph } from "grommet";
 import { deepMerge } from "grommet/utils";
 
 // try
@@ -35,9 +35,18 @@ const themeChanges = {
     //   color: "brand",
     // },
   },
+  paragraph: {
+    small: {
+      size: "16px",
+      height: "22px",
+    },
+    medium: {
+      size: "18px",
+      height: "24px",
+    },
+  },
   heading: {
     color: "#4b4b4b",
-
     level: {
       3: {
         medium: {

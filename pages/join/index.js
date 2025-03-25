@@ -216,12 +216,12 @@ export default function Join() {
                 <>
                   {!referralApproved && featureFlags.referrals && (
                     <>
-                      <Paragraph margin={textMargin}>
+                      <Paragraph margin={textMargin} fill>
                         At the moment, we are accepting new members based on
                         referrals from the current studios. If one of them is a
                         friend of yours, please ask them for an invite.
                       </Paragraph>
-                      <Paragraph margin={textMargin}>
+                      <Paragraph margin={textMargin} fill>
                         Otherwise please write us an email at{"  "}
                         <b>join@arti.my</b> {"  "}to request an account and let
                         us know a bit about your work, studio practice, and why
