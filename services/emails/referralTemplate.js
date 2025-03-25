@@ -20,10 +20,14 @@ export const ReferralTemplate = ({ name, referredBy, joinLink }) => (
           The idea started with the understanding that studios are a great place
           to share art and creativity. Studio visits help as well fill the gap
           of having a direct channel between artists and collectors. This way
-          artists can show their work how and to whom they prefer. Collectors
-          get to explore the creative process more intimately and buy artworks
-          directly from local artists. Find out more about our vision and how
-          the platform works <a href="https://www.arti.my/about">here</a>.
+          artists can show their work how they prefer and host events such as
+          workshops. Collectors get to explore the creative process more
+          intimately and buy artworks directly from local artists. Find out more
+          about our philosophy and{" "}
+          <a href="https://www.arti.my/how-it-works/artists">
+            how it works for artists and curators
+          </a>
+          .
         </p>
 
         <p>

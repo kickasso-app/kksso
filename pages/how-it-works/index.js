@@ -22,49 +22,57 @@ const How = () => {
       <Grid fluid>
         <Row>
           <Col xs={12}>
-            <Box align="center" margin={{ top: "medium", bottom: "large" }}>
+            <Box align="center" margin={{ top: "medium", bottom: "xlarge" }}>
               <Heading level={3} margin="none" textAlign="center">
-                For Art Lovers and Collectors
-                <br /> Demo Text
+                How It Works <br />
+                <br />
+                for Art Lovers and Collectors
               </Heading>
             </Box>
 
             <Box margin={{ vertical: "large" }} gap="small">
               <Heading level={2} margin={{ bottom: "medium" }}>
-                What is a Studio Visit?
+                Why the Studio?
               </Heading>
               <Paragraph fill>
-                A studio visit is a unique opportunity to experience art in its
-                birthplace. Whether it's a spacious workshop or an intimate home
+                We believe studios are a great place to share art, and that
+                original art stands outs. We are committed to helping art
+                communities thrive.
+              </Paragraph>
+              <Paragraph fill>
+                A studio visit is a unique opportunity to experience art in the
+                making . Whether it's a spacious workshop or an intimate home
                 studio, you'll get to see artworks in progress, learn about the
-                artist's process, and connect with creators personally.
+                artist's process and practice, and connect with them personally.
               </Paragraph>
             </Box>
 
             <Box margin={{ vertical: "medium" }}>
               <Heading level={2} margin={{ bottom: "medium" }}>
-                Our Approach
+                Philosophy
               </Heading>
 
               <Box gap="medium">
                 <Paragraph fill>
-                  We believe in making art more accessible and personal. By
-                  connecting you directly with artists, you can discover unique
-                  pieces, understand their stories, and build meaningful
-                  relationships with creators.
+                  We believe that collecting art is an art form in itself. It's
+                  about more than just acquiring objects. It's about forging a
+                  personal connection with the artist's vision. Each piece
+                  becomes a part of the collector's story, reflecting their
+                  values, passions, and unique perspective on the world.
                 </Paragraph>
-
                 <Paragraph fill>
-                  Our platform focuses on transparency and authenticity. We
-                  carefully select artists and provide you with all the
-                  information you need to make informed decisions about your art
-                  journey.
+                  A for-profit model is the best way to ensure that Arti remains
+                  sustainable and can continue to support artists and the art
+                  community. We are committed to transparency and fairness. We
+                  will always be open about how we operate and how we make
+                  money. We tried as much as possible to embody our goals and
+                  values directly in the platform's functionalities.
                 </Paragraph>
               </Box>
 
               <Box margin={{ vertical: "large" }}>
                 <Heading level={2} margin={{ bottom: "medium" }}>
-                  What You Get
+                  In Brief
                 </Heading>
 
                 <ul>
@@ -74,26 +82,37 @@ const How = () => {
                   >
                     <li>
                       <Text>
-                        Free account with access to all studios and events
+                        You don't need to create an account to request a private
+                        studio visit or join an event.
                       </Text>
                     </li>
                     <li>
-                      <Text>Direct connection with artists</Text>
+                      <Text>
+                        We ask for a 15% comission fee for artworks sold via
+                        studio studios.
+                      </Text>
                     </li>
                     <li>
-                      <Text>Unique art experiences through private visits</Text>
+                      <Text>
+                        We will give back a percentage of our yearly net profit
+                        to the art community.
+                      </Text>
                     </li>
                     <li>
-                      <Text>Exclusive events and workshops</Text>
+                      <Text>We will not spam you.</Text>
                     </li>
                     <li>
-                      <Text>Secure art purchasing directly from artists</Text>
+                      <Text>
+                        Your data is private. We will not use it without your
+                        consent.
+                      </Text>
                     </li>
+
                     <li>
-                      <Text>Personal data privacy protection</Text>
-                    </li>
-                    <li>
-                      <Text>Inclusive, discrimination-free community</Text>
+                      <Text>
+                        We do not tolerate any kind of sexism, racism and other
+                        forms of discrimination.
+                      </Text>
                     </li>
                   </Box>
                 </ul>
@@ -102,48 +121,64 @@ const How = () => {
 
             <Box margin={{ vertical: "large" }} gap="small">
               <Heading level={2} margin={{ bottom: "medium" }}>
-                Discovering Art
+                Giving Back
               </Heading>
 
               <Paragraph fill>
-                Browse through our curated selection of local artists and find
-                unique pieces that speak to you. Each artist's profile gives you
-                insight into their practice, style, and available works.
-              </Paragraph>
-
-              <Paragraph fill>
-                We work with local art experts to ensure you discover authentic
-                and quality artwork. Our platform helps you explore different
-                styles and mediums while learning about the local art scene.
+                We will give back a percentage of our yearly net profit to the
+                art community. Which projects and organizations we support will
+                be open to recommendations. We will also provide grants to
+                artists and curators to help them create new work and
+                exhibitions.
               </Paragraph>
             </Box>
 
             <Box margin={{ vertical: "large" }} gap="small">
               <Heading level={2} margin={{ bottom: "medium" }}>
-                Starting Your Collection
+                Curation
+              </Heading>
+
+              <Paragraph fill>
+                We believe that curation is an essential part of the art world,
+                and we support an open model where artists and curators can help
+                create their own art communities.
+              </Paragraph>
+
+              <Paragraph fill>
+                For each art community, we will work with local curators or
+                managers to ensure that the selected studios and events
+                represent the local art scene. The curator will be responsible
+                for inviting artists and organizing events such as studio tours.
+              </Paragraph>
+            </Box>
+
+            <Box margin={{ vertical: "large" }} gap="small">
+              <Heading level={2} margin={{ bottom: "medium" }}>
+                The Future
               </Heading>
 
               <Box gap="medium">
-                <CirclePoint>Personal Connection</CirclePoint>
+                <CirclePoint>
+                  Support with Logisitics and Certifcates
+                </CirclePoint>
                 <Paragraph fill>
-                  Meet artists in their creative space, understand their
-                  inspiration, and build a personal connection with the artwork
-                  before adding it to your collection.
+                  We will work to help artists and collectors with the logistics
+                  of shipping and delivering artworks securely. We also plan on
+                  building a system to create decentralized Certifcates of
+                  Authenticity for artworks. The system may be based on
+                  blockchain technology where each artwork will have a unique
+                  digital signature, and when it is sold a second time, the
+                  artist will receive an agreed upon percentage of the sale.
                 </Paragraph>
 
-                <CirclePoint>Transparent Process</CirclePoint>
+                <CirclePoint>Resources</CirclePoint>
                 <Paragraph fill>
-                  Every artwork comes with clear pricing and authenticity
-                  information. Purchase directly from artists with secure
-                  payment processing and proper documentation.
-                </Paragraph>
-
-                <CirclePoint>Long-term Support</CirclePoint>
-                <Paragraph fill>
-                  We're developing a system for digital Certificates of
-                  Authenticity and secure artwork tracking. This ensures the
-                  provenance of your collection and supports artists through
-                  future resales.
+                  We will work on creating a healthy network of art lovers and
+                  collectors who are interested in discovering emerging artists
+                  and supporting them. We will offer educational resources
+                  especially to young and beginner collectors to help guide them
+                  to develop in their journey and practice and in making
+                  informed decisions.
                 </Paragraph>
               </Box>
             </Box>

@@ -22,9 +22,12 @@ const HowArtists = () => {
       <Grid fluid>
         <Row>
           <Col xs={12}>
-            <Box align="center" margin={{ top: "medium", bottom: "large" }}>
+            <Box align="center" margin={{ top: "medium", bottom: "xlarge" }}>
               <Heading level={3} margin="none" textAlign="center">
-                For Artists and Curators
+                How It Works
+                <br />
+                <br />
+                for Artists and Curators
               </Heading>
             </Box>
 
@@ -54,7 +57,7 @@ const HowArtists = () => {
                 </Paragraph>
 
                 <Paragraph fill>
-                  We believe that a for profit model is the best way to ensure
+                  We believe that a for-profit model is the best way to ensure
                   that Arti remains sustainable and can continue to support
                   artists and the art community. We are committed to
                   transparency and fairness. We will always be open about how we
