@@ -1,11 +1,11 @@
 import { supabase } from "services/supabase";
 import convert from "client-side-image-resize";
 
-async function fileExists(bucketName, filePath, fileName) {
+async function fileExists(bucketName, filePath, fileName, listLarge = false) {
   const { data, error } = await supabase.storage
     .from(bucketName)
     .list(filePath, {
-      limit: 4,
+      limit: listLarge ? 10 : 4,
       // offset: 0,
       sortBy: { column: "name", order: "asc" },
     });
@@ -80,14 +80,16 @@ async function downloadEventImage({ imgPath, postDownload }) {
   return false;
 }
 async function downloadProfileImage({ userId }) {
-  // REMOVED - might be needed if profile image is not .jpg
+  const doesProfileImgExist = await fileExists(
+    "studios-photos",
+    userId,
+    "profile.jpg",
+    true
+  );
 
-  // const { paths } = await listImages({ userId });
-  // const imgPath = paths.filter((path) => path.includes("/0."))[0];
+  const imgPath = `${userId}${doesProfileImgExist ? "/profile.jpg" : "/0.jpg"}`;
 
-  const imgPath = userId + "/0.jpg";
-
-  const url = await downloadImage({
+  let url = await downloadImage({
     imgPath,
   });
 
@@ -114,16 +116,6 @@ async function downloadImages({ userId, postDownload }) {
 }
 
 async function resizeImage({ file, returnSmallerImage = false }) {
-  // let imgRatio = 1;
-  // const img = new Image();
-  // img.src = URL.createObjectURL(file);
-  // img.onload = async () => {
-  //   const width = img.width;
-  //   const height = img.height;
-  //   imgRatio = width / height;
-  //   // console.log(`Width: ${width}, Height: ${height}, Ratio: ${ratio}`);
-  //   URL.revokeObjectURL(img.src);
-  // };
   const fileLarge = await convert({
     file: file,
     width: 1200,
@@ -146,28 +138,6 @@ async function resizeImage({ file, returnSmallerImage = false }) {
 
   return [fileLarge, fileSmall];
 }
-
-// NOT NEEDED
-// async function getImagesUrls({ userId }) {
-//   const { paths } = await listImages({ userId });
-
-//   const urls = [];
-
-//   for (const path of paths) {
-//     const { publicURL, error } = supabase.storage
-//       .from("studios-photos")
-//       .getPublicUrl(path);
-
-//     if (publicURL) {
-//       urls.push(publicURL);
-//       // console.log(publicURL);
-//     } else {
-//       console.log(error);
-//     }
-//   }
-
-//   return urls;
-// }
 
 export {
   fileExists,

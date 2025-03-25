@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "services/supabase";
 import { useAuth } from "services/auth";
-import { downloadImage } from "services/images";
+import { downloadImage, resizeImage } from "services/images";
 
 import { Edit2, X } from "react-feather";
 
@@ -14,7 +14,7 @@ const PHOTO_MAX_SIZE = 1048576; // 1 MB
 export default function PhotoInput({
   imgPath,
   imgId,
-  //   size,
+  isMainPhoto,
   postUpload,
   //   onSetMain,
 }) {
@@ -24,8 +24,6 @@ export default function PhotoInput({
   const [isPhotoTooLarge, setIsPhotoTooLarge] = useState(false);
 
   const { user } = useAuth();
-
-  const isMainPhoto = imgPath?.includes("/0.");
 
   useEffect(() => {
     if (imgPath) {
@@ -59,8 +57,9 @@ export default function PhotoInput({
     try {
       setUploading(true);
       setIsPhotoTooLarge(false);
+
       if (imgPath) await removeImage();
-      if (!event.target.files || event.target.files.length === 0) {
+      if (!event.target.files?.[0]) {
         throw new Error("You must select an image to upload.");
       }
 
@@ -69,26 +68,65 @@ export default function PhotoInput({
       const fileName = `${imgName}.${fileExt}`;
       const filePath = `${user.id}/${fileName}`;
 
-      console.log(file.size);
       if (file.size > PHOTO_MAX_SIZE) {
         setIsPhotoTooLarge(true);
-        setUploading(false);
-      } else {
-        let { error } = await supabase.storage
+        return;
+      }
+
+      let errors = [];
+
+      if (isMainPhoto) {
+        const filePathSmall = `${user.id}/profile.${fileExt}`;
+        const [fileLarge, fileSmall] = await resizeImage({
+          file,
+          returnSmallerImage: true,
+        });
+
+        // Upload large version
+        const { error: errorLarge } = await supabase.storage
           .from("studios-photos")
-          .upload(filePath, file, {
+          .upload(filePath, fileLarge, {
             cacheControl: "30",
             upsert: true,
           });
+        if (errorLarge) errors.push(errorLarge);
 
-        if (error) {
-          throw error;
-        }
-        await postUpload();
-        await downloadImage({ imgPath: filePath, postDownload: setImgUrl });
-        setEditing(false);
+        // Upload small version
+        const { error: errorSmall } = await supabase.storage
+          .from("studios-photos")
+          .upload(filePathSmall, fileSmall, {
+            cacheControl: "30",
+            upsert: true,
+          });
+        if (errorSmall) errors.push(errorSmall);
+      } else {
+        const [fileLarge] = await resizeImage({
+          file,
+          returnSmallerImage: false,
+        });
+
+        const { error: errorLarge } = await supabase.storage
+          .from("studios-photos")
+          .upload(filePath, fileLarge, {
+            cacheControl: "30",
+            upsert: true,
+          });
+        if (errorLarge) errors.push(errorLarge);
       }
+
+      if (errors.length) {
+        throw new Error(
+          `Upload failed: ${errors.map((e) => e.message).join(", ")}`
+        );
+      }
+
+      await downloadImage({
+        imgPath: `${filePath}?t=${Date.now()}`,
+        postDownload: setImgUrl,
+      });
+      setEditing(false);
     } catch (error) {
+      console.error("Upload error:", error);
       alert(error.message);
     } finally {
       setUploading(false);
