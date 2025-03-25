@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { supabase } from "services/supabase";
 import { useAuth } from "services/auth";
 import { downloadImage, resizeImage } from "services/images";
-
 import { Edit2, X } from "react-feather";
-
-import { Box, Notification, FileInput } from "grommet";
-
+import {
+  Box,
+  Notification,
+  FileInput,
+  Paragraph,
+  ResponsiveContext,
+} from "grommet";
 import Button from "components/Button";
 
 const PHOTO_MAX_SIZE = 1048576; // 1 MB
@@ -24,6 +27,7 @@ export default function PhotoInput({
   const [isPhotoTooLarge, setIsPhotoTooLarge] = useState(false);
 
   const { user } = useAuth();
+  const size = useContext(ResponsiveContext);
 
   useEffect(() => {
     if (imgPath) {
@@ -135,23 +139,27 @@ export default function PhotoInput({
   return (
     <div>
       <Box
-        width="medium"
-        height="small"
+        // width={size === "small" ? "100%" : null}
         direction="row-responsive"
         align="center"
         pad="medium"
         gap="large"
-        margin="medium"
+        margin={{ vertical: "large", horizontal: "medium" }}
+        fill="horizontal"
       >
-        <Box align="center" width="small" height="small">
+        <Box
+          align="center"
+          alignContent="center"
+          width={size === "small" ? "90%" : "small"}
+          height={size === "small" ? "small" : "small"}
+        >
           {editing ? (
             <FileInput
-              //   style={{ width: size }}
+              style={{ width: size === "small" ? "100%" : "auto" }} // Use the size from context
               name="fileInput"
               id="fileInput"
               multiple={false}
               accept="image/*"
-              // maxSize={PHOTO_MAX_SIZE} // not working, using manual check
               disabled={uploading}
               onChange={async (event) =>
                 await uploadImage({ event, imgName: imgId })
@@ -165,9 +173,15 @@ export default function PhotoInput({
             </>
           )}
         </Box>
-        <Box width="small" pad="small">
+        <Box
+          align="center"
+          alignContent="center"
+          width={size === "small" ? "90%" : "medium"}
+          pad="small"
+          size="large"
+        >
           {imgUrl && (
-            <Box direction="row" gap="large" pad="small">
+            <Box direction="row" gap="large">
               <Edit2
                 size={24}
                 color="#222222"
@@ -188,14 +202,14 @@ export default function PhotoInput({
           {uploading && <img src={`/img/loader.svg`} />}
 
           <br />
-          {isMainPhoto && <p>This is your main front photo</p>}
+          {isMainPhoto && <Paragraph fill>Your main studio photo</Paragraph>}
+
           {isPhotoTooLarge && (
             <Notification
               toast
               status="warning"
               title="Your photo was not uploaded"
               message="Upload a smaller image, less than 1 Megabyte."
-              // onClose={() => {}}
             />
           )}
         </Box>
