@@ -31,8 +31,12 @@ async function listImages({ userId }) {
     if (error) {
       throw error;
     }
-    imgs = data.filter((img) => img.metadata?.size > 0);
+    imgs = data.filter(
+      (img) => img.metadata?.size > 0 && !img.name.includes("profile.jpg")
+    );
     paths = imgs.map((image) => `${userId}/${image.name}`);
+
+    // console.log(paths);
   } catch (error) {
     console.log("Error listing images: ", error.message);
   }

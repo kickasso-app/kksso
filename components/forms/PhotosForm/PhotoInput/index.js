@@ -64,8 +64,7 @@ export default function PhotoInput({
       }
 
       const file = event.target.files[0];
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${imgName}.${fileExt}`;
+      const fileName = `${imgName}.jpg`;
       const filePath = `${user.id}/${fileName}`;
 
       if (file.size > PHOTO_MAX_SIZE) {
@@ -76,7 +75,7 @@ export default function PhotoInput({
       let errors = [];
 
       if (isMainPhoto) {
-        const filePathSmall = `${user.id}/profile.${fileExt}`;
+        const filePathSmall = `${user.id}/profile.jpg`;
         const [fileLarge, fileSmall] = await resizeImage({
           file,
           returnSmallerImage: true,

@@ -64,9 +64,19 @@ export default function AccountSettings({ profile }) {
               <Text size="medium" margin={textMargin}>
                 Are you ready to publish you profile?
               </Text>
-              <Text size="medium" margin={textMargin}>
-                You can preview it <Link href={`/profile/preview`}> here</Link>.
-              </Text>
+              {profile?.artist && profile?.location ? (
+                <Text size="medium" margin={textMargin}>
+                  You can preview it{" "}
+                  <Link href={`/profile/preview`}> here</Link>.
+                </Text>
+              ) : (
+                <Text size="medium" margin={textMargin}>
+                  Please add your basic information in{" "}
+                  <Link href={`/profile?=section=0`}> here</Link> and then you
+                  can preview it.
+                </Text>
+              )}
+
               <br />
               <Button onClick={togglePublishProfile} btnStyle="filled">
                 Publish

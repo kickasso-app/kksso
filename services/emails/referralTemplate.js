@@ -7,7 +7,7 @@ export const ReferralTemplate = ({ name, referredBy, joinLink }) => (
       <style>{emailStyles.toString()}</style>
     </head>
     <body>
-      <div>
+      <div id="emailstyles">
         <h1>Hello {name}!</h1>
         <p> You were invited to join Arti by {referredBy}.</p>
         <p>
@@ -37,10 +37,11 @@ export const ReferralTemplate = ({ name, referredBy, joinLink }) => (
         </p>
 
         <p>
+          <br /> <br />
           <a class="pinkbutton" href={joinLink}>
             Join Arti
           </a>
-          <br />
+          <br /> <br />
         </p>
         <p>
           Feel free to reach out to us if you have any questions or comments.

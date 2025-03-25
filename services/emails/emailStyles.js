@@ -1,6 +1,9 @@
 export const emailStyles = `
 
-div{ background-color: #ffffff; }
+     div#emailstyles{ 
+     background-color: #ffffff; 
+     padding: 2rem 1rem;
+     }
 
      h1 {
     font-family: Helvetica;
@@ -49,31 +52,15 @@ div{ background-color: #ffffff; }
     color: #4b4b4b;
     }
 
-    a.bluebutton {
-    -webkit-text-size-adjust: 100%;
-    -webkit-font-smoothing: antialiased;
-    margin: 0;
-    box-sizing: border-box;
-    background-color: #c0fff4;
-    color: #4b4b4b;
-    font-size: 1.125rem;
-    font-family: Helvetica, sans-serif;
-    padding: 1rem 4rem;
-    margin-bottom: 2rem;
-    border: 1px solid #c0fff4;
-    margin-right: 0.5rem;
-    }
-
     a.pinkbutton {
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
-    margin: 3rem 1rem;
     box-sizing: border-box;
     background-color: #FFC0CB;
     color: #4b4b4b;
     font-size: 1.125rem;
     font-family: Helvetica, sans-serif;
-    padding: 1rem 4rem;
+    padding: 1rem 2rem;
     border: 1px solid #FFC0CB;
     }
 

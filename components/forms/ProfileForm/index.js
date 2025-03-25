@@ -5,24 +5,24 @@ import { useAuth } from "services/auth";
 
 import Button from "components/Button";
 
-// import { CheckCircle, XCircle } from "react-feather";
 import {
   Box,
   Form,
   FormField,
   Notification,
-  CheckBoxGroup,
   TextArea,
   TextInput,
   Text,
   Heading,
   Grommet,
+  Paragraph,
   Anchor,
 } from "grommet";
 
 export default function ProfileForm({
   profile: {
     artist,
+    location,
     textMini,
     textLong,
     styles,
@@ -39,6 +39,7 @@ export default function ProfileForm({
 
   const [values, setValues] = useState({
     artist,
+    location: location.join(","),
     textMini,
     textLong,
     styles,
@@ -50,7 +51,7 @@ export default function ProfileForm({
   const updateProfile = async (event) => {
     const updates = {
       ...values,
-      // updated_at: new Date(),
+      location: values.location.split(","),
     };
 
     await updateAccount(updates, user);
@@ -86,6 +87,19 @@ export default function ProfileForm({
           >
             <FormField name="artist" label="Name" margin={fieldMargin} required>
               <TextInput name="artist" placeholder="" />
+            </FormField>
+
+            <FormField
+              name="location"
+              label="Your studio location"
+              margin={textMargin}
+              required
+            >
+              <Box pad="small">
+                {" "}
+                <Text size="small">City, Country</Text>
+              </Box>
+              <TextInput name="location" placeholder="e.g Berlin, Germany" />
             </FormField>
             <FormField
               label="A short intro (max 300 chars)"

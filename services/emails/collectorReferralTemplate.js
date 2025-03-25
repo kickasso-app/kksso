@@ -12,7 +12,7 @@ export const CollectorReferralTemplate = ({
       <style>{emailStyles.toString()}</style>
     </head>
     <body>
-      <div>
+      <div id="emailstyles">
         <h1>Hello {name}!</h1>
         <p>
           We are delighted to send you this exclusive invitation to explore the
@@ -52,9 +52,8 @@ export const CollectorReferralTemplate = ({
 
         {includeStudioLink && (
           <p>
-            You were sent this invitation by {referredBy}.
-            <br />
-            Explore their Arti studio page <a href={studioLink}>here</a>.
+            You were sent this invitation by {referredBy}. Explore their Arti
+            studio page <a href={studioLink}>here</a>.
           </p>
         )}
 

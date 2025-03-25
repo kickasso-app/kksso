@@ -13,7 +13,7 @@ export const VisitRequestConfirmation = ({
       <style>{emailStyles.toString()}</style>
     </head>
     <body>
-      <div>
+      <div id="emailstyles">
         <h1>Hello, {from_name}!</h1>
         <p>
           We sent your studio visit request to {to_name}'s studio on{" "}

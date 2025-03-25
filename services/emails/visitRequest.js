@@ -14,7 +14,7 @@ export const VisitRequest = ({
       <style>{emailStyles.toString()}</style>
     </head>
     <body>
-      <div>
+      <div id="emailstyles">
         <h1>Hello, {to_name}!</h1>
         <p>
           You got a studio visit request from <strong>{from_name}</strong> on{" "}

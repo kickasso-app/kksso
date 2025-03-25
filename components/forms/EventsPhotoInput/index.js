@@ -84,8 +84,6 @@ const EventsPhotoInput = ({ userId, event, postUpload }) => {
       }
 
       const file = event.target.files[0];
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${imgName}.${fileExt}`;
 
       if (file.size > PHOTO_MAX_SIZE) {
         setIsPhotoTooLarge(true);

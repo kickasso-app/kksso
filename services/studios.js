@@ -4,6 +4,7 @@ import { supabase } from "./supabase";
 import { useCities } from "services/city";
 
 import { STUDIO_PREVIEW_COLUMNS } from "config/constants/studioPreviewColumns";
+import { STUDIO_COLUMNS } from "config/constants/studioColumns";
 
 const StudiosContext = createContext(null);
 
@@ -128,7 +129,7 @@ const StudiosProvider = ({ children }) => {
     setLoading(true);
     let { data: studio, error } = await supabase
       .from("studios")
-      .select("*")
+      .select(STUDIO_COLUMNS.join(", "))
       .eq("studio_id", id);
 
     if (studio?.length) {

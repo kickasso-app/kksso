@@ -19,7 +19,7 @@ import {
 import Button from "components/Button";
 
 export default function StudioSettingsForm({
-  profile: { visitRules, textStudio, location, district },
+  profile: { visitRules, textStudio, district },
 }) {
   const { user } = useAuth();
   const { updateAccount, loading, isUpdateSuccess, isUpdateError } =
@@ -27,7 +27,6 @@ export default function StudioSettingsForm({
 
   const [values, setValues] = useState({
     visitRules,
-    location: location.join(","),
     district,
     textStudio,
   });
@@ -35,7 +34,6 @@ export default function StudioSettingsForm({
   async function updateProfile(event) {
     const updates = {
       ...values,
-      location: values.location.split(","),
     };
 
     await updateAccount(updates, user);
@@ -55,17 +53,8 @@ export default function StudioSettingsForm({
       validate="submit"
     >
       <FormField
-        name="location"
-        label="Your studio location: City, Country"
-        margin={textMargin}
-        required
-      >
-        <TextInput name="location" placeholder="Berlin, Germany" />
-      </FormField>
-
-      <FormField
         name="district"
-        label="District or Kiez in your city"
+        label="District or kiez in your city"
         margin={textMargin}
         required
       >

@@ -1,4 +1,4 @@
-export const STUDIO_COLUMNS = [
+export const PROFILE_COLUMNS = [
   "artist",
   "location",
   "district",
@@ -13,9 +13,9 @@ export const STUDIO_COLUMNS = [
   "website",
   "instagram",
   "eventId",
+  "referrals",
   "accountType",
   "published",
   "studio_id",
   "uuid",
-  "email",
 ];

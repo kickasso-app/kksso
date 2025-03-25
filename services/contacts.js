@@ -1,5 +1,5 @@
 const createContact = async ({ newReferral, newRequest }) => {
-  const newContact = { contact_id: self.crypto.randomUUID() };
+  let newContact = { contact_id: self.crypto.randomUUID() };
   let isContactCreated = false;
 
   if (newReferral) {

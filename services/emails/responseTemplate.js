@@ -15,7 +15,7 @@ export const RequestResponse = ({
       <style>{emailStyles.toString()}</style>
     </head>
     <body>
-      <div>
+      <div id="emailstyles">
         <h1>Hello {name}!</h1>
         <p>
           {studio_name} responsed to your studio visit request on {request_date}
