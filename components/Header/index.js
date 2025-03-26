@@ -1,17 +1,15 @@
+import { useContext } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
-import { Box } from "grommet";
+import { Box, Grid, ResponsiveContext } from "grommet";
 
 import { useAuth } from "services/auth";
 import { useCities } from "services/city";
 
 import NavButton from "./NavButton";
-import Button from "components/Button";
+// import Button from "components/Button"; // No longer used
 import ProfileButton from "./ProfileButton";
 
 import MENU_LINKS from "config/menuLinks";
-import { MoreVertical } from "react-feather";
 
 import { createSlug } from "services/helpers/textFormat";
 // import styles from "./index.module.scss";
@@ -19,6 +17,7 @@ import { createSlug } from "services/helpers/textFormat";
 const Header = () => {
   const { session } = useAuth();
   const { selectedCity } = useCities();
+  const size = useContext(ResponsiveContext);
 
   const createPath = (label, path) => {
     if (!(label === "Studios" || label === "Events")) return path;
@@ -31,41 +30,52 @@ const Header = () => {
   };
 
   return (
-    <Grid fluid>
-      <Col xs={12}>
-        <Box margin={{ bottom: "0.5rem", top: "0.625rem" }}>
-          <Row center="xs" start="md">
-            <Col xs={12} md={2}>
-              <Link href="/">
-                <img src={`/img/logo-name-web.png`} alt="arti" />
-              </Link>
-            </Col>
-            <Col xs={12} md={10}>
-              <Box margin={{ vertical: "xs" }}>
-                <Row center="xs" end="md">
-                  {MENU_LINKS.map((button) => (
-                    <NavButton
-                      key={button.path}
-                      path={createPath(button.label, button.path)}
-                      label={button.label}
-                      // icon={button.icon}
-                    />
-                  ))}
-
-                  {session ? (
-                    <ProfileButton />
-                  ) : (
-                    <Button btnStyle="outline">
-                      <Link href="/join">Join</Link>
-                    </Button>
-                  )}
-                </Row>
-              </Box>
-            </Col>
-          </Row>
+    <Box margin={{ vertical: "0.5rem", horizontal: "small" }} pad="xsmall">
+      <Grid
+        columns={size !== "small" ? ["auto", "flex"] : ["100%"]}
+        rows={size !== "small" ? ["auto"] : ["auto", "auto"]}
+        areas={
+          size !== "small"
+            ? [
+                { name: "logo", start: [0, 0], end: [0, 0] },
+                { name: "nav", start: [1, 0], end: [1, 0] },
+              ]
+            : [
+                { name: "logo", start: [0, 0], end: [0, 0] },
+                { name: "nav", start: [0, 1], end: [0, 1] },
+              ]
+        }
+        gap="small"
+      >
+        <Box gridArea="logo" width="xsmall">
+          <Link href="/">
+            <img src={`/img/logo-name-web.png`} alt="arti" />
+          </Link>
         </Box>
-      </Col>
-    </Grid>
+
+        <Box
+          gridArea="nav"
+          justify={size !== "small" ? "end" : "center"}
+          align="center"
+          direction="row"
+          fill
+        >
+          {MENU_LINKS.map((button) => (
+            <NavButton
+              key={button.path}
+              path={createPath(button.label, button.path)}
+              label={button.label}
+            />
+          ))}
+
+          {session ? (
+            <ProfileButton />
+          ) : (
+            <NavButton path={"/join"} label={<u>Join</u>} />
+          )}
+        </Box>
+      </Grid>
+    </Box>
   );
 };
 
