@@ -1,16 +1,18 @@
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { Box, Heading, Text, Paragraph } from "grommet";
+import { Box, Heading, Paragraph } from "grommet";
 import Link from "next/link";
 import moment from "moment";
 import ProgressiveImage from "react-progressive-image";
 
-import useEventImage from "hooks/useEventImage";
+import { downloadEventImage } from "services/images";
 import styles from "./index.module.scss";
+
 const readableDate = (date) => moment(date, "YYYY-MM-DD").format("D MMM 'YY");
 
 export default function EventCard({ event, inStudio = false }) {
   const router = useRouter();
-  const [imgUrl, isImgLoaded] = useEventImage(event, "small");
+  const [imgUrl, setImgUrl] = useState(false);
   const eventMargin = { vertical: "1rem" };
   const detailsMargin = { vertical: "0.5rem" };
 
@@ -19,31 +21,21 @@ export default function EventCard({ event, inStudio = false }) {
     router.push(eventLink);
   };
 
+  useEffect(() => {
+    const imgPath = `${event.studio_uuid}/${event.id}/event-small.jpg`;
+    downloadEventImage({ imgPath }).then((url) => setImgUrl(url));
+  }, [event]);
+
   return (
-    <div className={styles.EventCard}>
+    <div>
       <div className={styles.imgContainer}>
         <Link href={eventLink}>
-          <a onClick={openEvent}>
-            {imgUrl && isImgLoaded && (
-              <Box pad="medium">
-                <ProgressiveImage src={imgUrl} placeholder={`/img/loader.svg`}>
-                  {(src, loading) => (
-                    <img
-                      className={styles.cardImg}
-                      src={src}
-                      alt={event.title}
-                      style={{
-                        opacity: loading ? 0.5 : 1,
-                        ...(inStudio && {
-                          maxHeight: "325px",
-                          objectFit: "contain",
-                        }),
-                      }}
-                    />
-                  )}
-                </ProgressiveImage>
-              </Box>
-            )}
+          <a onClick={() => openEvent()}>
+            <ProgressiveImage src={imgUrl} placeholder={`/img/loader.svg`}>
+              {(src, loading) => (
+                <img className={styles.cardImg} src={src} alt={event.title} />
+              )}
+            </ProgressiveImage>
           </a>
         </Link>
       </div>

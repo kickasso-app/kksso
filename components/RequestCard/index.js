@@ -42,10 +42,6 @@ const RequestCard = ({
 
   const status = !has_response ? "Pending" : response ? "Approved" : "Rejected";
 
-  // useEffect(() => {
-  //   // downloadProfileImage({ userId: uuid }).then((url) => setImgUrl(url));
-  // }, [uuid]);
-
   return (
     <Box fill onClick={() => onOpen(request_id)}>
       <Card
