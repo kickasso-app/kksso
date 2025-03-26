@@ -1,7 +1,11 @@
 import React, { useContext } from "react";
+import Link from "next/link";
+
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import { Box, Heading, Text, Paragraph, ResponsiveContext } from "grommet";
 import { Circle } from "react-feather";
+import Button from "components/Button";
+
 import styles from "./index.module.scss";
 
 const CirclePoint = ({ children }) => (
@@ -187,6 +191,72 @@ const About = () => {
                   </li>
                 </Box>
               </ul>
+            </Box>
+
+            <Box
+              margin={{ vertical: "xlarge" }}
+              // margin={{ vertical: "xlarge" }}
+              pad={{ horizontal: "small", vertical: "small" }}
+              align="center"
+              direction="column"
+            >
+              <Heading level={3} margin={{ bottom: "xlarge" }}>
+                How it works in detail
+              </Heading>
+
+              <Row>
+                <Col md={6}>
+                  <Box
+                    align="center"
+                    pad={{ vertical: "small" }}
+                    margin={{ vertical: "medium" }}
+                    fill
+                    direction="column"
+                  >
+                    <Button btnStyle="outline">
+                      <Box margin={"xsmall"}>
+                        <Link href={"/how-it-works/artists"}>
+                          For Artists and Curators
+                        </Link>
+                      </Box>
+                    </Button>
+                    <Paragraph
+                      size="medium"
+                      alignSelf="center"
+                      margin={{ vertical: "large" }}
+                    >
+                      Find out how our platform works and how to offer to host
+                      visits, workshops, and other art community events in your
+                      studio.
+                    </Paragraph>
+                  </Box>
+                </Col>
+                <Col md={6}>
+                  <Box
+                    align="center"
+                    pad={{ vertical: "small", horizontal: "small" }}
+                    margin={{ vertical: "medium" }}
+                    fill
+                    direction="column"
+                  >
+                    <Button btnStyle="outline">
+                      <Box margin={"xsmall"}>
+                        <Link href={"/how-it-works/"}>
+                          For Art Lovers and Collectors
+                        </Link>
+                      </Box>
+                    </Button>
+                    <Paragraph
+                      margin={{ vertical: "large" }}
+                      size="medium"
+                      alignSelf="center"
+                    >
+                      Know more about our vision for a new art world, and how
+                      you can be part of it.
+                    </Paragraph>
+                  </Box>
+                </Col>
+              </Row>
             </Box>
           </Col>
         </Row>
