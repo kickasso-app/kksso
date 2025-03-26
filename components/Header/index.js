@@ -55,9 +55,10 @@ const Header = () => {
 
         <Box
           gridArea="nav"
-          justify={size !== "small" ? "end" : "center"}
           align="center"
           direction="row"
+          justify={size !== "small" ? "end" : "center"}
+          gap={size !== "small" ? "small" : "medium"}
           fill
         >
           {MENU_LINKS.map((button) => (

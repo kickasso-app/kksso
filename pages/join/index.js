@@ -235,7 +235,9 @@ export default function Join() {
                   </Text>
                   <Paragraph margin={textMargin}>
                     Already have an account?{" "}
-                    <Anchor onClick={() => setNewUser(false)}>Log In</Anchor>
+                    <Anchor onClick={() => setNewUser(false)}>
+                      <u>Log In</u>
+                    </Anchor>
                   </Paragraph>
                 </>
               ) : (
@@ -248,7 +250,7 @@ export default function Join() {
                         // setForgotPassword(false);
                       }}
                     >
-                      Sign Up First
+                      <u>Sign Up First</u>
                     </Anchor>
                   </Paragraph>
 
