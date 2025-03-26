@@ -7,7 +7,7 @@ import { useAuth } from "services/auth";
 import Button from "components/Button";
 import NavButton from "../NavButton";
 
-import { User } from "react-feather";
+import { User, Gift } from "react-feather";
 
 import { DropButton, Box, ResponsiveContext } from "grommet";
 
@@ -51,7 +51,15 @@ export default function ProfileButton() {
         >
           <NavButton path={"/profile?section=0"} label={"Profile"} />
           <NavButton path={"/requests"} label={"Requests"} />
-          <NavButton path={"/profile?section=3"} label={"Events"} />
+          <NavButton
+            path={"/profile?section=5"}
+            label={
+              <Box gap="xsmall" direction="col">
+                <b>Invites</b> <Gift size={18} />
+              </Box>
+            }
+          />
+
           <NavButton path={"/profile?section=4"} label={"Settings"} />
           <Box pad={{ vertical: "small" }}>
             {loading ? (

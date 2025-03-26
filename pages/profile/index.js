@@ -11,10 +11,10 @@ import PhotosForm from "components/forms/PhotosForm";
 import VisitsSettingsForm from "components/forms/VisitsSettingsForm";
 import EventsSettingsForm from "components/forms/EventsSettingsForm";
 import AccountSettings from "components/forms/AccountSettings";
-import ReferralsForm from "components/forms/ReferralsForm";
+import InvitesForm from "components/forms/InvitesForm";
 
 // Define the constant TABS outside the component
-const TABS = ["Profile", "Photos", "Visits", "Events", "Settings", "Referrals"];
+const TABS = ["Profile", "Photos", "Visits", "Events", "Settings", "Invites"];
 
 export default function Profile() {
   const router = useRouter();
@@ -99,7 +99,7 @@ export default function Profile() {
                 {index === 2 && <VisitsSettingsForm profile={profile} />}
                 {index === 3 && <EventsSettingsForm profile={profile} />}
                 {index === 4 && <AccountSettings profile={profile} />}
-                {index === 5 && <ReferralsForm profile={profile} />}
+                {index === 5 && <InvitesForm profile={profile} />}
               </Box>
               <Box margin={{ top: "large" }}>
                 <MobileSelectMenu />
@@ -124,9 +124,7 @@ export default function Profile() {
                       {tab === "Settings" && (
                         <AccountSettings profile={profile} />
                       )}
-                      {tab === "Referrals" && (
-                        <ReferralsForm profile={profile} />
-                      )}
+                      {tab === "Invites" && <InvitesForm profile={profile} />}
                     </Box>
                   </Tab>
                 ))}

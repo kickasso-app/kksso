@@ -38,7 +38,7 @@ const Footer = () => {
           </Col>
           <Col md={4} xs={6}>
             <Box margin={{ vertical: "small" }} align="center">
-              <a href="mailto:arti.studiosapp@gmail.com">
+              <a href="mailto:hello@arti.my">
                 <Mail size={30} color="#4b4b4b" strokeWidth={1.5} />
               </a>
               <Text size="medium" margin="medium">
@@ -54,7 +54,7 @@ const Footer = () => {
               <Box height="50px" margin="small">
                 <Image fit="contain" src="/img/logo-only.png" />
               </Box>
-              <Text size="small">© Arti, 2024</Text>
+              <Text size="small">© Arti, 2025</Text>
 
               <br />
               <br />

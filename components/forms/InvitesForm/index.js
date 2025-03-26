@@ -20,12 +20,12 @@ import { CollectorReferralTemplate } from "services/emails/collectorReferralTemp
 
 const MAX_ARTIST_REFERRALS = 5;
 
-export default function ReferralsForm({ profile }) {
+export default function InvitesForm({ profile }) {
   const { user } = useAuth();
   const { updateAccount, loading, isUpdateSuccess, isUpdateError } =
     useAccount();
 
-  const [numOfArtistReferrals, setNumOfArtistReferrals] = useState(
+  const [numOfArtistInvites, setNumOfArtistInvites] = useState(
     profile?.referrals?.length || 0
   );
 
@@ -42,14 +42,14 @@ export default function ReferralsForm({ profile }) {
     const toName = event.target.name.value;
     const toEmail = event.target.email.value;
 
-    let newArtistReferrals;
+    let newArtistInvites;
     let emailTemplate;
     let subject;
     let referralLink;
     let isContactCreated = false;
 
     if (type === "artist") {
-      newArtistReferrals = [
+      newArtistInvites = [
         ...(profile?.referrals || []),
         { name: toName, email: toEmail },
       ];
@@ -86,9 +86,9 @@ export default function ReferralsForm({ profile }) {
       if (emailSent === true) {
         let updateObj = {};
         if (type === "artist") {
-          updateObj = { referrals: newArtistReferrals };
+          updateObj = { referrals: newArtistInvites };
           await updateAccount(updateObj, user);
-          setNumOfArtistReferrals(numOfArtistReferrals + 1);
+          setNumOfArtistInvites(numOfArtistInvites + 1);
         } else if (type === "artlover") {
           isContactCreated = await createContact({
             newReferral: {
@@ -121,7 +121,7 @@ export default function ReferralsForm({ profile }) {
         width={{ max: "large" }} // on larger screens, limit to "large"
       >
         <Heading level="3" size="medium" margin={fieldMargin}>
-          Referrals
+          Invites
         </Heading>
         <Text size="medium" margin={textMargin}>
           Invite your favorite artists' studios or art lovers and collectors in
@@ -131,7 +131,7 @@ export default function ReferralsForm({ profile }) {
         <Heading level={3} margin={fieldMargin}>
           Invite an artist
         </Heading>
-        {numOfArtistReferrals < MAX_ARTIST_REFERRALS && (
+        {numOfArtistInvites < MAX_ARTIST_REFERRALS && (
           <form onSubmit={(e) => addReferral(e, "artist")}>
             <Box width="medium">
               <Box>
@@ -162,13 +162,13 @@ export default function ReferralsForm({ profile }) {
             </Box>
             <br />
             <Button type="submit" btnStyle="filled">
-              {sendingInvite ? "Sending ..." : "Send Artist Referral"}
+              {sendingInvite ? "Sending ..." : "Send Artist Invite"}
             </Button>
           </form>
         )}
         <Text size="medium" margin={textMargin}>
-          You sent {numOfArtistReferrals} artist invites. You have{" "}
-          {MAX_ARTIST_REFERRALS - numOfArtistReferrals} left.
+          You sent {numOfArtistInvites} artist invites. You have{" "}
+          {MAX_ARTIST_REFERRALS - numOfArtistInvites} left.
         </Text>
         <Box margin={{ vertical: "large" }}>
           <hr />

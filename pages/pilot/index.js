@@ -56,9 +56,7 @@ const Pilot = () => {
               )}
             </Box>
             <Box margin={{ vertical: "2.5rem" }} align="center">
-              <Heading level={2}>
-                Discover art studios and events near you
-              </Heading>
+              <Heading level={2}>Discover Your Local Art Scene</Heading>
             </Box>
             {/*<Box margin={{ vertical: "1rem", bottom: "12rem" }} align="center">
               {featureFlags.studiosByCities === false ? (
