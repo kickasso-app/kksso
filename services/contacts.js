@@ -1,4 +1,4 @@
-const createContact = async ({ newReferral, newRequest }) => {
+const createContact = async ({ newReferral, newRequest, newNewsletter }) => {
   let newContact = { contact_id: self.crypto.randomUUID() };
   let isContactCreated = false;
 
@@ -18,6 +18,12 @@ const createContact = async ({ newReferral, newRequest }) => {
       name: newRequest.requestor_name,
       email: newRequest.requestor_email,
       website: newRequest.requestor_link,
+    };
+  } else if (newNewsletter) {
+    newContact = {
+      ...newContact,
+      source: "newsletter",
+      ...newNewsletter,
     };
   } else {
     console.warn("No newReferral or newRequest provided to createContact");

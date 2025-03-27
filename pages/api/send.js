@@ -2,6 +2,7 @@ import { Resend } from "resend";
 import { render } from "@react-email/render";
 
 import { TestTemplate } from "services/emails/testTemplate";
+import { NewsletterTemplate } from "services/emails/newsletterTemplate";
 import { ReferralTemplate } from "services/emails/referralTemplate";
 import { VisitRequest } from "services/emails/visitRequest";
 import { VisitRequestConfirmation } from "services/emails/visitRequestConfirmation";
@@ -15,6 +16,7 @@ const emailTemplates = {
   visitRequest: VisitRequest,
   visitRequestConfirmation: VisitRequestConfirmation,
   responseTemplate: RequestResponse,
+  newsletterTemplate: NewsletterTemplate,
 };
 
 const TEST_ENV = false;

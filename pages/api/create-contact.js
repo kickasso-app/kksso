@@ -27,9 +27,9 @@ export default async (req, res) => {
 
     console.log(newContact);
     // Basic validation
-    if (!newContact?.request_id || !newContact?.name || !newContact?.email) {
+    if (!newContact?.email) {
       return res.status(400).json({
-        message: "Email, name and ID are required",
+        message: "Email is required",
       });
     }
 

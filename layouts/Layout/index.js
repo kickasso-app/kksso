@@ -3,8 +3,7 @@ import { Analytics } from "@vercel/analytics/react";
 
 import { Grommet } from "grommet";
 
-import Header from "../Header";
-import Footer from "../Footer";
+import Header from "layouts/Header";
 
 import grommetTheme from "styles/grommetTheme";
 
@@ -47,7 +46,6 @@ const Layout = (props) => {
         <div className="layout">
           <Header />
           <div className="content">{props.children}</div>
-          <Footer />
         </div>
         <Analytics />
       </Grommet>
