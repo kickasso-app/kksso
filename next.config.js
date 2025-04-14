@@ -28,8 +28,7 @@ const nextConfig = {
         $color-gray: rgba(0, 0, 0, 0.1);
     `,
   },
-  env: {
-  },
+  env: {},
 };
 
 module.exports = nextConfig;

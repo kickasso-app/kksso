@@ -23,125 +23,157 @@ import {
 import Button from "components/Button";
 
 import { calendarBounds } from "config/calendar";
+import WeekdayTimeSelector from "./weekday-time-selector";
+import DateRangeSelector from "./date-range-selector";
+import StudioSettingsForm from "./StudioSettingsForm";
+
+import {
+  parseAvailability,
+  toIsoDate,
+} from "services/helpers/parseAvailability";
 
 export default function VisitsSettingsForm({
   profile: {
-    visitRules,
-    openDates,
+    availability,
     hasOpenDates,
+    visitRules,
     textStudio,
     location,
     district,
-    events,
-    eventsLink,
-    eventsContact,
-    // address,
-    // directions,
   },
 }) {
   const { user } = useAuth();
   const {
     updateAccount,
-    calendarDate,
-    updateCalendarDate,
+    contextAvailailbity,
+    updateContextAvailailbity,
     loading,
     isUpdateSuccess,
     isUpdateError,
   } = useAccount();
 
   const [values, setValues] = useState({
-    visitRules,
-    openDates,
-    location: location.join(","),
-    district,
-    textStudio,
-    events,
-    eventsLink,
-    eventsContact,
-    // directions,
-    // address,
+    availability,
   });
+  const [parsedDates, setParsedDates] = useState({});
 
-  const [selectedTimes, setSelectedTimes] = useState([]);
+  const [monthlyOpen, setMonthlyOpen] = useState([]);
+  const [monthlyDisabled, setMonthlyDisabled] = useState([]);
 
-  const getSelectedTimes = (date, dates) => {
-    const timeData = dates?.length
-      ? dates
-          .filter((s) => s.startsWith(date))
-          .map((d) => d.split(" ")[1])
-          .sort()
-      : [];
-    return timeData;
+  // const readableDate = (date) =>
+  //   moment(date, "YYYY-MM-DD hh:mm").format("D MMMM");
+
+  const formatDisabled = (a) =>
+    a?.unavailableDates.map((x) => x.map(toIsoDate));
+
+  const onChangeMonth = (date) => {
+    const month = new Date(date).getMonth() + 1;
+    const m = month.toString();
+    const dates = parsedDates;
+
+    if (dates.hasOwnProperty(m)) {
+      // console.log(dates);
+
+      const tempOpen = dates[m].availableDates.map(
+        (item) => toIsoDate(item.date) + "T13:52:26.780Z"
+      );
+
+      // console.log(tempOpen);
+      setMonthlyOpen(tempOpen);
+
+      const tempDisabled = dates[m].unavailableDates.map((item) =>
+        toIsoDate(item.date)
+      );
+
+      setMonthlyDisabled(tempDisabled);
+    }
+  };
+
+  const getParsedDates = (availability) => {
+    if (availability && Object.keys(parsedDates).length === 0) {
+      // const exampleAvailaibity = {
+      //   openTimes: [{ days: ["Wednesday", "Tuesday"], times: [9, 11, 13, 14] }],
+      //   unavailableDates: [["11/03/2025", "14/03/2025"]],
+      // };
+
+      const parsedAvail = parseAvailability(availability);
+      return parsedAvail;
+    }
   };
 
   useEffect(() => {
-    if (!openDates) {
-      updateAccount({ openDates: [] }, user);
-    } else if (openDates?.length > 0) {
-      const tempTimes = getSelectedTimes(calendarDate, openDates);
-      setSelectedTimes(tempTimes);
+    if (availability && Object.keys(parsedDates).length === 0) {
+      setParsedDates(getParsedDates(availability));
     }
-  }, [calendarDate]);
+  }, [availability, parsedDates]);
 
-  const onChangeTimes = (times) => {
-    setSelectedTimes(times.sort());
-  };
-
-  const areTimesDifferent = () => {
-    const oldTimes = getSelectedTimes(calendarDate, openDates);
-    return JSON.stringify(selectedTimes) !== JSON.stringify(oldTimes);
-  };
-
-  const onChangeDate = async (date) => {
-    const isUpdateNeeded = areTimesDifferent();
-
-    if (isUpdateNeeded) {
-      // console.log("update needed");
-      const newDates = updateOpenDates();
-      updateAccount({ openDates: newDates }, user);
+  useEffect(() => {
+    if (Object.keys(parsedDates).length !== 0) {
+      const today = new Date();
+      onChangeMonth(today.toISOString());
     }
-    updateCalendarDate(date);
+  }, [parsedDates]);
+
+  const onChangeAvailability = ({ openTimes, unavailableDates }) => {
+    if (openTimes) {
+      setValues({ availability: { ...values.availability, openTimes } });
+    }
+
+    if (unavailableDates) {
+      setValues({ availability: { ...values.availability, unavailableDates } });
+    }
   };
-
-  const updateOpenDates = () => {
-    // remove old times
-    // then add new ones
-    const dates = openDates.filter((s) => !s.startsWith(calendarDate));
-
-    selectedTimes.forEach((t) => dates.push(calendarDate + " " + t));
-
-    const newDates = dates.sort();
-    return newDates;
-  };
-
-  const readableDate = (date) =>
-    moment(date, "YYYY-MM-DD hh:mm").format("D MMMM");
-
-  // const disabledDates = [["2023-09-01", "2023-09-15"]];
-
   async function updateProfile(event) {
-    const newDates = updateOpenDates();
+    const updates = values;
 
-    const updates = {
-      ...values,
-      location: values.location.split(","),
-      openDates: newDates,
-    };
+    //console.log(updates);
 
     await updateAccount(updates, user);
   }
 
   const fieldMargin = { vertical: "large" };
-  const textMargin = { bottom: "medium" };
+  const textMargin = { vertical: "medium" };
 
   return (
     <Box fill align="center" justify="center">
       <Box width="large" pad="medium" gap="medium">
         <Heading level="3" size="medium" margin={fieldMargin}>
-          Your Visit Settings
+          Your Studio
         </Heading>
+        {user && (
+          <StudioSettingsForm
+            profile={{ visitRules, textStudio, location, district }}
+          />
+        )}
+        {/* <Heading level="3" size="medium" margin={fieldMargin}>
+          Your Visit Settings
+        </Heading> */}
 
         <Grid fluid>
+          <Heading level="3" size="medium" margin={fieldMargin}>
+            Your Visit Times
+          </Heading>
+
+          <Heading level={4} size="medium" margin={textMargin}>
+            Weekly Availability
+          </Heading>
+          <WeekdayTimeSelector
+            openTimes={availability?.openTimes}
+            onUpdate={onChangeAvailability}
+          />
+
+          <Heading level={4} margin={textMargin}>
+            Unavailable Dates
+          </Heading>
+          <Text margin={textMargin}>
+            These are times when you are away from your studio or don't want to
+            recieve visit requests.
+          </Text>
+          <DateRangeSelector
+            unavailableDates={availability?.unavailableDates}
+            onUpdate={onChangeAvailability}
+          />
+
           <Form
             value={values}
             onChange={(nextValue) => {
@@ -151,220 +183,31 @@ export default function VisitsSettingsForm({
             onSubmit={updateProfile}
             validate="submit"
           >
-            <FormField
-              name="location"
-              label="Your studio location: City, Country"
-              margin={textMargin}
-              required
-            >
-              <TextInput name="location" placeholder="Berlin, Germany" />
-            </FormField>
+            <Text>
+              Please save the dates and times you entered and review them in the
+              calendar below.
+            </Text>
 
-            <FormField
-              name="district"
-              label="District or Kiez in your city"
-              margin={textMargin}
-              required
-            >
-              <TextInput name="district" placeholder="Kreuzberg" />
-            </FormField>
-
-            <FormField
-              label="About your Studio"
-              name="textStudio"
-              margin={fieldMargin}
-            >
-              <TextArea
-                name="textStudio"
-                placeholder="Tell us a bit about your studio.
-Describe the role it plays in your process, how it affects your practice, and about the relationship(s) you have with it."
-                fill
-                maxLength={1200}
-                rows={8}
-              />
-            </FormField>
-            <br />
-            <Heading level="3" size="medium" margin={fieldMargin}>
-              Private Visits
-            </Heading>
+            <Box direction="row" gap="medium" margin={fieldMargin}>
+              <Button type="submit" btnStyle="filled" disabled={loading}>
+                Save Changes
+              </Button>
+            </Box>
             <Row>
               <Col xs={12} md={8}>
                 <Calendar
-                  onSelect={onChangeDate}
-                  dates={[calendarDate]}
+                  onSelect={() => false}
+                  dates={monthlyOpen}
                   size="medium"
                   daysOfWeek={true}
                   firstDayOfWeek={1}
-                  // margin="medium"
-                  bounds={[calendarBounds.Start, calendarBounds.End]}
-                  // disabled={disabledDates}
-                  // to customize the header
-                  // https://storybook.grommet.io/?path=/story/visualizations-calendar-header--custom-header-calendar
+                  bounds={calendarBounds}
+                  showAdjacentDays={false}
+                  onReference={onChangeMonth}
+                  disabled={monthlyDisabled}
                 />
               </Col>
-              <Col xs={12} md={4}>
-                <Text>
-                  <b>
-                    {readableDate(calendarDate)}
-                    <br />
-                    <br />
-                  </b>
-
-                  <CheckBoxGroup
-                    value={selectedTimes}
-                    onChange={({ value: nextValue }) => {
-                      onChangeTimes(nextValue);
-                    }}
-                    options={[
-                      "10:00",
-                      "11:00",
-                      "12:00",
-                      "13:00",
-                      "14:00",
-                      "15:00",
-                      "16:00",
-                      "17:00",
-                      "18:00",
-                      "19:00",
-                      "20:00",
-                      "21:00",
-                    ]}
-                  />
-                </Text>
-              </Col>
             </Row>
-
-            {/* 
-            <Text>
-              <b>
-                We will only share your address with visitors after you agree to
-                host them
-              </b>
-            </Text>
-
-            
-            <FormField
-              name="address"
-              label="Address (required)"
-              margin={fieldMargin}
-              required
-            >
-              <TextInput placeholder="" />
-              <TextArea
-                name="address"
-                placeholder="Your address"
-                fill
-                rows={2}
-                maxLength={200}
-              // disabled
-              />
-            </FormField> 
-            <FormField
-              label="Tips on finding the studio"
-              name="directions"
-              margin={fieldMargin}
-            >
-              <TextArea
-                name="directions"
-                placeholder="Any extra helpful directions of how to arrive to your studio. How to find the right entrance or name on doorbell, etc ..."
-                fill
-                rows={4}
-                maxLength={500}
-              />
-            </FormField>
-            */}
-
-            <Box>
-              <Heading level="4" size="medium" margin={textMargin}>
-                General visit tips
-              </Heading>
-              <ul>
-                <li>Visits are free</li>
-                <li>Show up on time</li>
-                <li>Ask before taking photos of the artist and artworks</li>
-                <li>A gift is almost always a nice touch</li>
-              </ul>
-            </Box>
-
-            <FormField
-              label="Your visit rules"
-              name="visitRules"
-              margin={fieldMargin}
-            >
-              <TextArea
-                name="visitRules"
-                placeholder="What do you expect from visitors at your studio?
-ex: Rule 1; Rule 2; Rule 3 (semi-colon seperated)"
-                fill
-                rows={4}
-                maxLength={500}
-              />
-            </FormField>
-            <Text margin={textMargin}>
-              {" "}
-              ex: Rule 1; Rule 2; Rule 3 (semi-colon seperated){" "}
-            </Text>
-            <br />
-            <Heading level="3" size="medium" margin={fieldMargin}>
-              Events
-            </Heading>
-
-            <Box margin={fieldMargin}>
-              <Text>
-                If you want to host a public event like an open studio, mini
-                exhibition or workshop, you can add it here. Please include the
-                event's title, date and a short description using the following
-                format: <br />
-                <b> Event title / Event dates(s) / Event description </b>
-              </Text>
-            </Box>
-
-            <FormField label="Your events" name="events" margin={fieldMargin}>
-              <TextArea
-                name="events"
-                placeholder="e.g. Painting workshop / 20 May 6-8pm / It's workshop for beginners "
-                fill
-                maxLength={1200}
-                rows={4}
-              />
-            </FormField>
-
-            <FormField
-              name="eventsLink"
-              label="Link for the event (if available)"
-              margin={fieldMargin}
-            >
-              <TextInput
-                name="eventsLink"
-                placeholder="e.g. https://www.studio-event-link.com"
-              />
-            </FormField>
-            <br />
-            <br />
-            <Box margin={textMargin}>
-              <Text>
-                How can visitors or participants can contact you and RSVP for
-                the event if needed?
-              </Text>
-            </Box>
-
-            <FormField
-              name="eventsContact"
-              label="Contact channel for event"
-              margin={fieldMargin}
-            >
-              <TextInput
-                name="eventsContact"
-                placeholder="e.g. your email or instagram link. This will be shown publicly on your profile."
-              />
-            </FormField>
-            <br />
-            <br />
-            <Box direction="row" gap="medium">
-              <Button type="submit" btnStyle="filled" disabled={loading}>
-                Update
-              </Button>
-            </Box>
 
             {!loading && (
               <>

@@ -24,8 +24,8 @@ export function AuthProvider({ children }) {
         setUser(session?.user ?? null);
         setEvent(event ?? null);
         setLoading(false);
-        console.log(session);
-        console.log(session?.user);
+        //console.log(session);
+        //console.log(session?.user);
       }
     );
 
@@ -38,7 +38,7 @@ export function AuthProvider({ children }) {
   const value = {
     signUp: (data) => supabase.auth.signUp(data),
     signIn: (data) => supabase.auth.signIn(data),
-    // sendMagicLink: (data) => supabase.auth.signInWithOtp(data),
+    noPassword: (data) => supabase.auth.api.resetPasswordForEmail(data), // remove ".api" for supabase v2
     signOut: () => supabase.auth.signOut(),
     user,
     session,

@@ -1,4 +1,4 @@
-import { grommet, base } from "grommet";
+import { grommet, base, Paragraph } from "grommet";
 import { deepMerge } from "grommet/utils";
 
 // try
@@ -14,7 +14,8 @@ const themeChanges = {
       // overriding colors
       brand: "#FFC0CB",
       "accent-1": "#C0FFF4",
-      "dark-1": "4b4b4b",
+      "dark-1": "#4b4b4b",
+      "brand-dark": "#D78EB7",
       control: "accent-1",
       focus: "#FFF",
       icon: "#FFC0CB",
@@ -25,16 +26,27 @@ const themeChanges = {
       height: "20px",
       color: "#4b4b4b",
     },
-    // active: {
-    //   background: "white",
-    //   color: "brand",
-    // },
+    active: {
+      background: "brand",
+      // color: "brand",
+    },
     // selected: {
     //   background: "white",
     //   color: "brand",
     // },
   },
+  paragraph: {
+    small: {
+      size: "16px",
+      height: "22px",
+    },
+    medium: {
+      size: "18px",
+      height: "24px",
+    },
+  },
   heading: {
+    color: "#4b4b4b",
     level: {
       3: {
         medium: {
@@ -67,14 +79,16 @@ const themeChanges = {
       color: "accent-1",
       active: {
         background: {
-          color: "#000",
+          color: "#C0FFF4",
         },
       },
     },
     secondary: {
       color: "brand",
       active: {
-        color: "#C0FFF4",
+        background: {
+          color: "brand",
+        },
       },
     },
   },
@@ -97,17 +111,17 @@ const themeChanges = {
       level: "4",
     },
     medium: {
-      daySize: "36px",
-      lineHeight: 2.0,
-      fontSize: "16px",
+      daySize: "30px",
+      lineHeight: 1.6,
+      fontSize: "14px",
     },
     small: {
       daySize: "28px",
     },
     day: {
-      extend: ({ isSelected }) => `
+      extend: ({ isSelected, isInRange }) => `
         border-radius: 100px;
-        background-color: ${isSelected && "#C0FFF4"}`,
+        background-color: ${(isSelected || isInRange) && "#C0FFF4"}`,
     },
   },
   checkBox: {
@@ -122,6 +136,14 @@ const themeChanges = {
       color: "brand",
     },
     border: {
+      color: "brand",
+    },
+  },
+  // New changes for Select component
+  select: {
+    background: { color: "light-1" },
+
+    icons: {
       color: "brand",
     },
   },

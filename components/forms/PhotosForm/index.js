@@ -79,6 +79,7 @@ export default function PhotosForm() {
               key={imgId}
               imgPath={imgPaths[imgId] ?? null}
               imgId={imgId}
+              isMainPhoto={imgId === 0}
               postUpload={async () => {
                 await fetchImgsList();
                 await fetchProfile(user);

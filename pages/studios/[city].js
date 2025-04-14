@@ -1,13 +1,12 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 import { useStudios } from "services/studios";
+import { useCities } from "services/city";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
-import Link from "next/link";
 
-import { Box, Heading, Text, ResponsiveContext } from "grommet";
-import styles from "./index.module.scss";
+import { Box, Heading, Text } from "grommet";
 
 import StudiosFilter from "components/StudiosFilter";
 import SelectLocation from "components/SelectLocation";
@@ -20,30 +19,49 @@ const Studios = () => {
   const { city } = router.query;
 
   const { studios, fetchStudios, loading, error } = useStudios();
+  const { selectedCity, selectCity } = useCities();
 
+  const [isDifferentCity, setIsDifferentCity] = useState(true);
+
+  // First Effect: Handle city selection
   useEffect(() => {
-    if (city && !studios.length && !error) {
-      fetchStudios(titleCase(city));
+    if (!city) return; // Guard clause
+
+    const cityName = titleCase(undoSlug(city));
+    if (cityName !== selectedCity) {
+      setIsDifferentCity(true);
+      selectCity(cityName);
     }
-  }, [city, studios, error]);
+  }, [city]); // Only depend on URL param changes
+
+  // Second Effect: Fetch studios when city changes
+  useEffect(() => {
+    if (selectedCity && isDifferentCity) {
+      fetchStudios();
+      setIsDifferentCity(false);
+    }
+  }, [selectedCity, isDifferentCity]);
 
   return (
-    <Grid fluid align="center">
+    <Grid fluid align="start">
       <section>
-        <Row id={styles.studio}>
+        <Row>
           <Col xs={12} md={12}>
+            <Box pad="xsmall">
+              <Heading level={2} margin="small">
+                Studios
+              </Heading>
+            </Box>
             {loading && <img src={`/img/loader.svg`} />}
             {error && (
               <>
-                <Box margin={{ vertical: "5rem" }} align="center">
-                  <Heading level={4}>
-                    There are no studios for the city <b>"{undoSlug(city)}"</b>
+                <Box pad={{ horizontal: "medium", vertical: "large" }}>
+                  <Text size="medium">
+                    There are no studios in the city{" "}
+                    <b>"{titleCase(undoSlug(city))}"</b>
                     <br />
                     <br />
-                    <br />
-                  </Heading>
-                  <Text>
-                    Please try to check the spelling or choose another city from
+                    Please try to check the URL or choose another city from
                     below
                   </Text>
                 </Box>

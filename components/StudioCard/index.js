@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-// import PropTypes from "prop-types";
 
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -18,7 +17,7 @@ const StudioCard = ({
     artist,
     district,
     styles: artStyles,
-    openDates,
+    // openDates,
     // hasOpenDates,
     textMini,
   },
@@ -36,33 +35,11 @@ const StudioCard = ({
 
   const [imgUrl, setImgUrl] = useState(false);
 
-  // const [hoverImg, setHoverImg] = useState("0");
-  // const [hoveredImg, setHoveredImg] = useState(false);
-
   // const nextVisit = openDates
   //   ? moment(openDates[0], "YYYY-MM-DD hh:mm").format("D MMM")
   //   : false;
 
-  // function sleep(ms) {
-  //   return new Promise((resolve) => setTimeout(resolve, ms));
-  // }
-
-  // const fetchImg = useCallback(async () => {
-  //   const url = await downloadProfileImage({ userId: uuid });
-
-  //   if (url) {
-  //     // the DB version
-  //     setImgUrl(url);
-  //   } else {
-  //     // the file version
-  //     const teaserSrc = `/img/${artist}/0.jpg`;
-  //     setImgUrl(teaserSrc);
-  //   }
-  //   // console.log(url);
-  // }, [uuid]);
-
   useEffect(() => {
-    // fetchImg();
     downloadProfileImage({ userId: uuid }).then((url) => setImgUrl(url));
   }, [uuid]);
 
@@ -118,16 +95,5 @@ const StudioCard = ({
     </div>
   );
 };
-
-// StudioCard.propTypes = {
-//   studio: PropTypes.shape({
-//     id: PropTypes.string.isRequired,
-//     artist: PropTypes.string.isRequired,
-//     openDates: PropTypes.array.isRequired,
-//     district: PropTypes.string.isRequired,
-//     mediums: PropTypes.string.isRequired,
-//     textMini: PropTypes.string.isRequired,
-//   }).isRequired,
-// };
 
 export default StudioCard;

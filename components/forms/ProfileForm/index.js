@@ -5,37 +5,57 @@ import { useAuth } from "services/auth";
 
 import Button from "components/Button";
 
-// import { CheckCircle, XCircle } from "react-feather";
 import {
   Box,
   Form,
   FormField,
   Notification,
-  CheckBoxGroup,
   TextArea,
   TextInput,
   Text,
   Heading,
   Grommet,
+  Paragraph,
   Anchor,
 } from "grommet";
 
-export default function ProfileForm({ profile, goToTab }) {
+export default function ProfileForm({
+  profile: {
+    artist,
+    location,
+    textMini,
+    textLong,
+    styles,
+    languages,
+    website,
+    instagram,
+  },
+  goToTab,
+}) {
   const { user } = useAuth();
 
   const { updateAccount, loading, isUpdateSuccess, isUpdateError } =
     useAccount();
 
-  const [values, setValues] = useState(profile);
+  const [values, setValues] = useState({
+    artist,
+    location: location.join(","),
+    textMini,
+    textLong,
+    styles,
+    languages,
+    website,
+    instagram,
+  });
 
-  async function updateProfile(event) {
+  const updateProfile = async (event) => {
     const updates = {
       ...values,
-      // updated_at: new Date(),
+      location: values.location.split(","),
     };
 
     await updateAccount(updates, user);
-  }
+  };
 
   const fieldMargin = { vertical: "large" };
   const textMargin = { bottom: "medium" };
@@ -67,6 +87,19 @@ export default function ProfileForm({ profile, goToTab }) {
           >
             <FormField name="artist" label="Name" margin={fieldMargin} required>
               <TextInput name="artist" placeholder="" />
+            </FormField>
+
+            <FormField
+              name="location"
+              label="Your studio location"
+              margin={textMargin}
+              required
+            >
+              <Box pad="small">
+                {" "}
+                <Text size="small">City, Country</Text>
+              </Box>
+              <TextInput name="location" placeholder="e.g Berlin, Germany" />
             </FormField>
             <FormField
               label="A short intro (max 300 chars)"
@@ -127,6 +160,18 @@ export default function ProfileForm({ profile, goToTab }) {
             </FormField>
 
             <FormField
+              name="languages"
+              label="Languages you speak"
+              margin={fieldMargin}
+            >
+              <TextInput
+                name="languages"
+                placeholder="Deutsch, English, Español, Arabic"
+                required
+              />
+            </FormField>
+
+            <FormField
               name="website"
               htmlfor="text-input-id"
               label="Website"
@@ -155,7 +200,7 @@ export default function ProfileForm({ profile, goToTab }) {
 
             <Box direction="row" gap="medium">
               <Button type="submit" btnStyle="filled" disabled={loading}>
-                Update
+                Save Changes
               </Button>
             </Box>
 

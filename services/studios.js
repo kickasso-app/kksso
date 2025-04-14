@@ -1,12 +1,17 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { supabase } from "./supabase";
 
+import { useCities } from "services/city";
+
+import { STUDIO_PREVIEW_COLUMNS } from "config/constants/studioPreviewColumns";
+import { STUDIO_COLUMNS } from "config/constants/studioColumns";
+
 const StudiosContext = createContext(null);
 
 const emptyQuery = "";
 
 const StudiosProvider = ({ children }) => {
-  const [cities, setCities] = useState([]);
+  const { selectedCity } = useCities();
 
   const [studios, setStudios] = useState([]);
   const [featuredStudios, setFeaturedStudios] = useState([]);
@@ -22,44 +27,23 @@ const StudiosProvider = ({ children }) => {
   const [error, setError] = useState();
 
   /**
-   * This function fetches cities from a Supabase database, orders them,  and sets them in state.
-   */
-
-  const fetchCities = async () => {
-    setLoading(true);
-    let { data: supaCities, error } = await supabase
-      .from("cities")
-      .select("*")
-      .order("count", { ascending: false });
-    // .is("published", true);
-    if (supaCities?.length) {
-      // console.log(supaCities);
-      setCities(supaCities);
-      setError(false);
-    } else {
-      const returnError = error ?? "No cities were fetched";
-      setError(returnError);
-      console.log(returnError);
-    }
-    setLoading(false);
-  };
-
-  /**
    * This function fetches published studios from a Supabase database and sets them in state.
    */
 
-  const fetchStudios = async (city) => {
+  const fetchStudios = async () => {
     setLoading(true);
     // console.log("fetching studios");
 
     // https://markustripp.medium.com/supabase-conditional-queries-with-filter-chaining-1c2bb48b8388
 
-    let { data: supaStudios, error } = await supabase
-      .from("studios")
-      .select("*")
+    let supabaseQuery = supabase.from("studios").select(STUDIO_PREVIEW_COLUMNS);
+
+    if (selectedCity) {
+      supabaseQuery = supabaseQuery.contains("location", [selectedCity]);
+    }
+    let { data: supaStudios, error } = await supabaseQuery
       .is("published", true)
       .is("displayed", true)
-      .contains("location", [city])
       .order("studio_id", true);
     if (supaStudios?.length) {
       setStudios(supaStudios);
@@ -83,7 +67,7 @@ const StudiosProvider = ({ children }) => {
 
     let { data: supaStudios, error } = await supabase
       .from("studios")
-      .select("*")
+      .select(STUDIO_PREVIEW_COLUMNS)
       .is("published", true)
       .is("displayed", true)
       .order("studio_id", true);
@@ -119,7 +103,7 @@ const StudiosProvider = ({ children }) => {
     setLoading(true);
     let { data: resultStudios, error } = await supabase
       .from("studios")
-      .select()
+      .select(STUDIO_PREVIEW_COLUMNS)
       .is("published", true)
       .is("displayed", true)
       .textSearch("fts", newQuery, {
@@ -145,7 +129,7 @@ const StudiosProvider = ({ children }) => {
     setLoading(true);
     let { data: studio, error } = await supabase
       .from("studios")
-      .select("*")
+      .select(STUDIO_COLUMNS.join(", "))
       .eq("studio_id", id);
 
     if (studio?.length) {
@@ -160,6 +144,28 @@ const StudiosProvider = ({ children }) => {
       setError(returnError);
     }
     setLoading(false);
+  };
+
+  /**
+   * This is an asynchronous function that fetches data from a Supabase database table called "studios"
+   * based on a given ID (studio_id) and sets the fetched data to a state variable called "studio".
+   */
+
+  const fetchStudioBasic = async ({ uuid }) => {
+    setLoading(true);
+    let { data: studioBasic, error } = await supabase
+      .from("studios")
+      .select("artist, studio_id, published")
+      .eq("uuid", uuid)
+      .single();
+
+    if (studioBasic) {
+      return studioBasic;
+    } else {
+      const returnError = error ?? "Some error occurred";
+      setError(returnError);
+    }
+    // setLoading(false);
   };
 
   /**
@@ -191,7 +197,7 @@ const StudiosProvider = ({ children }) => {
     setLoading(true);
     let { data: featStudios, error } = await supabase
       .from("studios")
-      .select("*")
+      .select(STUDIO_PREVIEW_COLUMNS)
       .is("published", true)
       .is("displayed", true)
       .is("featured", true)
@@ -204,8 +210,28 @@ const StudiosProvider = ({ children }) => {
     setLoading(false);
   };
 
+  const doesStudioExist = async ({ uuid }) => {
+    let doesExist = false;
+
+    if (uuid) {
+      setLoading(true);
+
+      let { data: supaStudios, error } = await supabase
+        .from("studios")
+        .select("uuid", "referrals")
+        .eq("uuid", uuid);
+      if (supaStudios?.length) {
+        doesExist = true;
+      } else {
+        const returnError = error ?? "No studios were found";
+        setError(returnError);
+      }
+      setLoading(false);
+    }
+    return doesExist;
+  };
+
   const contextObj = {
-    cities,
     studios,
     searchStudios,
     featuredStudios,
@@ -213,13 +239,14 @@ const StudiosProvider = ({ children }) => {
     userStudio,
     query,
     hasQuery,
-    fetchCities,
     updateQuery,
     fetchStudios,
     fetchAllStudios,
     fetchFeaturedStudios,
     fetchStudio,
     fetchUserStudio,
+    fetchStudioBasic,
+    doesStudioExist,
     loading,
     error,
   };

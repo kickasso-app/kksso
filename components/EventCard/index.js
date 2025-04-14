@@ -1,95 +1,53 @@
-import { Calendar, Clock, Link } from "react-feather";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import { Box, Heading, Paragraph } from "grommet";
+import Link from "next/link";
+import moment from "moment";
+import ProgressiveImage from "react-progressive-image";
 
-import { Heading, Paragraph } from "grommet";
-
+import { downloadEventImage } from "services/images";
 import styles from "./index.module.scss";
 
-const EventCard = ({ events, eventsLink, eventsContact }) => {
-  const eventSeperator = "/";
-  const headingMargin = { top: "large", bottom: "small" };
-  const eventMargin = { top: "small", bottom: "small" };
+const readableDate = (date) => moment(date, "YYYY-MM-DD").format("D MMM 'YY");
 
-  const [title, date, details, details2] = events.split(eventSeperator);
+export default function EventCard({ event, inStudio = false }) {
+  const router = useRouter();
+  const [imgUrl, setImgUrl] = useState(false);
+  const eventMargin = { vertical: "1rem" };
+  const detailsMargin = { vertical: "0.5rem" };
+
+  const eventLink = "/event/" + event.id;
+  const openEvent = () => {
+    router.push(eventLink);
+  };
+
+  useEffect(() => {
+    const imgPath = `${event.studio_uuid}/${event.id}/event-small.jpg`;
+    downloadEventImage({ imgPath }).then((url) => setImgUrl(url));
+  }, [event]);
 
   return (
-    <>
-      <Heading level="3" size="medium" margin={{ vertical: "2rem" }}>
-        Studio events
-      </Heading>
-
-      {title && (
-        <Paragraph size="medium" margin={eventMargin} fill>
-          <Calendar
-            className={styles.icon}
-            size={18}
-            strokeWidth="2"
-            color="#FFC0CB"
-            fill="#fff"
-          />
-          <b>{title}</b>
+    <div>
+      <div className={styles.imgContainer}>
+        <Link href={eventLink}>
+          <a onClick={() => openEvent()}>
+            <ProgressiveImage src={imgUrl} placeholder={`/img/loader.svg`}>
+              {(src, loading) => (
+                <img className={styles.cardImg} src={src} alt={event.title} />
+              )}
+            </ProgressiveImage>
+          </a>
+        </Link>
+      </div>
+      <Box>
+        <Heading level="3" margin={eventMargin}>
+          {event.title}
+        </Heading>
+        <Paragraph margin={detailsMargin}>
+          {event.type} on {readableDate(event.date)}{" "}
         </Paragraph>
-      )}
-
-      {date && (
-        <Paragraph size="medium" margin={eventMargin} fill>
-          <Clock
-            className={styles.icon}
-            size={18}
-            strokeWidth="2"
-            color="#FFC0CB"
-            fill="#fff"
-          />
-          {date}
-        </Paragraph>
-      )}
-      {details && (
-        <Paragraph size="medium" margin={eventMargin} fill>
-          {details}
-        </Paragraph>
-      )}
-      {details2 && (
-        <Paragraph size="medium" margin={eventMargin} fill>
-          {details2}
-        </Paragraph>
-      )}
-
-      {eventsLink?.startsWith("http") && (
-        <>
-          <Paragraph size="medium" margin={headingMargin} fill>
-            <Link
-              className={styles.icon}
-              size={18}
-              strokeWidth="4"
-              color="#C0FFF4"
-            />
-            <a target="_blank" href={eventsLink}>
-              Event link
-            </a>
-          </Paragraph>
-        </>
-      )}
-
-      {eventsContact && (
-        <>
-          <Heading level="4" size="medium" margin={headingMargin}>
-            Contact for event
-          </Heading>
-
-          {eventsContact.startsWith("http") ? (
-            <a href={eventsContact} target="_blank">
-              {eventsContact}
-            </a>
-          ) : (
-            <Paragraph size="medium" margin={eventMargin} fill>
-              {eventsContact}
-            </Paragraph>
-          )}
-          <br />
-          <hr />
-        </>
-      )}
-    </>
+        <Paragraph margin={detailsMargin}>{event.miniDescription}</Paragraph>
+      </Box>
+    </div>
   );
-};
-
-export default EventCard;
+}

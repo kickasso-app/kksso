@@ -26,6 +26,7 @@ const StudiosFilter = ({ studios }) => {
   return (
     <div className={styles.studios}>
       <Box align="center" margin="none">
+        {featureFlags.studiosByCities && <SelectLocation isBarFullWidth />}
         <SearchBar />
         {featureFlags.studiosByCities && <SelectLocation isBarFullWidth />}
       </Box>

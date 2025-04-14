@@ -1,8 +1,6 @@
 import { useState } from "react";
 import Link from "next/link";
 
-import { useRouter } from "next/router";
-
 import { useAuth } from "services/auth";
 import { useAccount } from "services/account";
 
@@ -12,12 +10,9 @@ import { Box, Text, Heading, Notification } from "grommet";
 export default function AccountSettings({ profile }) {
   const [isPublished, setIsPublished] = useState(profile?.published);
 
-  const router = useRouter();
-
   const { signOut, user } = useAuth();
   const { updateAccount, loading, isUpdateSuccess, isUpdateError } =
     useAccount();
-
   // console.log(profile);
 
   async function togglePublishProfile() {
@@ -25,7 +20,6 @@ export default function AccountSettings({ profile }) {
 
     await updateAccount({ published: isPublishedNew }, user);
   }
-
   // TO DO: add delete function to BE
   const handleDeleteUser = async () => {
     try {
@@ -41,7 +35,6 @@ export default function AccountSettings({ profile }) {
       // setLoading(false);
     }
   };
-
   const fieldMargin = { vertical: "medium" };
   const textMargin = { bottom: "medium" };
 
@@ -71,11 +64,21 @@ export default function AccountSettings({ profile }) {
               <Text size="medium" margin={textMargin}>
                 Are you ready to publish you profile?
               </Text>
-              <Text size="medium" margin={textMargin}>
-                You can preview it <Link href={`/preview`}> here</Link>.
-              </Text>
-              <Text size="medium" margin={textMargin}></Text>
-              <Button onClick={togglePublishProfile} btnStyle="outline">
+              {profile?.artist && profile?.location ? (
+                <Text size="medium" margin={textMargin}>
+                  You can preview it{" "}
+                  <Link href={`/profile/preview`}> here</Link>.
+                </Text>
+              ) : (
+                <Text size="medium" margin={textMargin}>
+                  Please add your basic information in{" "}
+                  <Link href={`/profile?=section=0`}> here</Link> and then you
+                  can preview it.
+                </Text>
+              )}
+
+              <br />
+              <Button onClick={togglePublishProfile} btnStyle="filled">
                 Publish
               </Button>
             </>
@@ -92,7 +95,7 @@ export default function AccountSettings({ profile }) {
           <Text size="medium" margin={textMargin}>
             Are you sure you want to delete your account?
           </Text>
-          <Button onClick={handleDeleteUser} btnStyle="filled">
+          <Button onClick={handleDeleteUser} btnStyle="outline">
             Delete account
           </Button>
         </Box>
@@ -117,6 +120,11 @@ export default function AccountSettings({ profile }) {
           )}
         </>
       )}
+      {/* <br />
+      <br />
+      <Button onClick={sendTestEmail} btnStyle="outline">
+        test EMail Resend
+      </Button> */}
     </Box>
   );
 }

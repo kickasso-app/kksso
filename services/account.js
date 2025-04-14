@@ -1,14 +1,12 @@
 import { createContext, useContext, useState } from "react";
 import { supabase } from "./supabase";
 
-import { profileFields } from "config/constants/profile";
-import { calendarBounds } from "config/calendar";
+import { PROFILE_COLUMNS } from "config/constants/profileColumns";
 
 const AccountContext = createContext(null);
 
 const AccountProvider = ({ children }) => {
   const [profile, setProfile] = useState();
-  const [calendarDate, setCalendarDate] = useState(calendarBounds.Start);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
   const [isUpdateError, setIsUpdateError] = useState(false);
@@ -19,27 +17,24 @@ const AccountProvider = ({ children }) => {
    */
 
   const fetchProfile = async (user) => {
-    setIsUpdateSuccess(false);
-    setIsUpdateError(false);
-    try {
+    resetNotification();
+    if (!profile) {
       setLoading(true);
       let { data, error, status } = await supabase
         .from("studios")
-        .select(profileFields.join(", "))
+        .select(PROFILE_COLUMNS.join(", "))
         .eq("uuid", user.id)
         .single();
       if (!data) {
         data = await createProfile(user);
       }
       setProfile({ ...data });
+      // console.log({ ...data });
 
       if (error && status !== 406) {
         setError(error);
         console.log(error);
       }
-    } catch (error) {
-      alert(error.message);
-    } finally {
       setLoading(false);
     }
   };
@@ -50,22 +45,31 @@ const AccountProvider = ({ children }) => {
 
   const createProfile = async (user) => {
     const randomId = 10000 + Math.floor(Math.random() * 10000);
-    const newRow = {
+    const newProfile = {
       uuid: user.id,
       studio_id: randomId,
       email: user.email,
-      location: "",
-      district: "",
-      artist: "",
-      styles: "",
+      created_at: new Date().toISOString(),
     };
+    try {
+      const response = await fetch("/api/create-studio", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ newProfile }),
+      });
 
-    const { newProfile, error } = await supabase
-      .from("studios")
-      .insert([newRow])
-      .select();
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to create studio");
+      }
 
-    return newProfile;
+      return await response.json();
+    } catch (error) {
+      console.error("Error creating studio:", error);
+      throw error;
+    }
   };
 
   /**
@@ -73,39 +77,37 @@ const AccountProvider = ({ children }) => {
    */
 
   const updateAccount = async (updates, user) => {
-    setIsUpdateError(false);
-    setIsUpdateSuccess(false);
-    setLoading(true);
-
+    resetNotification();
+    setLoading(false);
     if (updates) {
-      let { error } = await supabase
+      setLoading(true);
+      const { data, error } = await supabase
         .from("studios")
-        .update(updates, { returning: "minimal" })
-        .eq("uuid", user.id);
-
-      if (error) {
+        .update(updates)
+        .eq("uuid", user.id)
+        .select();
+      if (data) {
+        setProfile(data?.[0]);
+        setIsUpdateSuccess(true);
+      } else if (error) {
         setIsUpdateError(true);
         setLoading(false);
         throw error;
-      } else {
-        await fetchProfile(user);
-        setIsUpdateSuccess(true);
       }
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
-  const updateCalendarDate = (date) => {
-    setCalendarDate(date);
+  const resetNotification = () => {
+    setIsUpdateSuccess(false);
+    setIsUpdateError(false);
   };
 
   const contextObj = {
     profile,
-    calendarDate,
     fetchProfile,
     updateAccount,
-    updateCalendarDate,
+    resetNotification,
     isUpdateSuccess,
     isUpdateError,
     loading,
@@ -122,3 +124,54 @@ const AccountProvider = ({ children }) => {
 const useAccount = () => useContext(AccountContext);
 
 export { useAccount, AccountContext, AccountProvider };
+
+// TODO B4 MERGE: remove
+// const createProfileOld = async (user) => {
+//   const randomId = 10000 + Math.floor(Math.random() * 10000);
+//   const newRow = {
+//     uuid: user.id,
+//     studio_id: randomId,
+//     email: user.email,
+//     location: "",
+//     district: "",
+//     artist: "",
+//     styles: "",
+//   };
+
+//   const { newProfile, error } = await supabase
+//     .from("studios")
+//     .insert([newRow])
+//     .select();
+
+//   return newProfile;
+// };
+
+// update count using API
+
+// try {
+//   const response = await fetch("/api/update-studio", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({ updates, userId: user.id }),
+//   });
+
+//   if (!response.ok) {
+//     const errorData = await response.json();
+//     setIsUpdateError(true);
+//     throw new Error(errorData.message || "Failed to update studio");
+//   }
+
+//   const updatedProfile = await response.json();
+//   console.log(updatedProfile);
+//   setProfile(updatedProfile.user);
+//   setIsUpdateSuccess(true);
+
+//   return updatedProfile;
+// } catch (error) {
+//   console.error("Error updating studio:", error);
+//   throw error;
+// } finally {
+//   setLoading(false);
+// }

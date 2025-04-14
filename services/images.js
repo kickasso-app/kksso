@@ -1,17 +1,42 @@
 import { supabase } from "services/supabase";
+import convert from "client-side-image-resize";
 
+async function fileExists(bucketName, filePath, fileName, listLarge = false) {
+  const { data, error } = await supabase.storage
+    .from(bucketName)
+    .list(filePath, {
+      limit: listLarge ? 10 : 4,
+      // offset: 0,
+      sortBy: { column: "name", order: "asc" },
+    });
+
+  if (error) {
+    console.error("Error:", error);
+    return false;
+  }
+  // console.log(data);
+  const doesItExist = data.filter((img) => img.name === fileName)?.length > 0;
+  return doesItExist;
+}
 async function listImages({ userId }) {
   let imgs, paths;
   try {
     const { data, error } = await supabase.storage
       .from("studios-photos")
-      .list(`${userId}`);
+      .list(`${userId}`, {
+        limit: 10,
+        sortBy: { column: "name", order: "asc" },
+      });
+
     if (error) {
       throw error;
     }
-    imgs = data.filter((img) => img.metadata?.size > 0);
-    const imgNames = imgs.map((image) => image.name);
+    imgs = data.filter(
+      (img) => img.metadata?.size > 0 && !img.name.includes("profile.jpg")
+    );
     paths = imgs.map((image) => `${userId}/${image.name}`);
+
+    // console.log(paths);
   } catch (error) {
     console.log("Error listing images: ", error.message);
   }
@@ -38,14 +63,37 @@ async function downloadImage({ imgPath, postDownload }) {
   return false;
 }
 
+async function downloadEventImage({ imgPath, postDownload }) {
+  // console.log("downloadEventImage", imgPath);
+  try {
+    const { data, error } = await supabase.storage
+      .from("events")
+      .download(imgPath);
+    if (error) {
+      throw error;
+    }
+
+    const url = URL.createObjectURL(data);
+    if (postDownload) {
+      postDownload(url);
+    }
+    return url;
+  } catch (error) {
+    console.log("Error downloading image: ", error.message);
+  }
+  return false;
+}
 async function downloadProfileImage({ userId }) {
-  const { paths } = await listImages({ userId });
+  const doesProfileImgExist = await fileExists(
+    "studios-photos",
+    userId,
+    "profile.jpg",
+    true
+  );
 
-  // console.log(paths);
-  const imgPath = paths.filter((path) => path.includes("/0."))[0];
-  // console.log(imgPath);
+  const imgPath = `${userId}${doesProfileImgExist ? "/profile.jpg" : "/0.jpg"}`;
 
-  const url = await downloadImage({
+  let url = await downloadImage({
     imgPath,
   });
 
@@ -71,31 +119,36 @@ async function downloadImages({ userId, postDownload }) {
   return urls;
 }
 
-async function getImagesUrls({ userId }) {
-  const { paths } = await listImages({ userId });
+async function resizeImage({ file, returnSmallerImage = false }) {
+  const fileLarge = await convert({
+    file: file,
+    width: 1200,
+    // height: 1200 / imgRatio,
+    type: "jpg",
+  });
 
-  const urls = [];
+  // console.log(fileLarge.size);
 
-  for (const path of paths) {
-    const { publicURL, error } = supabase.storage
-      .from("studios-photos")
-      .getPublicUrl(path);
+  const fileSmall = returnSmallerImage
+    ? await convert({
+        file: file,
+        width: 600,
+        //   height: 600 / imgRatio,
+        type: "jpg",
+      })
+    : false;
 
-    if (publicURL) {
-      urls.push(publicURL);
-      // console.log(publicURL);
-    } else {
-      console.log(error);
-    }
-  }
+  // console.log(fileSmall.size);
 
-  return urls;
+  return [fileLarge, fileSmall];
 }
 
 export {
+  fileExists,
   listImages,
   downloadImage,
   downloadImages,
-  getImagesUrls,
   downloadProfileImage,
+  downloadEventImage,
+  resizeImage,
 };

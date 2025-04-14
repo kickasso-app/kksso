@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 
 import { useStudios } from "services/studios";
+import { useEvents } from "services/events";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import { Box, Heading, Paragraph, ResponsiveContext, Text } from "grommet";
@@ -23,12 +24,19 @@ const Studio = () => {
   const { id } = router.query;
 
   const { studio, fetchStudio, loading, error } = useStudios();
+  const { event, fetchEvent } = useEvents();
 
   useEffect(() => {
     if (id > 0) {
       fetchStudio({ id });
     }
   }, [id]);
+
+  useEffect(() => {
+    if (studio && studio?.eventId) {
+      fetchEvent({ event_id: studio.eventId });
+    }
+  }, [studio]);
 
   // console.log(studio);
 
@@ -118,29 +126,49 @@ const Studio = () => {
                   />{" "}
                   {studio.district}
                 </h4>
-                {studio.textStudio &&
-                  makeParagraphs(studio.textStudio, paragraphSeperator)}
+
                 <Box margin={sectionMargin}>
                   <hr />
-                </Box>{" "}
+                </Box>
+                {studio?.languages && (
+                  <>
+                    <Heading level="3" size="medium" margin={headingMargin}>
+                      Languages
+                    </Heading>
+                    {makeParagraphs(studio.languages)}
+                    <Box margin={sectionMargin}>
+                      <hr />
+                    </Box>
+                  </>
+                )}
                 {(studio.website || studio.instagram) && (
                   <>
                     <Heading level="3" size="medium" margin={headingMargin}>
                       Links
                     </Heading>
-                    <Paragraph fill margin={{ vertical: "medium" }}>
-                      {studio.website && (
+                    {studio.website && (
+                      <Paragraph fill margin={{ vertical: "medium" }}>
+                        <Globe
+                          className={styles.icon}
+                          size={24}
+                          strokeWidth="1"
+                          color="#4B4B4B"
+                          fill="#FFF"
+                        />{" "}
                         <a href={studio.website} target="_blank">
-                          <Globe
-                            className={styles.icon}
-                            size={28}
-                            strokeWidth="1"
-                            color="#4B4B4B"
-                            fill="#FFF"
-                          />
+                          {studio.website}
                         </a>
-                      )}
-                      {studio.instagram && (
+                      </Paragraph>
+                    )}
+                    {studio.instagram && (
+                      <Paragraph fill margin={{ vertical: "medium" }}>
+                        <Instagram
+                          className={styles.icon}
+                          size={24}
+                          strokeWidth="1"
+                          color="#4B4B4B"
+                          fill="#FFF"
+                        />{" "}
                         <a
                           href={
                             studio.instagram?.includes("instagram.com/")
@@ -149,16 +177,10 @@ const Studio = () => {
                           }
                           target="_blank"
                         >
-                          <Instagram
-                            className={styles.icon}
-                            size={28}
-                            strokeWidth="1"
-                            color="#4B4B4B"
-                            fill="#FFF"
-                          />
+                          Instagram
                         </a>
-                      )}
-                    </Paragraph>
+                      </Paragraph>
+                    )}
                     {size === "small" && (
                       <>
                         <Box margin={sectionMargin}>
@@ -171,12 +193,8 @@ const Studio = () => {
                 )}
               </Col>
               <Col xs={12} md={5} mdOffset={1}>
-                {studio.events && (
-                  <EventCard
-                    events={studio.events}
-                    eventsLink={studio?.eventsLink}
-                    eventsContact={studio?.eventsContact}
-                  />
+                {studio.eventId && event?.isPublished && (
+                  <EventCard event={event} inStudio />
                 )}
                 {studio.visitRules && studio.visitRules.length > 0 && (
                   <>
@@ -197,7 +215,7 @@ const Studio = () => {
                   <li>Visits are free</li>
                   <li>Show up on time</li>
                   <li>Ask before taking photos of the artist and artworks</li>
-                  <li>A gift is almost always a nice touch</li>
+                  {/* <li>A gift is almost always a nice touch</li> */}
                 </ul>
                 <br />
                 <Box margin={sectionMargin}>
@@ -213,10 +231,11 @@ const Studio = () => {
                 </Heading>
                 {studio.hasOpenDates === true ? (
                   <VisitForm
-                    openDates={studio.openDates}
                     artistEmail={studio.email}
                     artistName={studio.artist}
                     studioID={studio.studio_id}
+                    studio_uuid={studio.uuid}
+                    availability={studio.availability}
                   />
                 ) : (
                   <>

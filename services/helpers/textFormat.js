@@ -11,11 +11,12 @@ const untitleCase = (text) => {
 };
 
 const createSlug = (text) => {
-  return text.trim().toLowerCase().replaceAll(" ", "-");
+  if (!text) return;
+  else return text.trim().toLowerCase().replaceAll(" ", "-");
 };
 
 const undoSlug = (text) => {
-  return titleCase(text.trim().replaceAll("-", " "));
+  return text.trim().replaceAll("-", " ");
 };
 
 export { titleCase, untitleCase, createSlug, undoSlug };

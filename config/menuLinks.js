@@ -5,12 +5,17 @@ const MENU_LINKS = [
   //   },
 
   {
-    label: "about",
-    path: "/about",
-  },
-  {
     label: "Studios",
     path: "/studios",
+  },
+  ,
+  {
+    label: "Events",
+    path: "/events",
+  },
+  {
+    label: "about",
+    path: "/about",
   },
   // {
   //   label: "Join",
