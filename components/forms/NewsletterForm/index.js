@@ -123,7 +123,7 @@ export default function NewsletterForm({ profile }) {
             </FormField>
             <FormField
               name="contactType"
-              label="Contact Type"
+              label="Interested as"
               margin={fieldMargin}
               required
             >

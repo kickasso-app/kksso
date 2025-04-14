@@ -133,7 +133,7 @@ const Studio = () => {
                 {studio?.languages && (
                   <>
                     <Heading level="3" size="medium" margin={headingMargin}>
-                      Langauges
+                      Languages
                     </Heading>
                     {makeParagraphs(studio.languages)}
                     <Box margin={sectionMargin}>

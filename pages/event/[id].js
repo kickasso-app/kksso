@@ -183,7 +183,7 @@ const Studio = () => {
                       <hr />
                     </Box>
                     <Heading level="3" size="medium" margin={headingMargin}>
-                      Langauges
+                      Languages
                     </Heading>
                     {makeParagraphs(event.languages)}
                   </>

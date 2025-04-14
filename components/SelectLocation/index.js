@@ -43,38 +43,42 @@ export const SelectLocation = ({ isBarFullWidth = false }) => {
       <Grid fluid>
         <Row middle="xs">
           {cities?.length > 0 &&
-            cities.map(({ city, count }) => {
-              return (
-                <Box pad={size === "small" ? "small" : "small"} key={city}>
-                  <Button
-                    label={
-                      <Box pad={size === "small" ? "xxsmall" : "xxsmall"}>
-                        <Text
-                          size={size === "small" ? "medium" : "large"}
-                          weight={600}
-                          color="#4b4b4b"
-                        >
-                          {city} {count === 0 && "(soon)"}
-                        </Text>
-                      </Box>
-                    }
-                    active={selectedCity === city}
-                    disabled={count === 0}
-                    onClick={async () => {
-                      await selectCity(city);
-                    }}
-                    align="center"
-                    gap={size === "small" ? "xsmall" : "small"}
-                    color="#FFC0CB"
-                    size={size === "small" ? "medium" : "large"}
-                    pad={size === "small" ? "small" : "medium"}
-                    hoverIndicator="#FFC0CB"
-                    a11yTitle="X Available Updates"
-                    href={baseRedirect ? baseRedirect + createSlug(city) : null}
-                  />
-                </Box>
-              );
-            })}
+            cities
+              .filter(({ count }) => count > 0)
+              .map(({ city, published }) => {
+                return (
+                  <Box pad={"small"} key={city}>
+                    <Button
+                      label={
+                        <Box pad={size === "small" ? "xxsmall" : "xxsmall"}>
+                          <Text
+                            size={size === "small" ? "medium" : "large"}
+                            weight={600}
+                            color="#4b4b4b"
+                          >
+                            {city} {published || "(soon)"}
+                          </Text>
+                        </Box>
+                      }
+                      active={selectedCity === city}
+                      disabled={published === false}
+                      onClick={async () => {
+                        await selectCity(city);
+                      }}
+                      align="center"
+                      gap={size === "small" ? "xsmall" : "small"}
+                      color="#FFC0CB"
+                      size={size === "small" ? "medium" : "large"}
+                      pad={size === "small" ? "small" : "medium"}
+                      hoverIndicator="#FFC0CB"
+                      a11yTitle="X Available Updates"
+                      href={
+                        baseRedirect ? baseRedirect + createSlug(city) : null
+                      }
+                    />
+                  </Box>
+                );
+              })}
         </Row>
       </Grid>
     </Box>
