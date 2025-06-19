@@ -15,7 +15,7 @@ const Footer = () => {
     <footer className={styles.footer}>
       <Box pad={{ vertical: "large", horizontal: "large" }}>
         <Row>
-          <Col md={4} xs={6}>
+          <Col md={4} xs={12}>
             <Box margin={{ vertical: "small" }} align="center">
               <a target="_blank" href="https://www.instagram.com/arti.mystudio">
                 <Instagram size={30} color="#4b4b4b" strokeWidth={1.5} />
@@ -25,7 +25,7 @@ const Footer = () => {
               </Text>
             </Box>
           </Col>
-          <Col md={4} xs={12}>
+          <Col md={4} xs={6}>
             <Box
               margin={{ vertical: "small" }}
               align="center"
@@ -36,6 +36,21 @@ const Footer = () => {
               {/* </a> */}
 
               <Text size="medium" margin="medium">
+                Get our newsletter
+              </Text>
+            </Box>
+          </Col>
+          <Col md={4} xs={6}>
+            <Box
+              margin={{ vertical: "small" }}
+              align="center"
+              onClick={() => setShowNewsletter(!showNewsletter)}
+            >
+              {/* <a target="_blank" href="https://arti.crd.co/#register"> */}
+              <Zap size={30} color="#4b4b4b" strokeWidth={1.5} />
+              {/* </a> */}
+
+              <Text size="medium" margin="medium" textAlign="center">
                 Get our newsletter
               </Text>
             </Box>
