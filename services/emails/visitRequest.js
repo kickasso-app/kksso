@@ -30,9 +30,11 @@ export const VisitRequest = ({
         </p>
         <p>Please review and reply to the request in your Arti account.</p>
         <p>
+          <br /> <br />
           <a class="pinkbutton" href={`https://arti.my/requests/` + request_id}>
             View Request
           </a>
+          <br /> <br />
         </p>
         <p>
           If you want to confirm the visit request and would like to host them,

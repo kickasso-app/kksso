@@ -1,3 +1,4 @@
+// import { createClient } from "@supabase/supabase-js";
 import { createClient } from "@supabase/supabase-js";
 
 // Validate environment variables
@@ -10,9 +11,16 @@ if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
 }
 
 // Create Supabase client
-const supabase = createClient(
+const supabaseSrv = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
+  process.env.SUPABASE_SERVICE_ROLE_KEY,
+  {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
+    },
+  }
 );
 
 export default async (req, res) => {
@@ -23,35 +31,47 @@ export default async (req, res) => {
 
   try {
     // Destructure and validate incoming data
-    const { newRequest } = req.body;
+    const { oldUser } = req.body;
 
-    // console.log(newProfile);
+    console.log(oldUser);
     // Basic validation
-    if (
-      !newRequest?.request_id ||
-      !newRequest?.studio_uuid ||
-      !newRequest?.requestor_email
-    ) {
+    if (!oldUser?.email) {
       return res.status(400).json({
-        message: "Email and IDs are required",
+        message: "Email is required",
       });
     }
 
     // Perform insert operation
-    const { error } = await supabase.from("requests").insert([newRequest]);
+    const { data, error } = await supabaseSrv.auth.admin.generateLink({
+      type: "magiclink",
+      email: oldUser.email,
+    });
 
     // Handle potential Supabase errors
     if (error) {
-      console.error("Supabase insertion error:", error);
+      console.error("Error creating magic link:", error);
       return res.status(500).json({
-        message: "Failed to create request",
+        message: "Failed to create magic link",
         error: error.message,
       });
     }
 
     // Successful response
+    let responseData = { doesUserExist: false, link: "" };
+
+    if (
+      data?.properties?.verification_type === "magiclink" &&
+      data?.user?.last_sign_in_at?.length > 0
+    ) {
+      responseData = {
+        doesUserExist: true,
+        link: data.properties.action_link + "/profile",
+      };
+    }
+
     return res.status(201).json({
-      message: "Request created successfully",
+      message: "Magic link created successfully",
+      data: responseData,
     });
   } catch (err) {
     // Catch any unexpected errors

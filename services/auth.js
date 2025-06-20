@@ -11,34 +11,45 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     // Check active sessions and sets the user
-    const activeSession = supabase.auth.session();
+    const activeSession = supabase.auth.getSession();
+
+    // TODO: use getUser() instead of session?.user
 
     setSession(activeSession ?? null);
     setUser(activeSession?.user ?? null);
     setLoading(false);
 
     // Listen for changes on auth state (logged in, signed out, etc.)
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setSession(session ?? null);
-        setUser(session?.user ?? null);
-        setEvent(event ?? null);
-        setLoading(false);
-        //console.log(session);
-        //console.log(session?.user);
+    const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
+      setSession(session ?? null);
+      setUser(session?.user ?? null);
+      setEvent(event ?? null);
+      setLoading(false);
+      //console.log(session);
+      //console.log(session?.user);
+
+      if (event === "SIGNED_OUT") {
+        console.log("SIGNED_OUT", session);
+        // clear local and session storage
+        [localStorage, sessionStorage].forEach((storage) => {
+          if (storage?.length > 0) {
+            Object.entries(storage).forEach(([key]) => {
+              storage.removeItem(key);
+            });
+          }
+        });
       }
-    );
+    });
 
     return () => {
-      listener?.unsubscribe();
+      data?.subscription.unsubscribe();
     };
   }, []);
 
   // Will be passed down to Signup, Login and Dashboard components
   const value = {
     signUp: (data) => supabase.auth.signUp(data),
-    signIn: (data) => supabase.auth.signIn(data),
-    noPassword: (data) => supabase.auth.api.resetPasswordForEmail(data), // remove ".api" for supabase v2
+    signIn: (data) => supabase.auth.signInWithPassword(data),
     signOut: () => supabase.auth.signOut(),
     user,
     session,

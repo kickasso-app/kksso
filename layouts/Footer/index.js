@@ -35,21 +35,6 @@ const Footer = () => {
               <Zap size={30} color="#4b4b4b" strokeWidth={1.5} />
               {/* </a> */}
 
-              <Text size="medium" margin="medium">
-                Get our newsletter
-              </Text>
-            </Box>
-          </Col>
-          <Col md={4} xs={6}>
-            <Box
-              margin={{ vertical: "small" }}
-              align="center"
-              onClick={() => setShowNewsletter(!showNewsletter)}
-            >
-              {/* <a target="_blank" href="https://arti.crd.co/#register"> */}
-              <Zap size={30} color="#4b4b4b" strokeWidth={1.5} />
-              {/* </a> */}
-
               <Text size="medium" margin="medium" textAlign="center">
                 Get our newsletter
               </Text>

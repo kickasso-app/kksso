@@ -34,9 +34,7 @@ export default async (req, res) => {
     }
 
     // Perform insert operation
-    const { error } = await supabase
-      .from("contacts")
-      .insert([newContact], { returning: "minimal" });
+    const { error } = await supabase.from("contacts").insert([newContact]);
 
     // Handle potential Supabase errors
     if (error) {
