@@ -51,10 +51,10 @@ export default async (req, res) => {
       await supabaseSrv.auth.admin.generateLink({
         type: "magiclink",
         email: oldUser.email,
-        options: { redirectTo: "/profile" },
       });
 
     //console.log(magicData);
+
     // Handle potential Supabase errors
     if (magicError) {
       console.error("Error creating magic link:", magicError);
@@ -75,7 +75,9 @@ export default async (req, res) => {
       });
     } else {
       // Successful magic link
-      const magicLink = magicData.properties.action_link;
+      const magicLink = magicData.properties.action_link + "/profile";
+
+      // console.log(magicLink);
 
       const emailHtml = await render(<MagicLinkTemplate magic={magicLink} />, {
         pretty: true,
