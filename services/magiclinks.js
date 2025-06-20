@@ -2,18 +2,17 @@ import { sendEmail } from "./sendEmail";
 
 const sendMagicLink = async ({ email }) => {
   let oldUser = {};
-  let isMagicLinkCreated = false;
-  let isMagicLinkSent = false;
+  let magicLinkSent = false;
+  let magicLinkError = false;
 
   if (email) {
     oldUser = { email: email };
   } else {
-    console.warn("No email for user");
-    return false; // Or throw an error, depending on your error handling strategy
+    return { data: false, error: { message: "No input email" } };
   }
 
   try {
-    const response = await fetch("/api/create-magic-link", {
+    const response = await fetch("/api/send-magic-link", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -21,40 +20,18 @@ const sendMagicLink = async ({ email }) => {
       body: JSON.stringify({ oldUser }),
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to create magic link");
+    if (response.ok) {
+      magicLinkSent = true;
+      // console.log("Magic link email sent successfully!");
     } else {
-      isMagicLinkCreated = true;
-      const magicData = await response.json();
-
-      if (magicData.data.doesUserExist === true) {
-        const magicLink = magicData.data.link;
-        //  console.log(magicLink);
-
-        const emailRequestDetails = {
-          subject: "Your Magic Link for Arti ",
-          toEmail: [email],
-          fromEmail: "default",
-        };
-
-        const { emailSent, error: emailError } = await sendEmail({
-          emailTemplate: "magicLinkTemplate",
-          emailDetails: emailRequestDetails,
-          emailVariables: { magic: magicLink },
-        });
-
-        if (emailSent) {
-          isMagicLinkSent = true;
-        } else {
-          console.log(emailError.message);
-        }
-      }
+      magicLinkError = await response.json();
+      console.error("Error sending email:", magicLinkError.message);
     }
   } catch (error) {
-    console.error("Error creating or sending magic link:", error);
+    magicLinkError = error;
+    console.error("There was a problem sending the email:", error);
   }
-  return isMagicLinkSent;
+  return { data: magicLinkSent, error: magicLinkError };
 };
 
 export { sendMagicLink };

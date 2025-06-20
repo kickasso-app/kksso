@@ -8,7 +8,7 @@ import { sendMagicLink } from "services/magiclinks";
 import { Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 
 import { Box, FormField, TextInput, Heading, Text, Paragraph } from "grommet";
-import { Checkmark } from "grommet-icons";
+import { Checkmark, Close } from "grommet-icons";
 import { ChevronLeft } from "react-feather";
 
 import Button from "components/Button";
@@ -16,6 +16,7 @@ import Button from "components/Button";
 export default function Magiclink() {
   const [loading, setLoading] = useState(false);
   const [magicLinkSent, setMagicLinkSent] = useState(false);
+  const [magicLinkError, setMagicLinkError] = useState(false);
 
   const router = useRouter();
 
@@ -34,10 +35,12 @@ export default function Magiclink() {
 
     try {
       setLoading(true);
-      const { error } = await sendMagicLink({ email });
+      setMagicLinkSent(false);
+      setMagicLinkError(false);
+      const { data, error } = await sendMagicLink({ email });
       if (error) {
         setMagicLinkSent(false);
-        throw error;
+        setMagicLinkError(error.message);
       } else {
         setMagicLinkSent(true);
       }
@@ -94,6 +97,17 @@ export default function Magiclink() {
             <Paragraph fill>
               We sent a magic link to your email from <b>hello@arti.my</b>.
               Please check your inbox and spam folder to log in to your account.{" "}
+            </Paragraph>
+          </Box>
+        )}
+        {magicLinkError && (
+          <Box margin="small" pad="medium">
+            <Close color="dark-3" />
+            <br />
+            <Paragraph fill>
+              We could not send a magic link to your email. Please check that
+              the email is correctly entered and that the Arti account is
+              verified.
             </Paragraph>
           </Box>
         )}
