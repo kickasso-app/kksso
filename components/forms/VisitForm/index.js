@@ -42,7 +42,6 @@ const VisitForm = ({
   studioID,
   studio_uuid,
 }) => {
-  const size = useContext(ResponsiveContext);
   const { createRequest } = useRequests();
 
   const initValues = {
@@ -276,8 +275,6 @@ const VisitForm = ({
                   }}
                   date={selectedDate}
                   onReference={onChangeMonth}
-                  // size={size === "small" ? "small" : "medium"}
-                  // margin={size === "small" ? "medium" : "small"}
                   size="medium"
                   margin="none"
                   bounds={calendarBounds}

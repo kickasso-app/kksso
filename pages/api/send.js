@@ -6,6 +6,8 @@ import { NewsletterTemplate } from "services/emails/newsletterTemplate";
 import { ReferralTemplate } from "services/emails/referralTemplate";
 import { VisitRequest } from "services/emails/visitRequest";
 import { VisitRequestConfirmation } from "services/emails/visitRequestConfirmation";
+import { EventRequest } from "services/emails/eventRequest";
+import { EventRequestConfirmation } from "services/emails/eventRequestConfirmation";
 import { RequestResponse } from "services/emails/responseTemplate";
 import { MagicLinkTemplate } from "services/emails/magicLinkTemplate";
 
@@ -16,6 +18,8 @@ const emailTemplates = {
   referralTemplate: ReferralTemplate,
   visitRequest: VisitRequest,
   visitRequestConfirmation: VisitRequestConfirmation,
+  eventRequest: EventRequest,
+  eventRequestConfirmation: EventRequestConfirmation,
   responseTemplate: RequestResponse,
   newsletterTemplate: NewsletterTemplate,
   magicLinkTemplate: MagicLinkTemplate,

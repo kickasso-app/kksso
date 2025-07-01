@@ -13,6 +13,7 @@ import { Box, Heading, Paragraph, ResponsiveContext, Text } from "grommet";
 import { ChevronLeft, Disc, Instagram, Globe } from "react-feather";
 
 import Button from "components/Button";
+import EventRequestForm from "components/forms/EventRequestForm";
 
 import styles from "./index.module.scss";
 
@@ -26,7 +27,7 @@ const Studio = () => {
   const { fetchStudioBasic } = useStudios();
 
   const { id } = router.query;
-  const [studioName, setStudioName] = useState(null);
+  const [studioBasic, setStudioBasic] = useState(null);
   const [studioLink, setStudioLink] = useState(null);
 
   const [imgUrl, isImgLoaded] = useEventImage(event, "large");
@@ -38,23 +39,26 @@ const Studio = () => {
         await fetchEvent({ event_id: id });
       }
     }
-    fetchData();
-  }, [id, event, fetchEvent]);
 
-  useEffect(() => {
-    async function fetchStudioNameAndLink() {
+    async function fetchStudioBasicInfo() {
       if (id && event && event?.id === id) {
         // console.log("fetching studio name and link", event.studio_uuid);
         const studioBasic = await fetchStudioBasic({
           uuid: event.studio_uuid,
         });
-        setStudioName(studioBasic?.artist);
+        setStudioBasic({
+          name: studioBasic?.artist,
+          email: studioBasic?.email,
+          id: studioBasic?.studio_id,
+        });
         if (studioBasic?.published) {
           setStudioLink(`/studio/${studioBasic?.studio_id}`);
         }
       }
     }
-    fetchStudioNameAndLink();
+
+    fetchData();
+    fetchStudioBasicInfo();
   }, [id, event]);
 
   const headingMargin = { top: "large", bottom: "small" };
@@ -69,7 +73,6 @@ const Studio = () => {
       <Paragraph key={index} size="medium" margin={paragraphMargin} fill>
         {paragraph}
       </Paragraph>
-      // <ReactMarkdown key={index}>{paragraph}</ReactMarkdown>
     ));
   };
 
@@ -89,7 +92,8 @@ const Studio = () => {
           </Box>
         ) : (
           <>
-            {/* <ChevronLeft className={styles.icon} size={16} />{" "}
+            {/* TO DO: add back link to events in city
+             <ChevronLeft className={styles.icon} size={16} />{" "}
             <Link
               href={`/events/` + event.location[0].toLowerCase()}
               className={styles.backlink}
@@ -134,9 +138,8 @@ const Studio = () => {
                     </Box>
                   )}
                 </Row>
-                {/* {makeParagraphs(event.miniDescription)} */}
 
-                {studioName && (
+                {studioBasic && (
                   <Heading
                     level="4"
                     size="small"
@@ -149,10 +152,10 @@ const Studio = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        {studioName}
+                        {studioBasic.name}
                       </a>
                     ) : (
-                      studioName
+                      studioBasic.name
                     )}
                   </Heading>
                 )}
@@ -189,7 +192,7 @@ const Studio = () => {
                   </>
                 )}
 
-                {studioName && studioLink && (
+                {studioBasic && studioLink && (
                   <>
                     <Box margin={sectionMargin}>
                       <hr />
@@ -203,7 +206,7 @@ const Studio = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        {studioName}
+                        {studioBasic.name}
                       </a>
                     </Paragraph>
                   </>
@@ -224,7 +227,6 @@ const Studio = () => {
                 <Box margin={sectionMargin}>
                   <hr />
                 </Box>
-
                 {event?.maxNJoined && (
                   <>
                     <Heading level="3" size="medium" margin={headingMargin}>
@@ -250,6 +252,25 @@ const Studio = () => {
                     <Box margin={sectionMargin}>
                       <hr />
                     </Box>
+                  </>
+                )}
+
+                {studioBasic && (
+                  <>
+                    <Heading level="3" size="medium" margin={headingMargin}>
+                      Request to Join
+                    </Heading>
+                    <EventRequestForm
+                      artistEmail={studioBasic.email}
+                      artistName={studioBasic.name}
+                      studioID={studioBasic.id}
+                      studio_uuid={event.studio_uuid}
+                      event_date_time={
+                        readableDate(event.date) +
+                        " at " +
+                        event.time.toLowerCase()
+                      }
+                    />
                   </>
                 )}
                 {event?.contact && (
