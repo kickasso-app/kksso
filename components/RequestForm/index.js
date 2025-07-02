@@ -17,6 +17,8 @@ import NotificationLayer from "components/NotificationLayer";
 import { useAccount } from "services/account";
 import { useAuth } from "services/auth";
 
+import { titleCase } from "services/helpers/textFormat";
+
 const submitColors = {
   Reject: "brand",
   Approve: "accent-1",
@@ -34,6 +36,7 @@ export default function RequestForm({
   updateRequest,
   studio_id,
   studio_email,
+  isEventReq,
 }) {
   const {
     request_id,
@@ -46,6 +49,8 @@ export default function RequestForm({
     request_date_tz,
     messages,
     requestor_link,
+    event_uuid,
+    request_type,
   } = request;
 
   const { user } = useAuth();
@@ -80,10 +85,13 @@ export default function RequestForm({
         message,
         readableResponse: status,
         studio_link: "https:/arti.my/studio/" + studio_id,
+        event_uuid,
       };
 
       const { emailSent, error } = await sendEmail({
-        emailTemplate: "responseTemplate",
+        emailTemplate: isEventReq
+          ? "responseEventRequest"
+          : "responseVisitRequest",
         emailDetails,
         emailVariables,
       });
@@ -100,7 +108,8 @@ export default function RequestForm({
       request_id
     );
 
-    if (boolStatus) {
+    // only update studio account if visit is confirmed and it is not an event request
+    if (boolStatus && !isEventReq) {
       let newAvailability = profile.availability;
       newAvailability.bookedTimes.push(request_date_tz.replace("T", " "));
       const updates = {
@@ -133,8 +142,17 @@ export default function RequestForm({
     <Box pad="medium" round="2px" gap="medium" margin={{ vertical: "medium" }}>
       {/* Request Details Section */}
       <Box gap="small">
+        <Box
+          border={"dark-3"}
+          pad={{ horizontal: "medium", vertical: "xsmall" }}
+          round="2px"
+          width="fit-content"
+        >
+          <Text size="medium">{titleCase(request_type)}</Text>
+        </Box>
         <Heading level={3} margin={{ vertical: "small" }} size="small">
-          Visit request from {requestor_name}
+          Request to {isEventReq ? "join Event" : "visit Studio"} from{" "}
+          {requestor_name}
         </Heading>
 
         <Box gap="medium">
@@ -144,6 +162,22 @@ export default function RequestForm({
             </Text>
             <Text size="small">{formattedDate}</Text>
           </Box>
+
+          {isEventReq && event_uuid && (
+            <Box>
+              <Text size="small" color="dark-3">
+                Event
+              </Text>
+              <Text size="small">
+                <a
+                  href={"https:/arti.my/event/" + event_uuid}
+                  style={{ textDecoration: "none" }}
+                >
+                  <u> {event_uuid}</u>
+                </a>
+              </Text>
+            </Box>
+          )}
 
           <Box>
             <Text size="small" color="dark-3">
@@ -218,7 +252,11 @@ export default function RequestForm({
             </Text>
             <TextArea
               name="message"
-              placeholder="Enter your response message...&#10;. &#10;Please include your address in case you accept the visit request"
+              placeholder={
+                "Enter your response message...&#10;. &#10;" + isEventReq
+                  ? ""
+                  : "Please include your address in case you accept the request"
+              }
               rows={6}
               resize={false}
             />

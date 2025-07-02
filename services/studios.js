@@ -155,7 +155,7 @@ const StudiosProvider = ({ children }) => {
     setLoading(true);
     let { data: studioBasic, error } = await supabase
       .from("studios")
-      .select("artist, studio_id, published")
+      .select("artist, studio_id, published, email")
       .eq("uuid", uuid)
       .single();
 

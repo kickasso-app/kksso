@@ -159,6 +159,30 @@ const About = () => {
                       </Paragraph>
                     </Box>
                   </Col>
+                  <Col md={4}>
+                    <Box margin="medium" gap="medium">
+                      <img
+                        className={styles.teamImg}
+                        src="img/team/gabal.jpg"
+                        alt="Mohamed AbouGabal"
+                      />
+                      <Text size="large">
+                        Mohamed AbouGabal <br /> Curator - Cairo
+                      </Text>
+                      <Paragraph>
+                        Mohamed is a visual artist and curator whose
+                        multidisciplinary practice explores the intersections of
+                        art, science, and social history.
+                        <br />
+                        <br /> AbouGabal's work merges archival research,
+                        conceptual art, and social commentary, reflecting on
+                        both personal and collective narratives. He is the
+                        founder of the Egyptian Geographical Museum Society and
+                        co-founder of the Giza Zoo Collective, engaging with
+                        memory, critique, and cultural preservation.
+                      </Paragraph>
+                    </Box>
+                  </Col>
                 </Row>
               </Box>
 

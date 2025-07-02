@@ -68,7 +68,7 @@ const RequestsProvider = ({ children }) => {
    * This function creates a new Requests in a Supabase database
    */
 
-  const createRequest = async (id, request) => {
+  const createRequest = async (request) => {
     setLoading(true);
     let requestCreated = false;
     let isContactCreated = false;
@@ -83,11 +83,15 @@ const RequestsProvider = ({ children }) => {
       requestor_link,
       visit_reason,
       request_date_tz,
+      request_type,
+      studio_uuid,
+      event_uuid,
     } = request;
 
     const newRequest = {
       request_id,
-      studio_uuid: id,
+      studio_uuid,
+      event_uuid,
       has_response: false,
       requestor_name: from_name,
       studio_name,
@@ -96,6 +100,7 @@ const RequestsProvider = ({ children }) => {
       request_date_tz,
       requestor_link,
       messages: [{ reason: visit_reason }],
+      request_type,
       // Default Values in DB
       // last_update: now(),
       // has_response: FALSE,

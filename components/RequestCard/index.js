@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import { Box, Button, Card, Grid, Text } from "grommet";
 import { FormNext } from "grommet-icons";
 
+import { titleCase } from "services/helpers/textFormat";
+
 const statusColors = {
   Pending: "brand",
   Approved: "accent-1",
@@ -21,12 +23,8 @@ const RequestCard = ({
     has_response,
     response,
     requestor_name,
-    studio_name,
-    requestor_email,
     request_date,
-    request_date_tz,
-    requestor_link,
-    messages,
+    request_type,
   },
 }) => {
   const router = useRouter();
@@ -87,14 +85,24 @@ const RequestCard = ({
                 </Text> */}
               </Box>
             </Box>
+            <Box direction="row" gap="small">
+              <Box
+                background={statusColors[status]}
+                pad={{ horizontal: "medium", vertical: "xsmall" }}
+                round="2px"
+                width="fit-content"
+              >
+                <Text size="small">{statusTitles[status]}</Text>
+              </Box>
 
-            <Box
-              background={statusColors[status]}
-              pad={{ horizontal: "medium", vertical: "xsmall" }}
-              round="2px"
-              width="fit-content"
-            >
-              <Text size="small">{statusTitles[status]}</Text>
+              <Box
+                border={"dark-3"}
+                pad={{ horizontal: "medium", vertical: "xsmall" }}
+                round="2px"
+                width="fit-content"
+              >
+                <Text size="small">{titleCase(request_type)}</Text>
+              </Box>
             </Box>
           </Box>
 

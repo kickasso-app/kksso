@@ -42,7 +42,6 @@ const VisitForm = ({
   studioID,
   studio_uuid,
 }) => {
-  const size = useContext(ResponsiveContext);
   const { createRequest } = useRequests();
 
   const initValues = {
@@ -199,7 +198,12 @@ const VisitForm = ({
 
     try {
       const { requestCreated: requestinDB, error: errorInsertDB } =
-        await createRequest(studio_uuid, emailVariables);
+        await createRequest({
+          request_type: "visit",
+          studio_uuid: studio_uuid,
+          event_uuid: null,
+          ...emailVariables,
+        });
 
       const emailRequestDetails = {
         subject: "You got a new studio visit request!",
@@ -276,8 +280,6 @@ const VisitForm = ({
                   }}
                   date={selectedDate}
                   onReference={onChangeMonth}
-                  // size={size === "small" ? "small" : "medium"}
-                  // margin={size === "small" ? "medium" : "small"}
                   size="medium"
                   margin="none"
                   bounds={calendarBounds}
