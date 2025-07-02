@@ -1,7 +1,7 @@
 import * as React from "react";
 import { emailStyles } from "./emailStyles";
 
-export const RequestResponse = ({
+export const ResponseVisitRequest = ({
   name,
   request_date,
   studio_name,
@@ -25,9 +25,13 @@ export const RequestResponse = ({
         <p>
           Response:<b> {readableResponse}</b>
           <br />
-          They attached this following message:
-          <blockquote>{message}</blockquote>
         </p>
+        {message && (
+          <p>
+            They attached this following message:
+            <blockquote>{message}</blockquote>
+          </p>
+        )}
 
         {readableResponse === "Approved" && (
           <>

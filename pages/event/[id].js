@@ -32,6 +32,8 @@ const Studio = () => {
 
   const [imgUrl, isImgLoaded] = useEventImage(event, "large");
 
+  const isPastDate = (date) => new Date(date) < new Date();
+
   useEffect(() => {
     async function fetchData() {
       if (id && (!event || event?.id !== id)) {
@@ -255,7 +257,7 @@ const Studio = () => {
                   </>
                 )}
 
-                {studioBasic && (
+                {studioBasic && !isPastDate(event?.date) && (
                   <>
                     <Heading level="3" size="medium" margin={headingMargin}>
                       Request to Join
@@ -265,6 +267,8 @@ const Studio = () => {
                       artistName={studioBasic.name}
                       studioID={studioBasic.id}
                       studio_uuid={event.studio_uuid}
+                      event_uuid={event.id}
+                      event_date={event.date}
                       event_date_time={
                         readableDate(event.date) +
                         " at " +
@@ -279,11 +283,12 @@ const Studio = () => {
                       Contact
                     </Heading>
                     <Paragraph>{event.contact}</Paragraph>
+                    <Box margin={sectionMargin}>
+                      <hr />
+                    </Box>
                   </>
                 )}
-                <Box margin={sectionMargin}>
-                  <hr />
-                </Box>
+
                 {event.link && (
                   <>
                     <Heading level="3" size="medium" margin={headingMargin}>

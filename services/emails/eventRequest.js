@@ -8,6 +8,7 @@ export const EventRequest = ({
   requestor_link,
   request_id,
   event_date_time,
+  event_link,
 }) => (
   <html>
     <head>
@@ -17,8 +18,9 @@ export const EventRequest = ({
       <div id="emailstyles">
         <h1>Hello, {to_name}!</h1>
         <p>
-          You got a request to join your event on {event_date_time} from <strong>{from_name}</strong>.
-          They want to join for this reason:
+          You got a request to join your <a href={event_link}>event</a> on{" "}
+          {event_date_time} from <strong>{from_name}</strong>. They want to join
+          for this reason:
           <blockquote>{visit_reason}</blockquote>
         </p>
         <p>
@@ -37,7 +39,8 @@ export const EventRequest = ({
           <br /> <br />
         </p>
         <p>
-          If you want to confirm their request, remember to include any extra helpful directions.
+          If you want to confirm their request, remember to include any extra
+          helpful directions.
         </p>
         <p>
           Best wishes,

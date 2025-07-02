@@ -8,7 +8,8 @@ import { VisitRequest } from "services/emails/visitRequest";
 import { VisitRequestConfirmation } from "services/emails/visitRequestConfirmation";
 import { EventRequest } from "services/emails/eventRequest";
 import { EventRequestConfirmation } from "services/emails/eventRequestConfirmation";
-import { RequestResponse } from "services/emails/responseTemplate";
+import { ResponseVisitRequest } from "services/emails/responseVisitReqTemplate";
+import { ResponseEventRequest } from "services/emails/responseEventReqTemplate";
 import { MagicLinkTemplate } from "services/emails/magicLinkTemplate";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -20,7 +21,8 @@ const emailTemplates = {
   visitRequestConfirmation: VisitRequestConfirmation,
   eventRequest: EventRequest,
   eventRequestConfirmation: EventRequestConfirmation,
-  responseTemplate: RequestResponse,
+  responseVisitRequest: ResponseVisitRequest,
+  responseEventRequest: ResponseEventRequest,
   newsletterTemplate: NewsletterTemplate,
   magicLinkTemplate: MagicLinkTemplate,
 };

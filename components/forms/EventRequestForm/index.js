@@ -19,12 +19,26 @@ import Button from "./../../Button";
 
 import NotificationLayer from "components/NotificationLayer";
 
+const convertToTimestampTZ = (d, t) => {
+  const [year, month, day] = d.split("-");
+  const time = t.includes(":") ? t : dateUtils.to24hFormat(t);
+  const [hours, minutes] = time.split(":");
+  const dateObj = new Date(year, month - 1, day, hours, minutes);
+
+  // Format the Date object to include the time zone offset
+  const timestamptz = dateObj.toISOString();
+
+  return timestamptz;
+};
+
 const EventRequestForm = ({
   artistEmail,
   artistName,
   studioID,
   studio_uuid,
+  event_uuid,
   event_date_time,
+  event_date,
 }) => {
   const { createRequest } = useRequests();
 
@@ -50,7 +64,7 @@ const EventRequestForm = ({
     const emailVariables = {
       ...values,
       studio_name: artistName,
-      studio_link: "https:/arti.my/studio/" + studioID,
+      event_link: "https:/arti.my/event/" + event_uuid,
       request_id,
       event_date_time,
     };
@@ -59,10 +73,17 @@ const EventRequestForm = ({
     setIsEmailError(false);
     setIsSendingRequest(true);
 
-    console.log(emailVariables);
     try {
       const { requestCreated: requestinDB, error: errorInsertDB } =
-        await createRequest(studio_uuid, emailVariables);
+        await createRequest({
+          request_type: "event",
+
+          request_date_tz: convertToTimestampTZ(String(event_date), "12:00"),
+          request_date: event_date_time,
+          studio_uuid,
+          event_uuid,
+          ...emailVariables,
+        });
 
       const emailRequestDetails = {
         subject: "You got a new event request!",
@@ -186,8 +207,7 @@ const EventRequestForm = ({
               name="visit_reason"
               placeholder="Tell the artist why you'd like to join this event."
               fill
-              required
-              rows="7"
+              rows="5"
             />
           </FormField>
           <br />

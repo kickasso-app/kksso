@@ -198,7 +198,12 @@ const VisitForm = ({
 
     try {
       const { requestCreated: requestinDB, error: errorInsertDB } =
-        await createRequest(studio_uuid, emailVariables);
+        await createRequest({
+          request_type: "visit",
+          studio_uuid: studio_uuid,
+          event_uuid: null,
+          ...emailVariables,
+        });
 
       const emailRequestDetails = {
         subject: "You got a new studio visit request!",
