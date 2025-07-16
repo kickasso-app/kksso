@@ -198,6 +198,7 @@ const StudiosProvider = ({ children }) => {
     let { data: featStudios, error } = await supabase
       .from("studios")
       .select(STUDIO_PREVIEW_COLUMNS)
+      .contains("location", [selectedCity])
       .is("published", true)
       .is("displayed", true)
       .is("featured", true)
