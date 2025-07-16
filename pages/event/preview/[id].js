@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 
 import { useRouter } from "next/router";
-import Link from "next/link";
 
 import moment from "moment";
 
@@ -15,12 +14,12 @@ import { ChevronLeft, Disc, Globe } from "react-feather";
 
 import EventRequestForm from "components/forms/EventRequestForm";
 
-import styles from "./index.module.scss";
+import styles from "../index.module.scss";
 
 const readableDate = (date) =>
   moment(date, "YYYY-MM-DD").format("dddd D MMM, YYYY");
 
-const Event = () => {
+const EventPreview = () => {
   const router = useRouter();
   const size = useContext(ResponsiveContext);
   const { event, fetchEvent, loading, error } = useEvents();
@@ -88,19 +87,26 @@ const Event = () => {
           <Box align="center" pad="large">
             <img src={`/img/loader.svg`} />
           </Box>
-        ) : !event || !event?.isPublished ? (
+        ) : !event ? (
           <Box align="center" margin="large">
-            There is no published event here {":("}
+            There is no event here {":("}
           </Box>
         ) : (
           <>
-            <ChevronLeft className={styles.icon} size={16} />{" "}
-            <Link
-              href={`/events/` + event.cityLocation[0].toLowerCase()}
-              className={styles.backlink}
+            <Box
+              border
+              round="xsmall"
+              pad={"small"}
+              margin={{ vertical: "small" }}
+              width={"small"}
+              align="center"
             >
+              Preview
+            </Box>
+            <ChevronLeft className={styles.icon} size={16} />{" "}
+            <a onClick={() => router.back()} className={styles.backlink}>
               BACK
-            </Link>
+            </a>
             {imgUrl && isImgLoaded && (
               <Box
                 align="center"
@@ -139,7 +145,6 @@ const Event = () => {
                     </Box>
                   )}
                 </Row>
-
                 {studioBasic && (
                   <Heading
                     level="4"
@@ -180,7 +185,6 @@ const Event = () => {
                   />{" "}
                   <Text> {event.location}</Text>
                 </Paragraph>
-
                 {event?.languages && (
                   <>
                     <Box margin={sectionMargin}>
@@ -192,7 +196,6 @@ const Event = () => {
                     {makeParagraphs(event.languages)}
                   </>
                 )}
-
                 {studioBasic && studioLink && (
                   <>
                     <Box margin={sectionMargin}>
@@ -328,4 +331,4 @@ const Event = () => {
   );
 };
 
-export default Event;
+export default EventPreview;

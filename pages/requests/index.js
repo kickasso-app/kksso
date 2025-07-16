@@ -63,8 +63,14 @@ const Requests = () => {
                 Requests
               </Heading>
 
-              {loading || !requests.length ? (
+              {loading ? (
                 <img src={`/img/loader.svg`} />
+              ) : !requests.length ? (
+                <>
+                  <Text size="small" weight="bold">
+                    There are currently no requests
+                  </Text>
+                </>
               ) : (
                 <>
                   {/* Filter Buttons */}
@@ -113,7 +119,7 @@ const Requests = () => {
                         horizontal: "small",
                       }}
                     >
-                      No upcoming requests
+                      There are no upcoming requests
                     </Box>
                   )}
 
@@ -158,7 +164,7 @@ const Requests = () => {
                           horizontal: "small",
                         }}
                       >
-                        No past requests
+                        They were no past requests
                       </Box>
                     ))}
                 </>

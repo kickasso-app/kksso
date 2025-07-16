@@ -39,7 +39,7 @@ export default function ProfileForm({
 
   const [values, setValues] = useState({
     artist,
-    location: location.join(","),
+    location: location ? location.join(", ") : "",
     textMini,
     textLong,
     styles,
@@ -49,9 +49,11 @@ export default function ProfileForm({
   });
 
   const updateProfile = async (event) => {
+    const locationSeperator = values.location.includes(", ") ? ", " : ",";
+
     const updates = {
       ...values,
-      location: values.location.split(","),
+      location: values.location.split(locationSeperator),
     };
 
     await updateAccount(updates, user);
@@ -96,7 +98,6 @@ export default function ProfileForm({
               required
             >
               <Box pad="small">
-                {" "}
                 <Text size="small">City, Country</Text>
               </Box>
               <TextInput name="location" placeholder="e.g Berlin, Germany" />

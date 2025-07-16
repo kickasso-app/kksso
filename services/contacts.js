@@ -13,7 +13,7 @@ const createContact = async ({ newReferral, newRequest, newNewsletter }) => {
   } else if (newRequest) {
     newContact = {
       ...newContact,
-      source: "request",
+      source: newRequest.request_type, // either "visit" or "event",
       request_id: newRequest.request_id,
       name: newRequest.requestor_name,
       email: newRequest.requestor_email,

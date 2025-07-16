@@ -49,6 +49,7 @@ const Request = () => {
               updateRequest={updateRequest}
               studio_id={profile.studio_id}
               studio_email={user.email}
+              isEventReq={request.request_type === "event"}
             />
           )}
         </Col>

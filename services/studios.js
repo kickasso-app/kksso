@@ -155,7 +155,7 @@ const StudiosProvider = ({ children }) => {
     setLoading(true);
     let { data: studioBasic, error } = await supabase
       .from("studios")
-      .select("artist, studio_id, published")
+      .select("artist, studio_id, published, email")
       .eq("uuid", uuid)
       .single();
 
@@ -198,6 +198,7 @@ const StudiosProvider = ({ children }) => {
     let { data: featStudios, error } = await supabase
       .from("studios")
       .select(STUDIO_PREVIEW_COLUMNS)
+      .contains("location", [selectedCity])
       .is("published", true)
       .is("displayed", true)
       .is("featured", true)
