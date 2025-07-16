@@ -1,29 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 
 import {
   Box,
-  // Grid,
   Heading,
   Text,
-  Form,
   FormField,
-  TextInput,
   Notification,
-  TextArea,
   Select,
   Button as GrommetButton,
 } from "grommet";
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 
-import EventsPhotoInput from "components/forms/EventsPhotoInput";
 import { useAccount } from "services/account";
 import { useAuth } from "services/auth";
 import { useEvents } from "services/events";
 
 import EventCardEdit from "../EventCardEdit";
-
-import Button from "components/Button";
 
 const MAX_EVENTS = 3;
 export default function EventsSettingsForm({ profile }) {
@@ -49,6 +42,7 @@ export default function EventsSettingsForm({ profile }) {
     const newEvent = {
       event_id: event_id,
       studio_uuid: user.id,
+      cityLocation: profile.location,
     };
     await createEvent(newEvent);
     if (events?.length === 0) {
@@ -112,6 +106,9 @@ export default function EventsSettingsForm({ profile }) {
                     }}
                     onView={() => {
                       router.push("/event/" + e.id);
+                    }}
+                    onPreview={() => {
+                      router.push("/event/preview/" + e.id);
                     }}
                   />
                 ))

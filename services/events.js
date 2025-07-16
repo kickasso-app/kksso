@@ -115,7 +115,7 @@ const EventsProvider = ({ children }) => {
    * This function creates a new Events in a Supabase database
    */
 
-  const createEvent = async ({ studio_uuid, event_id }) => {
+  const createEvent = async ({ studio_uuid, event_id, cityLocation }) => {
     setLoading(true);
     let eventCreated = false;
     let errorMsg = false;
@@ -124,7 +124,8 @@ const EventsProvider = ({ children }) => {
 
     const newEvent = {
       id: event_id, // uuid from event
-      studio_uuid: studio_uuid, // uuid of the studio
+      studio_uuid, // uuid of the studio
+      cityLocation,
       created_at: new Date().toISOString(), // timestamp with time zone
       location: "Studio",
       isPublished: false,

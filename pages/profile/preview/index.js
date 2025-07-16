@@ -71,7 +71,7 @@ const Preview = () => {
           </Box>
         ) : !studio ? (
           <Box align="center" margin="large">
-            There is no studio here :(
+            There is no studio here {":("}
           </Box>
         ) : (
           <>

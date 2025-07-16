@@ -25,7 +25,6 @@ import { useAuth } from "services/auth";
 import { useEvents } from "services/events";
 
 import Button from "components/Button";
-import { lang } from "moment";
 
 const initialValues = {
   eventType: "Workshop",
@@ -156,11 +155,10 @@ const EventEditForm = () => {
       <Box fill="horizontal" pad="medium" gap="medium" width={{ max: "large" }}>
         <br />
         <Box direction="col">
-          {" "}
           <ChevronLeft size={16} />{" "}
           <Link href={"/profile?section=3"}>BACK</Link>
         </Box>
-        <Heading level="3" size="medium" margin={textMargin}>
+        <Heading level="3" size="medium" margin={fieldMargin}>
           {event?.title || "New Event"}
         </Heading>
 
@@ -234,7 +232,7 @@ const EventEditForm = () => {
                   Event Photo
                 </Heading>
                 <Text>
-                  We suggest a sqaure ratio (1:1) for this image. <br />
+                  We suggest a square ratio (1:1) for this image. <br />
                   Please make sure that your image file are smaller than{" "}
                   <b>1 MB </b>
                 </Text>
@@ -263,11 +261,11 @@ const EventEditForm = () => {
                 />
               </FormField>
               <FormField
-                label="Participation Fee (per person)"
+                label="Participation Fee - per person (optional)"
                 name="fee"
                 margin={fieldMargin}
               >
-                <TextInput name="fee" placeholder="e.g. 30 Euros" required />
+                <TextInput name="fee" placeholder="e.g. 30 Euros" />
               </FormField>
               <FormField label="Location" name="location" margin={fieldMargin}>
                 <Select
@@ -407,6 +405,10 @@ const EventEditForm = () => {
                 <Button type="submit" btnStyle="filled" disabled={loading}>
                   Save Changes
                 </Button>
+              </Box>
+              <Box direction="col" margin={{ top: "medium", bottom: "xlarge" }}>
+                <ChevronLeft size={16} />{" "}
+                <Link href={"/profile?section=3"}>BACK to preview</Link>
               </Box>
               {!loading && (
                 <>

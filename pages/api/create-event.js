@@ -25,7 +25,7 @@ export default async (req, res) => {
     // Destructure and validate incoming data
     const { newEvent } = req.body;
 
-    console.log(newEvent);
+    // console.log(newEvent);
     // Basic validation
     // if (!newEvent?.id || !newEvent?.studio_uuid) {
     //   return res.status(400).json({
