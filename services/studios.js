@@ -136,7 +136,7 @@ const StudiosProvider = ({ children }) => {
     if (studio?.length) {
       const tempStudio = {
         ...studio[0],
-        hasOpenDates: studio[0]?.openDates?.length ? true : false,
+        hasOpenDates: studio[0]?.availability?.openTimes?.length ? true : false,
       };
       setStudio(tempStudio);
       // console.log(tempStudio);
@@ -186,7 +186,7 @@ const StudiosProvider = ({ children }) => {
     } else {
       const tempStudio = {
         ...studio[0],
-        hasOpenDates: studio[0]?.openDates?.length ? true : false,
+        hasOpenDates: studio[0]?.availability?.openTimes?.length ? true : false,
       };
       setUserStudio(tempStudio);
       // console.log(tempStudio);

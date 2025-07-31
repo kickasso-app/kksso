@@ -7,7 +7,6 @@ export const STUDIO_COLUMNS = [
   "textLong",
   "textStudio",
   "visitRules",
-  "openDates",
   "availability",
   "languages",
   "website",

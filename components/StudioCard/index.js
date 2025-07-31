@@ -13,16 +13,7 @@ import { capitalizeFirstLetter } from "services/helpers/textFormat";
 import styles from "./index.module.scss";
 
 const StudioCard = ({
-  studio: {
-    studio_id,
-    uuid,
-    artist,
-    district,
-    styles: artStyles,
-    // openDates,
-    // hasOpenDates,
-    textMini,
-  },
+  studio: { studio_id, uuid, artist, district, styles: artStyles, textMini },
 }) => {
   const router = useRouter();
 
@@ -36,10 +27,6 @@ const StudioCard = ({
   };
 
   const [imgUrl, setImgUrl] = useState(false);
-
-  // const nextVisit = openDates
-  //   ? moment(openDates[0], "YYYY-MM-DD hh:mm").format("D MMM")
-  //   : false;
 
   useEffect(() => {
     downloadProfileImage({ userId: uuid }).then((url) => setImgUrl(url));
