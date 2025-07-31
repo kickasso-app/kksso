@@ -496,8 +496,24 @@ const todayFormatted = `${String(today.getDate()).padStart(2, "0")}/${String(
 const datesWithToday = [...dates, todayFormatted];
 // console.log("Including today:", findNextDate(datesWithToday));
 
+const getFirstAvailableDate = (parsedDates) => {
+  if (!parsedDates || Object.keys(parsedDates).length === 0) {
+    return null;
+  }
+
+  // Flatten available dates and sort them
+  const allAvailableDates = Object.values(parsedDates)
+    .flatMap((month) => month.availableDates)
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  // Return the first available date or null if none found
+  return allAvailableDates.length > 0 ? allAvailableDates[0].date : null;
+};
+// Example usage of getFirstAvailableDate
+
 export {
   parseAvailability,
+  getFirstAvailableDate,
   isDateUnavailable,
   getClosedDates,
   dateUtils,

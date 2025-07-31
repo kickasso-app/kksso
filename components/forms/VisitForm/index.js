@@ -15,9 +15,6 @@ import {
   Text,
   Calendar,
   RadioButtonGroup,
-  Notification,
-  ResponsiveContext,
-  Anchor,
   Paragraph,
 } from "grommet";
 
@@ -32,6 +29,7 @@ import {
   dateUtils,
   toIsoDate,
   toReverseIsoDate,
+  getFirstAvailableDate,
 } from "services/helpers/parseAvailability";
 
 const VisitForm = ({
@@ -59,7 +57,6 @@ const VisitForm = ({
   const [bookedTimes, setBookedTimes] = useState([]);
   const [parsedDates, setParsedDates] = useState({});
 
-  const [monthlyOpen, setMonthlyOpen] = useState([]);
   const [monthlyDisabled, setMonthlyDisabled] = useState([]);
   const [selectedDate, setSelectedDate] = useState(false);
   const [selectedTime, setSelectedTime] = useState(false);
@@ -76,9 +73,17 @@ const VisitForm = ({
     moment(date, "YYYY-MM-DD hh:mm").format("dddd D MMMM");
 
   const onSelectDate = (date) => {
+    // console.log(date);
     setSelectedDate(date);
     const month = new Date(date).getMonth() + 1;
     const m = month.toString();
+
+    // Check if availableDates exists
+    if (!parsedDates[m]?.availableDates) {
+      console.error(`No availableDates found for month: ${m}`);
+      return;
+    }
+    //console.log(parsedDates[m].availableDates);
 
     const parsedDate = parsedDates[m].availableDates.filter(
       (d) => d.date === toReverseIsoDate(date)
@@ -88,7 +93,7 @@ const VisitForm = ({
 
     let tempTimes = parsedDate.times.map((t) => dateUtils.toAmPm(t.hour));
 
-    // onsole.log(tempTimes);
+    // console.log(tempTimes);
     // Check if bookedTimes has the same date and remove the times from tempTimes
     const bookedDate = bookedTimes.find(
       (bt) => bt.date === toReverseIsoDate(date)
@@ -111,31 +116,40 @@ const VisitForm = ({
     const month = new Date(date).getMonth() + 1;
     const m = month.toString();
     const dates = parsedDates;
-    if (dates.hasOwnProperty(m)) {
-      setBookedTimes(dates[m].bookedTimes);
-      // console.log(dates[m]);
 
-      const tempOpen = dates[m].availableDates.map((item) => item.date);
-
-      const tempUnavail = dates[m].unavailableDates.map((item) =>
-        toIsoDate(item.date)
-      );
-
-      const tempClosed = getClosedDates(tempOpen);
-
-      // Join and remove duplicates
-      const allDisabled = [...new Set([...tempClosed, ...tempUnavail])];
-
-      setMonthlyDisabled(allDisabled);
-
-      const disabledSet = new Set(allDisabled);
-      const allOpen = tempOpen.filter((element) => !disabledSet.has(element));
-
-      // setMonthlyOpen(allOpen);
-
-      const nextDate = dateUtils.findNext(allOpen);
-      onSelectDate(toIsoDate(nextDate));
+    if (!dates.hasOwnProperty(m)) {
+      console.error(`No month ${m} in dates`);
+      return;
     }
+
+    if (!dates[m]?.availableDates?.length) {
+      console.error(`No availableDates found for month: ${m}`);
+      return;
+    }
+
+    setBookedTimes(dates[m].bookedTimes);
+    // console.log(dates[m]);
+
+    const tempOpen = dates[m].availableDates.map((item) => item.date);
+
+    const tempUnavail = dates[m].unavailableDates.map((item) =>
+      toIsoDate(item.date)
+    );
+
+    const tempClosed = getClosedDates(tempOpen);
+
+    // Join and remove duplicates
+    const allDisabled = [...new Set([...tempClosed, ...tempUnavail])];
+
+    setMonthlyDisabled(allDisabled);
+
+    const disabledSet = new Set(allDisabled);
+    const allOpen = tempOpen.filter((element) => !disabledSet.has(element));
+
+    // setMonthlyOpen(allOpen);
+
+    const nextDate = dateUtils.findNext(allOpen);
+    onSelectDate(toIsoDate(nextDate));
   };
 
   const getParsedDates = (availability) => {
@@ -160,8 +174,11 @@ const VisitForm = ({
 
   useEffect(() => {
     if (Object.keys(parsedDates).length !== 0) {
-      const today = new Date();
-      onChangeMonth(today.toISOString());
+      const firstAvailableDate = getFirstAvailableDate(parsedDates);
+      const firstAvailIsoDate = toIsoDate(firstAvailableDate);
+      // console.log("firstAvailableDate", firstAvailIsoDate);
+
+      onChangeMonth(firstAvailIsoDate);
     }
   }, [parsedDates]);
 
