@@ -14,6 +14,9 @@ import Button from "components/Button";
 import EventCard from "components/EventCard";
 import VisitForm from "components/forms/VisitForm";
 import ImagesCarousel from "components/ImagesCarousel";
+
+import { makeParagraphs } from "services/helpers/textFormat";
+
 import styles from "./index.module.scss";
 
 const Preview = () => {
@@ -41,18 +44,6 @@ const Preview = () => {
   const headingMargin = { top: "large", bottom: "small" };
   const paragraphMargin = { top: "small", bottom: "small" };
   const sectionMargin = { top: "medium", bottom: "medium" };
-
-  const paragraphSeperator = /\r\n|\n|\r/;
-
-  const makeParagraphs = (paragraphString, pSeparator) => {
-    // console.log(paragraphString);
-    return paragraphString.split(pSeparator).map((paragraph, index) => (
-      <Paragraph key={index} size="medium" margin={paragraphMargin} fill>
-        {paragraph}
-      </Paragraph>
-      // <ReactMarkdown key={index}>{paragraph}</ReactMarkdown>
-    ));
-  };
 
   return (
     <Grid fluid className={styles.studio}>
@@ -95,8 +86,7 @@ const Preview = () => {
                     </Col>
                   )}
                 </Row>
-                {studio.textLong &&
-                  makeParagraphs(studio.textLong, paragraphSeperator)}
+                {studio.textLong && makeParagraphs(studio.textLong)}
                 <Heading level="3" size="medium" margin={headingMargin}>
                   Mediums
                 </Heading>

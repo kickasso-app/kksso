@@ -14,6 +14,8 @@ import { ChevronLeft, Disc, Globe } from "react-feather";
 
 import EventRequestForm from "components/forms/EventRequestForm";
 
+import { makeParagraphs } from "services/helpers/textFormat";
+
 import styles from "../index.module.scss";
 
 const readableDate = (date) =>
@@ -65,17 +67,6 @@ const EventPreview = () => {
   const headingMargin = { top: "large", bottom: "small" };
   const paragraphMargin = { top: "small", bottom: "small" };
   const sectionMargin = { top: "medium", bottom: "medium" };
-
-  const paragraphSeperator = /\r\n|\n|\r/;
-
-  const makeParagraphs = (paragraphString, pSeparator) => {
-    // console.log(paragraphString);
-    return paragraphString.split(pSeparator).map((paragraph, index) => (
-      <Paragraph key={index} size="medium" margin={paragraphMargin} fill>
-        {paragraph}
-      </Paragraph>
-    ));
-  };
 
   return (
     <Grid fluid className={styles.event}>
@@ -168,7 +159,7 @@ const EventPreview = () => {
                 <Heading level="3" size="medium" margin={headingMargin}>
                   Details
                 </Heading>
-                {makeParagraphs(event.longDescription, paragraphSeperator)}
+                {makeParagraphs(event.longDescription)}
                 <Box margin={sectionMargin}>
                   <hr />
                 </Box>

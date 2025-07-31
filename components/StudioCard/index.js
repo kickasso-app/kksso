@@ -7,8 +7,10 @@ import ProgressiveImage from "react-progressive-image";
 // import moment from "moment";
 import { Disc, Hash } from "react-feather";
 
-import styles from "./index.module.scss";
 import { downloadProfileImage } from "services/images";
+
+import { capitalizeFirstLetter } from "services/helpers/textFormat";
+import styles from "./index.module.scss";
 
 const StudioCard = ({
   studio: {
@@ -67,7 +69,7 @@ const StudioCard = ({
           color="#FFC0CB"
           fill="#fff"
         />
-        {district}
+        {capitalizeFirstLetter(district)}
       </h4>
 
       {/* CHANGED FOR PILOT */}
@@ -89,7 +91,7 @@ const StudioCard = ({
             color="#4b4b4b"
             fill="#fff"
           />{" "}
-          {artStyles}
+          {capitalizeFirstLetter(artStyles)}
         </h4>
       )}
     </div>

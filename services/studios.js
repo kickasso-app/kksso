@@ -104,6 +104,7 @@ const StudiosProvider = ({ children }) => {
     let { data: resultStudios, error } = await supabase
       .from("studios")
       .select(STUDIO_PREVIEW_COLUMNS)
+      .contains("location", [selectedCity])
       .is("published", true)
       .is("displayed", true)
       .textSearch("fts", newQuery, {
