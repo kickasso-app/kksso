@@ -23,10 +23,18 @@ const Layout = (props) => {
           property="og:description"
           content="Arti is a web platform to connect artists, art lovers, and collectors in the studio space"
         />
+        <meta property="og:url" content="https://arti.my/" />
         <meta
           property="og:image"
           content="https://arti.my/img/opengraph-image.png"
         />
+        <meta
+          property="og:image:secure_url"
+          content="https://arti.my/img/opengraph-image.png"
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:type" content="image/png" />
 
         <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
         <link
