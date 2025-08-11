@@ -1,4 +1,6 @@
 import Head from "next/head";
+
+// import { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 
 import { Grommet } from "grommet";
@@ -15,13 +17,15 @@ const Layout = (props) => {
         <title>Arti</title>
         <meta
           name="description"
-          content="Arti is a web platform to connect artists, art lovers, and collectors in the studio space"
+          content="A platform to connect artists, art lovers, and collectors via studio visits and events."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta property="og:site_name" content="Arti" />
         <meta property="og:title" content="Arti" />
+        <meta property="og:type" content="website" />
         <meta
           property="og:description"
-          content="Arti is a web platform to connect artists, art lovers, and collectors in the studio space"
+          content="A platform to connect artists, art lovers, and collectors via studio visits and events."
         />
         <meta property="og:url" content="https://arti.my/" />
         <meta
@@ -35,7 +39,7 @@ const Layout = (props) => {
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:type" content="image/png" />
-
+        <meta property="twitter:card" content="summary_large_image" />
         <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
         <link
           rel="icon"
@@ -62,3 +66,21 @@ const Layout = (props) => {
 };
 
 export default Layout;
+
+// This also doesn't work!
+// export const metadata = {
+//   title: "Arti",
+//   description:
+//     "A platform to connect artists, art lovers, and collectors via studio visits and events.",
+//   metadataBase: new URL("https://arti.my"),
+//   openGraph: {
+//     title: "Arti",
+//     description:
+//       "A platform to connect artists, art lovers, and collectors via studio visits and events.",
+//     url: "https://arti.my",
+//     siteName: "Arti",
+//     images: "/img/opengraph-image.png",
+//     locale: "en_US",
+//     type: "website",
+//   },
+// };
