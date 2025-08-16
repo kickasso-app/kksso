@@ -34,7 +34,14 @@ const Event = () => {
 
   const [imgUrl, isImgLoaded] = useEventImage(event, "large");
 
-  const isPastDate = (date) => new Date(date) < new Date();
+  const isPastDate = (date) => {
+    const inputDate = new Date(date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set time to midnight for accurate comparison
+    inputDate.setHours(0, 0, 0, 0);
+
+    return inputDate < today;
+  };
 
   useEffect(() => {
     async function fetchData() {
