@@ -126,8 +126,8 @@ const About = () => {
                       />
                       <Text size="large">Youssef Faltas</Text>
                       <Paragraph>
-                        Youssef is a creative technologist, a visual artist, and
-                        a web developer.
+                        Youssef is a creative technologist, visual artist, and
+                        web developer.
                       </Paragraph>
                     </Box>
                   </Col>
@@ -140,7 +140,7 @@ const About = () => {
                       />
                       <Text size="large">Ivana Benova</Text>
                       <Paragraph>
-                        Ivana is a professional bohemian and a project manager +
+                        Ivana is a project manager and a
                         booster in areas connecting tech, art and education.
                       </Paragraph>
                     </Box>

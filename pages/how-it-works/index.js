@@ -159,12 +159,12 @@ const How = () => {
 
               <Box gap="medium">
                 <CirclePoint>
-                  Support with Logisitics and Certifcates
+                  Support with Logisitics and Certificates
                 </CirclePoint>
                 <Paragraph fill>
                   We will work to help artists and collectors with the logistics
                   of shipping and delivering artworks securely. We also plan on
-                  building a system to create decentralized Certifcates of
+                  building a system to create decentralized Certificates of
                   Authenticity for artworks. The system may be based on
                   blockchain technology where each artwork will have a unique
                   digital signature, and when it is sold a second time, the

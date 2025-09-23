@@ -189,12 +189,12 @@ const HowArtists = () => {
                   practice and in making informed decisions.
                 </Paragraph>
                 <CirclePoint>
-                  Support with Logisitics and Certifcates
+                  Support with Logisitics and Certificates
                 </CirclePoint>
                 <Paragraph fill>
                   We will work to help artists and collectors with the logistics
                   of shipping and delivering artworks securely. We also plan on
-                  building a system to create decentralized Certifcates of
+                  building a system to create decentralized Certificates of
                   Authenticity for artworks. The system may be based on
                   blockchain technology where each artwork will have a unique
                   digital signature, and when it is sold a second time, the
@@ -210,10 +210,10 @@ const HowArtists = () => {
                   that prioritize profit over the community's interests. By
                   giving creators a direct say in Arti's development, we can
                   avoid the pitfalls of other platforms that, after gaining
-                  popularity, exploit their users for financial gain. This
+                  popularity, exploit their users for financial gain. 
                 </Paragraph>
                 <Paragraph fill>
-                  This proposed voting system ensures that Arti remains true to
+                  The proposed voting system ensures that Arti remains true to
                   its original vision.
                 </Paragraph>
               </Box>
