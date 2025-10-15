@@ -125,6 +125,7 @@ const EventEditForm = () => {
         // console.log("fetching event", id);
         await fetchEvent({ event_id: id });
       }
+      // console.log(event);
       if (user && id && event && event.id === id && !isEventEdited) {
         setValues({
           eventType: event.type ?? "Workshop",
@@ -142,9 +143,9 @@ const EventEditForm = () => {
           contact: event.contact ?? "",
           link: event.link ?? "",
           isPublished: event.isPublished ?? false,
-          location: event.location ?? "Studio",
+          location: event.location == "Studio" ? "Studio" : "Other",
           locationOther:
-            event.location === "Other" ? event.locationOther ?? "" : "",
+            event.location !== "Studio" ? event.location : "",
         });
       }
     }
