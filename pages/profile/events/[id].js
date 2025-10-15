@@ -76,6 +76,7 @@ const EventEditForm = () => {
   } = useEvents();
 
   const [values, setValues] = useState(initialValues);
+  const [isEventEdited, setIsEventEdited] = useState(false); 
 
   async function handleUpdateEvent(event) {
     event.preventDefault();
@@ -121,10 +122,10 @@ const EventEditForm = () => {
   useEffect(() => {
     async function fetchData() {
       if (user && id && (!event || event?.id !== id)) {
-        console.log("fetching event", id);
+        // console.log("fetching event", id);
         await fetchEvent({ event_id: id });
       }
-      if (user && id && event && event.id === id) {
+      if (user && id && event && event.id === id && !isEventEdited) {
         setValues({
           eventType: event.type ?? "Workshop",
           eventTypeOther:
@@ -148,6 +149,7 @@ const EventEditForm = () => {
       }
     }
     fetchData();
+
   }, [user, id, event]);
 
   return (
@@ -170,7 +172,7 @@ const EventEditForm = () => {
           <Grid fluid>
             <Form
               value={values}
-              onChange={(nextValue) => setValues(nextValue)}
+              onChange={(nextValue) => { setValues(nextValue); setIsEventEdited(true); }}
               onSubmit={handleUpdateEvent}
               validate="submit"
             >
