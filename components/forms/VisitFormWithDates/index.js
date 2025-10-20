@@ -18,7 +18,7 @@ import {
   Paragraph,
 } from "grommet";
 
-import Button from "./../../Button";
+import Button from "components/Button";
 
 import { calendarBounds } from "config/calendar";
 import NotificationLayer from "components/NotificationLayer";
@@ -32,7 +32,7 @@ import {
   getFirstAvailableDate,
 } from "services/helpers/parseAvailability";
 
-const VisitForm = ({
+const VisitFormWithDates = ({
   artistEmail,
   artistName,
   openDates,
@@ -161,7 +161,6 @@ const VisitForm = ({
 
       const parsedAvail = parseAvailability(availability);
 
-      // console.log(parsedAvail);
       return parsedAvail;
     }
   };
@@ -170,13 +169,14 @@ const VisitForm = ({
     if (availability && Object.keys(parsedDates).length === 0) {
       setParsedDates(getParsedDates(availability));
     }
+
+    //console.log("parsedDates", getParsedDates(availability));
   }, [availability, parsedDates]);
 
   useEffect(() => {
     if (Object.keys(parsedDates).length !== 0) {
       const firstAvailableDate = getFirstAvailableDate(parsedDates);
       const firstAvailIsoDate = toIsoDate(firstAvailableDate);
-      // console.log("firstAvailableDate", firstAvailIsoDate);
 
       onChangeMonth(firstAvailIsoDate);
     }
@@ -276,7 +276,7 @@ const VisitForm = ({
         // pad="medium"
         margin={{ vertical: "medium" }}
       >
-        {availability ? (
+        {availability && (
           <Form
             id="select-visit-date"
             values={values}
@@ -483,14 +483,10 @@ const VisitForm = ({
               )
             )}
           </Form>
-        ) : (
-          <Paragraph size="medium">
-            There are no available dates yet for this studio.
-          </Paragraph>
-        )}
+        ) }
       </Box>
     </Box>
   );
 };
 
-export default VisitForm;
+export default VisitFormWithDates;

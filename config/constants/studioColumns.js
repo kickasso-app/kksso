@@ -8,6 +8,7 @@ export const STUDIO_COLUMNS = [
   "textStudio",
   "visitRules",
   "availability",
+  "has_no_visits",
   "languages",
   "website",
   "instagram",

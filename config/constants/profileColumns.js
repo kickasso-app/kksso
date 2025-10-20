@@ -7,6 +7,7 @@ export const PROFILE_COLUMNS = [
   "textLong",
   "textStudio",
   "visitRules",
+  "has_no_visits",
   "availability",
   "languages",
   "website",

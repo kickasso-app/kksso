@@ -1,9 +1,9 @@
-# Copilot Instructions for the Arti Next.js Project
+# Copilot Instructions for a Next.js Project
 
 ## 1️⃣ Project Overview
 - **Framework**: Next.js (12+), TypeScript  
 - **Purpose**: Server‑side rendered web application with API routes, static pages, and client‑side interactivity.  
-- **Architecture**: Pages driven by the `pages` directory, reusable UI in `components`, shared logic in `lib` and `utils`, and global styles in `styles`.  
+- **Architecture**: Pages driven by the `pages` directory, reusable UI in `components`, shared logic in `lib``utils`, and global styles in `styles`.  
 - **Deployment**: Vercel (standard Next.js build).  
 
 ## 2️⃣ Coding Style & Conventions
@@ -21,20 +21,16 @@
 | **Tests** | Jest + React Testing Library. | Opinionated testing stack |
 
 ## 3️⃣ Folder Structure
+/components – reusable UI pieces
+/pages – Next.js pages & API routes
+/lib – core logic, data fetching utilities
+/utils – helpers, types, constants
+/styles – global CSS, Tailwind, or styled-jsx
+/hooks – custom hooks
+/context – React context
+/middleware – next/middleware
 
-The codebase uses the following folder structure:
 
-- `/components` – Reusable UI components (PascalCase filenames)
-- `/pages` – Next.js pages & API routes (kebab-case filenames for pages)
-- `/lib` – Core logic, data fetching utilities
-- `/utils` – Helpers, types, constants
-- `/styles` – Global CSS, Tailwind, or styled-jsx
-- `/hooks` – Custom React hooks
-- `/context` – React context providers
-- `/middleware` – Next.js middleware
-- `/public` – Static assets (images, favicon, etc.)
-- `/tests` – Test files (mirroring structure of components/pages)
-- `/types` – Shared TypeScript types and interfaces
 
 ## 4️⃣ Suggested Patterns
 
@@ -60,7 +56,6 @@ The codebase uses the following folder structure:
 
 - Copilot should suggest tests that cover typical React component usage and API response handling.  
 - Use `@testing-library/react` + Jest. For API routes, use `node-mocks-http` or `supertest`.
-- Place test files in `/tests` directory, mirroring the structure of the code being tested.
 
 ## 8️⃣ Common Edge Cases
 

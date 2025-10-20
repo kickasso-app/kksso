@@ -12,7 +12,8 @@ import { Disc, Instagram, Globe } from "react-feather";
 
 import Button from "components/Button";
 import EventCard from "components/EventCard";
-import VisitForm from "components/forms/VisitForm";
+import VisitFormWithDates from "components/forms/VisitFormWithDates";
+import VisitFormOpen from "components/forms/VisitFormOpen";
 import ImagesCarousel from "components/ImagesCarousel";
 
 import { makeParagraphs } from "services/helpers/textFormat";
@@ -211,24 +212,30 @@ const Preview = () => {
                 >
                   Private studio visits
                 </Heading>
-                {studio.hasOpenDates === true ? (
-                  <VisitForm
-                    availability={studio.availability}
-                    artistEmail={studio.email}
-                    artistName={studio.artist}
-                    studioID={studio.studio_id}
-                    studio_uuid={studio.uuid}
-                  />
-                ) : (
-                  <>
-                    <Heading level="4" size="medium" margin={headingMargin}>
-                      The artist has no upcoming private visit dates right now
-                    </Heading>
-                    <h4 className={styles.subsectiontitle}>
-                      Please check back again later
-                    </h4>
-                  </>
-                )}
+                    {studio.has_no_visits === true ? (
+                      <>
+                        <Heading level="4" size="medium" margin={headingMargin}>
+                          The artist has no upcoming private visit dates right now
+                        </Heading>
+                        <h4 className={styles.subsectiontitle}>
+                          Please check back again later
+                        </h4>
+                      </>) :
+                      studio.hasOpenDates === true ? (
+                        <VisitFormWithDates
+                          artistEmail={studio.email}
+                          artistName={studio.artist}
+                          studioID={studio.studio_id}
+                          studio_uuid={studio.uuid}
+                          availability={studio.availability}
+                        />
+                      ) : (
+                        <VisitFormOpen
+                          artistEmail={studio.email}
+                          artistName={studio.artist}
+                          studioID={studio.studio_id}
+                          studio_uuid={studio.uuid}
+                        />)}
               </Col>
             </Row>
           </>

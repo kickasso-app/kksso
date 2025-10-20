@@ -45,80 +45,68 @@ const parseAvailability = (availability, monthsAhead = 6) => {
     return acc;
   }, {});
 
-  // Initialize result object
-  const result = {};
+  // Initialize result as an array to maintain order
+  const resultArray = [];
 
   // Get current date
   const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1; // 1-12
 
-  // Process each month
+  // Process each month starting from current month
   for (let monthOffset = 0; monthOffset < monthsAhead; monthOffset++) {
-    const currentMonth = new Date(
+    const targetDate = new Date(
       currentDate.getFullYear(),
       currentDate.getMonth() + monthOffset,
       1
     );
 
-    const monthKey = currentMonth.toLocaleString("default", {
-      month: "numeric",
-      // year: "numeric",
-    });
+    // Get month number (1-12)
+    const monthKey = String(targetDate.getMonth() + 1);
+    const monthYear = targetDate.getFullYear();
 
-    result[monthKey] = {
+    resultArray.push({
+      monthKey,
+      monthYear,
       availableDates: [],
       unavailableDates: [],
       bookedTimes: [],
-    };
+    });
 
     // Get last day of month
     const lastDay = new Date(
-      currentMonth.getFullYear(),
-      currentMonth.getMonth() + 1,
+      targetDate.getFullYear(),
+      targetDate.getMonth() + 1,
       0
     ).getDate();
 
     // Check each day of the month
     for (let day = 1; day <= lastDay; day++) {
-      const date = new Date(
-        currentMonth.getFullYear(),
-        currentMonth.getMonth(),
-        day
-      );
+      const date = new Date(targetDate.getFullYear(), targetDate.getMonth(), day);
 
       // Skip dates before today
-      if (
-        date <
-        new Date(
-          currentDate.getFullYear(),
-          currentDate.getMonth(),
-          currentDate.getDate()
-        )
-      ) {
+      if (date < new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())) {
         continue;
       }
 
-      // Get day name using 'long' format
       const dayName = date.toLocaleString("default", { weekday: "long" });
       const availableTimes = availableTimesByDay[dayName];
 
-      // Format date as DD/MM/YYYY
       const formattedDate = [
         String(date.getDate()).padStart(2, "0"),
         String(date.getMonth() + 1).padStart(2, "0"),
         date.getFullYear(),
       ].join("/");
 
-      // Check if date falls within unavailable ranges
       const isUnavailable = unavailableDateRanges.some(
         ([start, end]) => date >= start && date <= end
       );
 
       if (isUnavailable) {
-        result[monthKey].unavailableDates.push({
+        resultArray[monthOffset].unavailableDates.push({
           date: formattedDate,
         });
       } else if (availableTimes?.length > 0) {
-        result[monthKey].availableDates.push({
+        resultArray[monthOffset].availableDates.push({
           date: formattedDate,
           times: availableTimes.map((time) => ({
             hour: time,
@@ -127,15 +115,24 @@ const parseAvailability = (availability, monthsAhead = 6) => {
         });
       }
 
-      // Add booked times if any
       if (bookedTimesMap[formattedDate]) {
-        result[monthKey].bookedTimes.push({
+        resultArray[monthOffset].bookedTimes.push({
           date: formattedDate,
           times: bookedTimesMap[formattedDate],
         });
       }
     }
   }
+
+  // Convert array back to object maintaining the order
+  const result = resultArray.reduce((acc, month) => {
+    acc[month.monthKey.toString()] = {
+      availableDates: month.availableDates,
+      unavailableDates: month.unavailableDates,
+      bookedTimes: month.bookedTimes,
+    };
+    return acc;
+  }, {});
 
   return result;
 };
@@ -501,13 +498,34 @@ const getFirstAvailableDate = (parsedDates) => {
     return null;
   }
 
-  // Flatten available dates and sort them
-  const allAvailableDates = Object.values(parsedDates)
-    .flatMap((month) => month.availableDates)
-    .sort((a, b) => new Date(a.date) - new Date(b.date));
+  const currentMonth = (new Date().getMonth() + 1).toString();
 
-  // Return the first available date or null if none found
-  return allAvailableDates.length > 0 ? allAvailableDates[0].date : null;
+  // Get all month keys and sort them to start from current month
+  const monthKeys = Object.keys(parsedDates)
+    .map(Number)
+    .sort((a, b) => {
+      // Adjust month numbers to be relative to current month
+      const adjustMonth = (month) => {
+        const m = parseInt(month);
+        return m >= parseInt(currentMonth) ? m : m + 12;
+      };
+      return adjustMonth(a) - adjustMonth(b);
+    });
+
+  // Look through months in order
+  for (const monthKey of monthKeys) {
+    const monthData = parsedDates[monthKey];
+    if (monthData.availableDates && monthData.availableDates.length > 0) {
+      // Sort dates within the month
+      const sortedDates = monthData.availableDates.sort((a, b) => {
+        return new Date(a.date.split('/').reverse().join('-')) -
+          new Date(b.date.split('/').reverse().join('-'));
+      });
+      return sortedDates[0].date;
+    }
+  }
+
+  return null;
 };
 // Example usage of getFirstAvailableDate
 

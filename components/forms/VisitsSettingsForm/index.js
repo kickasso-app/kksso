@@ -18,6 +18,7 @@ import {
   TextInput,
   Text,
   Heading,
+  RadioButtonGroup,
 } from "grommet";
 
 import Button from "components/Button";
@@ -40,18 +41,19 @@ export default function VisitsSettingsForm({
     textStudio,
     location,
     district,
+    has_no_visits,
   },
 }) {
   const { user } = useAuth();
   const {
     updateAccount,
-    contextAvailailbity,
-    updateContextAvailailbity,
     loading,
     isUpdateSuccess,
     isUpdateError,
   } = useAccount();
 
+
+  const [disabledVisits, setDisabledVisits] = useState(has_no_visits ?? false);
   const [values, setValues] = useState({
     availability,
   });
@@ -124,11 +126,18 @@ export default function VisitsSettingsForm({
     }
   };
   async function updateProfile(event) {
-    const updates = values;
+    const updates = event.target.value;
+    //console.log(updates);
+    await updateAccount(updates, user);
+  }
 
+  async function updateProfileForDisabledVisits(event) {
+    const isDisabled = event.target.value === 'Disable' ? true : false;
+    const updates = { "has_no_visits": isDisabled };
     //console.log(updates);
 
     await updateAccount(updates, user);
+    setDisabledVisits(isDisabled);
   }
 
   const fieldMargin = { vertical: "large" };
@@ -154,6 +163,24 @@ export default function VisitsSettingsForm({
             Your Visit Times
           </Heading>
 
+          <Box margin={textMargin}>
+            <Heading level={4} size="small" margin={{ bottom: "small" }}>
+              Disable Visits
+            </Heading>
+            <Text margin={{ bottom: "small" }}>
+              Toggle to stop receiving visit requests. You can re-enable visits later.
+            </Text>
+            <Box direction="row" gap="small">
+              <RadioButtonGroup
+                name="hasNoVisits"
+                options={['Enable', 'Disable']}
+                value={disabledVisits ? 'Disable' : 'Enable'}
+                onChange={updateProfileForDisabledVisits}
+              />
+            </Box>
+            <br />
+          </Box>
+          {disabledVisits || (<>
           <Heading level={4} size="medium" margin={textMargin}>
             Weekly Availability
           </Heading>
@@ -229,7 +256,7 @@ export default function VisitsSettingsForm({
                 )}
               </>
             )}
-          </Form>
+            </Form></>)}
         </Grid>
       </Box>
     </Box>
