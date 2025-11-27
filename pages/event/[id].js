@@ -254,26 +254,42 @@ const Event = () => {
                   </>
                 )}
 
-                {studioBasic && !isPastDate(event?.date) && (
-                  <>
-                    <Heading level="3" size="medium" margin={headingMargin}>
-                      Request to Join
-                    </Heading>
-                    <EventRequestForm
-                      artistEmail={studioBasic.email}
-                      artistName={studioBasic.name}
-                      studioID={studioBasic.id}
-                      studio_uuid={event.studio_uuid}
-                      event_uuid={event.id}
-                      event_date={event.date}
-                      event_date_time={
-                        readableDate(event.date) +
-                        " at " +
-                        event.time.toLowerCase()
-                      }
-                    />
-                  </>
-                )}
+                {studioBasic &&
+                  !isPastDate(event?.date) &&
+                  (event?.isWithoutRegistration === false ? (
+                    <>
+                      <Heading level="3" size="medium" margin={headingMargin}>
+                        Request to Join
+                      </Heading>
+                      <EventRequestForm
+                        artistEmail={studioBasic.email}
+                        artistName={studioBasic.name}
+                        studioID={studioBasic.id}
+                        studio_uuid={event.studio_uuid}
+                        event_uuid={event.id}
+                        event_date={event.date}
+                        event_date_time={
+                          readableDate(event.date) +
+                          " at " +
+                          event.time.toLowerCase()
+                        }
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <Heading level="3" size="medium" margin={headingMargin}>
+                        Join the event
+                      </Heading>
+                      <Paragraph>
+                        This is an open event, and there is no registration
+                        needed. You can simply show up to take part.
+                      </Paragraph>
+                      <Box margin={sectionMargin}>
+                        <hr />
+                      </Box>
+                    </>
+                  ))}
+
                 {event?.contact && (
                   <>
                     <Heading level="3" size="medium" margin={headingMargin}>

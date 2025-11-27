@@ -32,6 +32,7 @@ const initialValues = {
   eventTitle: "",
   eventDate: "",
   eventTime: "",
+  isWithoutRegistration: false,
   fee: "",
   currentNJoined: "",
   maxNJoined: "",
@@ -76,7 +77,7 @@ const EventEditForm = () => {
   } = useEvents();
 
   const [values, setValues] = useState(initialValues);
-  const [isEventEdited, setIsEventEdited] = useState(false); 
+  const [isEventEdited, setIsEventEdited] = useState(false);
 
   async function handleUpdateEvent(event) {
     event.preventDefault();
@@ -94,6 +95,7 @@ const EventEditForm = () => {
       title: values.eventTitle,
       date: values.eventDate,
       time: values.eventTime,
+      isWithoutRegistration: values.isWithoutRegistration,
       currentNJoined: values.currentNJoined,
       maxNJoined: values.maxNJoined,
       fee: values.fee,
@@ -134,6 +136,7 @@ const EventEditForm = () => {
           eventTitle: event.title ?? "",
           eventDate: event.date ?? "",
           eventTime: event.time ?? "",
+          isWithoutRegistration: event.isWithoutRegistration ?? false,
           currentNJoined: event.currentNJoined ?? "",
           maxNJoined: event.maxNJoined ?? "",
           miniDescription: event.miniDescription ?? "",
@@ -144,13 +147,11 @@ const EventEditForm = () => {
           link: event.link ?? "",
           isPublished: event.isPublished ?? false,
           location: event.location == "Studio" ? "Studio" : "Other",
-          locationOther:
-            event.location !== "Studio" ? event.location : "",
+          locationOther: event.location !== "Studio" ? event.location : "",
         });
       }
     }
     fetchData();
-
   }, [user, id, event]);
 
   return (
@@ -173,7 +174,10 @@ const EventEditForm = () => {
           <Grid fluid>
             <Form
               value={values}
-              onChange={(nextValue) => { setValues(nextValue); setIsEventEdited(true); }}
+              onChange={(nextValue) => {
+                setValues(nextValue);
+                setIsEventEdited(true);
+              }}
               onSubmit={handleUpdateEvent}
               validate="submit"
             >
@@ -261,6 +265,23 @@ const EventEditForm = () => {
                   name="eventTime"
                   placeholder="e.g. 6-8 pm"
                   required
+                />
+              </FormField>
+              <FormField
+                label="Remove Event Registration Form"
+                name="isWithoutRegistration"
+                margin={fieldMargin}
+              >
+                <CheckBox
+                  name="isWithoutRegistration"
+                  checked={values.isWithoutRegistration}
+                  onChange={(e) =>
+                    setValues((prev) => ({
+                      ...prev,
+                      isWithoutRegistration: e.target.checked,
+                    }))
+                  }
+                  label="Check this if your event is open and does not require registration"
                 />
               </FormField>
               <FormField
@@ -387,18 +408,13 @@ const EventEditForm = () => {
               <FormField label="Status" name="isPublished" margin={fieldMargin}>
                 <Select
                   name="isPublished"
-                  options={[
-                    { label: "Published", value: true },
-                    { label: "Not Published", value: false },
-                  ]}
-                  labelKey="label"
-                  valueKey={{ key: "value", reduce: true }}
+                  options={["Published", "Not Published"]}
                   placeholder="Select"
-                  value={values.isPublished}
-                  onChange={({ value: nextValue }) =>
+                  value={values.isPublished ? "Published" : "Not Published"}
+                  onChange={({ option }) =>
                     setValues((prev) => ({
                       ...prev,
-                      isPublished: nextValue,
+                      isPublished: option === "Published",
                     }))
                   }
                   required
