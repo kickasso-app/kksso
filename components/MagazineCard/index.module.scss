@@ -1,0 +1,53 @@
+.imgContainer {
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid $color--bg-white;
+  border-radius: 0.5rem;
+}
+
+/* basic image styling */
+img.cardImg {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: 0.1s ease-in-out all;
+  box-sizing: border-box;
+  object-fit: cover;
+}
+
+/* only handle stacking on small screens; desktop sizing is handled by Grommet Box basis/flex props */
+.row {
+  display: flex;
+}
+
+@media (max-width: 600px) {
+  .row {
+    flex-direction: column;
+  }
+
+  /* spacing between stacked image and content */
+  .imgContainer {
+    margin-bottom: 1rem;
+  }
+}
+
+/* simple hover animation */
+@keyframes burns {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1.125);
+  }
+}
+
+img.cardImg:hover {
+  animation: burns 12s;
+}
+
+svg.icon {
+  vertical-align: top;
+  margin-right: 0.5rem;
+  margin-top: 0.1rem;
+}

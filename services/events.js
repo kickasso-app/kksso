@@ -31,7 +31,6 @@ const EventsProvider = ({ children }) => {
     }
 
     let { data: supaEvents, error } = await supabaseQuery
-
       .is("isPublished", true)
       .order("created_at", { ascending: false });
     if (supaEvents?.length) {
@@ -73,7 +72,6 @@ const EventsProvider = ({ children }) => {
       let { data: supaEvent, error } = await supabase
         .from("events")
         .select("*")
-
         .eq("id", event_id)
         .single();
       if (error) {
