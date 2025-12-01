@@ -29,12 +29,7 @@ const hours = Array.from({ length: 12 }, (_, i) => {
   return `${displayHour}:00 ${period}`;
 });
 
-const VisitFormOpen = ({
-  artistEmail,
-  artistName,
-  studioID,
-  studio_uuid,
-}) => {
+const VisitFormOpen = ({ artistEmail, artistName, studioID, studio_uuid }) => {
   const { createRequest } = useRequests();
 
   const initValues = {
@@ -54,15 +49,12 @@ const VisitFormOpen = ({
   const [isEmailSent, setIsEmailSent] = useState(false);
   const [isEmailError, setIsEmailError] = useState(false);
 
-
-  const readableDate = (date) =>
-    moment(date).format("dddd D MMMM");
+  const readableDate = (date) => moment(date).format("dddd D MMMM");
 
   const onSelectDate = (date) => {
-
-    if(date!== selectedDate){
-        // date is an ISO-like YYYY-MM-DD string from Grommet Calendar
-        setSelectedDate(date);
+    if (date !== selectedDate) {
+      // date is an ISO-like YYYY-MM-DD string from Grommet Calendar
+      setSelectedDate(date);
     }
   };
 
@@ -72,19 +64,25 @@ const VisitFormOpen = ({
     const [timeStr, period] = t.split(" ");
     const [hours] = timeStr.split(":");
     let hour = parseInt(hours);
-    
+
     // Convert to 24 hour format
     if (period === "PM" && hour < 12) hour += 12;
     if (period === "AM" && hour === 12) hour = 0;
-    
-    const dateObj = new Date(Number(year), Number(month) - 1, Number(day), hour, 0);
+
+    const dateObj = new Date(
+      Number(year),
+      Number(month) - 1,
+      Number(day),
+      hour,
+      0
+    );
     return dateObj.toISOString();
   };
 
   const handleSendRequest = async () => {
     const request_id = self.crypto.randomUUID();
 
-    const chosenDate = moment(selectedDate).format('YYYY-MM-DD');
+    const chosenDate = moment(selectedDate).format("YYYY-MM-DD");
     const chosenTime = values.request_time;
 
     const emailVariables = {
@@ -103,70 +101,65 @@ const VisitFormOpen = ({
     setIsEmailError(false);
     setIsSendingRequest(true);
 
+    try {
+      const { requestCreated: requestinDB, error: errorInsertDB } =
+        await createRequest({
+          request_type: "visit",
+          studio_uuid: studio_uuid,
+          event_uuid: null,
+          ...emailVariables,
+        });
 
+      const emailRequestDetails = {
+        subject: "You got a new studio visit request!",
+        toEmail: [emailVariables.to_email],
+        fromEmail: "Arti <requests@arti.my>",
+      };
 
-    // try {
-    //   const { requestCreated: requestinDB, error: errorInsertDB } =
-    //     await createRequest({
-    //       request_type: "visit",
-    //       studio_uuid: studio_uuid,
-    //       event_uuid: null,
-    //       ...emailVariables,
-    //     });
+      const { emailSent: emailRequestSent, error: errorRequest } =
+        await sendEmail({
+          emailTemplate: "visitRequest",
+          emailDetails: emailRequestDetails,
+          emailVariables,
+        });
 
-    //   const emailRequestDetails = {
-    //     subject: "You got a new studio visit request!",
-    //     toEmail: [emailVariables.to_email],
-    //     fromEmail: "Arti <requests@arti.my>",
-    //   };
+      const emailRequestConfirmationDetails = {
+        subject: `We sent your studio visit request to ${emailVariables.to_name}`,
+        toEmail: [emailVariables.requestor_email],
+        fromEmail: "Arti <requests@arti.my>",
+      };
 
-    //   const { emailSent: emailRequestSent, error: errorRequest } =
-    //     await sendEmail({
-    //       emailTemplate: "visitRequest",
-    //       emailDetails: emailRequestDetails,
-    //       emailVariables,
-    //     });
+      const { emailSent: emailConfirmationSent, error: errorConfirmation } =
+        await sendEmail({
+          emailTemplate: "visitRequestConfirmation",
+          emailDetails: emailRequestConfirmationDetails,
+          emailVariables,
+        });
 
-    //   const emailRequestConfirmationDetails = {
-    //     subject: `We sent your studio visit request to ${emailVariables.to_name}`,
-    //     toEmail: [emailVariables.requestor_email],
-    //     fromEmail: "Arti <requests@arti.my>",
-    //   };
-
-    //   const { emailSent: emailConfirmationSent, error: errorConfirmation } =
-    //     await sendEmail({
-    //       emailTemplate: "visitRequestConfirmation",
-    //       emailDetails: emailRequestConfirmationDetails,
-    //       emailVariables,
-    //     });
-
-    //   if (requestinDB && emailRequestSent && emailConfirmationSent) {
-    //     setIsEmailSent(true);
-    //   }
-    //   if (errorRequest || errorConfirmation || errorInsertDB) {
-    //     console.log(
-    //       errorInsertDB?.message +
-    //         " " +
-    //         errorRequest?.message +
-    //         " " +
-    //         errorConfirmation?.message
-    //     );
-    //     setIsEmailError(true);
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    //   setIsEmailError(true);
-    // } finally {
-    //   setIsSendingRequest(false);
-    // }
+      if (requestinDB && emailRequestSent && emailConfirmationSent) {
+        setIsEmailSent(true);
+      }
+      if (errorRequest || errorConfirmation || errorInsertDB) {
+        console.log(
+          errorInsertDB?.message +
+            " " +
+            errorRequest?.message +
+            " " +
+            errorConfirmation?.message
+        );
+        setIsEmailError(true);
+      }
+    } catch (error) {
+      console.log(error);
+      setIsEmailError(true);
+    } finally {
+      setIsSendingRequest(false);
+    }
   };
 
   return (
     <Box align="center" justify="center">
-      <Box
-        width="large"
-        margin={{ vertical: "medium" }}
-      >
+      <Box width="large" margin={{ vertical: "medium" }}>
         <Form
           id="select-visit-date"
           values={values}
@@ -196,7 +189,9 @@ const VisitFormOpen = ({
                   name="request_time"
                   options={hours}
                   value={values.request_time || ""}
-                  onChange={({ option }) => setValues(v => ({ ...v, request_time: option }))}
+                  onChange={({ option }) =>
+                    setValues((v) => ({ ...v, request_time: option }))
+                  }
                   placeholder="Select time"
                 />
               </FormField>
@@ -261,10 +256,7 @@ const VisitFormOpen = ({
               ]}
             />
           </FormField>
-          <FormField
-            label={<Text>Reason of visit </Text>}
-            name="visit_reason"
-          >
+          <FormField label={<Text>Reason of visit </Text>} name="visit_reason">
             <TextArea
               name="visit_reason"
               placeholder="Just curious, Want to collaborate on a project, or Want to buy a specific artwork, or something else... &#10;. &#10;Feel free to add here a personal message, a little something about yourself, and what you like about their work."
@@ -280,7 +272,9 @@ const VisitFormOpen = ({
             <Button
               type="submit"
               btnStyle="filled"
-              disabled={!selectedDate || !values.request_time || isSendingRequest}
+              disabled={
+                !selectedDate || !values.request_time || isSendingRequest
+              }
             >
               Request a visit
             </Button>
