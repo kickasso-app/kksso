@@ -30,18 +30,18 @@ const MagazinePost = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const [studioBasic, setStudioBasic] = useState(null);
-  const [studioLink, setStudioLink] = useState(null);
+  // const [studioBasic, setStudioBasic] = useState(null);
+  // const [studioLink, setStudioLink] = useState(null);
 
   useEffect(() => {
     async function fetchMagPost() {
       if (slug && (!magPost || magPost?.slug !== slug)) {
         setLoading(true);
         setError(false);
-        console.log("fetching post ", slug);
+        // console.log("fetching post ", slug);
         let tempMagPost = await fetchMagazinePost({ magpost_slug: slug });
         if (tempMagPost?.id) {
-          console.log(tempMagPost);
+          // console.log(tempMagPost);
           setMagPost(tempMagPost);
         } else {
           setError("Unable to fetch this magazine article");

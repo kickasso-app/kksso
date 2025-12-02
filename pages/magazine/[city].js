@@ -5,16 +5,12 @@ import { fetchMagazinePosts } from "services/magazine";
 import { useCities } from "services/city";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
-import Masonry from "react-masonry-css";
 import { Box, Heading, Text } from "grommet";
 
 import SelectLocation from "components/SelectLocation";
 
 import MagPostCard from "components/MagazineCard";
 import { titleCase, undoSlug } from "services/helpers/textFormat";
-
-// Optionally reuse masonry styles from StudiosFilter or create your own
-import styles from "components/StudiosFilter/index.module.scss";
 
 export default function Magazine() {
   const router = useRouter();
@@ -41,11 +37,16 @@ export default function Magazine() {
   // Second Effect: Fetch studios when city changes
   useEffect(() => {
     async function fetchMagPosts() {
+      setLoading(true);
+      setError(false);
       let tempPosts = await fetchMagazinePosts({ selectedCity: selectedCity });
       if (tempPosts?.length) {
-        console.log(tempPosts);
+        // console.log(tempPosts);
         setMagPosts(tempPosts);
+      } else {
+        setError("Unable to fetch magazine articles");
       }
+      setLoading(false);
     }
 
     if (selectedCity && isDifferentCity) {
@@ -61,7 +62,7 @@ export default function Magazine() {
           <Col xs={12} md={12}>
             <Box pad="xsmall">
               <Heading level={2} margin="small">
-                MagPosts
+                Magzaine
               </Heading>
             </Box>
             {loading && <img src={`/img/loader.svg`} />}
@@ -71,8 +72,6 @@ export default function Magazine() {
                   <Text size="medium">
                     There are no articles in the city{" "}
                     <b>"{titleCase(undoSlug(city))}"</b>
-                    <br />
-                    <br />
                     Please try to check the URL or choose another city from
                     below
                   </Text>
@@ -84,19 +83,9 @@ export default function Magazine() {
             <SelectLocation isBarFullWidth />
             {!loading && !error && magPosts && (
               <Box pad="small">
-                {/* <Masonry
-                  breakpointCols={{
-                    default: 2,
-                    960: 2,
-                    600: 1,
-                  }}
-                  className={styles.masonryGrid}
-                  columnClassName={styles.masonryGridColumn}
-                > */}
                 {magPosts.map((magPost) => (
                   <MagPostCard key={magPost.id} magPost={magPost} />
                 ))}
-                {/* </Masonry> */}
               </Box>
             )}
           </Col>
