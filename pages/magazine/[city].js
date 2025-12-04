@@ -14,7 +14,6 @@ import { titleCase, undoSlug } from "services/helpers/textFormat";
 
 export default function Magazine() {
   const router = useRouter();
-  console.log("router", router);
   const { city } = router.query;
 
   const { selectedCity, selectCity } = useCities();
