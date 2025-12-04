@@ -44,11 +44,11 @@ const fetchMagazinePost = async ({ magpost_slug }) => {
 
 // Images
 
-async function fileExists(bucketName, filePath, fileName, listLarge = false) {
+async function magazineImageExists(bucketName, filePath, fileName) {
   const { data, error } = await supabase.storage
     .from(bucketName)
     .list(filePath, {
-      limit: listLarge ? 10 : 4,
+      limit: 15,
       sortBy: { column: "name", order: "asc" },
     });
 
@@ -62,36 +62,37 @@ async function fileExists(bucketName, filePath, fileName, listLarge = false) {
 }
 
 async function downloadMagazineImage({ imgPath, postDownload }) {
-  try {
-    const { data, error } = await supabase.storage
-      .from("magazine")
-      .download(imgPath);
-    if (error) {
-      throw error;
+  const [slug, fileName] = imgPath.split("/");
+
+  const doesImgExist = await magazineImageExists("magazine", slug, fileName);
+
+  if (doesImgExist) {
+    try {
+      const { data, error } = await supabase.storage
+        .from("magazine")
+        .download(imgPath);
+      if (error) {
+        throw error;
+      }
+      const url = URL.createObjectURL(data);
+      if (postDownload) {
+        postDownload(url);
+      }
+      return url;
+    } catch (error) {
+      console.log("Error downloading image: ", error.message);
     }
-    const url = URL.createObjectURL(data);
-    if (postDownload) {
-      postDownload(url);
-    }
-    return url;
-  } catch (error) {
-    console.log("Error downloading image: ", error.message);
+    return false;
+  } else {
+    return false;
   }
-  return false;
 }
 
 async function downloadMagazineThumbnail({ slug }) {
-  const doesThumbnailImgExist = await fileExists(
-    "magazine",
-    slug,
-    "small.jpg",
-    true
-  );
-
-  const imgPath = `${slug}${doesThumbnailImgExist ? "/small.jpg" : "/0.jpg"}`;
-
+  const imgPath = slug + "/thumbnail.jpg";
   let url = await downloadMagazineImage({
-    imgPath,
+    imgPath: imgPath,
+    postDownload: null,
   });
 
   return url ?? false;
@@ -100,7 +101,6 @@ async function downloadMagazineThumbnail({ slug }) {
 export {
   fetchMagazinePosts,
   fetchMagazinePost,
-  fileExists,
   downloadMagazineImage,
   downloadMagazineThumbnail,
 };

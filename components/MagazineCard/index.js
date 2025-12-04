@@ -6,14 +6,19 @@ import moment from "moment";
 import ProgressiveImage from "react-progressive-image";
 
 import { downloadMagazineThumbnail } from "services/magazine";
+import { capitalizeFirstLetter } from "services/helpers/textFormat";
+
+import { Hash } from "react-feather";
+
 import styles from "./index.module.scss";
 
-const readableDate = (date) => moment(date, "YYYY-MM-DD").format("D MMM 'YY");
+const readableDate = (date) =>
+  moment(date, "YYYY-MM-DD").format("MMMM D, YYYY");
 
 export default function MagPostCard({ magPost }) {
   const router = useRouter();
   const [imgUrl, setImgUrl] = useState(false);
-  const magPostMargin = { vertical: "1rem" };
+  const magPostMargin = { vertical: "1.5rem" };
   const detailsMargin = { vertical: "0.5rem" };
   const size = useContext(ResponsiveContext);
 
@@ -30,16 +35,15 @@ export default function MagPostCard({ magPost }) {
 
   return (
     <>
-      <Box
-        direction={size === "small" ? "column" : "row"}
-        gap="medium"
-        fill="horizontal"
-        className={styles.row}
-      >
-        <Box basis="33%" flex={false} className={styles.imgBox}>
-          {/* <Image src="path-to-your-image.jpg" fit="cover" /> */}
-          <div className={styles.imgContainer}>
-            <Link href={magPostLink}>
+      <Link href={magPostLink}>
+        <Box
+          direction={size === "small" ? "column" : "row"}
+          gap="medium"
+          fill="horizontal" // Ensures the Box takes full width
+        >
+          <Box basis="33%" flex={false} className={styles.imgBox}>
+            {/* <Image src="path-to-your-image.jpg" fit="cover" /> */}
+            <div className={styles.imgContainer}>
               <a onClick={() => openMagPost()}>
                 <ProgressiveImage src={imgUrl} placeholder={`/img/loader.svg`}>
                   {(src, loading) => (
@@ -51,21 +55,31 @@ export default function MagPostCard({ magPost }) {
                   )}
                 </ProgressiveImage>
               </a>
-            </Link>
-          </div>
-        </Box>
-        <Box basis="67%" flex className={styles.contentBox}>
-          <Box>
-            <Heading level="3" margin={magPostMargin}>
+            </div>
+          </Box>
+          <Box basis="67%" flex fill className={styles.contentBox}>
+            <Heading level="2" margin={magPostMargin}>
               {magPost.title}
             </Heading>
-            {/* <Paragraph margin={detailsMargin}>
-           on {readableDate(magPost.date)}{" "}
-        </Paragraph> */}
-            <Paragraph margin={detailsMargin}>{magPost.description}</Paragraph>
-          </Box>
+            <Heading
+              level="4"
+              margin={size === "small" ? detailsMargin : magPostMargin}
+              fill
+            >
+              {magPost.subtitle}
+            </Heading>
+            <Paragraph margin={detailsMargin}>
+              {readableDate(magPost.date)}{" "}
+            </Paragraph>
+            {magPost.tags && (
+              <Paragraph margin={detailsMargin}>
+                <Hash size={18} strokeWidth="2" color="#4b4b4b" fill="#fff" />
+                {" " + magPost.tags.map(capitalizeFirstLetter).join(", ")}
+              </Paragraph>
+            )}
+          </Box>{" "}
         </Box>
-      </Box>
+      </Link>
     </>
   );
 }

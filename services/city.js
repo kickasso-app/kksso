@@ -34,7 +34,7 @@ const CityProvider = ({ children }) => {
   };
 
   const selectCity = async (city) => {
-    console.log("selectCity called with:", city);
+    // console.log("selectCity called with:", city);
     if (!citiesRef.current.length) {
       await fetchCities();
     }
