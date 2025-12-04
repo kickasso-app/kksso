@@ -7,7 +7,6 @@ import { useAuth } from "services/auth";
 import { useCities } from "services/city";
 
 import NavButton from "./NavButton";
-// import Button from "components/Button"; // No longer used
 import ProfileButton from "./ProfileButton";
 
 import MENU_LINKS from "config/menuLinks";
@@ -32,7 +31,7 @@ const Header = () => {
 
   return (
     <div className={styles.header}>
-      <Box margin={{ vertical: "0.5rem", horizontal: "small" }} pad="xsmall">
+      <Box margin={{ vertical: "small", horizontal: "small" }} pad="xsmall">
         {size === "small" ? (
           <Box direction="row" align="center" justify="between" fill>
             <Box width="xsmall">
@@ -44,7 +43,7 @@ const Header = () => {
             <button
               onClick={() => setMenuOpen(true)}
               aria-label="Open menu"
-              className={styles.menuicon}
+              className={styles.menuIcon}
             >
               <MenuIcon size={28} strokeWidth="1" color="#4b4b4b" fill="#fff" />
             </button>
@@ -55,7 +54,7 @@ const Header = () => {
               >
                 <button
                   onClick={() => setMenuOpen(false)}
-                  className={styles.menuiconclose}
+                  className={styles.menuIconClose}
                   aria-label="Close menu"
                 >
                   <CloseIcon
@@ -71,6 +70,11 @@ const Header = () => {
                   align="center"
                   justify="center"
                 >
+                  <NavButton
+                    path={"/"}
+                    label={"Home"}
+                    onClick={() => setMenuOpen(false)}
+                  />
                   {MENU_LINKS.map((button) => (
                     <NavButton
                       key={button.path}

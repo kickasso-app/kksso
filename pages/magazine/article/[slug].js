@@ -79,7 +79,7 @@ const MagazinePost = () => {
 
   return (
     <WithFooter>
-      <Grid fluid className={styles.magazinearticle}>
+      <Grid fluid className={styles.magazineArticle}>
         <Col xs={12}>
           {error && error.code !== "22P02" && (
             <strong>Error: {JSON.stringify(error)}</strong>
@@ -94,13 +94,19 @@ const MagazinePost = () => {
             </Box>
           ) : (
             <>
-              <ChevronLeft className={styles.icon} size={16} />{" "}
-              <Link
-                href={`/magazine/` + magPost.cityLocation[0].toLowerCase()}
-                className={styles.backlink}
+              <Box
+                margin={{ vertical: "medium", horizontal: "small" }}
+                direction="row"
+                align="center"
               >
-                BACK
-              </Link>
+                <ChevronLeft className={styles.icon} size={16} />{" "}
+                <Link
+                  href={`/magazine/` + magPost.cityLocation[0].toLowerCase()}
+                  className={styles.backlink}
+                >
+                  BACK
+                </Link>
+              </Box>
               {imgUrl && (
                 <Box
                   align="center"

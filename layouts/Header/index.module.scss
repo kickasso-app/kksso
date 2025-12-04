@@ -1,14 +1,14 @@
 .header {
-  .menuicon {
+  .menuIcon {
     background: none;
     border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
     margin-left: auto;
-    padding: 0;
+    padding-right: 0.5rem;
   }
-  .menuiconclose {
+  .menuIconClose {
     position: absolute;
     top: 24px;
     right: 24px;
