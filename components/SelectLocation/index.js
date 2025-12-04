@@ -16,13 +16,8 @@ export const SelectLocation = ({ isBarFullWidth = false }) => {
 
   const router = useRouter();
 
-  const isStudiosPage = router.pathname.includes("/studios/");
-  const isEventsPage = router.pathname.includes("/events/");
-
-  const baseRedirect = isStudiosPage
-    ? "/studios/"
-    : isEventsPage
-    ? "/events/"
+  const baseRedirect = router.pathname.split("/")[1]
+    ? `/${router.pathname.split("/")[1]}/`
     : null;
 
   useEffect(() => {

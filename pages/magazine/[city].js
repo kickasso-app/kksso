@@ -5,7 +5,7 @@ import { fetchMagazinePosts } from "services/magazine";
 import { useCities } from "services/city";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
-import { Box, Heading, Text } from "grommet";
+import { Box, Heading, Paragraph, Text } from "grommet";
 
 import SelectLocation from "components/SelectLocation";
 
@@ -14,6 +14,7 @@ import { titleCase, undoSlug } from "services/helpers/textFormat";
 
 export default function Magazine() {
   const router = useRouter();
+  console.log("router", router);
   const { city } = router.query;
 
   const { selectedCity, selectCity } = useCities();
@@ -61,9 +62,13 @@ export default function Magazine() {
         <Row>
           <Col xs={12} md={12}>
             <Box pad="xsmall">
-              <Heading level={2} margin="small">
+              <Heading level={2} margin="xsmall">
                 Magzaine
               </Heading>
+              <Text margin="xsmall" fill>
+                A series of studio interviews and articles covering local art
+                topics and events
+              </Text>
             </Box>
             {loading && <img src={`/img/loader.svg`} />}
             {error && (
@@ -71,7 +76,8 @@ export default function Magazine() {
                 <Box pad={{ horizontal: "medium", vertical: "large" }}>
                   <Text size="medium">
                     There are no articles in the city{" "}
-                    <b>"{titleCase(undoSlug(city))}"</b>
+                    <b>"{titleCase(undoSlug(city))}"</b>. <br />
+                    <br />
                     Please try to check the URL or choose another city from
                     below
                   </Text>

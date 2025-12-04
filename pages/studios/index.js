@@ -1,34 +1,17 @@
 import { useEffect } from "react";
-import { useStudios } from "services/studios";
+import { useRouter } from "next/router";
 
-import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
-import Link from "next/link";
+import DEFFAULT_CITY from "config/default-city";
 
-import StudiosFilter from "components/StudiosFilter/index.js";
-
-const Studios = () => {
-  const { studios, fetchAllStudios, loading, error } = useStudios();
+export default function StudiosAll() {
+  const router = useRouter();
 
   useEffect(() => {
-    if (!studios.length && !error) {
-      fetchAllStudios();
+    if (router && !router.query?.city) {
+      router.push("/studios/" + DEFFAULT_CITY);
+      return;
     }
-  }, [studios, error]);
+  }, [router]);
 
-  return (
-    <Grid fluid align="center">
-      <section>
-        <Row>
-          <Col xs={12} md={12}>
-            {loading || !studios.length ? (
-              <img src={`/img/loader.svg`} />
-            ) : (
-              <StudiosFilter studios={studios} />
-            )}
-          </Col>
-        </Row>
-      </section>
-    </Grid>
-  );
-};
-export default Studios;
+  return <></>;
+}
