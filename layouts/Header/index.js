@@ -84,7 +84,7 @@ const Header = () => {
                     />
                   ))}
                   {session ? (
-                    <ProfileButton />
+                    <ProfileButton onMenuItemClick={() => setMenuOpen(false)} />
                   ) : (
                     <NavButton
                       path={"/join"}
