@@ -33,14 +33,15 @@ const CityProvider = ({ children }) => {
     }
   };
 
-  const selectCity = async (city) => {
-    // console.log("selectCity called with:", city);
+  const selectCity = async (citySlug) => {
     if (!citiesRef.current.length) {
       await fetchCities();
     }
-    if (citiesRef.current.map((c) => c.city).includes(city)) {
-      // console.log("selecting city", city);
-      setSelectedCity(city);
+
+    if (selectedCity?.slugName === citySlug) return;
+    const matchingCity = citiesRef.current.find((c) => c.slugName === citySlug);
+    if (matchingCity) {
+      setSelectedCity(matchingCity);
     } else {
       setError("City not found");
       setSelectedCity(null);

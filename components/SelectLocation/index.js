@@ -8,8 +8,6 @@ import { Grid, Row } from "react-flexbox-grid/dist/react-flexbox-grid";
 
 import { Box, Button, Text, ResponsiveContext } from "grommet";
 
-import { createSlug } from "services/helpers/textFormat";
-
 export const SelectLocation = ({ isBarFullWidth = false }) => {
   const size = useContext(ResponsiveContext);
   const { cities, fetchCities, selectCity, selectedCity } = useCities();
@@ -24,6 +22,7 @@ export const SelectLocation = ({ isBarFullWidth = false }) => {
     async function fetchData() {
       if (!cities.length) {
         await fetchCities();
+        //console.log("Fetched cities inSelectLocation:", cities);
       }
     }
     fetchData();
@@ -40,7 +39,7 @@ export const SelectLocation = ({ isBarFullWidth = false }) => {
           {cities?.length > 0 &&
             cities
               .filter(({ count }) => count > 0)
-              .map(({ city, published }) => {
+              .map(({ city, published, slugName }) => {
                 return (
                   <Box pad={"small"} key={city}>
                     <Button
@@ -55,10 +54,10 @@ export const SelectLocation = ({ isBarFullWidth = false }) => {
                           </Text>
                         </Box>
                       }
-                      active={selectedCity === city}
+                      active={selectedCity?.slugName === slugName}
                       disabled={published === false}
                       onClick={async () => {
-                        await selectCity(city);
+                        await selectCity(slugName);
                       }}
                       align="center"
                       gap={size === "small" ? "xsmall" : "small"}
@@ -67,9 +66,7 @@ export const SelectLocation = ({ isBarFullWidth = false }) => {
                       pad={size === "small" ? "small" : "medium"}
                       hoverIndicator="#FFC0CB"
                       a11yTitle="X Available Updates"
-                      href={
-                        baseRedirect ? baseRedirect + createSlug(city) : null
-                      }
+                      href={baseRedirect ? baseRedirect + slugName : null}
                     />
                   </Box>
                 );

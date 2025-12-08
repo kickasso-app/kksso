@@ -2,8 +2,9 @@ import { supabase } from "services/supabase";
 
 const fetchMagazinePosts = async ({ selectedCity }) => {
   let supabaseQuery = supabase.from("magazine").select("*");
-  if (selectedCity !== false) {
-    supabaseQuery = supabaseQuery.contains("cityLocation", [selectedCity]);
+  if (selectedCity?.city) {
+    const cityName = selectedCity.city;
+    supabaseQuery = supabaseQuery.contains("cityLocation", [cityName]);
   }
 
   try {

@@ -10,11 +10,11 @@ import { Box, Heading, Paragraph, Text } from "grommet";
 import SelectLocation from "components/SelectLocation";
 
 import MagPostCard from "components/MagazineCard";
-import { titleCase, undoSlug } from "services/helpers/textFormat";
+import { titleCase } from "services/helpers/textFormat";
 
 export default function Magazine() {
   const router = useRouter();
-  const { city } = router.query;
+  const { city: citySlug } = router.query;
 
   const { selectedCity, selectCity } = useCities();
 
@@ -23,23 +23,25 @@ export default function Magazine() {
   const [magPosts, setMagPosts] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
   // First Effect: Handle city selection
   useEffect(() => {
-    if (!city) return; // Guard clause
+    if (!citySlug) return; // Guard clause
 
-    const cityName = titleCase(undoSlug(city));
-    if (cityName !== selectedCity) {
+    if (citySlug !== selectedCity?.slugName) {
       setIsDifferentCity(true);
-      selectCity(cityName);
+      selectCity(citySlug);
     }
-  }, [city]); // Only depend on URL param changes
+  }, [citySlug]); // Only depend on URL param changes
 
   // Second Effect: Fetch studios when city changes
   useEffect(() => {
     async function fetchMagPosts() {
       setLoading(true);
       setError(false);
-      let tempPosts = await fetchMagazinePosts({ selectedCity: selectedCity });
+      let tempPosts = await fetchMagazinePosts({
+        selectedCity: selectedCity,
+      });
       if (tempPosts?.length) {
         // console.log(tempPosts);
         setMagPosts(tempPosts);
@@ -75,7 +77,7 @@ export default function Magazine() {
                 <Box pad={{ horizontal: "medium", vertical: "large" }}>
                   <Text size="medium">
                     There are no articles in the city{" "}
-                    <b>"{titleCase(undoSlug(city))}"</b>. <br />
+                    <b>"{titleCase(citySlug)}"</b>. <br />
                     <br />
                     Please try to check the URL or choose another city from
                     below

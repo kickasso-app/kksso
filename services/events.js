@@ -26,8 +26,9 @@ const EventsProvider = ({ children }) => {
 
     let supabaseQuery = supabase.from("events").select("*");
 
-    if (selectedCity) {
-      supabaseQuery = supabaseQuery.contains("cityLocation", [selectedCity]);
+    if (selectedCity?.city) {
+      const cityName = selectedCity.city;
+      supabaseQuery = supabaseQuery.contains("cityLocation", [cityName]);
     }
 
     let { data: supaEvents, error } = await supabaseQuery

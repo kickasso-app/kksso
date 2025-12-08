@@ -38,8 +38,9 @@ const StudiosProvider = ({ children }) => {
 
     let supabaseQuery = supabase.from("studios").select(STUDIO_PREVIEW_COLUMNS);
 
-    if (selectedCity) {
-      supabaseQuery = supabaseQuery.contains("location", [selectedCity]);
+    if (selectedCity?.city) {
+      const cityName = selectedCity.city;
+      supabaseQuery = supabaseQuery.contains("location", [cityName]);
     }
     let { data: supaStudios, error } = await supabaseQuery
       .is("published", true)
@@ -101,10 +102,13 @@ const StudiosProvider = ({ children }) => {
 
   const fetchSearchStudios = async (newQuery) => {
     setLoading(true);
+
+    const cityName = selectedCity?.city;
+
     let { data: resultStudios, error } = await supabase
       .from("studios")
       .select(STUDIO_PREVIEW_COLUMNS)
-      .contains("location", [selectedCity])
+      .contains("location", [cityName])
       .is("published", true)
       .is("displayed", true)
       .textSearch("fts", newQuery, {
@@ -196,10 +200,11 @@ const StudiosProvider = ({ children }) => {
 
   const fetchFeaturedStudios = async () => {
     setLoading(true);
+    const cityName = selectedCity?.city;
     let { data: featStudios, error } = await supabase
       .from("studios")
       .select(STUDIO_PREVIEW_COLUMNS)
-      .contains("location", [selectedCity])
+      .contains("location", [cityName])
       .is("published", true)
       .is("displayed", true)
       .is("featured", true)

@@ -11,8 +11,6 @@ import ProfileButton from "./ProfileButton";
 
 import MENU_LINKS from "config/menuLinks";
 
-import { createSlug } from "services/helpers/textFormat";
-
 import styles from "./index.module.scss";
 
 const Header = () => {
@@ -24,7 +22,7 @@ const Header = () => {
   const createPath = (label, path) => {
     const isSpecialLabel = ["Studios", "Events", "Magazine"].includes(label);
     const pathCity = selectedCity
-      ? `${path}/${createSlug(selectedCity)}`
+      ? `${path}/${selectedCity.slugName}`
       : `${path}`;
     return isSpecialLabel ? pathCity : path;
   };
