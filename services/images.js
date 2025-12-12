@@ -100,23 +100,17 @@ async function downloadProfileImage({ userId }) {
   return url ?? false;
 }
 
-async function downloadImages({ userId, postDownload }) {
+async function downloadImages({ userId }) {
+  // console.time("downloadImages:all");
   const { paths } = await listImages({ userId });
   // console.log(paths);
-  const urls = [];
-
-  for (const path of paths) {
-    await downloadImage({
+  const imagePromises = paths.map((path) =>
+    downloadImage({
       imgPath: path,
-      postDownload: (url) => urls.push(url),
-    });
-  }
-
-  if (postDownload) {
-    postDownload();
-  }
-
-  return urls;
+    })
+  );
+  // console.timeEnd('downloadImages:all');
+  return imagePromises;
 }
 
 async function resizeImage({ file, returnSmallerImage = false }) {
