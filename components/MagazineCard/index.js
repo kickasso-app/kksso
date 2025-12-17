@@ -40,6 +40,7 @@ export default function MagPostCard({ magPost }) {
           direction={size === "small" ? "column" : "row"}
           gap="medium"
           fill="horizontal" // Ensures the Box takes full width
+          margin={{ vertical: "small" }}
         >
           <Box basis="33%" flex={false} className={styles.imgBox}>
             {/* <Image src="path-to-your-image.jpg" fit="cover" /> */}
@@ -77,7 +78,7 @@ export default function MagPostCard({ magPost }) {
                 {" " + magPost.tags.map(capitalizeFirstLetter).join(", ")}
               </Paragraph>
             )}
-          </Box>{" "}
+          </Box>
         </Box>
       </Link>
     </>

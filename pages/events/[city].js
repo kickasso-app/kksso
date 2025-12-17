@@ -11,7 +11,7 @@ import { Box, Heading, Text } from "grommet";
 import SelectLocation from "components/SelectLocation";
 
 import EventCard from "components/EventCard";
-import { titleCase, undoSlug } from "services/helpers/textFormat";
+import { titleCase } from "services/helpers/textFormat";
 
 // Optionally reuse masonry styles from StudiosFilter or create your own
 import styles from "components/StudiosFilter/index.module.scss";

@@ -9,6 +9,7 @@ export const STUDIO_COLUMNS = [
   "visitRules",
   "availability",
   "has_no_visits",
+  "magazine_article",
   "languages",
   "website",
   "instagram",

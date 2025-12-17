@@ -9,7 +9,7 @@ import { fetchMagazinePost, downloadMagazineImage } from "services/magazine";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import { Box, Heading, Paragraph, ResponsiveContext, Text } from "grommet";
-import { ChevronLeft, Disc, Globe, Hash } from "react-feather";
+import { ChevronLeft } from "react-feather";
 
 import MagazinePostMarkdown from "./markdown";
 
@@ -22,16 +22,12 @@ const readableDate = (date) =>
 const MagazinePost = () => {
   const router = useRouter();
   const size = useContext(ResponsiveContext);
-  //   const { fetchStudioBasic } = useStudios();
   const [imgUrl, setImgUrl] = useState(false);
   const { slug } = router.query;
 
   const [magPost, setMagPost] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  // const [studioBasic, setStudioBasic] = useState(null);
-  // const [studioLink, setStudioLink] = useState(null);
 
   useEffect(() => {
     async function fetchMagPost() {
@@ -52,23 +48,6 @@ const MagazinePost = () => {
         setLoading(false);
       }
     }
-
-    // async function fetchStudioBasicInfo() {
-    //   if (id && event && event?.id === id) {
-    //     // console.log("fetching studio name and link", event.studio_uuid);
-    //     const studioBasic = await fetchStudioBasic({
-    //       uuid: event.studio_uuid,
-    //     });
-    //     setStudioBasic({
-    //       name: studioBasic?.artist,
-    //       email: studioBasic?.email,
-    //       id: studioBasic?.studio_id,
-    //     });
-    //     if (studioBasic?.published) {
-    //       setStudioLink(`/studio/${studioBasic?.studio_id}`);
-    //     }
-    //   }
-    // }
 
     fetchMagPost();
   }, [slug, magPost]);
@@ -162,8 +141,8 @@ const MagazinePost = () => {
                       <hr />
                     </Box>
 
-                    {/* <Paragraph>{magPost.markdown}</Paragraph> */}
                     <MagazinePostMarkdown markdown={magPost.markdown} />
+
                     <Box margin={{ vertical: "large" }}>
                       <p className={styles.subtitle}>
                         Learn more about the artist's work and their upcoming
