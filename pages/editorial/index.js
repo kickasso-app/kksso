@@ -9,7 +9,7 @@ export default function MagazineDefault() {
   useEffect(() => {
     console.log("router", router);
     if (router && !router.query?.city) {
-      router.push("/magazine/" + DEFFAULT_CITY);
+      router.push("/editorial/" + DEFFAULT_CITY);
       return;
     }
   }, [router]);

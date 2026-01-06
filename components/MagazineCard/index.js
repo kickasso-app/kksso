@@ -5,7 +5,7 @@ import Link from "next/link";
 import moment from "moment";
 import ProgressiveImage from "react-progressive-image";
 
-import { downloadMagazineThumbnail } from "services/magazine";
+import { downloadMagazineThumbnail } from "services/editorial";
 import { capitalizeFirstLetter } from "services/helpers/textFormat";
 
 import { Hash } from "react-feather";
@@ -22,7 +22,7 @@ export default function MagPostCard({ magPost }) {
   const detailsMargin = { vertical: "0.5rem" };
   const size = useContext(ResponsiveContext);
 
-  const magPostLink = "/magazine/article/" + magPost.slug;
+  const magPostLink = "/editorial/article/" + magPost.slug;
   const openMagPost = () => {
     router.push(magPostLink);
   };
@@ -40,7 +40,7 @@ export default function MagPostCard({ magPost }) {
           direction={size === "small" ? "column" : "row"}
           gap="medium"
           fill="horizontal" // Ensures the Box takes full width
-          margin={{ vertical: "small" }}
+          margin={{ vertical: "medium" }}
         >
           <Box basis="33%" flex={false} className={styles.imgBox}>
             {/* <Image src="path-to-your-image.jpg" fit="cover" /> */}
@@ -69,11 +69,11 @@ export default function MagPostCard({ magPost }) {
             >
               {magPost.subtitle}
             </Heading>
-            <Paragraph margin={detailsMargin}>
-              {readableDate(magPost.date)}{" "}
+            <Paragraph margin={detailsMargin} size="small">
+              {readableDate(magPost.date)}
             </Paragraph>
             {magPost.tags && (
-              <Paragraph margin={detailsMargin}>
+              <Paragraph margin={detailsMargin} size="small">
                 <Hash size={18} strokeWidth="2" color="#4b4b4b" fill="#fff" />
                 {" " + magPost.tags.map(capitalizeFirstLetter).join(", ")}
               </Paragraph>

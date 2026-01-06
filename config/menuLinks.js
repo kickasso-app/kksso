@@ -8,8 +8,8 @@ const MENU_LINKS = [
     path: "/events",
   },
   {
-    label: "Magazine",
-    path: "/magazine",
+    label: "Editorial",
+    path: "/editorial",
   },
   {
     label: "about",

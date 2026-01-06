@@ -20,7 +20,7 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const createPath = (label, path) => {
-    const isSpecialLabel = ["Studios", "Events", "Magazine"].includes(label);
+    const isSpecialLabel = ["Studios", "Events", "Editorial"].includes(label);
     const pathCity = selectedCity
       ? `${path}/${selectedCity.slugName}`
       : `${path}`;

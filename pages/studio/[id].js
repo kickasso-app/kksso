@@ -106,7 +106,7 @@ const Studio = () => {
                     <br />
                     <Link
                       href={
-                        `/magazine/article/` +
+                        `/editorial/article/` +
                         studio.magazine_article.article_url
                       }
                     >

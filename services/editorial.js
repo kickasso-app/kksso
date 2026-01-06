@@ -21,13 +21,13 @@ const fetchMagazinePosts = async ({ selectedCity }) => {
       return supaMagPosts;
     }
   } catch (error) {
-    console.log(error?.message || "No Magazine articles were fetched");
+    console.log(error?.message || "No articles were fetched");
     return false;
   }
 };
 
 const fetchMagazinePost = async ({ magpost_slug }) => {
-  // console.log("fetching Magazine Post " + magpost_slug);
+  // console.log("fetching Post " + magpost_slug);
   try {
     let { data: supaMagPost, error } = await supabase
       .from("magazine")
@@ -39,7 +39,7 @@ const fetchMagazinePost = async ({ magpost_slug }) => {
       return supaMagPost;
     }
   } catch (error) {
-    console.error(error.message ?? "No Magazine Post were fetched");
+    console.error(error.message ?? "No Editorial Post were fetched");
   }
 };
 

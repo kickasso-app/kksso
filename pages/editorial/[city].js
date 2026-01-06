@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-import { fetchMagazinePosts } from "services/magazine";
+import { fetchMagazinePosts } from "services/editorial";
 import { useCities } from "services/city";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
@@ -12,7 +12,7 @@ import SelectLocation from "components/SelectLocation";
 import MagPostCard from "components/MagazineCard";
 import { titleCase } from "services/helpers/textFormat";
 
-export default function Magazine() {
+export default function Editorial() {
   const router = useRouter();
   const { city: citySlug } = router.query;
 
@@ -46,7 +46,7 @@ export default function Magazine() {
         // console.log(tempPosts);
         setMagPosts(tempPosts);
       } else {
-        setError("Unable to fetch magazine articles");
+        setError("Unable to fetch articles");
       }
       setLoading(false);
     }
@@ -64,7 +64,7 @@ export default function Magazine() {
           <Col xs={12} md={12}>
             <Box pad="xsmall">
               <Heading level={2} margin="xsmall">
-                Magzaine
+                Editorial
               </Heading>
               <Text margin="xsmall" fill>
                 A series of studio interviews and articles covering local art
