@@ -7,7 +7,7 @@ export default function MagazineDefault() {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("router", router);
+    // console.log("router", router);
     if (router && !router.query?.city) {
       router.push("/editorial/" + DEFFAULT_CITY);
       return;
