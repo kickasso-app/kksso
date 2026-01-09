@@ -26,12 +26,12 @@ const EventsProvider = ({ children }) => {
 
     let supabaseQuery = supabase.from("events").select("*");
 
-    if (selectedCity) {
-      supabaseQuery = supabaseQuery.contains("cityLocation", [selectedCity]);
+    if (selectedCity?.city) {
+      const cityName = selectedCity.city;
+      supabaseQuery = supabaseQuery.contains("cityLocation", [cityName]);
     }
 
     let { data: supaEvents, error } = await supabaseQuery
-
       .is("isPublished", true)
       .order("created_at", { ascending: false });
     if (supaEvents?.length) {
@@ -73,7 +73,6 @@ const EventsProvider = ({ children }) => {
       let { data: supaEvent, error } = await supabase
         .from("events")
         .select("*")
-
         .eq("id", event_id)
         .single();
       if (error) {

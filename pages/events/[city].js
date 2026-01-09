@@ -11,30 +11,29 @@ import { Box, Heading, Text } from "grommet";
 import SelectLocation from "components/SelectLocation";
 
 import EventCard from "components/EventCard";
-import { titleCase, undoSlug } from "services/helpers/textFormat";
+import { titleCase } from "services/helpers/textFormat";
 
 // Optionally reuse masonry styles from StudiosFilter or create your own
 import styles from "components/StudiosFilter/index.module.scss";
 
 export default function Events() {
-  const router = useRouter();
-  const { city } = router.query;
-
   const { events, fetchEvents, loading, error } = useEvents();
   const { selectedCity, selectCity } = useCities();
 
   const [isDifferentCity, setIsDifferentCity] = useState(true);
 
+  const router = useRouter();
+  const { city: citySlug } = router.query;
+
   // First Effect: Handle city selection
   useEffect(() => {
-    if (!city) return; // Guard clause
+    if (!citySlug) return; // Guard clause
 
-    const cityName = titleCase(undoSlug(city));
-    if (cityName !== selectedCity) {
+    if (citySlug !== selectedCity?.slugName) {
       setIsDifferentCity(true);
-      selectCity(cityName);
+      selectCity(citySlug);
     }
-  }, [city]); // Only depend on URL param changes
+  }, [citySlug]); // Only depend on URL param changes
 
   // Second Effect: Fetch studios when city changes
   useEffect(() => {
@@ -60,7 +59,7 @@ export default function Events() {
                 <Box pad={{ horizontal: "medium", vertical: "large" }}>
                   <Text size="medium">
                     There are no events in the city{" "}
-                    <b>"{titleCase(undoSlug(city))}"</b>
+                    <b>"{titleCase(citySlug)}"</b>
                     <br />
                     <br />
                     Please try to check the URL or choose another city from

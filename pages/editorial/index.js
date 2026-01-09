@@ -3,12 +3,13 @@ import { useRouter } from "next/router";
 
 import DEFFAULT_CITY from "config/default-city";
 
-export default function StudiosAll() {
+export default function MagazineDefault() {
   const router = useRouter();
 
   useEffect(() => {
+    // console.log("router", router);
     if (router && !router.query?.city) {
-      router.push("/studios/" + DEFFAULT_CITY);
+      router.push("/editorial/" + DEFFAULT_CITY);
       return;
     }
   }, [router]);
