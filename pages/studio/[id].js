@@ -97,7 +97,11 @@ const Studio = () => {
                   )}
                 </Row>
                 {/*  Main Text  */}
-                {studio.textLong && makeParagraphs(studio.textLong)}
+                {studio.textLong && (
+                  <div dir={studio?.txtDirection}>
+                    {makeParagraphs(studio.textLong)}
+                  </div>
+                )}
 
                 {studio.magazine_article && (
                   <Paragraph size="medium" margin={sectionMargin} fill>

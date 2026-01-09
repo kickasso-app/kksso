@@ -161,7 +161,9 @@ const Event = () => {
                 <Heading level="3" size="medium" margin={headingMargin}>
                   Details
                 </Heading>
-                {makeParagraphs(event.longDescription)}
+                <div dir={event?.txtDirection}>
+                  {makeParagraphs(event.longDescription)}
+                </div>
                 <Box margin={sectionMargin}>
                   <hr />
                 </Box>

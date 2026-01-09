@@ -10,6 +10,8 @@ import { Box, Heading, Paragraph, Text } from "grommet";
 import SelectLocation from "components/SelectLocation";
 
 import MagPostCard from "components/MagazineCard";
+import WithFooter from "layouts/WithFooter";
+
 import { titleCase } from "services/helpers/textFormat";
 
 export default function Editorial() {
@@ -58,46 +60,48 @@ export default function Editorial() {
   }, [selectedCity, isDifferentCity]);
 
   return (
-    <Grid fluid align="start">
-      <section>
-        <Row>
-          <Col xs={12} md={12}>
-            <Box pad="xsmall">
-              <Heading level={2} margin="xsmall">
-                Editorial
-              </Heading>
-              <Text margin="xsmall" fill>
-                A series of studio interviews and articles covering local art
-                topics and events
-              </Text>
-            </Box>
-            {loading && <img src={`/img/loader.svg`} />}
-            {error && (
-              <>
-                <Box pad={{ horizontal: "medium", vertical: "large" }}>
-                  <Text size="medium">
-                    There are no articles in the city{" "}
-                    <b>"{titleCase(citySlug)}"</b>. <br />
-                    <br />
-                    Please try to check the URL or choose another city from
-                    below
-                  </Text>
-                </Box>
-                {/* <b>Error: {JSON.stringify(error)}</b> */}
-              </>
-            )}
-
-            <SelectLocation isBarFullWidth />
-            {!loading && !error && magPosts && (
-              <Box pad="small">
-                {magPosts.map((magPost) => (
-                  <MagPostCard key={magPost.id} magPost={magPost} />
-                ))}
+    <WithFooter>
+      <Grid fluid align="start">
+        <section>
+          <Row>
+            <Col xs={12} md={12}>
+              <Box pad="xsmall">
+                <Heading level={2} margin="xsmall">
+                  Editorial
+                </Heading>
+                <Text margin="xsmall" fill>
+                  A series of studio interviews and articles covering local art
+                  topics and events
+                </Text>
               </Box>
-            )}
-          </Col>
-        </Row>
-      </section>
-    </Grid>
+              {loading && <img src={`/img/loader.svg`} />}
+              {error && (
+                <>
+                  <Box pad={{ horizontal: "medium", vertical: "large" }}>
+                    <Text size="medium">
+                      There are no articles in the city{" "}
+                      <b>"{titleCase(citySlug)}"</b>. <br />
+                      <br />
+                      Please try to check the URL or choose another city from
+                      below
+                    </Text>
+                  </Box>
+                  {/* <b>Error: {JSON.stringify(error)}</b> */}
+                </>
+              )}
+
+              <SelectLocation isBarFullWidth />
+              {!loading && !error && magPosts && (
+                <Box pad="small">
+                  {magPosts.map((magPost) => (
+                    <MagPostCard key={magPost.id} magPost={magPost} />
+                  ))}
+                </Box>
+              )}
+            </Col>
+          </Row>
+        </section>
+      </Grid>
+    </WithFooter>
   );
 }

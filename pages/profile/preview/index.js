@@ -87,7 +87,11 @@ const Preview = () => {
                     </Col>
                   )}
                 </Row>
-                {studio.textLong && makeParagraphs(studio.textLong)}
+                {studio.textLong && (
+                  <div dir={studio?.txtDirection}>
+                    {makeParagraphs(studio.textLong)}
+                  </div>
+                )}
                 <Heading level="3" size="medium" margin={headingMargin}>
                   Mediums
                 </Heading>
@@ -212,30 +216,31 @@ const Preview = () => {
                 >
                   Private studio visits
                 </Heading>
-                    {studio.has_no_visits === true ? (
-                      <>
-                        <Heading level="4" size="medium" margin={headingMargin}>
-                          The artist has no upcoming private visit dates right now
-                        </Heading>
-                        <h4 className={styles.subsectiontitle}>
-                          Please check back again later
-                        </h4>
-                      </>) :
-                      studio.hasOpenDates === true ? (
-                        <VisitFormWithDates
-                          artistEmail={studio.email}
-                          artistName={studio.artist}
-                          studioID={studio.studio_id}
-                          studio_uuid={studio.uuid}
-                          availability={studio.availability}
-                        />
-                      ) : (
-                        <VisitFormOpen
-                          artistEmail={studio.email}
-                          artistName={studio.artist}
-                          studioID={studio.studio_id}
-                          studio_uuid={studio.uuid}
-                        />)}
+                {studio.has_no_visits === true ? (
+                  <>
+                    <Heading level="4" size="medium" margin={headingMargin}>
+                      The artist has no upcoming private visit dates right now
+                    </Heading>
+                    <h4 className={styles.subsectiontitle}>
+                      Please check back again later
+                    </h4>
+                  </>
+                ) : studio.hasOpenDates === true ? (
+                  <VisitFormWithDates
+                    artistEmail={studio.email}
+                    artistName={studio.artist}
+                    studioID={studio.studio_id}
+                    studio_uuid={studio.uuid}
+                    availability={studio.availability}
+                  />
+                ) : (
+                  <VisitFormOpen
+                    artistEmail={studio.email}
+                    artistName={studio.artist}
+                    studioID={studio.studio_id}
+                    studio_uuid={studio.uuid}
+                  />
+                )}
               </Col>
             </Row>
           </>
