@@ -2,22 +2,21 @@ import { useContext } from "react";
 import { Search, Calendar, Users } from "react-feather";
 
 import { useCities } from "services/city";
-import { useRouter } from "next/router";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import Link from "next/link";
 import Image from "next/image";
 
-import { featureFlags } from "config/feature-flags";
+// import { featureFlags } from "config/feature-flags";
 
 import { Box, Heading, Text, ResponsiveContext } from "grommet";
 
-import SearchBar from "components/SearchBar";
-import SelectLocation from "components/SelectLocation";
-import StudiosFeatured from "components/StudiosFeatured";
+// import SearchBar from "components/SearchBar";
+// import SelectLocation from "components/SelectLocation";
+// import StudiosFeatured from "components/StudiosFeatured";
 import Button from "components/Button";
 
-import { createSlug } from "services/helpers/textFormat";
+import DEFAULT_CITY from "config/default-city";
 
 import styles from "./index.module.scss";
 import WithFooter from "layouts/WithFooter";
@@ -27,8 +26,6 @@ const Pilot = () => {
   const sectionMargin = { vertical: "xlarge" };
 
   const size = useContext(ResponsiveContext);
-
-  const router = useRouter();
 
   const { selectedCity } = useCities();
 
@@ -94,19 +91,9 @@ const Pilot = () => {
                       <Button btnStyle="outline">
                         <Box margin={{ vertical: "1rem", horizontal: "1rem" }}>
                           <Link
-                            href={
-                              "/studios/" + createSlug(selectedCity ?? "Berlin")
-                            }
-                            onClick={async () => {
-                              {
-                                if (!selectedCity) {
-                                  await selectCity("Berlin");
-                                }
-                                router.push(
-                                  "/studios/" + createSlug(selectedCity)
-                                );
-                              }
-                            }}
+                            href={`/studios/${
+                              selectedCity ? selectedCity.slugName : ""
+                            }`}
                           >
                             Explore Studios
                           </Link>
@@ -134,19 +121,9 @@ const Pilot = () => {
                       <Button btnStyle="outline">
                         <Box margin={{ vertical: "1rem", horizontal: "1rem" }}>
                           <Link
-                            href={
-                              "/events/" + createSlug(selectedCity ?? "Berlin")
-                            }
-                            onClick={async () => {
-                              {
-                                if (!selectedCity) {
-                                  await selectCity("Berlin");
-                                }
-                                router.push(
-                                  "/events/" + createSlug(selectedCity)
-                                );
-                              }
-                            }}
+                            href={`/events/${
+                              selectedCity ? selectedCity.slugName : ""
+                            }`}
                           >
                             Join Events
                           </Link>
