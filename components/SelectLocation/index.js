@@ -31,7 +31,7 @@ export const SelectLocation = ({ isBarFullWidth = false }) => {
   return (
     <Box
       width={isBarFullWidth ? "xlarge" : "large"}
-      margin={{ horizontal: "none", vertical: "medium" }}
+      margin={{ horizontal: "none", vertical: "small" }}
       align="center"
     >
       <Grid fluid>
