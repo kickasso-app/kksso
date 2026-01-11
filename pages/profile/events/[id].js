@@ -115,14 +115,17 @@ const EventEditForm = () => {
   const fieldMargin = { vertical: "large" };
   const textMargin = { bottom: "medium" };
 
-  useEffect(async () => {
-    if (user?.role === "authenticated" && !profile) {
-      await fetchProfile(user);
+  useEffect(() => {
+    async function fetchProfileAndEvent() {
+      if (user?.role === "authenticated" && !profile) {
+        await fetchProfile(user);
+      }
     }
+    fetchProfileAndEvent();
   }, [session, profile]);
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchEventData() {
       if (user && id && (!event || event?.id !== id)) {
         // console.log("fetching event", id);
         await fetchEvent({ event_id: id });
@@ -151,7 +154,7 @@ const EventEditForm = () => {
         });
       }
     }
-    fetchData();
+    fetchEventData();
   }, [user, id, event]);
 
   return (

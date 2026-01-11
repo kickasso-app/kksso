@@ -38,12 +38,15 @@ export default function Join() {
 
   const { signUp, signIn, user } = useAuth();
 
-  useEffect(async () => {
-    if (referral && featureFlags.referrals) {
-      setNewUser(true);
-      const isApproved = await doesStudioExist({ uuid: referral });
-      setReferralApproved(isApproved);
+  useEffect(() => {
+    async function checkReferral() {
+      if (referral && featureFlags.referrals) {
+        setNewUser(true);
+        const isApproved = await doesStudioExist({ uuid: referral });
+        setReferralApproved(isApproved);
+      }
     }
+    checkReferral();
   }, [referral]);
 
   useEffect(() => {
