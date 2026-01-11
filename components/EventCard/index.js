@@ -29,14 +29,14 @@ export default function EventCard({ event, inStudio = false }) {
   return (
     <div>
       <div className={styles.imgContainer}>
-        <Link href={eventLink}>
-          <a onClick={() => openEvent()}>
-            <ProgressiveImage src={imgUrl} placeholder={`/img/loader.svg`}>
-              {(src, loading) => (
-                <img className={styles.cardImg} src={src} alt={event.title} />
-              )}
-            </ProgressiveImage>
-          </a>
+        <Link href={eventLink} onClick={() => openEvent()}>
+
+          <ProgressiveImage src={imgUrl} placeholder={`/img/loader.svg`}>
+            {(src, loading) => (
+              <img className={styles.cardImg} src={src} alt={event.title} />
+            )}
+          </ProgressiveImage>
+
         </Link>
       </div>
       <Box>

@@ -69,7 +69,7 @@ export default function Editorial() {
                 <Heading level={2} margin="xsmall">
                   Editorial
                 </Heading>
-                <Text margin="xsmall" fill>
+                <Text margin="xsmall">
                   A series of studio interviews and articles covering local art
                   topics and events
                 </Text>

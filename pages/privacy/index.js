@@ -21,7 +21,7 @@ const Privacy = () => {
         <Row>
           <Col xs={12}>
             <Box margin={{ bottom: "large" }}>
-              <Link href="/" passHref>
+              <Link href="/">
                 <Box direction="row" align="center" gap="small" as="a">
                   <ChevronLeft size={16} />
                   <Text>BACK</Text>

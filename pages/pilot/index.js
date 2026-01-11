@@ -40,17 +40,17 @@ const Pilot = () => {
                   <Image
                     src={`/img/intro/MobileBanner.png`}
                     alt="banner"
-                    layout="responsive"
-                    width="100%"
-                    height="100%"
+                    width={375}
+                    height={667}
+                    loading="eager"
                   />
                 ) : (
                   <Image
                     src={`/img/intro/Banner.png`}
                     alt="banner"
-                    layout="responsive"
-                    width="100%"
-                    height="45%"
+                    width={1200}
+                    height={540}
+                    loading="eager"
                   />
                 )}
               </Box>
