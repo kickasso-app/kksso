@@ -21,7 +21,7 @@ import DEFAULT_CITY from "config/default-city";
 import styles from "./index.module.scss";
 import WithFooter from "layouts/WithFooter";
 
-const Pilot = () => {
+const Landing = () => {
   const margin = "medium";
   const sectionMargin = { vertical: "xlarge" };
 
@@ -31,7 +31,7 @@ const Pilot = () => {
 
   return (
     <WithFooter>
-      <Grid fluid id={styles.pilot} align="center">
+      <Grid fluid id={styles.landing} align="center">
         <section>
           <Row id={styles.intro}>
             <Col xs={12} md={12}>
@@ -350,4 +350,4 @@ const Pilot = () => {
   );
 };
 
-export default Pilot;
+export default Landing;
