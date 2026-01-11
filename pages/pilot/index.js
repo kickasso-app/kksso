@@ -40,8 +40,9 @@ const Pilot = () => {
                   <Image
                     src={`/img/intro/MobileBanner.png`}
                     alt="banner"
-                    width={375}
-                    height={667}
+                    width={400}
+                    height={400}
+                    style={{ width: "100%", height: "auto" }}
                     loading="eager"
                   />
                 ) : (
@@ -50,6 +51,7 @@ const Pilot = () => {
                     alt="banner"
                     width={1200}
                     height={540}
+                    style={{ width: "100%", height: "auto" }}
                     loading="eager"
                   />
                 )}
