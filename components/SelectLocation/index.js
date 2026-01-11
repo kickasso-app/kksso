@@ -41,12 +41,12 @@ export const SelectLocation = ({ isBarFullWidth = false }) => {
               .filter(({ count }) => count > 0)
               .map(({ city, published, slugName }) => {
                 return (
-                  <Box pad={"small"} key={city}>
+                  <Box pad={"xsmall"} key={city}>
                     <Button
                       label={
-                        <Box pad={size === "small" ? "xxsmall" : "xxsmall"}>
+                        <Box pad={{ vertical: "xsmall", horizontal: "medium" }}>
                           <Text
-                            size={size === "small" ? "medium" : "large"}
+                            size={size === "small" ? "small" : "medium"}
                             weight={600}
                             color="#4b4b4b"
                           >
@@ -60,12 +60,15 @@ export const SelectLocation = ({ isBarFullWidth = false }) => {
                         await selectCity(slugName);
                       }}
                       align="center"
-                      gap={size === "small" ? "xsmall" : "small"}
+                      // gap={size === "small" ? "xsmall" : "small"}
                       color="#FFC0CB"
                       size={size === "small" ? "medium" : "large"}
-                      pad={size === "small" ? "small" : "medium"}
+                      pad={
+                        size === "small"
+                          ? { vertical: "xsmall", horizontal: "small" }
+                          : "small"
+                      }
                       hoverIndicator="#FFC0CB"
-                      a11yTitle="X Available Updates"
                       href={baseRedirect ? baseRedirect + slugName : null}
                     />
                   </Box>

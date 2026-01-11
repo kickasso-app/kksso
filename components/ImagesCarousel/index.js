@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-// import { useState, useEffect, useCallback, useRef } from "react";
 import ImageGallery from "react-image-gallery";
+import "react-image-gallery/styles/css/image-gallery.css";
 
 import { downloadImages } from "services/images";
 
@@ -86,9 +86,9 @@ const ImagesCarousel = ({ userId }) => {
   return (
     <>
       {loading && imgs.length === 0 ? ( // Show loader only if no images are loaded yet
-        (<Box pad="large">
+        <Box pad="large">
           <img src={`/img/loader.svg`} />
-        </Box>)
+        </Box>
       ) : (
         <ImageGallery items={imgs} {...carouselConfig} />
       )}

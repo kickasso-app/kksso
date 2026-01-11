@@ -14,15 +14,11 @@ const NavButton = ({ path, label, onClick }) => {
   };
   return (
     <Link href={path} className={styles.navButton} onClick={handleClick}>
-
       <span
-        className={
-          router.pathname === path ? styles.labelActive : styles.label
-        }
+        className={router.pathname === path ? styles.labelActive : styles.label}
       >
         {label}
       </span>
-
     </Link>
   );
 };
