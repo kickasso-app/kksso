@@ -7,8 +7,6 @@ import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import Link from "next/link";
 import Image from "next/image";
 
-// import { featureFlags } from "config/feature-flags";
-
 import { Box, Heading, Text, ResponsiveContext } from "grommet";
 
 // import SearchBar from "components/SearchBar";
