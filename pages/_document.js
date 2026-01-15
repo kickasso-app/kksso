@@ -54,20 +54,3 @@ export default function Document() {
     </Html>
   );
 }
-// This also doesn't work!
-// export const metadata = {
-//   title: "Arti",
-//   description:
-//     "A platform to connect artists, art lovers, and collectors via studio visits and events.",
-//   metadataBase: new URL("https://arti.my"),
-//   openGraph: {
-//     title: "Arti",
-//     description:
-//       "A platform to connect artists, art lovers, and collectors via studio visits and events.",
-//     url: "https://arti.my",
-//     siteName: "Arti",
-//     images: "/img/opengraph-image.png",
-//     locale: "en_US",
-//     type: "website",
-//   },
-// };

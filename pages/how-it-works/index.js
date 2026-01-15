@@ -23,8 +23,7 @@ const How = () => {
     <>
       <CustomHead
         pageSlug="how-it-works"
-        title="How It Works for Art Lovers and Collectors"
-        description="How It Works for Art Lovers and Collectors - Arti is a platform to connect artists, art lovers, and collectors via studio visits and events."
+        title="Arti - How It Works for Art Lovers and Collectors"
       />
 
       <Box pad={size === "small" ? "medium" : "large"}>
