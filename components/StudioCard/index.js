@@ -35,19 +35,17 @@ const StudioCard = ({
   return (
     <div className={styles.StudioCard}>
       <div className={styles.imgContainer}>
-        <Link href={articleLink}>
-          <a onClick={() => openArticle()}>
-            <ProgressiveImage src={imgUrl} placeholder={`/img/loader.svg`}>
-              {(src, loading) => (
-                <img className={styles.cardImg} src={src} alt={artist} />
-              )}
-            </ProgressiveImage>
-          </a>
+        <Link href={articleLink} onClick={() => openArticle()}>
+
+          <ProgressiveImage src={imgUrl} placeholder={`/img/loader.svg`}>
+            {(src, loading) => (
+              <img className={styles.cardImg} src={src} alt={artist} />
+            )}
+          </ProgressiveImage>
+
         </Link>
       </div>
-
       <h4 className={styles.primary}>{artist}</h4>
-
       <h4 className={styles.secondary}>
         <Disc
           className={styles.Icon}
@@ -58,7 +56,6 @@ const StudioCard = ({
         />
         {capitalizeFirstLetter(district)}
       </h4>
-
       {/* CHANGED FOR PILOT */}
       {/* 
       {nextVisit && (
@@ -66,9 +63,7 @@ const StudioCard = ({
           Next Visit <strong>{nextVisit}</strong>
         </h4>
       )} */}
-
       <p className={styles.textMini}>{textMini}</p>
-
       {artStyles && (
         <h4 className={styles.secondary}>
           <Hash

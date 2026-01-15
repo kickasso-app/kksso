@@ -38,19 +38,19 @@ export const SearchBar = ({ isBarFullWidth = false }) => {
   return (
     <Box
       width={isBarFullWidth ? "xlarge" : "large"}
-      pad="small"
+      pad={{ vertical: "xsmall", left: "none", right: "xsmall" }}
       border={{
-        color: "#222222",
-        size: "xsmall",
+        color: "#4B4B4B",
+        size: "1px",
         style: "solid",
-        side: "all",
+        // side: "all",
       }}
       round="large"
-      margin={{ horizontal: "none", vertical: "medium" }}
+      margin={{ horizontal: "none", vertical: "small" }}
     >
       <Grid fluid>
         <Row middle="xs">
-          <Col xs={9}>
+          <Col xs={10}>
             <TextInput
               placeholder={"Search artist, style, or district"}
               plain
@@ -59,7 +59,7 @@ export const SearchBar = ({ isBarFullWidth = false }) => {
               onKeyDown={onSearchEnter}
             />
           </Col>
-          <Col xs={3}>
+          <Col xs={2}>
             <Row end="xs">
               <Box
                 width="38px"
@@ -79,7 +79,7 @@ export const SearchBar = ({ isBarFullWidth = false }) => {
               >
                 <Search
                   size={18}
-                  color="#222222"
+                  color="#4B4B4B"
                   strokeWidth={1.5}
                   onClick={onSearch}
                 />

@@ -53,7 +53,12 @@ export default function Events() {
                 Events
               </Heading>
             </Box>
-            {loading && <img src={`/img/loader.svg`} />}
+            {loading && (
+              <img
+                src={`/img/loader.svg`}
+                style={{ width: "100px", height: "auto" }} // Ensure aspect ratio is maintained
+              />
+            )}
             {error && (
               <>
                 <Box pad={{ horizontal: "medium", vertical: "large" }}>

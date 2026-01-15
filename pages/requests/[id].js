@@ -20,16 +20,19 @@ const Request = () => {
   const { user } = useAuth();
   const { profile, fetchProfile } = useAccount();
 
-  useEffect(async () => {
-    if (
-      user?.role === "authenticated" &&
-      !error &&
-      id &&
-      (!request || request?.request_id !== id)
-    ) {
-      await fetchProfile(user);
-      await fetchRequest(id, user.id);
+  useEffect(() => {
+    async function fetchRequestData() {
+      if (
+        user?.role === "authenticated" &&
+        !error &&
+        id &&
+        (!request || request?.request_id !== id)
+      ) {
+        await fetchProfile(user);
+        await fetchRequest(id, user.id);
+      }
     }
+    fetchRequestData();
   }, [id, request, error]);
 
   return (

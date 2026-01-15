@@ -13,16 +13,12 @@ const NavButton = ({ path, label, onClick }) => {
     }
   };
   return (
-    <Link href={path} legacyBehavior>
-      <div className={`${styles.navButton}`} onClick={handleClick}>
-        <span
-          className={
-            router.pathname === path ? styles.labelActive : styles.label
-          }
-        >
-          {label}
-        </span>
-      </div>
+    <Link href={path} className={styles.navButton} onClick={handleClick}>
+      <span
+        className={router.pathname === path ? styles.labelActive : styles.label}
+      >
+        {label}
+      </span>
     </Link>
   );
 };

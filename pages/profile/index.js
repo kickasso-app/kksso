@@ -30,17 +30,20 @@ export default function Profile() {
     router.push(`/profile/?section=${nextIndex}`, undefined, { shallow: true });
   };
 
-  useEffect(async () => {
-    if (user?.role === "authenticated" && !profile) {
-      await fetchProfile(user);
-    }
-    if (profile && router) {
-      const routerIndex = parseInt(router?.query?.section) || 0;
-      if (routerIndex != index) {
-        resetNotification();
+  useEffect(() => {
+    async function fetchUserProfile() {
+      if (user?.role === "authenticated" && !profile) {
+        await fetchProfile(user);
       }
-      setIndex(routerIndex);
+      if (profile && router) {
+        const routerIndex = parseInt(router?.query?.section) || 0;
+        if (routerIndex != index) {
+          resetNotification();
+        }
+        setIndex(routerIndex);
+      }
     }
+    fetchUserProfile();
   }, [router, session, profile]);
 
   if (!session && event !== "SIGNED_OUT") {

@@ -8,7 +8,6 @@ import { EventsProvider } from "services/events";
 import "../styles/base.scss";
 import "../styles/colors.scss";
 import "react-flexbox-grid/dist/react-flexbox-grid.css";
-import "react-image-gallery/styles/scss/image-gallery.scss";
 
 import Layout from "layouts/Layout";
 

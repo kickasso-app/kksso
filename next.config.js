@@ -2,21 +2,6 @@ const path = require("path");
 
 const nextConfig = {
   // distDir: "build",
-  outDir: "export",
-  // exportPathMap: async function (
-  //   defaultPathMap,
-  //   { dev, dir, outDir, distDir, buildId }
-  // ) {
-  //   return {
-  //     "/": { page: "/" },
-  //     "/about": { page: "/about" },
-  //     "/join": { page: "/join" },
-  //     "/studios": { page: "/studios" },
-  //     "/studio/1": { page: "/studio/1" },
-
-  //     // '/p/deploy-nextjs': { page: '/post', query: { title: 'deploy-nextjs' } },
-  //   };
-  // },
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],
     prependData: `
@@ -27,6 +12,9 @@ const nextConfig = {
         $color--bg-white: #fff;
         $color-gray: rgba(0, 0, 0, 0.1);
     `,
+  },
+  compiler: {
+    styledComponents: true,
   },
   env: {},
 };

@@ -1,42 +1,47 @@
-.imgContainer {
-  width: 100%;
-  overflow: hidden;
-  border: 1px solid $color--bg-white;
-  border-radius: 0.5rem;
-}
+.eventCard {
+  margin-bottom: 2.5rem;
+  text-align: left;
 
-img.cardImg {
-  width: 100%;
-  margin: 0 auto;
-  display: block;
-  transition: 0.1s ease-in-out all;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-}
-
-@keyframes burns {
-  0% {
-    transform: scale(1);
+  .imgContainer {
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid $color--bg-white;
+    border-radius: 0.5rem;
   }
 
-  // 50% {
-  //   transform: scale(1.125);
-  // }
-  // 51% {
-  //   transform: scale(1);
-  // }
-  100% {
-    transform: scale(1.125);
+  img.cardImg {
+    width: 100%;
+    margin: 0 auto;
+    display: block;
+    transition: 0.1s ease-in-out all;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
   }
-}
 
-img.cardImg:hover {
-  animation: burns 12s;
-}
+  @keyframes burns {
+    0% {
+      transform: scale(1);
+    }
 
-svg.icon {
-  vertical-align: top;
-  margin-right: 0.5rem;
-  margin-top: 0.1rem;
+    // 50% {
+    //   transform: scale(1.125);
+    // }
+    // 51% {
+    //   transform: scale(1);
+    // }
+    100% {
+      transform: scale(1.125);
+    }
+  }
+
+  img.cardImg:hover {
+    animation: burns 12s;
+  }
+
+  svg.icon {
+    vertical-align: top;
+    margin-right: 0.5rem;
+    margin-top: 0.1rem;
+  }
 }

@@ -29,24 +29,28 @@ const EventsPhotoInput = ({ userId, event, postUpload }) => {
   const filePathLarge = `${imgDirectory}/event-large.jpg`;
   const filePathSmall = `${imgDirectory}/event-small.jpg`;
 
-  useEffect(async () => {
-    if (event) {
-      const imgPath = filePathSmall;
-      // console.log(imgPath);
-      const doesImageExist = await fileExists(
-        "events",
-        imgDirectory,
-        "event-small.jpg"
-      );
-      if (doesImageExist) {
+  useEffect(() => {
+    const fetchImage = async () => {
+      if (event) {
+        const imgPath = filePathSmall;
         // console.log(imgPath);
-        await downloadEventImage({
-          imgPath: imgPath,
-          postDownload: setImgUrl,
-        });
-        setEditing(!imgPath);
+        const doesImageExist = await fileExists(
+          "events",
+          imgDirectory,
+          "event-small.jpg"
+        );
+        if (doesImageExist) {
+          // console.log(imgPath);
+          await downloadEventImage({
+            imgPath: imgPath,
+            postDownload: setImgUrl,
+          });
+          setEditing(!imgPath);
+        }
       }
-    }
+    };
+
+    fetchImage();
   }, [event]);
 
   async function removeImage() {

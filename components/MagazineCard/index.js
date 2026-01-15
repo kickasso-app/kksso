@@ -34,7 +34,7 @@ export default function MagPostCard({ magPost }) {
   }, [magPost]);
 
   return (
-    <>
+    <div className={styles.MagPostCard}>
       <Link href={magPostLink}>
         <Box
           direction={size === "small" ? "column" : "row"}
@@ -44,18 +44,16 @@ export default function MagPostCard({ magPost }) {
         >
           <Box basis="33%" flex={false} className={styles.imgBox}>
             {/* <Image src="path-to-your-image.jpg" fit="cover" /> */}
-            <div className={styles.imgContainer}>
-              <a onClick={() => openMagPost()}>
-                <ProgressiveImage src={imgUrl} placeholder={`/img/loader.svg`}>
-                  {(src, loading) => (
-                    <img
-                      className={styles.cardImg}
-                      src={src}
-                      alt={magPost.title}
-                    />
-                  )}
-                </ProgressiveImage>
-              </a>
+            <div className={styles.imgContainer} onClick={() => openMagPost()}>
+              <ProgressiveImage src={imgUrl} placeholder={`/img/loader.svg`}>
+                {(src, loading) => (
+                  <img
+                    className={styles.cardImg}
+                    src={src}
+                    alt={magPost.title}
+                  />
+                )}
+              </ProgressiveImage>
             </div>
           </Box>
           <Box basis="67%" flex fill className={styles.contentBox}>
@@ -81,6 +79,6 @@ export default function MagPostCard({ magPost }) {
           </Box>
         </Box>
       </Link>
-    </>
+    </div>
   );
 }

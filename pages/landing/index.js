@@ -7,8 +7,6 @@ import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import Link from "next/link";
 import Image from "next/image";
 
-// import { featureFlags } from "config/feature-flags";
-
 import { Box, Heading, Text, ResponsiveContext } from "grommet";
 
 // import SearchBar from "components/SearchBar";
@@ -21,7 +19,7 @@ import DEFAULT_CITY from "config/default-city";
 import styles from "./index.module.scss";
 import WithFooter from "layouts/WithFooter";
 
-const Pilot = () => {
+const Landing = () => {
   const margin = "medium";
   const sectionMargin = { vertical: "xlarge" };
 
@@ -31,7 +29,7 @@ const Pilot = () => {
 
   return (
     <WithFooter>
-      <Grid fluid id={styles.pilot} align="center">
+      <Grid fluid id={styles.landing} align="center">
         <section>
           <Row id={styles.intro}>
             <Col xs={12} md={12}>
@@ -40,17 +38,19 @@ const Pilot = () => {
                   <Image
                     src={`/img/intro/MobileBanner.png`}
                     alt="banner"
-                    layout="responsive"
-                    width="100%"
-                    height="100%"
+                    width={400}
+                    height={400}
+                    style={{ width: "100%", height: "auto" }}
+                    loading="eager"
                   />
                 ) : (
                   <Image
                     src={`/img/intro/Banner.png`}
                     alt="banner"
-                    layout="responsive"
-                    width="100%"
-                    height="45%"
+                    width={1200}
+                    height={540}
+                    style={{ width: "100%", height: "auto" }}
+                    loading="eager"
                   />
                 )}
               </Box>
@@ -348,4 +348,4 @@ const Pilot = () => {
   );
 };
 
-export default Pilot;
+export default Landing;

@@ -9,7 +9,6 @@
 
   a.backlink {
     text-decoration: none !important;
-    color: $color-secondary;
   }
 
   a.backlink:hover {
@@ -87,24 +86,5 @@
   button.is-checked {
     color: $color--bg-white;
     background-color: $color-primary;
-  }
-}
-
-@media only screen and (max-width: 768px) {
-  #intro {
-    button {
-      border-color: $color-secondary;
-    }
-  }
-}
-
-#intro-inverse {
-  width: 100%;
-  margin: 4rem auto;
-  background-color: $color--bg-white;
-  color: $color-primary;
-  p,
-  h3 {
-    margin-bottom: 2rem;
   }
 }

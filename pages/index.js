@@ -1,7 +1,3 @@
-{/* CHANGED FOR PILOT */ }
-// import Intro from "./intro";
-// export default Intro;
+import Landing from "./landing";
 
-import Pilot from "./pilot";
-
-export default Pilot;
+export default Landing;
