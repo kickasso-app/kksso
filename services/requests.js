@@ -86,6 +86,7 @@ const RequestsProvider = ({ children }) => {
       request_type,
       studio_uuid,
       event_uuid,
+      event_title,
     } = request;
 
     const newRequest = {
@@ -99,6 +100,7 @@ const RequestsProvider = ({ children }) => {
       request_date,
       request_date_tz,
       requestor_link,
+      event_title,
       messages: [{ reason: visit_reason }],
       request_type,
       // Default Values in DB

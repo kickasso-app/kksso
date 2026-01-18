@@ -16,8 +16,7 @@ const getStatus = (r) =>
   !r.has_response ? "Pending" : r.response ? "Approved" : "Rejected";
 
 const isPastDate = (date) => new Date(date) < new Date();
-const sortByDate = (a, b) =>
-  new Date(a.request_date_tz) - new Date(b.request_date_tz);
+const sortByDate = (a, b) => new Date(b.last_update) - new Date(a.last_update);
 
 const filterOptions = [
   { key: "All", title: "All", color: "light-3" },

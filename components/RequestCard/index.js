@@ -25,6 +25,7 @@ const RequestCard = ({
     requestor_name,
     request_date,
     request_type,
+    event_title,
   },
 }) => {
   const router = useRouter();
@@ -39,6 +40,7 @@ const RequestCard = ({
   };
 
   const status = !has_response ? "Pending" : response ? "Approved" : "Rejected";
+  const isEventReq = request_type === "event";
 
   return (
     <Box fill onClick={() => onOpen(request_id)}>
@@ -49,7 +51,11 @@ const RequestCard = ({
         round="4px"
       >
         <Box align="start">
-          <Text weight="bold">{request_date}</Text>
+          <Text size="medium" weight="bold" align="start">
+            {isEventReq && event_title
+              ? event_title
+              : "Visit on " + request_date}
+          </Text>
         </Box>
         <Grid columns={["auto", "xsmall"]} gap="medium" align="center">
           <Box gap="xsmall">

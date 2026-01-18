@@ -12,10 +12,13 @@ import {
   Notification,
 } from "grommet";
 import { Checkmark, Close } from "grommet-icons";
-import { sendEmail } from "services/sendEmail";
-import NotificationLayer from "components/NotificationLayer";
+import moment from "moment";
+
 import { useAccount } from "services/account";
 import { useAuth } from "services/auth";
+
+import { sendEmail } from "services/sendEmail";
+import NotificationLayer from "components/NotificationLayer";
 
 import { titleCase } from "services/helpers/textFormat";
 
@@ -47,9 +50,11 @@ export default function RequestForm({
     requestor_email,
     request_date,
     request_date_tz,
+    last_update,
     messages,
     requestor_link,
     event_uuid,
+    event_title,
     request_type,
   } = request;
 
@@ -128,7 +133,11 @@ export default function RequestForm({
     setIsResponding(false);
   };
 
-  const formattedDate = request_date;
+  const requestedDate = request_date;
+  const createdDate = moment(
+    last_update,
+    "YYYY-MM-DD HH:mm:ss.SSSSSSZZ"
+  ).format("D MMM YYYY, h:mm a");
 
   const handleSubmit = async () => {
     onRespond({
@@ -156,14 +165,7 @@ export default function RequestForm({
         </Heading>
 
         <Box gap="medium">
-          <Box>
-            <Text size="small" color="dark-3">
-              Date
-            </Text>
-            <Text size="small">{formattedDate}</Text>
-          </Box>
-
-          {isEventReq && event_uuid && (
+          {isEventReq && event_uuid && event_title && (
             <Box>
               <Text size="small" color="dark-3">
                 Event
@@ -173,12 +175,23 @@ export default function RequestForm({
                   href={"https:/arti.my/event/" + event_uuid}
                   style={{ textDecoration: "none" }}
                 >
-                  <u> {event_uuid}</u>
+                  <u> {event_title}</u>
                 </a>
               </Text>
             </Box>
           )}
-
+          <Box>
+            <Text size="small" color="dark-3">
+              Requested {isEventReq ? "Event" : "Visit"} Date
+            </Text>
+            <Text size="small">{requestedDate}</Text>
+          </Box>
+          <Box>
+            <Text size="small" color="dark-3">
+              Request Created On
+            </Text>
+            <Text size="small">{createdDate}</Text>
+          </Box>
           <Box>
             <Text size="small" color="dark-3">
               Your Response
@@ -194,7 +207,6 @@ export default function RequestForm({
               {statusTitles[values.status]}
             </Text>
           </Box>
-
           {messages?.[1] && (
             <Box>
               <Text size="small" color="dark-3">
@@ -205,7 +217,6 @@ export default function RequestForm({
               </Text>
             </Box>
           )}
-
           <Box>
             <Text size="small" color="dark-3">
               Contact
@@ -213,7 +224,6 @@ export default function RequestForm({
 
             <Text size="small">{requestor_email} </Text>
           </Box>
-
           <Box>
             <Text size="small" color="dark-3">
               Requestor's Link
@@ -229,7 +239,6 @@ export default function RequestForm({
               </a>
             </Text>
           </Box>
-
           <Box>
             <Text size="small" color="dark-3">
               Visit Reason
