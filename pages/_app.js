@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { CityProvider } from "services/city";
 import { AuthProvider } from "services/auth";
 import { AccountProvider } from "services/account";
@@ -13,20 +14,25 @@ import Layout from "layouts/Layout";
 
 export default function MyApp({ Component, pageProps }) {
   return (
-    <CityProvider>
-      <AuthProvider>
-        <AccountProvider>
-          <RequestsProvider>
-            <EventsProvider>
-              <StudiosProvider>
-                <Layout>
-                  <Component {...pageProps} />
-                </Layout>
-              </StudiosProvider>
-            </EventsProvider>
-          </RequestsProvider>
-        </AccountProvider>
-      </AuthProvider>
-    </CityProvider>
+    <>
+      <Head>
+        <title>Arti</title>
+      </Head>
+      <CityProvider>
+        <AuthProvider>
+          <AccountProvider>
+            <RequestsProvider>
+              <EventsProvider>
+                <StudiosProvider>
+                  <Layout>
+                    <Component {...pageProps} />
+                  </Layout>
+                </StudiosProvider>
+              </EventsProvider>
+            </RequestsProvider>
+          </AccountProvider>
+        </AuthProvider>
+      </CityProvider>
+    </>
   );
 }

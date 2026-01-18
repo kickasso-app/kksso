@@ -236,8 +236,8 @@ const VisitFormOpen = ({ artistEmail, artistName, studioID, studio_uuid }) => {
             label="Social or professional link"
             required
             validate={{
-              regexp: /\S+.\S+\.\S+?.\S+/,
-              message: "Enter a valid url",
+              regexp: /^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-./?%&=]*)?$/,
+              message: "Enter a valid URL",
             }}
             type="url"
           >

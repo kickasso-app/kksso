@@ -269,6 +269,7 @@ const Event = () => {
                         studioID={studioBasic.id}
                         studio_uuid={event.studio_uuid}
                         event_uuid={event.id}
+                        event_title={event.title}
                         event_date={event.date}
                         event_date_time={
                           readableDate(event.date) +

@@ -9,6 +9,7 @@ export const EventRequest = ({
   request_id,
   event_date_time,
   event_link,
+  event_title,
 }) => (
   <html>
     <head>
@@ -18,10 +19,11 @@ export const EventRequest = ({
       <div id="emailstyles">
         <h1>Hello, {to_name}!</h1>
         <p>
-          You got a request to join your <a href={event_link}>event</a> on{" "}
-          {event_date_time} from <strong>{from_name}</strong>. They want to join
-          for this reason:
-          <blockquote>{visit_reason}</blockquote>
+          You got a request to join your{" "}
+          <a href={event_link}>{event_title} event</a> on {event_date_time} from{" "}
+          <strong>{from_name}</strong>. They want to join for this reason:
+          <br />
+          {visit_reason}
         </p>
         <p>
           You can know more about {from_name} at their link{" "}

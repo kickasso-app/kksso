@@ -37,6 +37,7 @@ const EventRequestForm = ({
   studioID,
   studio_uuid,
   event_uuid,
+  event_title,
   event_date_time,
   event_date,
 }) => {
@@ -65,6 +66,7 @@ const EventRequestForm = ({
       ...values,
       studio_name: artistName,
       event_link: "https:/arti.my/event/" + event_uuid,
+      event_title,
       request_id,
       event_date_time,
     };
@@ -182,8 +184,8 @@ const EventRequestForm = ({
             label="Social or professional link"
             required
             validate={{
-              regex: /\S+.\S+\.\S+?.\S+/,
-              message: "Enter a valid url",
+              regexp: /^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-./?%&=]*)?$/,
+              message: "Enter a valid URL",
             }}
             type="url"
           >

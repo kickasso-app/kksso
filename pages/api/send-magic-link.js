@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { Resend } from "resend";
-import { render } from "@react-email/render";
+import { render, pretty } from "@react-email/render";
 
 import { MagicLinkTemplate } from "services/emails/magicLinkTemplate";
 
@@ -79,9 +79,9 @@ export default async (req, res) => {
 
       // console.log(magicLink);
 
-      const emailHtml = await render(<MagicLinkTemplate magic={magicLink} />, {
-        pretty: true,
-      });
+      const emailHtml = await pretty(
+        await render(<MagicLinkTemplate magic={magicLink} />)
+      );
       // console.log(emailHtml);
 
       const { data, error } = await resend.emails.send({

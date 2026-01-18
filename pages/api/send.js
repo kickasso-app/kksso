@@ -1,5 +1,5 @@
 import { Resend } from "resend";
-import { render } from "@react-email/render";
+import { render, pretty } from "@react-email/render";
 
 import { TestTemplate } from "services/emails/testTemplate";
 import { NewsletterTemplate } from "services/emails/newsletterTemplate";
@@ -38,11 +38,11 @@ export default async (req, res) => {
 
   const EmailTemplate = emailTemplates[emailTemplate];
 
-  const emailHtml = await render(<EmailTemplate {...emailVariables} />, {
-    pretty: true,
-  });
+  const emailHtml = await pretty(
+    await render(<EmailTemplate {...emailVariables} />)
+  );
 
-  // console.log(emailHtml);
+  console.log(emailHtml);
 
   try {
     const toEmail =

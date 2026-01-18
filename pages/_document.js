@@ -5,7 +5,6 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <title>Arti</title>
         <meta
           name="description"
           content="A platform to connect artists, art lovers, and collectors via studio visits and events."

@@ -7,6 +7,7 @@ export const EventRequestConfirmation = ({
   visit_reason,
   event_date_time,
   event_link,
+  event_title,
 }) => (
   <html>
     <head>
@@ -16,14 +17,12 @@ export const EventRequestConfirmation = ({
       <div id="emailstyles">
         <h1>Hello, {from_name}!</h1>
         <p>
-          We sent your request to join the event at {to_name}'s studio on{" "}
-          {event_date_time}.
+          We sent your request to join {to_name}'s event on {event_date_time}.
         </p>
         <p>
-          Event link: <a href={event_link}>{event_link}</a>
-          <br />
-          Reason to join: {visit_reason}
+          Event link: <a href={event_link}>{event_title}</a>
         </p>
+        <p>Reason to join: {visit_reason}</p>
         <p>
           If this is not an open event, please wait for the artist or space to
           reply to you.
