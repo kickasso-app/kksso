@@ -8,6 +8,7 @@ import { EventsProvider } from "services/events";
 
 import "../styles/base.scss";
 import "../styles/colors.scss";
+import "../styles/emailStyles.scss";
 import "react-flexbox-grid/dist/react-flexbox-grid.css";
 
 import Layout from "layouts/Layout";

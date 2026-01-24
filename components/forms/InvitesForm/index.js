@@ -16,7 +16,8 @@ import {
 } from "grommet";
 import Button from "components/Button";
 
-import { CollectorReferralTemplate } from "services/emails/collectorReferralTemplate";
+import { CollectorReferralPreview } from "services/emails/collectorReferralPreview";
+// import { styles } from "../../../styles/emailStyles.scss";
 
 const MAX_ARTIST_REFERRALS = 5;
 
@@ -26,7 +27,7 @@ export default function InvitesForm({ profile }) {
     useAccount();
 
   const [numOfArtistInvites, setNumOfArtistInvites] = useState(
-    profile?.referrals?.length || 0
+    profile?.referrals?.length || 0,
   );
 
   const [sendingInvite, setSendingInvite] = useState(false);
@@ -235,12 +236,14 @@ export default function InvitesForm({ profile }) {
             <Heading level={4} size="small" margin={{ bottom: "small" }}>
               Email Preview
             </Heading>
-            <CollectorReferralTemplate
-              name={previewName || ""}
-              referredBy={profile.artist}
-              studioLink={`https://arti.my/studio/${user.id}`}
-              includeStudioLink={includeStudioLink}
-            />
+            <div class="emailStyles">
+              <CollectorReferralPreview
+                name={previewName || ""}
+                referredBy={profile.artist}
+                studioLink={`https://arti.my/studio/${user.id}`}
+                includeStudioLink={includeStudioLink}
+              />
+            </div>
           </Box>
         )}
       </Box>

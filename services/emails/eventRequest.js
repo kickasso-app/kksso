@@ -22,9 +22,9 @@ export const EventRequest = ({
           You got a request to join your{" "}
           <a href={event_link}>{event_title} event</a> on {event_date_time} from{" "}
           <strong>{from_name}</strong>. They want to join for this reason:
-          <br />
-          {visit_reason}
         </p>
+        <div id="blockquote">{visit_reason}</div>
+
         <p>
           You can know more about {from_name} at their link{" "}
           <a href={requestor_link} target="_blank">

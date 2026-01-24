@@ -18,9 +18,10 @@ export const VisitRequest = ({
         <h1>Hello, {to_name}!</h1>
         <p>
           You got a studio visit request from <strong>{from_name}</strong> on{" "}
-          {request_date}. They asked to visit for this reason:
-          <blockquote>{visit_reason}</blockquote>
+          {request_date}. They asked to visit for this reason:{" "}
         </p>
+        <div id="blockquote">{visit_reason}</div>
+
         <p>
           You can know more about {from_name} at their link{" "}
           <a href={requestor_link} target="_blank">

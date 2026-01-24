@@ -19,13 +19,12 @@ export const CollectorReferralTemplate = ({
           art world with us.
         </p>
 
-        <p>
-          What is Arti?
-          <blockquote>
-            Arti is a digital platform to connect artists, collectors, and art
-            lovers.
-          </blockquote>
-        </p>
+        <p>What is Arti? </p>
+
+        <div id="blockquote">
+          Arti is a digital platform to connect artists, collectors, and art
+          lovers.
+        </div>
 
         <p>
           Join us today to attend studio visits and events, and create with us a
@@ -62,7 +61,6 @@ export const CollectorReferralTemplate = ({
           <br />
           Arti team
           <br />
-          {/* <a href="https://arti.my"> https://www.arti.my</a>. */}
         </p>
         <img src="https://arti.my/img/logo-name-web.png"></img>
       </div>

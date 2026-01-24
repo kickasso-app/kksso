@@ -30,10 +30,10 @@ export const ResponseEventRequest = ({
           <br />
         </p>
         {message && (
-          <p>
-            They attached this following message:
-            <blockquote>{message}</blockquote>
-          </p>
+          <div>
+            <p>They attached this following message:</p>
+            <div id="blockquote">{message}</div>{" "}
+          </div>
         )}
 
         {readableResponse === "Approved" && (

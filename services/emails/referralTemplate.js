@@ -10,12 +10,11 @@ export const ReferralTemplate = ({ name, referredBy, joinLink }) => (
       <div id="emailstyles">
         <h1>Hello {name}!</h1>
         <p> You were invited to join Arti by {referredBy}.</p>
-        <p>
-          <blockquote>
-            Arti is a digital platform to connect artists, collectors, and art
-            lovers.
-          </blockquote>
-        </p>
+
+        <div class="blockquote">
+          Arti is a digital platform to connect artists, collectors, and art
+          lovers.
+        </div>
         <p>
           The idea started with the understanding that studios are a great place
           to share art and creativity. Studio visits help as well fill the gap
