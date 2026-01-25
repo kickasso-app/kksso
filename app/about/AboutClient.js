@@ -1,13 +1,13 @@
+'use client';
+
 import React, { useContext } from "react";
 import Link from "next/link";
-
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import { Box, Heading, Text, Paragraph, ResponsiveContext } from "grommet";
 import { Circle } from "react-feather";
 import Button from "components/Button";
-
+import Footer from "layouts/Footer";
 import styles from "./index.module.scss";
-import WithFooter from "layouts/WithFooter";
 
 const CirclePoint = ({ children }) => (
   <Box direction="row" align="center" margin={{ vertical: "small" }}>
@@ -20,11 +20,11 @@ const CirclePoint = ({ children }) => (
   </Box>
 );
 
-const About = () => {
+const AboutClient = () => {
   const size = useContext(ResponsiveContext);
 
   return (
-    <WithFooter>
+    <>
       <Box pad={size === "small" ? "medium" : "large"}>
         <Grid fluid>
           <Row>
@@ -121,7 +121,7 @@ const About = () => {
                     <Box margin="medium" gap="medium">
                       <img
                         className={styles.teamImg}
-                        src="img/team/youssef.jpg"
+                        src="/img/team/youssef.jpg"
                         alt="Youssef Faltas"
                       />
                       <Text size="large">Youssef Faltas</Text>
@@ -135,7 +135,7 @@ const About = () => {
                     <Box margin="medium" gap="medium">
                       <img
                         className={styles.teamImg}
-                        src="img/team/ivca.jpg"
+                        src="/img/team/ivca.jpg"
                         alt="Ivana Benova"
                       />
                       <Text size="large">Ivana Benova</Text>
@@ -149,7 +149,7 @@ const About = () => {
                     <Box margin="medium" gap="medium">
                       <img
                         className={styles.teamImg}
-                        src="img/team/salam.jpg"
+                        src="/img/team/salam.jpg"
                         alt="Salam Shokor"
                       />
                       <Text size="large">Salam Shokor</Text>
@@ -163,7 +163,7 @@ const About = () => {
                     <Box margin="medium" gap="medium">
                       <img
                         className={styles.teamImg}
-                        src="img/team/gabal.jpg"
+                        src="/img/team/gabal.jpg"
                         alt="Mohamed AbouGabal"
                       />
                       <Text size="large">
@@ -225,7 +225,6 @@ const About = () => {
 
               <Box
                 margin={{ vertical: "xlarge" }}
-                // margin={{ vertical: "xlarge" }}
                 pad={{ horizontal: "small", vertical: "small" }}
                 align="center"
                 direction="column"
@@ -243,13 +242,13 @@ const About = () => {
                       fill
                       direction="column"
                     >
-                      <Button btnStyle="outline">
-                        <Box margin={"xsmall"}>
-                          <Link href={"/how-it-works/artists"}>
+                      <Link href={"/how-it-works/artists"} style={{ textDecoration: 'none' }}>
+                        <Button btnStyle="outline" as="div">
+                          <Box margin={"xsmall"}>
                             For Artists and Curators
-                          </Link>
-                        </Box>
-                      </Button>
+                          </Box>
+                        </Button>
+                      </Link>
                       <Paragraph
                         size="medium"
                         alignSelf="center"
@@ -269,13 +268,13 @@ const About = () => {
                       fill
                       direction="column"
                     >
-                      <Button btnStyle="outline">
-                        <Box margin={"xsmall"}>
-                          <Link href={"/how-it-works/"}>
+                      <Link href={"/how-it-works/"} style={{ textDecoration: 'none' }}>
+                        <Button btnStyle="outline" as="div">
+                          <Box margin={"xsmall"}>
                             For Art Lovers and Collectors
-                          </Link>
-                        </Box>
-                      </Button>
+                          </Box>
+                        </Button>
+                      </Link>
                       <Paragraph
                         margin={{ vertical: "large" }}
                         size="medium"
@@ -292,8 +291,9 @@ const About = () => {
           </Row>
         </Grid>
       </Box>
-    </WithFooter>
+      <Footer />
+    </>
   );
 };
 
-export default About;
+export default AboutClient;

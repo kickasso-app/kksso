@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 import ProgressiveImage from "react-progressive-image";
@@ -17,10 +17,7 @@ const StudioCard = ({
 }) => {
   const router = useRouter();
 
-  const articleLink = {
-    pathname: "/studio/[id]",
-    query: { id: studio_id },
-  };
+  const articleLink = `/studio/${studio_id}`;
 
   const openArticle = () => {
     router.push(articleLink);
@@ -35,7 +32,10 @@ const StudioCard = ({
   return (
     <div className={styles.StudioCard}>
       <div className={styles.imgContainer}>
-        <Link href={articleLink} onClick={() => openArticle()}>
+        <Link href={articleLink} onClick={(e) => {
+          e.preventDefault();
+          openArticle();
+        }}>
 
           <ProgressiveImage src={imgUrl} placeholder={`/img/loader.svg`}>
             {(src, loading) => (

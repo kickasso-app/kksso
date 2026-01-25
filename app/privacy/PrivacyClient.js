@@ -1,3 +1,5 @@
+'use client';
+
 import Link from "next/link";
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import { Box, Heading, Paragraph, Text } from "grommet";
@@ -14,7 +16,7 @@ const CirclePoint = ({ children }) => (
   </Box>
 );
 
-const Privacy = () => {
+const PrivacyClient = () => {
   return (
     <Box pad="large">
       <Grid fluid>
@@ -22,7 +24,7 @@ const Privacy = () => {
           <Col xs={12}>
             <Box margin={{ bottom: "large" }}>
               <Link href="/">
-                <Box direction="row" align="center" gap="small" as="a">
+                <Box direction="row" align="center" gap="small">
                   <ChevronLeft size={16} />
                   <Text>BACK</Text>
                 </Box>
@@ -81,4 +83,4 @@ const Privacy = () => {
   );
 };
 
-export default Privacy;
+export default PrivacyClient;

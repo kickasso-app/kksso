@@ -2,23 +2,23 @@
 
 This document tracks the progress of migrating **Arti** from the Next.js Pages Router to the App Router. It combines detailed explanations with a checklist of actionable tasks.
 
-**Overall Progress: 60%**
+**Overall Progress: 0%**
 
 ---
 
-## 1. Setup & Infrastructure (100% Complete)
+## 1. Setup & Infrastructure (0% Complete)
 
 **Explanation:**
 The `app` directory allows for incremental adoption, meaning it can coexist with the `pages` directory. The first step is to establish the directory structure and ensure the environment is configured correctly. Since the project uses `styled-components`, specific configuration is required to ensure it works with Server Components.
 
 **Tasks:**
-- [x] Create the `app/` directory in the root.
-- [x] Ensure `next.config.js` is compatible with App Router (standard in Next.js v13+).
-- [x] Verify `styled-components` registry setup for Server Components (Next.js documentation requirement).
+- [ ] Create the `app/` directory in the root.
+- [ ] Ensure `next.config.js` is compatible with App Router (standard in Next.js v13+).
+- [ ] Verify `styled-components` registry setup for Server Components (Next.js documentation requirement).
 
 ---
 
-## 2. Root Layout & Global Context (100% Complete)
+## 2. Root Layout & Global Context (0% Complete)
 
 **Explanation:**
 In the App Router, `app/layout.js` replaces both `pages/_app.js` and `pages/_document.js`.
@@ -29,24 +29,19 @@ In the App Router, `app/layout.js` replaces both `pages/_app.js` and `pages/_doc
 Context providers (`CityProvider`, `AuthProvider`, etc.) rely on React state and effects, so they must be Client Components. They cannot be directly imported into a Server Component layout. The solution is to create a "Providers" client component wrapper.
 
 **Tasks:**
-- [x] **Create `components/Providers.js` (Client Component):**
-    - [x] Add `'use client'` directive.
-    - [x] Import and wrap children with `Grommet` (theme).
-    - [x] Import and wrap children with all context providers: `CityProvider`, `AuthProvider`, `AccountProvider`, `RequestsProvider`, `EventsProvider`, `StudiosProvider`.
-- [x] **Create `app/layout.js` (Server Component):**
-    - [x] Import `Providers` from `components/Providers`.
-    - [x] Import global styles (`styles/base.scss`, `styles/colors.scss`, etc.).
-    - [x] Define and export `metadata` object (Title, Description, OpenGraph, Favicons) replacing `pages/_document.js` and `next/head` content.
-    - [x] Implement `RootLayout` function with `<html>`, `<body>`, and `<Providers>{children}</Providers>`.
-
-**Log:**
-- Successfully created `lib/registry.js` for styled-components.
-- Created `components/Providers.js` and `app/layout.js`.
-- Updated `NavButton` and `ProfileButton` to use `next/navigation` to fix "NextRouter was not mounted" error.
+- [ ] **Create `components/Providers.js` (Client Component):**
+    - [ ] Add `'use client'` directive.
+    - [ ] Import and wrap children with `Grommet` (theme).
+    - [ ] Import and wrap children with all context providers: `CityProvider`, `AuthProvider`, `AccountProvider`, `RequestsProvider`, `EventsProvider`, `StudiosProvider`.
+- [ ] **Create `app/layout.js` (Server Component):**
+    - [ ] Import `Providers` from `components/Providers`.
+    - [ ] Import global styles (`styles/base.scss`, `styles/colors.scss`, etc.).
+    - [ ] Define and export `metadata` object (Title, Description, OpenGraph, Favicons) replacing `pages/_document.js` and `next/head` content.
+    - [ ] Implement `RootLayout` function with `<html>`, `<body>`, and `<Providers>{children}</Providers>`.
 
 ---
 
-## 3. Page Migration (60% Complete)
+## 3. Page Migration (0% Complete)
 
 **Explanation:**
 Pages should be migrated incrementally. The new router uses Server Components by default, which simplifies data fetching but requires identifying interactive parts (Client Components).
@@ -57,29 +52,23 @@ Pages should be migrated incrementally. The new router uses Server Components by
 **Tasks:**
 
 ### Simple / Static Pages
-- [x] **About Page:** Move `pages/about/index.js` to `app/about/page.js`.
-- [x] **Privacy Page:** Move `pages/privacy/index.js` to `app/privacy/page.js`.
-- [x] **How It Works:** Move `pages/how-it-works/index.js` to `app/how-it-works/page.js` and `artists.js` to `app/how-it-works/artists/page.js`.
-- [x] **Update Metadata:** Remove `next/head` from these pages and export `metadata` object.
+- [ ] **About Page:** Move `pages/about/index.js` to `app/about/page.js`.
+- [ ] **Privacy Page:** Move `pages/privacy/index.js` to `app/privacy/page.js`.
+- [ ] **How It Works:** Move `pages/how-it-works/index.js` to `app/how-it-works/page.js` and `artists.js` to `app/how-it-works/artists/page.js`.
+- [ ] **Update Metadata:** Remove `next/head` from these pages and export `metadata` object.
 
 ### Landing Page
-- [x] **Landing:** Move `pages/index.js` (and `pages/landing/index.js`) to `app/page.js`.
-    - [x] Strategy: Refactor into Server Component (static parts) + Client Components (interactive parts).
+- [ ] **Landing:** Move `pages/index.js` (and `pages/landing/index.js`) to `app/page.js`.
+    - [ ] Strategy: Refactor into Server Component (static parts) + Client Components (interactive parts).
 
 ### Complex / Dynamic Pages
-- [x] **Studios:** Move `pages/studios/index.js` & `[city].js`.
-    - [x] Replace `getStaticProps`/`getServerSideProps` with async component data fetching.
-    - [x] Update `useRouter` usage to `next/navigation`.
-- [x] **Events:** Move `pages/events/index.js` & `[city].js`.
+- [ ] **Studios:** Move `pages/studios/index.js` & `[city].js`.
+    - [ ] Replace `getStaticProps`/`getServerSideProps` with async component data fetching.
+    - [ ] Update `useRouter` usage to `next/navigation`.
+- [ ] **Events:** Move `pages/events/index.js` & `[city].js`.
 - [ ] **Editorial:** Move `pages/editorial` routes.
 - [ ] **Profile & Auth:** Move `pages/profile`, `pages/signin`, `pages/join`.
     - [ ] Ensure `useSearchParams` and `useRouter` hooks are updated from `next/router` to `next/navigation`.
-
-**Log:**
-- Removed conflicting files in `pages/` directory to resolve route overlap errors.
-- Migrated Landing, About, Privacy, How-it-works, Studios, and Events pages.
-- Updated shared components (`EventCard`, `StudioCard`, `SelectLocation`, `SearchBar`, `MagazineCard`) to use `next/navigation`.
-- Fixed `router.push` object syntax to string paths in `StudioCard`.
 
 ---
 

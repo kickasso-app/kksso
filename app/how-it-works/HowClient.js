@@ -1,9 +1,11 @@
-import React, { useContext } from "react";
-import CustomHead from "layouts/CustomHead";
+'use client';
 
+import React, { useContext } from "react";
+import Link from "next/link";
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import { Box, Heading, Text, Paragraph, ResponsiveContext } from "grommet";
 import { Circle } from "react-feather";
+import Button from "components/Button";
 
 const CirclePoint = ({ children }) => (
   <Box direction="row" align="center" margin={{ vertical: "small" }}>
@@ -16,16 +18,11 @@ const CirclePoint = ({ children }) => (
   </Box>
 );
 
-const How = () => {
+const HowClient = () => {
   const size = useContext(ResponsiveContext);
 
   return (
     <>
-      <CustomHead
-        pageSlug="how-it-works"
-        title="Arti - How It Works for Art Lovers and Collectors"
-      />
-
       <Box pad={size === "small" ? "medium" : "large"}>
         <Grid fluid>
           <Row>
@@ -202,4 +199,4 @@ const How = () => {
   );
 };
 
-export default How;
+export default HowClient;

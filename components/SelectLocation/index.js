@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react";
 
-import { useRouter } from "next/router";
+import { useRouter, usePathname } from "next/navigation";
 
 import { useCities } from "services/city";
 
@@ -13,9 +13,10 @@ export const SelectLocation = ({ isBarFullWidth = false }) => {
   const { cities, fetchCities, selectCity, selectedCity } = useCities();
 
   const router = useRouter();
+  const pathname = usePathname();
 
-  const baseRedirect = router.pathname.split("/")[1]
-    ? `/${router.pathname.split("/")[1]}/`
+  const baseRedirect = pathname.split("/")[1]
+    ? `/${pathname.split("/")[1]}/`
     : null;
 
   useEffect(() => {

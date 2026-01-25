@@ -1,47 +1,23 @@
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+'use client';
 
-import { useEvents } from "services/events";
+import { useEffect } from "react";
 import { useCities } from "services/city";
-
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import Masonry from "react-masonry-css";
 import { Box, Heading, Text } from "grommet";
-
 import SelectLocation from "components/SelectLocation";
-
 import EventCard from "components/EventCard";
 import { titleCase } from "services/helpers/textFormat";
-
-// Optionally reuse masonry styles from StudiosFilter or create your own
 import styles from "components/StudiosFilter/index.module.scss";
 
-export default function Events() {
-  const { events, fetchEvents, loading, error } = useEvents();
+const EventsClient = ({ events, city }) => {
   const { selectedCity, selectCity } = useCities();
 
-  const [isDifferentCity, setIsDifferentCity] = useState(true);
-
-  const router = useRouter();
-  const { city: citySlug } = router.query;
-
-  // First Effect: Handle city selection
   useEffect(() => {
-    if (!citySlug) return; // Guard clause
-
-    if (citySlug !== selectedCity?.slugName) {
-      setIsDifferentCity(true);
-      selectCity(citySlug);
+    if (city && city !== selectedCity?.slugName) {
+      selectCity(city);
     }
-  }, [citySlug]); // Only depend on URL param changes
-
-  // Second Effect: Fetch studios when city changes
-  useEffect(() => {
-    if (selectedCity && isDifferentCity) {
-      fetchEvents();
-      setIsDifferentCity(false);
-    }
-  }, [selectedCity, isDifferentCity]);
+  }, [city, selectedCity, selectCity]);
 
   return (
     <Grid fluid align="start">
@@ -53,31 +29,23 @@ export default function Events() {
                 Events
               </Heading>
             </Box>
-            {loading && (
-              <img
-                src={`/img/loader.svg`}
-                style={{ width: "100px", height: "auto" }} // Ensure aspect ratio is maintained
-              />
-            )}
-            {error && (
+            
+             {(!events || events.length === 0) ? (
               <>
                 <Box pad={{ horizontal: "medium", vertical: "large" }}>
                   <Text size="medium">
                     There are no events in the city{" "}
-                    <b>"{titleCase(citySlug)}"</b>
+                    <b>"{titleCase(city)}"</b>
                     <br />
                     <br />
                     Please try to check the URL or choose another city from
                     below
                   </Text>
                 </Box>
-                {/* <b>Error: {JSON.stringify(error)}</b> */}
+                <SelectLocation isBarFullWidth />
               </>
-            )}
-
-            <SelectLocation isBarFullWidth />
-            {!loading && !error && events && (
-              <Box pad="small">
+            ) : (
+               <Box pad="small">
                 <Masonry
                   breakpointCols={{
                     default: 3,
@@ -94,9 +62,18 @@ export default function Events() {
                 </Masonry>
               </Box>
             )}
+            
+            {(events && events.length > 0) && (
+                 <Box align="center" margin={{ top: "medium" }}>
+                     <SelectLocation isBarFullWidth />
+                 </Box>
+            )}
+
           </Col>
         </Row>
       </section>
     </Grid>
   );
-}
+};
+
+export default EventsClient;

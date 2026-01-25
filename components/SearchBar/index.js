@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { useStudios } from "services/studios";
-import { useRouter } from "next/router";
+import { useRouter, usePathname } from "next/navigation";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 
@@ -9,6 +9,7 @@ import { Box, TextInput } from "grommet";
 
 export const SearchBar = ({ isBarFullWidth = false }) => {
   const router = useRouter();
+  const pathname = usePathname();
 
   const { query, hasQuery, updateQuery } = useStudios();
 
@@ -72,7 +73,7 @@ export const SearchBar = ({ isBarFullWidth = false }) => {
                 pad={{ vertical: "10px" }}
                 onClick={() => {
                   onSearch();
-                  if (!router.pathname.includes("studios")) {
+                  if (!pathname.includes("studios")) {
                     router.push("/studios");
                   }
                 }}

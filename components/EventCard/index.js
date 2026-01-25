@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { Box, Heading, Paragraph } from "grommet";
 import Link from "next/link";
 import moment from "moment";
@@ -29,7 +29,10 @@ export default function EventCard({ event, inStudio = false }) {
   return (
     <div className={styles.eventCard}>
       <div className={styles.imgContainer}>
-        <Link href={eventLink} onClick={() => openEvent()}>
+        <Link href={eventLink} onClick={(e) => {
+          e.preventDefault();
+          openEvent();
+        }}>
           <ProgressiveImage src={imgUrl} placeholder={`/img/loader.svg`}>
             {(src, loading) => (
               <img className={styles.cardImg} src={src} alt={event.title} />
