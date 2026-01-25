@@ -62,6 +62,16 @@ const CityProvider = ({ children }) => {
   );
 };
 
+const getCityBySlug = async (slug) => {
+  const { data, error } = await supabase
+    .from("cities")
+    .select("*")
+    .eq("slugName", slug)
+    .single();
+  if (error) return null;
+  return data;
+};
+
 const useCities = () => useContext(CityContext);
 
-export { useCities, CityContext, CityProvider };
+export { useCities, CityContext, CityProvider, getCityBySlug };

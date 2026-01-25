@@ -202,6 +202,17 @@ const EventsProvider = ({ children }) => {
   );
 };
 
+const getEvent = async (id) => {
+  const { data, error } = await supabase
+    .from("events")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) return null;
+  return data;
+};
+
 const useEvents = () => useContext(EventsContext);
 
-export { useEvents, EventsContext, EventsProvider };
+export { useEvents, EventsContext, EventsProvider, getEvent };

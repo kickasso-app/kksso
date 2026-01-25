@@ -1,0 +1,106 @@
+.studio {
+  background: #ffffff;
+  min-height: 80vw;
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+a.backlink {
+  text-decoration: none !important;
+}
+
+a.backlink:hover {
+  text-decoration: underline;
+}
+
+h2.maintitle {
+  font-size: 1.75rem;
+  margin: 0.5rem;
+  line-height: 2.25rem;
+}
+
+img.article-photo {
+  display: block;
+  max-width: 100%;
+  max-height: 75vh;
+  height: auto;
+  width: auto;
+  margin: 0 auto;
+}
+
+p.studioParagraph {
+  margin-bottom: 0.5rem;
+}
+
+p.eventParagraph {
+  margin: 0.75rem 0;
+  padding-left: 0.5rem;
+  font-weight: bold;
+}
+
+h4.subsectiontitle {
+  margin: 1rem 0;
+  // font-weight: 600;
+}
+svg.icon {
+  vertical-align: top;
+  margin-right: 0.333rem;
+}
+
+ul.rules {
+  width: 100%;
+  padding-left: 0.5rem;
+  list-style: outside circle;
+  margin-left: 0.75rem;
+  font-size: 1.125rem;
+  li {
+    line-height: 1.5rem;
+  }
+}
+
+@media only screen and (min-width: 400px) {
+  .studio {
+    width: 100%;
+    padding: 1rem;
+    // img.article-photo {
+    //   width: 100%;
+    //   height: auto;
+    // }
+    .icon-and-info {
+      text-align: right;
+      margin-left: 20%;
+    }
+  }
+}
+
+button.submit {
+  background-color: #ffc0cb; // fallback for $color-quad
+  color: #4b4b4b; // fallback for $color-primary
+  font-size: 1rem;
+  font-family: "Nunito Sans", sans-serif;
+  // font-family: 'Roboto', sans-serif;
+  font-weight: 600;
+  padding: 1rem 3rem;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  margin-right: 0.5rem;
+}
+button.reset {
+  background-color: #ffffff; // fallback for $color--bg-white
+  color: #4b4b4b; // fallback for $color-primary
+  padding: 1rem 2rem;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+button.submit:hover,
+button.reset:hover {
+  color: #ffffff; // fallback for $color--bg-white
+  background-color: #4b4b4b; // fallback for $color-primary
+}
+textarea.Comment {
+  min-height: 8rem;
+}

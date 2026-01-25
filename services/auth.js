@@ -51,6 +51,7 @@ export function AuthProvider({ children }) {
     signUp: (data) => supabase.auth.signUp(data),
     signIn: (data) => supabase.auth.signInWithPassword(data),
     signOut: () => supabase.auth.signOut(),
+    updateUser: (data) => supabase.auth.updateUser(data),
     user,
     session,
     event,

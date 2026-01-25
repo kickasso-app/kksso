@@ -2,7 +2,7 @@
 
 This document tracks the progress of migrating **Arti** from the Next.js Pages Router to the App Router. It combines detailed explanations with a checklist of actionable tasks.
 
-**Overall Progress: 60%**
+**Overall Progress: 100%**
 
 ---
 
@@ -46,7 +46,7 @@ Context providers (`CityProvider`, `AuthProvider`, etc.) rely on React state and
 
 ---
 
-## 3. Page Migration (60% Complete)
+## 3. Page Migration (100% Complete)
 
 **Explanation:**
 Pages should be migrated incrementally. The new router uses Server Components by default, which simplifies data fetching but requires identifying interactive parts (Client Components).
@@ -68,22 +68,22 @@ Pages should be migrated incrementally. The new router uses Server Components by
 
 ### Complex / Dynamic Pages
 - [x] **Studios:** Move `pages/studios/index.js` & `[city].js`.
-    - [x] Replace `getStaticProps`/`getServerSideProps` with async component data fetching.
-    - [x] Update `useRouter` usage to `next/navigation`.
 - [x] **Events:** Move `pages/events/index.js` & `[city].js`.
-- [ ] **Editorial:** Move `pages/editorial` routes.
-- [ ] **Profile & Auth:** Move `pages/profile`, `pages/signin`, `pages/join`.
-    - [ ] Ensure `useSearchParams` and `useRouter` hooks are updated from `next/router` to `next/navigation`.
+- [x] **Editorial:** Move `pages/editorial` routes.
+- [x] **Profile & Auth:** Move `pages/profile`, `pages/signin`, `pages/join`.
+- [x] **Individual Details:** Move `pages/studio/[id].js`, `pages/event/[id].js`, `pages/event/preview/[id].js`, `pages/requests/*`.
 
 **Log:**
 - Removed conflicting files in `pages/` directory to resolve route overlap errors.
 - Migrated Landing, About, Privacy, How-it-works, Studios, and Events pages.
 - Updated shared components (`EventCard`, `StudioCard`, `SelectLocation`, `SearchBar`, `MagazineCard`) to use `next/navigation`.
 - Fixed `router.push` object syntax to string paths in `StudioCard`.
+- Added `<Header />` to `app/layout.js` and ensured it uses `'use client'`.
+- Fully completed all page migrations and removed `pages/` directory.
 
 ---
 
-## 4. API Routes to Route Handlers (0% Complete)
+## 4. API Routes to Route Handlers (100% Complete)
 
 **Explanation:**
 API routes in `pages/api/*` are replaced by Route Handlers in `app/api/*/route.js`.
@@ -91,24 +91,24 @@ API routes in `pages/api/*` are replaced by Route Handlers in `app/api/*/route.j
 - **Response:** Use `NextResponse` for standard web API responses.
 
 **Tasks:**
-- [ ] **Send Email:** Convert `pages/api/send.js` to `app/api/send/route.js`.
-- [ ] **Magic Link:** Convert `pages/api/send-magic-link.js` to `app/api/send-magic-link/route.js`.
-- [ ] **Create Contact:** Convert `pages/api/create-contact.js` to `app/api/create-contact/route.js`.
-- [ ] **Create Event:** Convert `pages/api/create-event.js` to `app/api/create-event/route.js`.
-- [ ] **Create Request:** Convert `pages/api/create-request.js` to `app/api/create-request/route.js`.
-- [ ] **Create Studio:** Convert `pages/api/create-studio.js` to `app/api/create-studio/route.js`.
+- [x] **Send Email:** Convert `pages/api/send.js` to `app/api/send/route.js`.
+- [x] **Magic Link:** Convert `pages/api/send-magic-link.js` to `app/api/send-magic-link/route.js`.
+- [x] **Create Contact:** Convert `pages/api/create-contact.js` to `app/api/create-contact/route.js`.
+- [x] **Create Event:** Convert `pages/api/create-event.js` to `app/api/create-event/route.js`.
+- [x] **Create Request:** Convert `pages/api/create-request.js` to `app/api/create-request/route.js`.
+- [x] **Create Studio:** Convert `pages/api/create-studio.js` to `app/api/create-studio/route.js`.
 
 ---
 
-## 5. Verification & Cleanup (0% Complete)
+## 5. Verification & Cleanup (100% Complete)
 
 **Explanation:**
 After moving routes, thorough verification is needed to ensure no functionality is lost. Once the `pages` directory is empty, it can be safely removed.
 
 **Tasks:**
-- [ ] Verify all routes load correctly.
-- [ ] Verify SEO tags (metadata) appear in source.
-- [ ] Verify Global Styles and Fonts load correctly.
-- [ ] Verify Auth state persists across navigation.
-- [ ] Remove `pages/` directory once empty.
-- [ ] Remove `pages/_app.js` and `pages/_document.js`.
+- [x] Verify all routes load correctly.
+- [x] Verify SEO tags (metadata) appear in source.
+- [x] Verify Global Styles and Fonts load correctly.
+- [x] Verify Auth state persists across navigation.
+- [x] Remove `pages/` directory once empty.
+- [x] Remove `pages/_app.js` and `pages/_document.js`.

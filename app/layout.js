@@ -1,5 +1,6 @@
 import { Providers } from 'components/Providers';
 import StyledComponentsRegistry from 'lib/registry';
+import Header from 'layouts/Header';
 
 import "../styles/base.scss";
 import "../styles/colors.scss";
@@ -46,7 +47,10 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <StyledComponentsRegistry>
-          <Providers>{children}</Providers>
+          <Providers>
+            <Header />
+            {children}
+          </Providers>
         </StyledComponentsRegistry>
       </body>
     </html>
