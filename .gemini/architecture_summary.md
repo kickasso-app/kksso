@@ -1,51 +1,73 @@
-# Application Architecture Summary
+# Application Architecture Summary (Detailed)
 
-## Overview
-**Arti** is a web application built using the **Next.js** framework, serving as a platform for artists, studios, and events. It combines a server-side rendered (SSR) and static site generated (SSG) frontend with a backend-as-a-service (BaaS) architecture using **Supabase**.
+## 1. Overview
 
-## Tech Stack
+**Arti** is a modern web application built on **Next.js 16** and **React 19**, leveraging the **App Router** paradigm. It serves as a discovery platform connecting artists, collectors, and enthusiasts by featuring artist studios and art events.
+
+The architecture is server-centric, prioritizing **React Server Components (RSCs)** for rendering and data fetching to optimize performance and reduce client-side load. This is complemented by a Backend-as-a-Service (BaaS) infrastructure using **Supabase**, which handles the database, authentication, and other backend functionalities. The result is a highly-performant, SEO-friendly application with a streamlined developer experience.
+
+## 2. Tech Stack
 
 ### Frontend
-- **Framework:** Next.js (v16.x) with React (v19.x).
-- **Styling:**
-  - **SCSS Modules:** Used for component-level styling (`.module.scss`).
-  - **Styled Components:** integrated via Next.js compiler options.
-  - **Grommet:** UI component library (`grommetTheme.js`).
-  - **Global Styles:** SCSS variables and base styles defined in `styles/`.
-- **State Management:** React Hooks (`hooks/`) and Context (implied by usage patterns).
+- **Framework:** Next.js (v16.x) with React (v19.x). The use of the **App Router** is central, moving away from the traditional `pages/` directory structure.
+- **Styling:** A hybrid styling strategy is employed:
+  - **Global Styles:** Core styles and variables are defined in `styles/base.scss` and `styles/colors.scss`. These are injected into all components and pages via the `additionalData` option in `next.config.js`.
+  - **SCSS Modules:** The primary method for component-level styling, ensuring class names are locally scoped to prevent conflicts.
+  - **Styled Components:** Used for dynamic or complex component styling. It is correctly configured for Server-Side Rendering (SSR) in the App Router via `lib/registry.js`, which prevents style flashing on initial load.
+  - **Grommet:** A UI component library providing a base set of accessible and themeable components. The application's theme is configured in `styles/grommetTheme.js`.
+- **State Management:** Primarily relies on React Hooks (`useState`, `useContext`, `useEffect`). Global state and context are managed through `components/Providers.js`, which likely wraps the application in necessary context providers (e.g., for authentication state).
 
 ### Backend & Data
-- **Database & Auth:** **Supabase** (PostgreSQL-based) is used for data persistence and user authentication.
-- **API:** Next.js API Routes (`pages/api/`) handle server-side logic, including:
-  - transactional emails.
-  - specialized database operations.
-- **Email Service:** **Resend** (via `resend` package) is used for transactional emails (`services/sendEmail.js`).
+- **Database & Authentication:** **Supabase** serves as the all-in-one backend. It provides a PostgreSQL database for data persistence and a complete authentication solution. The Supabase client is initialized in `services/supabase.js`.
+- **API Layer:** Server-side logic is handled by **Next.js Route Handlers** within the `app/api/` directory.
+  - These endpoints are crucial for secure operations that require server-only secrets, such as creating new database entries (`create-event/route.js`, `create-studio/route.js`).
+  - They securely interact with Supabase using the `SUPABASE_SERVICE_ROLE_KEY`, which grants elevated privileges necessary for bypassing Row Level Security (RLS) when appropriate.
+- **Email Service:** Transactional emails (e.g., magic link logins, notifications) are sent using the **Resend** API, as indicated by the `resend` package in `package.json`.
 
 ### Infrastructure
-- **Hosting:** Vercel (implied by `.vercel` folder and `next.config.js` structure).
-- **PWA:** Progressive Web App support via `@ducanh2912/next-pwa`.
+- **Hosting:** The project is optimized for and likely hosted on **Vercel**, the platform built by the creators of Next.js.
+- **PWA (Progressive Web App):** The application includes PWA features, enabled by the `@ducanh2912/next-pwa` package, allowing it to be installed on user devices for an app-like experience.
 
-## Project Structure
+## 3. Project Structure
 
 ### Key Directories
-- **`pages/`**:
-  - **Routing:** Follows Next.js Pages Router conventions.
-  - **`api/`**: Backend endpoints (e.g., `create-event`, `send-magic-link`).
-  - **Feature Pages:** `editorial`, `events`, `studios`, `profile`, `requests`.
-- **`components/`**: Reusable UI components organized by feature (e.g., `Auth`, `EventCard`, `forms`).
-- **`services/`**: API abstraction layer. Functions here directly interact with Supabase or external APIs, separating data fetching logic from UI components.
-  - Examples: `supabase.js`, `auth.js`, `events.js`, `studios.js`.
-- **`styles/`**: Global style definitions, theme configurations (Grommet), and SCSS variables.
-- **`hooks/`**: Custom React hooks for shared logic (e.g., `useMediaQuery`, `useEventImage`).
-- **`config/`**: Static configuration and constants (e.g., `menuLinks.js`, `feature-flags.js`).
+- **`app/`**: The core of the application, following App Router conventions.
+  - **`layout.js`:** The root layout that defines the global HTML structure, including the `<Header>` and shared providers (`Providers.js`). It also imports global stylesheets.
+  - **`page.js`:** The entry point for the homepage route (`/`).
+  - **Feature Routes:** Subdirectories map directly to URL segments. For example, `app/events/[city]/` corresponds to the `/events/:city` URL.
+    - **`page.js`** files define the UI for a specific route.
+    - **`layout.js`** files define layouts specific to a route segment.
+  - **`api/`:** Contains all backend Route Handlers. Each subdirectory (e.g., `send-magic-link/`) has a `route.js` file that exports functions for HTTP methods (`GET`, `POST`, etc.).
 
-## Key Features
-1.  **Authentication:** Custom flows for Sign In/Up, including Magic Links (`pages/join/magiclink.js`).
-2.  **Studios & Events:** Directory and listing capabilities with filtering (`StudiosFilter`).
-3.  **Editorial:** Content section for articles (`pages/editorial`).
-4.  **User Profiles:** Management of user-specific data and settings.
-5.  **Notifications:** Notification layer component (`components/NotificationLayer`).
+- **`components/`**: A library of reusable React components.
+  - It is well-organized by feature (`Auth/`, `forms/`, `EventCard/`) or by atomic purpose (`Button/`). This modular structure promotes code reuse and maintainability.
 
-## conventions
-- **Styling:** Prefers SCSS modules for local scope, with global variables injected via `next.config.js`.
-- **Service Pattern:** Database queries are encapsulated in `services/` rather than written directly inside components or API routes.
+- **`services/`**: The data access layer, responsible for all communication with Supabase and other external APIs.
+  - This pattern decouples data-fetching logic from the UI, making components cleaner and logic easier to test and manage.
+  - **`*.server.js` Convention:** Files like `events.server.js` likely contain functions intended only for server-side execution (in Server Components or Route Handlers), while files without the `.server` suffix may be used in both client and server environments.
+
+- **`styles/`**: Contains all global styling resources, including Sass partials, variable definitions, and the Grommet theme configuration.
+
+- **`hooks/`**: Home to custom React hooks that encapsulate reusable client-side logic, such as `useMediaQuery` for responsive design.
+
+- **`lib/`**: Contains utility and library-specific configuration files, most notably the `registry.js` for Styled Components SSR.
+
+## 4. Key Features & Implementation
+
+1.  **Authentication:** Implemented using Supabase Auth. The flow includes email/password sign-in (`components/Auth/SignIn`) and a passwordless Magic Link system (`app/api/send-magic-link/route.js`).
+2.  **Studios & Events Directory:** A core feature allowing users to browse and filter studios and events.
+    - Listings are rendered on pages like `app/studios/[city]/page.js`.
+    - Filtering logic is encapsulated in `components/StudiosFilter/filterStudios.js`.
+    - Individual items are displayed using reusable components like `StudioCard` and `EventCard`.
+3.  **Editorial Content:** A section for articles, likely managed via Supabase and rendered through `app/editorial/`.
+4.  **User Profiles:** A dedicated `app/profile/` section where users can manage their information and view their activity (e.g., created events).
+5.  **Notifications:** A global notification system provided by `components/NotificationLayer`, likely using a React Context to manage notification state across the app.
+
+## 5. Architectural Conventions
+
+- **App Router Paradigm:** The application fully embraces the App Router's conventions:
+  - **Server-First:** Components are React Server Components by default, fetching data asynchronously and rendering on the server.
+  - **Client Components:** Interactivity is explicitly opted into by using the `"use client";` directive at the top of a file (e.g., forms, components with `useState` or `useEffect`).
+- **Service Pattern:** All database and API interactions are centralized in the `services/` directory. This promotes a clean separation of concerns, making the codebase easier to reason about and maintain.
+- **Standardized API Responses:** Route Handlers in `app/api/` use the `NextResponse` object to return standardized, typed JSON responses, which improves API consistency.
+- **Hybrid Styling:** The project effectively combines the strengths of different styling methodologies: global SCSS for foundational styles, SCSS Modules for component encapsulation, and Styled Components/Grommet for dynamic UI elements.
