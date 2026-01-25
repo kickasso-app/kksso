@@ -12,10 +12,6 @@ const fetchMagazinePosts = async ({ selectedCity }) => {
       .is("isPublished", true)
       .order("created_at", { ascending: false });
 
-    await supabaseQuery
-      .is("isPublished", true)
-      .order("created_at", { ascending: false });
-
     if (supaMagPosts?.length) {
       //console.log(supaMagPosts);
       return supaMagPosts;
