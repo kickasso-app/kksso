@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect } from "react";
 import { useCities } from "services/city";
@@ -29,13 +29,12 @@ const EventsClient = ({ events, city }) => {
                 Events
               </Heading>
             </Box>
-            
-             {(!events || events.length === 0) ? (
+
+            {!events || events.length === 0 ? (
               <>
                 <Box pad={{ horizontal: "medium", vertical: "large" }}>
                   <Text size="medium">
-                    There are no events in the city{" "}
-                    <b>"{titleCase(city)}"</b>
+                    There are no events in the city <b>"{titleCase(city)}"</b>
                     <br />
                     <br />
                     Please try to check the URL or choose another city from
@@ -45,7 +44,11 @@ const EventsClient = ({ events, city }) => {
                 <SelectLocation isBarFullWidth />
               </>
             ) : (
-               <Box pad="small">
+              <Box pad="small">
+                <Box align="center" margin={{ vertical: "medium" }}>
+                  <SelectLocation isBarFullWidth />
+                </Box>
+
                 <Masonry
                   breakpointCols={{
                     default: 3,
@@ -62,13 +65,6 @@ const EventsClient = ({ events, city }) => {
                 </Masonry>
               </Box>
             )}
-            
-            {(events && events.length > 0) && (
-                 <Box align="center" margin={{ top: "medium" }}>
-                     <SelectLocation isBarFullWidth />
-                 </Box>
-            )}
-
           </Col>
         </Row>
       </section>
