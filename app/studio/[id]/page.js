@@ -1,4 +1,4 @@
-import { getStudio } from "services/studios";
+import { getStudio } from "services/studios.server";
 import StudioClient from "./StudioClient";
 
 export async function generateMetadata({ params }) {

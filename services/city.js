@@ -1,3 +1,5 @@
+'use client';
+
 import { createContext, useContext, useState, useRef } from "react";
 import { supabase } from "./supabase";
 
@@ -62,16 +64,6 @@ const CityProvider = ({ children }) => {
   );
 };
 
-const getCityBySlug = async (slug) => {
-  const { data, error } = await supabase
-    .from("cities")
-    .select("*")
-    .eq("slugName", slug)
-    .single();
-  if (error) return null;
-  return data;
-};
-
 const useCities = () => useContext(CityContext);
 
-export { useCities, CityContext, CityProvider, getCityBySlug };
+export { useCities, CityContext, CityProvider };

@@ -48,8 +48,12 @@ export default function RootLayout({ children }) {
       <body>
         <StyledComponentsRegistry>
           <Providers>
-            <Header />
-            {children}
+            <div className="layout">
+              <Header />
+              <div className="content">
+                {children}
+              </div>
+            </div>
           </Providers>
         </StyledComponentsRegistry>
       </body>

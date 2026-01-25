@@ -1,3 +1,5 @@
+'use client';
+
 import { createContext, useContext, useState, useEffect } from "react";
 import { supabase } from "./supabase";
 
@@ -265,20 +267,6 @@ const StudiosProvider = ({ children }) => {
   );
 };
 
-const getStudio = async (id) => {
-  const { data, error } = await supabase
-    .from("studios")
-    .select(STUDIO_COLUMNS.join(", "))
-    .eq("studio_id", id)
-    .single();
-
-  if (error) return null;
-  return {
-    ...data,
-    hasOpenDates: data?.availability?.openTimes?.length ? true : false,
-  };
-};
-
 const useStudios = () => useContext(StudiosContext);
 
-export { useStudios, StudiosContext, StudiosProvider, getStudio };
+export { useStudios, StudiosContext, StudiosProvider };

@@ -1,4 +1,4 @@
-import { getEvent } from "services/events";
+import { getEvent } from "services/events.server";
 import EventPreviewClient from "./EventPreviewClient";
 
 export const metadata = {

@@ -1,4 +1,4 @@
-import { getEvent } from "services/events";
+import { getEvent } from "services/events.server";
 import EventClient from "./EventClient";
 
 export async function generateMetadata({ params }) {

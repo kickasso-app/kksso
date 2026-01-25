@@ -1,4 +1,4 @@
-import { getCityBySlug } from "services/city";
+import { getCityBySlug } from "services/city.server";
 import { fetchMagazinePosts } from "services/editorial";
 import { titleCase } from "services/helpers/textFormat";
 import EditorialCityClient from "./EditorialCityClient";
