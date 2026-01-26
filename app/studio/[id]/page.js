@@ -16,7 +16,7 @@ export async function generateMetadata({ params }) {
     description: studio.textMini || `Visit ${studio.artist}'s studio on Arti.`,
     openGraph: {
       images: [
-        `/api/create-og-image?imgurl=${encodeURIComponent(`https://chsbkuvxttsertgkuwhy.supabase.co/storage/v1/object/public/studios-photos/${id}/profile.jpg`)}`,
+        `/api/create-og-image?imgurl=${encodeURIComponent(`https://chsbkuvxttsertgkuwhy.supabase.co/storage/v1/object/public/studios-photos/${studio.uuid}/profile.jpg`)}`,
       ],
     },
   };
