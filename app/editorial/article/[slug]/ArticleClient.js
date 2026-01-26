@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState, useEffect, useContext } from "react";
 import Link from "next/link";
@@ -20,11 +20,11 @@ const ArticleClient = ({ magPost, slug }) => {
 
   useEffect(() => {
     async function fetchImage() {
-        if (magPost?.slug) {
-          downloadMagazineImage({
-            imgPath: magPost.slug + "/main.jpg",
-          }).then((url) => setImgUrl(url));
-        }
+      if (magPost?.slug) {
+        downloadMagazineImage({
+          imgPath: magPost.slug + "/main.jpg",
+        }).then((url) => setImgUrl(url));
+      }
     }
     fetchImage();
   }, [magPost]);
@@ -50,7 +50,10 @@ const ArticleClient = ({ magPost, slug }) => {
               >
                 <ChevronLeft className={styles.icon} size={16} />{" "}
                 <Link
-                  href={`/editorial/` + (magPost.cityLocation?.[0]?.toLowerCase() || 'munich')}
+                  href={
+                    `/editorial/` +
+                    (magPost.cityLocation?.[0]?.toLowerCase() || "munich")
+                  }
                   className={styles.backlink}
                 >
                   BACK
@@ -68,7 +71,7 @@ const ArticleClient = ({ magPost, slug }) => {
                       height: size === "small" ? "100%" : "auto",
                       maxHeight: size !== "small" ? "70vh" : "none",
                       width: "100%",
-                      objectFit: "contain"
+                      objectFit: "contain",
                     }}
                   />
                 </Box>
@@ -80,7 +83,7 @@ const ArticleClient = ({ magPost, slug }) => {
                   margin={{ vertical: "large", horizontal: "small" }}
                   width="100%"
                 >
-                  <Col xs={12} md={8} lg={6}>
+                  <Col xs={12} md={10} lg={8}>
                     <Heading level="2" margin={sectionMargin}>
                       {magPost.title}
                     </Heading>
