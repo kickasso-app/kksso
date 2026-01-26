@@ -7,13 +7,19 @@ export async function generateMetadata({ params }) {
 
   if (!event) {
     return {
-      title: 'Event Not Found - Arti',
+      title: "Event Not Found - Arti",
     };
   }
 
   return {
     title: `${event.title} - Event - Arti`,
-    description: event.miniDescription || `Join the art event ${event.title} on Arti.`,
+    description:
+      event.miniDescription || `Join the art event ${event.title} on Arti.`,
+    openGraph: {
+      images: [
+        `/api/create-og-image?imgurl=${encodeURIComponent(`https://chsbkuvxttsertgkuwhy.supabase.co/storage/v1/object/public/events/${event.studio_uuid}/${event.id}/event-small.jpg`)}`,
+      ],
+    },
   };
 }
 
