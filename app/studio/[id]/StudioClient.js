@@ -24,9 +24,11 @@ export default function StudioClient({ initialStudio }) {
 
   useEffect(() => {
     if (studio && studio?.eventId) {
-      fetchEvent({ event_id: studio.eventId });
+      if (!event || event.id !== studio.eventId) {
+        fetchEvent({ event_id: studio.eventId });
+      }
     }
-  }, [studio, fetchEvent]);
+  }, [studio, fetchEvent, event]);
 
   const headingMargin = { top: "large", bottom: "small" };
   const paragraphMargin = { top: "small", bottom: "small" };

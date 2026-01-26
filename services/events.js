@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useCallback, useMemo } from "react";
 import { supabase } from "./supabase";
 
 import { useCities } from "services/city";
@@ -18,11 +18,16 @@ const EventsProvider = ({ children }) => {
   const [isUpdateError, setIsUpdateError] = useState(false);
   const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
 
+  const resetNotification = useCallback(() => {
+    setIsUpdateSuccess(false);
+    setIsUpdateError(false);
+  }, []);
+
   /**
    * This function fetches published Events from a Supabase database and sets them in state.
    */
 
-  const fetchEvents = async () => {
+  const fetchEvents = useCallback(async () => {
     setLoading(true);
     // console.log("fetching Events");
 
@@ -44,11 +49,11 @@ const EventsProvider = ({ children }) => {
       setError(returnError);
     }
     setLoading(false);
-  };
+  }, [selectedCity]);
 
   // Fetchs all account events including unpublished ones
 
-  const fetchAccountEvents = async (id) => {
+  const fetchAccountEvents = useCallback(async (id) => {
     setLoading(true);
     // console.log("fetching Events");
 
@@ -65,11 +70,11 @@ const EventsProvider = ({ children }) => {
       setError(returnError);
     }
     setLoading(false);
-  };
+  }, []);
 
-  const fetchEvent = async ({ event_id }) => {
+  const fetchEvent = useCallback(async ({ event_id }) => {
     setLoading(true);
-    resetNotification;
+    resetNotification();
     // console.log("fetching Events");
     try {
       let { data: supaEvent, error } = await supabase
@@ -91,13 +96,13 @@ const EventsProvider = ({ children }) => {
       setLoading(false);
     }
     // setLoading(false);
-  };
+  }, [resetNotification]);
 
   /**
    * This function creates a new Events in a Supabase database
    */
 
-  const createEvent = async ({ studio_uuid, event_id, cityLocation }) => {
+  const createEvent = useCallback(async ({ studio_uuid, event_id, cityLocation }) => {
     setLoading(true);
     let eventCreated = false;
     let errorMsg = false;
@@ -146,13 +151,13 @@ const EventsProvider = ({ children }) => {
 
     setLoading(false);
     return { eventCreated, error: { message: errorMsg } };
-  };
+  }, []);
 
   /**
    * This function updates a event item in a Supabase database
    */
 
-  const updateEvent = async (updates, id) => {
+  const updateEvent = useCallback(async (updates, id) => {
     setLoading(true);
     resetNotification();
 
@@ -176,14 +181,9 @@ const EventsProvider = ({ children }) => {
 
     setLoading(false);
     return { error: false };
-  };
+  }, [resetNotification]);
 
-  const resetNotification = () => {
-    setIsUpdateSuccess(false);
-    setIsUpdateError(false);
-  };
-
-  const contextObj = {
+  const contextObj = useMemo(() => ({
     events,
     event,
     createEvent,
@@ -195,7 +195,19 @@ const EventsProvider = ({ children }) => {
     error,
     isUpdateSuccess,
     isUpdateError,
-  };
+  }), [
+    events,
+    event,
+    createEvent,
+    updateEvent,
+    fetchEvent,
+    fetchEvents,
+    fetchAccountEvents,
+    loading,
+    error,
+    isUpdateSuccess,
+    isUpdateError,
+  ]);
 
   return (
     <EventsContext.Provider value={contextObj}>
