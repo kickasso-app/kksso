@@ -70,4 +70,28 @@ The architecture is server-centric, prioritizing **React Server Components (RSCs
   - **Client Components:** Interactivity is explicitly opted into by using the `"use client";` directive at the top of a file (e.g., forms, components with `useState` or `useEffect`).
 - **Service Pattern:** All database and API interactions are centralized in the `services/` directory. This promotes a clean separation of concerns, making the codebase easier to reason about and maintain.
 - **Standardized API Responses:** Route Handlers in `app/api/` use the `NextResponse` object to return standardized, typed JSON responses, which improves API consistency.
-- **Hybrid Styling:** The project effectively combines the strengths of different styling methodologies: global SCSS for foundational styles, SCSS Modules for component encapsulation, and Styled Components/Grommet for dynamic UI elements.
+- **Hybrid Styling:** The project effectively combines the strengths of different styling methodologies: global SCSS for foundational styles, SCSS Modules for component encapsulation, and Styled Components/Grommet for dynamic UI elements.# Architecture Decision: Suspense Pattern for Data Fetching
+
+## Context
+In the refactoring of "fetch-heavy" content routes (Studios, Events, Editorial), we introduced a "Results" component pattern (e.g., `StudiosResults.js`) separating the data fetching from the main `page.js` and the presentation `Client` component.
+
+## Decision: Separate Server Component for Fetching (`*Results.js`)
+
+The separation of the Fetching Logic (`StudiosResults`), the Page Shell (`page.js`), and the Interactive UI (`StudiosClient`) was necessary due to two conflicting constraints in the Next.js App Router model:
+
+### 1. The "Page Blocking" Constraint
+*   **Problem:** If the `await getStudios()` call remains inside `page.js`, the **entire page rendering is blocked**. Next.js will not send any HTML to the user's browser until the data fetch is complete, resulting in a blank screen or browser spinner.
+*   **Requirement:** To implement Streaming/Suspense, the blocking `await` call must be moved out of the root `page.js` so that the page shell (Navbar, Footer, Layout) can render immediately.
+
+### 2. The "Client Component" Constraint
+*   **Problem:** The presentation logic resides in `StudiosClient.js`, which requires `'use client'` for interactivity (hooks, event listeners).
+*   **Restriction:** Client Components **cannot** be `async` functions and cannot directly execute server-side database queries (like Supabase calls).
+
+### The Solution: The "Middleman" Pattern
+We introduced a specific **Async Server Component** (e.g., `StudiosResults.js`) to act as a bridge:
+*   **Role:** It acts as a dedicated fetcher.
+*   **Type:** Async Server Component (allows direct DB access).
+*   **Placement:** It is rendered as a child of `page.js` and wrapped in a `<Suspense>` boundary.
+*   **Output:** It passes the fetched data down to the purely presentational Client Component (`StudiosClient.js`).
+
+This architecture allows the `page.js` to render immediately with a loading state (via `<Suspense fallback={<Loading />}>`), while the `*Results.js` component fetches data in parallel on the server, streaming the result to the client when ready.

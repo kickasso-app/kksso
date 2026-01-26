@@ -1,8 +1,7 @@
-import { supabase } from "services/supabase";
-import { STUDIO_PREVIEW_COLUMNS } from "config/constants/studioPreviewColumns";
-import StudiosClient from "./StudiosClient";
+import { Suspense } from "react";
 import { titleCase } from "services/helpers/textFormat";
-import { getCityBySlug } from "services/city.server";
+import StudiosResults from "./StudiosResults";
+import Loading from "components/Loading";
 
 export async function generateMetadata({ params }) {
   const { city } = await params;
@@ -12,31 +11,12 @@ export async function generateMetadata({ params }) {
   };
 }
 
-async function getStudios(cityName) {
-  let supabaseQuery = supabase.from("studios").select(STUDIO_PREVIEW_COLUMNS);
-  if (cityName) {
-    supabaseQuery = supabaseQuery.contains("location", [cityName]);
-  }
-  let { data: supaStudios, error } = await supabaseQuery
-    .is("published", true)
-    .is("displayed", true)
-    .order("studio_id", { ascending: true });
-
-  if (error) {
-    console.error("Error fetching studios:", error);
-    return [];
-  }
-
-  // console.log(`Studios found for ${cityName}:`, supaStudios?.length);
-  return supaStudios || [];
-}
-
 export default async function StudiosCityPage({ params }) {
   const { city } = await params;
-  const cityData = await getCityBySlug(city);
-  const cityName = cityData?.city || titleCase(city);
 
-  const studios = await getStudios(cityName);
-
-  return <StudiosClient studios={studios} city={city} />;
+  return (
+    <Suspense fallback={<Loading />}>
+      <StudiosResults city={city} />
+    </Suspense>
+  );
 }

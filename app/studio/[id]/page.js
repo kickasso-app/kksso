@@ -7,13 +7,15 @@ export async function generateMetadata({ params }) {
 
   if (!studio) {
     return {
-      title: 'Studio Not Found - Arti',
+      title: "Studio Not Found - Arti",
     };
   }
 
   return {
     title: `${studio.artist} - Studio - Arti`,
-    description: studio.textLong?.substring(0, 160) || `Visit ${studio.artist}'s studio on Arti.`,
+    description:
+      studio.textMini?.substring(0, 160) ||
+      `Visit ${studio.artist}'s studio on Arti.`,
   };
 }
 

@@ -1,7 +1,7 @@
-import { getCityBySlug } from "services/city.server";
-import { fetchMagazinePosts } from "services/editorial";
+import { Suspense } from "react";
 import { titleCase } from "services/helpers/textFormat";
-import EditorialCityClient from "./EditorialCityClient";
+import EditorialResults from "./EditorialResults";
+import Loading from "components/Loading";
 
 export async function generateMetadata({ params }) {
   const { city } = await params;
@@ -13,16 +13,10 @@ export async function generateMetadata({ params }) {
 
 export default async function EditorialCityPage({ params }) {
   const { city } = await params;
-  
-  const cityData = await getCityBySlug(city);
-  let magPosts = [];
 
-  if (cityData) {
-      magPosts = await fetchMagazinePosts({ selectedCity: cityData });
-  }
-
-  // fetchMagazinePosts returns false on error, or array.
-  if (!magPosts) magPosts = [];
-
-  return <EditorialCityClient magPosts={magPosts} city={city} />;
+  return (
+    <Suspense fallback={<Loading />}>
+      <EditorialResults city={city} />
+    </Suspense>
+  );
 }
