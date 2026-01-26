@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { supabase } from "./supabase";
 
 import { useCities } from "services/city";
@@ -27,6 +27,17 @@ const StudiosProvider = ({ children }) => {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
+
+  // Cache for studio profile images using useRef to avoid re-renders
+  const profileImageCache = useRef({});
+
+  const updateProfileImageCache = useCallback((uuid, url) => {
+    profileImageCache.current[uuid] = url;
+  }, []);
+
+  const getProfileImage = useCallback((uuid) => {
+    return profileImageCache.current[uuid];
+  }, []);
 
   /**
    * This function fetches published studios from a Supabase database and sets them in state.
@@ -240,7 +251,7 @@ const StudiosProvider = ({ children }) => {
     return doesExist;
   };
 
-  const contextObj = {
+  const contextObj = useMemo(() => ({
     studios,
     searchStudios,
     featuredStudios,
@@ -258,7 +269,21 @@ const StudiosProvider = ({ children }) => {
     doesStudioExist,
     loading,
     error,
-  };
+    getProfileImage,
+    updateProfileImageCache,
+  }), [
+    studios,
+    searchStudios,
+    featuredStudios,
+    studio,
+    userStudio,
+    query,
+    hasQuery,
+    loading,
+    error,
+    getProfileImage,
+    updateProfileImageCache,
+  ]);
 
   return (
     <StudiosContext.Provider value={contextObj}>

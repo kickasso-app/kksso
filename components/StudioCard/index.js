@@ -7,6 +7,7 @@ import ProgressiveImage from "react-progressive-image";
 // import moment from "moment";
 import { Disc, Hash } from "react-feather";
 
+import { useStudios } from "services/studios";
 import { downloadProfileImage } from "services/images";
 
 import { capitalizeFirstLetter } from "services/helpers/textFormat";
@@ -16,6 +17,7 @@ const StudioCard = ({
   studio: { studio_id, uuid, artist, district, styles: artStyles, textMini },
 }) => {
   const router = useRouter();
+  const { getProfileImage, updateProfileImageCache } = useStudios();
 
   const articleLink = `/studio/${studio_id}`;
 
@@ -26,8 +28,16 @@ const StudioCard = ({
   const [imgUrl, setImgUrl] = useState(false);
 
   useEffect(() => {
-    downloadProfileImage({ userId: uuid }).then((url) => setImgUrl(url));
-  }, [uuid]);
+    const cachedUrl = getProfileImage(uuid);
+    if (cachedUrl) {
+      setImgUrl(cachedUrl);
+    } else {
+      downloadProfileImage({ userId: uuid }).then((url) => {
+        setImgUrl(url);
+        updateProfileImageCache(uuid, url);
+      });
+    }
+  }, [uuid, getProfileImage, updateProfileImageCache]);
 
   return (
     <div className={styles.StudioCard}>

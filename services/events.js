@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useCallback, useMemo } from "react";
+import React, { createContext, useContext, useState, useCallback, useMemo, useRef } from "react";
 import { supabase } from "./supabase";
 
 import { useCities } from "services/city";
@@ -17,6 +17,17 @@ const EventsProvider = ({ children }) => {
 
   const [isUpdateError, setIsUpdateError] = useState(false);
   const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
+
+  // Cache for event images using useRef to avoid re-renders
+  const eventImageCache = useRef({});
+
+  const updateEventImageCache = useCallback((eventPath, url) => {
+    eventImageCache.current[eventPath] = url;
+  }, []);
+
+  const getEventImage = useCallback((eventPath) => {
+    return eventImageCache.current[eventPath];
+  }, []);
 
   const resetNotification = useCallback(() => {
     setIsUpdateSuccess(false);
@@ -195,6 +206,8 @@ const EventsProvider = ({ children }) => {
     error,
     isUpdateSuccess,
     isUpdateError,
+    getEventImage,
+    updateEventImageCache,
   }), [
     events,
     event,
@@ -207,6 +220,8 @@ const EventsProvider = ({ children }) => {
     error,
     isUpdateSuccess,
     isUpdateError,
+    getEventImage,
+    updateEventImageCache,
   ]);
 
   return (
