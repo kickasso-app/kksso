@@ -1,6 +1,6 @@
 // import { useState } from "react";
 import { supabase } from "services/supabase";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 import { useAuth } from "services/auth";

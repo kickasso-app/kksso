@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 import { Box, Button, Card, Grid, Text } from "grommet";
 import { FormNext } from "grommet-icons";
