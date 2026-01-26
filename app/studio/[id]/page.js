@@ -13,9 +13,12 @@ export async function generateMetadata({ params }) {
 
   return {
     title: `${studio.artist} - Studio - Arti`,
-    description:
-      studio.textMini?.substring(0, 160) ||
-      `Visit ${studio.artist}'s studio on Arti.`,
+    description: studio.textMini || `Visit ${studio.artist}'s studio on Arti.`,
+    openGraph: {
+      images: [
+        `/api/create-og-image?imgurl=${encodeURIComponent(`https://chsbkuvxttsertgkuwhy.supabase.co/storage/v1/object/public/studios-photos/${id}/profile.jpg`)}`,
+      ],
+    },
   };
 }
 
