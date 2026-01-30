@@ -66,9 +66,7 @@ const Footer = () => {
               <Text size="small">
                 We don't use cookies{"  .   "}
                 <Link href="/privacy">
-                  {/* <Text> */}
                   <u>Privacy Policy</u>
-                  {/* </Text> */}
                 </Link>
               </Text>
             </Box>

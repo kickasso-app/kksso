@@ -1,0 +1,18 @@
+.prompt {
+  padding: 0.5rem;
+  background-color: $color-quad; // Using the blueish secondary color
+  border-radius: 8px;
+  margin: 0;
+  text-align: center;
+  color: $color-primary;
+
+  h3 {
+    margin: 1rem 0 0.875rem 0;
+  }
+
+  p {
+    margin-bottom: 1rem;
+    font-size: 1.125rem;
+    line-height: 1.325rem;
+  }
+}

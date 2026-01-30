@@ -47,9 +47,11 @@
   padding: 0.5rem 1.5rem;
   // margin-bottom: 0.5rem;
   border-radius: 0.5rem;
-  border: 0.1rem solid $color-secondary;
+  border: 0.1rem solid $color-quad;
   margin-right: 0.5rem;
-  transition: color 0.25s ease, background-color 0.25s ease,
+  transition:
+    color 0.25s ease,
+    background-color 0.25s ease,
     border-color 0.25s ease;
 }
 
@@ -74,7 +76,9 @@
   // border-radius: 0.5rem;
   border: 1px solid $color-quad;
   margin-right: 0.5rem;
-  transition: color 0.25s ease, background-color 0.25s ease,
+  transition:
+    color 0.25s ease,
+    background-color 0.25s ease,
     border-color 0.25s ease;
 }
 
