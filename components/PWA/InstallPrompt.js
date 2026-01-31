@@ -1,43 +1,38 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 import styles from "./index.module.scss";
-import { Share2, Plus } from "react-feather";
+import { Download, Settings } from "react-feather";
+import { usePWA } from "hooks/usePWA";
 
 export default function InstallPrompt() {
-  const [isIOS, setIsIOS] = useState(false);
-  const [isStandalone, setIsStandalone] = useState(false);
+  const { isStandalone, subscription, isMobile, isLoading } = usePWA();
   const pathname = usePathname();
 
-  useEffect(() => {
-    setIsIOS(/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream);
+  // Logic to determine if prompt should be shown
+  const showPrompt = !isLoading && pathname === "/" && isMobile && (!isStandalone || !subscription);
 
-    setIsStandalone(window.matchMedia("(display-mode: standalone)").matches);
-  }, []);
-
-  if (pathname !== "/" || isStandalone || !isIOS) {
-    return null;
-  }
+  if (!showPrompt) return null;
 
   return (
     <div className={styles.prompt}>
-      <h3>Install App</h3>
-      <p>
-        To install on your phone, tap the Share button
-        <span role="img" aria-label="share icon">
-          {"  "}
-          <Share2 size={14} strokeWidth={2} />
-          {"  "}
-        </span>
-        <br />
-        and then "Add to Home Screen"
-        <span role="img" aria-label="plus icon">
-          {" "}
-          <Plus size={14} strokeWidth={2} />{" "}
-        </span>
-        .
-      </p>
+      <Link
+        href="/install"
+        className={styles.link}
+      >
+        <div className={styles.contentWrapper}>
+          {isStandalone ? <Settings size={18} /> : <Download size={20} />}
+          <span className={styles.text}>
+            {isStandalone ? "Manage App" : "Install App"}
+          </span>
+        </div>
+        {isStandalone && (
+          <p className={styles.subText}>
+            Enable notifications
+          </p>
+        )}
+      </Link>
     </div>
   );
 }

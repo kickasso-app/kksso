@@ -2,7 +2,6 @@ import { Providers } from "components/Providers";
 import StyledComponentsRegistry from "lib/registry";
 import Header from "layouts/Header";
 import InstallPrompt from "components/PWA/InstallPrompt";
-import PushNotificationManager from "components/PWA/PushNotificationManager";
 
 import "../styles/base.scss";
 import "../styles/colors.scss";
@@ -44,6 +43,7 @@ export const metadata = {
 export const viewport = {
   width: "device-width",
   initialScale: 1,
+  themeColor: "#ffc0cb",
 };
 
 export default function RootLayout({ children }) {
@@ -55,8 +55,6 @@ export default function RootLayout({ children }) {
             <div className="layout">
               <InstallPrompt />
               <Header />
-
-              <PushNotificationManager />
               <div className="content">{children}</div>
             </div>
           </Providers>
