@@ -19,7 +19,10 @@ export default function InstallPage() {
       setBrowser("firefox");
     } else if (/chrome|chromium|crios/.test(userAgent)) {
       setBrowser("chrome");
-    } else if (/safari/.test(userAgent) && !/chrome|chromium|crios/.test(userAgent)) {
+    } else if (
+      /safari/.test(userAgent) &&
+      !/chrome|chromium|crios/.test(userAgent)
+    ) {
       setBrowser("safari-desktop");
     }
 
@@ -27,13 +30,16 @@ export default function InstallPage() {
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
-      console.log("Captured beforeinstallprompt event");
+      // console.log("Captured beforeinstallprompt event");
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
     return () => {
-      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt,
+      );
     };
   }, []);
 
@@ -42,7 +48,7 @@ export default function InstallPage() {
 
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    
+
     if (outcome === "accepted") {
       setDeferredPrompt(null);
     }
@@ -54,10 +60,12 @@ export default function InstallPage() {
         <div className={styles.container}>
           <div className={styles.installedHeader}>
             <CheckCircle size={48} color="green" />
-            <h1 className={styles.title} style={{ marginTop: 0 }}>App is Installed</h1>
+            <h1 className={styles.title} style={{ marginTop: 0 }}>
+              App is Installed
+            </h1>
             <p className={styles.description}>You are using the Arti app.</p>
           </div>
-          
+
           <div className={styles.notificationsWrapper}>
             <PushNotificationManager />
           </div>
@@ -71,7 +79,8 @@ export default function InstallPage() {
       <div className={styles.container}>
         <h1 className={styles.title}>Install Arti App</h1>
         <p className={styles.description}>
-          Install our app for a better experience, offline access, and easier access to your favorite art events and studios.
+          Install our app for a better experience, offline access, and easier
+          access to your favorite art events and studios.
         </p>
 
         <div className={styles.installSection}>
@@ -81,10 +90,7 @@ export default function InstallPage() {
               <Smartphone size={48} className={styles.browserIcon} />
               <p>Ready to install?</p>
               <br />
-              <Button 
-                btnStyle="primary" 
-                onClick={handleInstallClick}
-              >
+              <Button btnStyle="primary" onClick={handleInstallClick}>
                 <Download size={18} style={{ marginRight: 8 }} />
                 Install App
               </Button>
@@ -97,15 +103,22 @@ export default function InstallPage() {
               <h3>How to install on iOS:</h3>
               <ol>
                 <li>
-                  Tap the <strong>Share</strong> button 
-                  <span className={styles.icon}><Share2 size={16} /></span>
+                  Tap the <strong>Share</strong> button
+                  <span className={styles.icon}>
+                    <Share2 size={16} />
+                  </span>
                   in your browser bar.
                 </li>
                 <li>
                   Scroll down and tap <strong>"Add to Home Screen"</strong>
-                  <span className={styles.icon}><Plus size={16} /></span>.
+                  <span className={styles.icon}>
+                    <Plus size={16} />
+                  </span>
+                  .
                 </li>
-                <li>Tap <strong>Add</strong> in the top right corner.</li>
+                <li>
+                  Tap <strong>Add</strong> in the top right corner.
+                </li>
               </ol>
             </div>
           )}
@@ -115,16 +128,29 @@ export default function InstallPage() {
             <div className={styles.instructions}>
               <h3>How to install:</h3>
               {browser === "firefox" && (
-                <p>On Firefox Android, tap the menu (3 dots) and select <strong>"Install"</strong>.</p>
+                <p>
+                  On Firefox Android, tap the menu (3 dots) and select{" "}
+                  <strong>"Install"</strong>.
+                </p>
               )}
               {browser === "chrome" && (
-                <p>Tap the menu (3 dots) and select <strong>"Install App"</strong> or <strong>"Add to Home screen"</strong>.</p>
+                <p>
+                  Tap the menu (3 dots) and select{" "}
+                  <strong>"Install App"</strong> or{" "}
+                  <strong>"Add to Home screen"</strong>.
+                </p>
               )}
               {browser === "safari-desktop" && (
-                <p>On macOS Sonoma or later, you can add this website to your Dock via <strong>File {'>'} Add to Dock</strong>.</p>
+                <p>
+                  On macOS Sonoma or later, you can add this website to your
+                  Dock via <strong>File {">"} Add to Dock</strong>.
+                </p>
               )}
               {(browser === "unknown" || browser === "safari-desktop") && (
-                <p>Look for an "Install" icon in your address bar or browser menu.</p>
+                <p>
+                  Look for an "Install" icon in your address bar or browser
+                  menu.
+                </p>
               )}
             </div>
           )}

@@ -22,7 +22,7 @@
 
   .text {
     font-weight: 600;
-    font-size: 1.0rem;
+    font-size: 1rem;
   }
 
   .subText {
@@ -32,13 +32,34 @@
   }
 }
 
+.settingsPrompt {
+  background-color: $color--bg-white;
+  color: $color-primary;
+  padding: 0.25rem;
+  border-radius: 50%;
+  margin: 0.75rem 0.75rem 0 auto; // Align right
+  width: 40px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  .link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 .manager {
   padding: 20px;
   border: 1px solid #eee;
   border-radius: 8px;
   margin-top: 20px;
   background: #f9f9f9;
-  
+
   h3 {
     margin-top: 0;
   }
@@ -58,17 +79,17 @@
 
 .testSection {
   margin: 15px 0;
-  
+
   p {
     font-size: 0.9rem;
     margin-bottom: 8px;
   }
-  
+
   .inputWrapper {
     display: flex;
     gap: 8px;
   }
-  
+
   input {
     padding: 8px;
     border-radius: 4px;
@@ -78,10 +99,10 @@
 }
 
 .unsubscribeWrapper {
-  // Since Button doesn't accept className/style, we might need to wrap it 
+  // Since Button doesn't accept className/style, we might need to wrap it
   // or rely on 'text' style. But assuming we want to style the area:
   margin-top: 10px;
-  
+
   // If we really want to target the button inside:
   button {
     color: #666;

@@ -57,7 +57,7 @@ export function usePWA() {
     mq.addEventListener("change", checkStandalone);
 
     // Check iOS
-    const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream && !/FxiOS/i.test(navigator.userAgent);
     setIsIOS(iOS);
 
     // Check Mobile
@@ -89,6 +89,15 @@ export function usePWA() {
 
   async function subscribeToPush() {
     try {
+      if (Notification.permission === 'default') {
+        const permissionResult = await Notification.requestPermission();
+        setPermission(permissionResult);
+        if (permissionResult !== 'granted') {
+          console.warn("Permission not granted for Notification");
+          return;
+        }
+      }
+
       const registration = await navigator.serviceWorker.ready;
       const sub = await registration.pushManager.subscribe({
         userVisibleOnly: true,

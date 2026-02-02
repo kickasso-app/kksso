@@ -108,6 +108,8 @@ describe("PWA Functionality", () => {
         matches: query === "(display-mode: standalone)",
         addListener: jest.fn(),
         removeListener: jest.fn(),
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
       }));
 
       const { result } = renderHook(() => usePWA());
@@ -143,7 +145,7 @@ describe("PWA Functionality", () => {
       await waitFor(() => {
         expect(screen.getByText("Install App")).toBeInTheDocument();
       });
-      expect(screen.queryByText("Manage App")).not.toBeInTheDocument();
+      expect(screen.queryByLabelText("App Settings")).not.toBeInTheDocument();
     });
 
     it("should NOT show on non-mobile (Desktop)", async () => {
@@ -159,12 +161,14 @@ describe("PWA Functionality", () => {
       expect(screen.queryByText("Install App")).not.toBeInTheDocument();
     });
 
-    it("should show 'Manage App' if installed but not subscribed", async () => {
+    it("should show Settings icon if installed but not subscribed", async () => {
       // Mock Installed (Standalone)
       window.matchMedia = jest.fn().mockImplementation(query => ({
         matches: query === "(display-mode: standalone)",
         addListener: jest.fn(),
         removeListener: jest.fn(),
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
       }));
 
       await act(async () => {
@@ -172,7 +176,7 @@ describe("PWA Functionality", () => {
       });
 
       await waitFor(() => {
-        expect(screen.getByText("Manage App")).toBeInTheDocument();
+        expect(screen.getByLabelText("App Settings")).toBeInTheDocument();
       });
       expect(screen.queryByText("Install App")).not.toBeInTheDocument();
     });
@@ -181,7 +185,13 @@ describe("PWA Functionality", () => {
   describe("InstallPage", () => {
     it("should render install instructions for Android/Chrome by default (or when prompt captured)", async () => {
         // Mock non-standalone
-       window.matchMedia = jest.fn().mockReturnValue({ matches: false, addListener: jest.fn(), removeListener: jest.fn() });
+       window.matchMedia = jest.fn().mockReturnValue({ 
+           matches: false, 
+           addListener: jest.fn(), 
+           removeListener: jest.fn(),
+           addEventListener: jest.fn(),
+           removeEventListener: jest.fn()
+       });
 
       await act(async () => {
         render(<InstallPage />);
@@ -220,7 +230,13 @@ describe("PWA Functionality", () => {
     });
 
     it("should render 'App is Installed' when in standalone mode", async () => {
-       window.matchMedia = jest.fn().mockReturnValue({ matches: true, addListener: jest.fn(), removeListener: jest.fn() });
+       window.matchMedia = jest.fn().mockReturnValue({ 
+           matches: true, 
+           addListener: jest.fn(), 
+           removeListener: jest.fn(),
+           addEventListener: jest.fn(),
+           removeEventListener: jest.fn()
+       });
 
        await act(async () => {
            render(<InstallPage />);
