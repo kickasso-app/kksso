@@ -38,17 +38,17 @@ export default function PushNotificationManager() {
   }
 
   return (
-    <div className={styles.manager}>
+    <div className={styles.notificationsWrapper}>
       <h3>Push Notifications</h3>
 
       {subscription ? (
         <>
-          <p className={styles.subscribed}>✓ You are subscribed to updates.</p>
+          <p>✓ You are subscribed to updates.</p>
 
-          <div className={styles.testSection}>
+          <div>
             <p>Test your notification:</p>
 
-            <div className={styles.inputWrapper}>
+            <div>
               <input
                 type="text"
                 placeholder="Message"
@@ -57,7 +57,7 @@ export default function PushNotificationManager() {
               />
 
               <Button
-                btnStyle="secondary"
+                btnStyle="filled"
                 onClick={() => {
                   sendTestMessage(message);
 
@@ -79,10 +79,11 @@ export default function PushNotificationManager() {
         <>
           <p>
             Stay updated with the latest studio visits and events directly on
-            your device.
+            your device. <br />
+            <br />
           </p>
 
-          <Button btnStyle="primary" onClick={subscribeToPush}>
+          <Button btnStyle="filled" onClick={subscribeToPush}>
             Enable Notifications
           </Button>
         </>

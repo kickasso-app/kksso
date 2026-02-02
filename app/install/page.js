@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Button from "components/Button";
 import styles from "./index.module.scss";
-import { Share2, Plus, Download, Smartphone, CheckCircle } from "react-feather";
+import { Share2, Plus, Download, Smartphone, CheckSquare } from "react-feather";
 import PushNotificationManager from "components/PWA/PushNotificationManager";
 import { usePWA } from "hooks/usePWA";
 
@@ -59,11 +59,8 @@ export default function InstallPage() {
       <div className={styles.installPage}>
         <div className={styles.container}>
           <div className={styles.installedHeader}>
-            <CheckCircle size={48} color="green" />
-            <h1 className={styles.title} style={{ marginTop: 0 }}>
-              App is Installed
-            </h1>
-            <p className={styles.description}>You are using the Arti app.</p>
+            <CheckSquare size={20} />
+            <span> App is installed successfully</span>
           </div>
 
           <div className={styles.notificationsWrapper}>
