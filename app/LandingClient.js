@@ -1,9 +1,7 @@
-'use client';
+"use client";
 
 import { useContext } from "react";
 import { Search, Calendar, Users } from "react-feather";
-
-import { useCities } from "services/city";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import Link from "next/link";
@@ -16,16 +14,11 @@ import Button from "components/Button";
 import Footer from "layouts/Footer";
 import styles from "./page.module.scss";
 
-// We need to copy styles from pages/landing/index.module.scss to app/page.module.scss
-// For now I will assume I will create the style file next.
-
 const LandingClient = () => {
   const margin = "medium";
   const sectionMargin = { vertical: "xlarge" };
 
   const size = useContext(ResponsiveContext);
-
-  const { selectedCity } = useCities();
 
   return (
     <>
@@ -58,7 +51,7 @@ const LandingClient = () => {
               <Box margin={{ vertical: "2.5rem" }} align="center">
                 <Heading level={2}>Discover Your Local Art Scene</Heading>
               </Box>
-              
+
               <Box
                 margin={sectionMargin}
                 pad={{ horizontal: "small", vertical: "small" }}
@@ -75,13 +68,13 @@ const LandingClient = () => {
                       direction="column"
                     >
                       <Link
-                        href={`/studios/${
-                          selectedCity ? selectedCity.slugName : ""
-                        }`}
-                        style={{ textDecoration: 'none' }}
+                        href={`/studios/`}
+                        style={{ textDecoration: "none" }}
                       >
                         <Button btnStyle="outline" as="div">
-                          <Box margin={{ vertical: "1rem", horizontal: "1rem" }}>
+                          <Box
+                            margin={{ vertical: "1rem", horizontal: "1rem" }}
+                          >
                             Explore Studios
                           </Box>
                         </Button>
@@ -106,13 +99,13 @@ const LandingClient = () => {
                       direction="column"
                     >
                       <Link
-                        href={`/events/${
-                          selectedCity ? selectedCity.slugName : ""
-                        }`}
-                        style={{ textDecoration: 'none' }}
+                        href={`/events/`}
+                        style={{ textDecoration: "none" }}
                       >
                         <Button btnStyle="outline" as="div">
-                          <Box margin={{ vertical: "1rem", horizontal: "1rem" }}>
+                          <Box
+                            margin={{ vertical: "1rem", horizontal: "1rem" }}
+                          >
                             Join Events
                           </Box>
                         </Button>
@@ -129,11 +122,7 @@ const LandingClient = () => {
                   </Col>
                 </Row>
               </Box>
-              <Box
-                margin={sectionMargin}
-                pad="large"
-                align="center"
-              >
+              <Box margin={sectionMargin} pad="large" align="center">
                 <Box fill>
                   <Row center="xs">
                     <Col xs={12} md={4}>
@@ -274,11 +263,12 @@ const LandingClient = () => {
                       fill
                       direction="column"
                     >
-                      <Link href={"/how-it-works/artists"} style={{ textDecoration: 'none' }}>
+                      <Link
+                        href={"/how-it-works/artists"}
+                        style={{ textDecoration: "none" }}
+                      >
                         <Button btnStyle="outline" as="div">
-                          <Box margin={"xsmall"}>
-                            For Artists and Curators
-                          </Box>
+                          <Box margin={"xsmall"}>For Artists and Curators</Box>
                         </Button>
                       </Link>
                       <Text
@@ -300,7 +290,10 @@ const LandingClient = () => {
                       fill
                       direction="column"
                     >
-                      <Link href={"/how-it-works/"} style={{ textDecoration: 'none' }}>
+                      <Link
+                        href={"/how-it-works/"}
+                        style={{ textDecoration: "none" }}
+                      >
                         <Button btnStyle="outline" as="div">
                           <Box margin={"xsmall"}>
                             For Art Lovers and Collectors

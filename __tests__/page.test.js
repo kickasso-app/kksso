@@ -2,9 +2,19 @@ import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import Page from "app/page";
 
+// Mock next/navigation
+jest.mock("next/navigation", () => ({
+  useParams: () => ({ city: "berlin" }),
+  useRouter: () => ({
+    push: jest.fn(),
+  }),
+}));
+
 // Mock the useCities hook
 jest.mock("services/city", () => ({
   useCities: () => ({
+    cities: [],
+    fetchCities: jest.fn(),
     selectedCity: { slugName: "berlin" },
   }),
 }));
@@ -29,6 +39,18 @@ describe("Landing Page", () => {
     });
 
     expect(heading).toBeInTheDocument();
+  });
+
+  it("renders links with correct city slug", () => {
+    render(<Page />);
+    
+    // Check for Explore Studios link
+    const studiosLink = screen.getByRole("link", { name: /explore studios/i });
+    expect(studiosLink).toHaveAttribute("href", "/studios");
+
+    // Check for Join Events link
+    const eventsLink = screen.getByRole("link", { name: /join events/i });
+    expect(eventsLink).toHaveAttribute("href", "/events");
   });
 
   describe("Hero Banner - CLS Optimization ", () => {

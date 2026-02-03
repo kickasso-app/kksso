@@ -2,6 +2,7 @@
 
 import { useContext, useState } from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { Box, Grid, ResponsiveContext } from "grommet";
 import { Menu as MenuIcon, X as CloseIcon } from "react-feather";
 
@@ -17,15 +18,15 @@ import styles from "./index.module.scss";
 
 const Header = () => {
   const { session } = useAuth();
-  const { selectedCity } = useCities();
+  const params = useParams();
+  const citySlug = params?.city;
+
   const size = useContext(ResponsiveContext);
   const [menuOpen, setMenuOpen] = useState(false);
 
   const createPath = (label, path) => {
     const isSpecialLabel = ["Studios", "Events", "Editorial"].includes(label);
-    const pathCity = selectedCity
-      ? `${path}/${selectedCity.slugName}`
-      : `${path}`;
+    const pathCity = citySlug ? `${path}/${citySlug}` : `${path}`;
     return isSpecialLabel ? pathCity : path;
   };
 
