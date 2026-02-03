@@ -79,8 +79,7 @@ button.submit {
   background-color: #ffc0cb; // fallback for $color-quad
   color: #4b4b4b; // fallback for $color-primary
   font-size: 1rem;
-  font-family: "Nunito Sans", sans-serif;
-  // font-family: 'Roboto', sans-serif;
+  font-family: var(--font-nunito-sans), sans-serif;
   font-weight: 600;
   padding: 1rem 3rem;
   margin-bottom: 1rem;

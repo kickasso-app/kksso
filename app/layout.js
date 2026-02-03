@@ -1,3 +1,4 @@
+import { Nunito_Sans } from "next/font/google";
 import { Providers } from "components/Providers";
 import StyledComponentsRegistry from "lib/registry";
 import Header from "layouts/Header";
@@ -7,6 +8,13 @@ import "../styles/base.scss";
 import "../styles/colors.scss";
 import "../styles/emailStyles.scss";
 import "react-flexbox-grid/dist/react-flexbox-grid.css";
+
+const nunitoSans = Nunito_Sans({
+  subsets: ["latin"],
+  weight: ["200", "300", "400", "600", "700", "800", "900"],
+  variable: "--font-nunito-sans",
+  display: "swap",
+});
 
 export const metadata = {
   title: "Arti",
@@ -48,7 +56,10 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      className={`${nunitoSans.variable}`}
+    >
       <body>
         <StyledComponentsRegistry>
           <Providers>

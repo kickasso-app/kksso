@@ -34,25 +34,26 @@ const LandingClient = () => {
           <Row id={styles.intro}>
             <Col xs={12} md={12}>
               <Box margin={{ bottom: "1rem" }}>
-                {size === "small" ? (
+                <div className={styles.mobileBanner}>
                   <Image
                     src={`/img/intro/MobileBanner.png`}
                     alt="banner"
                     width={400}
                     height={400}
                     style={{ width: "100%", height: "auto" }}
-                    loading="eager"
+                    priority
                   />
-                ) : (
+                </div>
+                <div className={styles.desktopBanner}>
                   <Image
                     src={`/img/intro/Banner.png`}
                     alt="banner"
                     width={1200}
                     height={540}
                     style={{ width: "100%", height: "auto" }}
-                    loading="eager"
+                    priority
                   />
-                )}
+                </div>
               </Box>
               <Box margin={{ vertical: "2.5rem" }} align="center">
                 <Heading level={2}>Discover Your Local Art Scene</Heading>

@@ -1,5 +1,23 @@
 // @import "./styles/colors.scss";
 
+.mobileBanner {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
+.desktopBanner {
+  display: none;
+  width: 100%;
+  aspect-ratio: 1200 / 540;
+  @media (min-width: 768px) {
+    display: block;
+  }
+}
+
 #landing {
   color: $color-primary;
   background-color: $color--bg-white;

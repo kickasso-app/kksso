@@ -32,7 +32,7 @@ const Header = () => {
   return (
     <div className={styles.header}>
       <Box margin={{ vertical: "small", horizontal: "small" }} pad="xsmall">
-        {size === "small" ? (
+        <div className={styles.mobileHeader}>
           <Box direction="row" align="center" justify="between" fill>
             <Box width="xsmall">
               <Link href="/">
@@ -96,7 +96,8 @@ const Header = () => {
               </Box>
             )}
           </Box>
-        ) : (
+        </div>
+        <div className={styles.desktopHeader}>
           <Grid
             columns={["auto", "flex"]}
             rows={["auto"]}
@@ -133,7 +134,7 @@ const Header = () => {
               )}
             </Box>
           </Grid>
-        )}
+        </div>
       </Box>
     </div>
   );
