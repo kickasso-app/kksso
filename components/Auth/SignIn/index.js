@@ -16,8 +16,8 @@ export default function SignIn() {
   const handleSignIn = async (event) => {
     event.preventDefault();
 
-    const email = event.target.email.value;
-    const password = event.target.password.value;
+    const email = event.currentTarget.elements.email.value;
+    const password = event.currentTarget.elements.password.value;
 
     // With Context
 

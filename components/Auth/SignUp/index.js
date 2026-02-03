@@ -16,8 +16,8 @@ export default function SignUp() {
   const handleSignUp = async (event) => {
     event.preventDefault();
 
-    const email = event.target.email.value;
-    const password = event.target.password.value;
+    const email = event.currentTarget.elements.email.value;
+    const password = event.currentTarget.elements.password.value;
 
     // With Context
 
@@ -27,7 +27,7 @@ export default function SignUp() {
       alert(error.message);
     } else if (user) {
       // Redirect user to Dashboard
-      router.push("/welcome?email=${user.email}");
+      router.push(`/welcome?email=${user.email}`);
     }
 
     // Quick and Dirty

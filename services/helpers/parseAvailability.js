@@ -10,12 +10,19 @@ const toReverseIsoDate = (date) =>
  * @param {number} monthsAhead - Number of months to generate availability for (default: 3)
  * @returns {Object} Monthly availability with available and unavailable dates
  */
-const parseAvailability = (availability, monthsAhead = 6) => {
+const parseAvailability = (
+  availability,
+  monthsAhead = 6,
+  mockToday = false,
+) => {
   const {
     openTimes = [],
     unavailableDates = [],
     bookedTimes = [],
   } = availability;
+
+  // Get current date
+  const currentDate = mockToday || new Date();
 
   // Create map of days to their available times
   const availableTimesByDay = openTimes.reduce((acc, { days, times }) => {
@@ -48,16 +55,12 @@ const parseAvailability = (availability, monthsAhead = 6) => {
   // Initialize result as an array to maintain order
   const resultArray = [];
 
-  // Get current date
-  const currentDate = new Date();
-  const currentMonth = currentDate.getMonth() + 1; // 1-12
-
   // Process each month starting from current month
   for (let monthOffset = 0; monthOffset < monthsAhead; monthOffset++) {
     const targetDate = new Date(
       currentDate.getFullYear(),
       currentDate.getMonth() + monthOffset,
-      1
+      1,
     );
 
     // Get month number (1-12)
@@ -76,15 +79,26 @@ const parseAvailability = (availability, monthsAhead = 6) => {
     const lastDay = new Date(
       targetDate.getFullYear(),
       targetDate.getMonth() + 1,
-      0
+      0,
     ).getDate();
 
     // Check each day of the month
     for (let day = 1; day <= lastDay; day++) {
-      const date = new Date(targetDate.getFullYear(), targetDate.getMonth(), day);
+      const date = new Date(
+        targetDate.getFullYear(),
+        targetDate.getMonth(),
+        day,
+      );
 
       // Skip dates before today
-      if (date < new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())) {
+      if (
+        date <
+        new Date(
+          currentDate.getFullYear(),
+          currentDate.getMonth(),
+          currentDate.getDate(),
+        )
+      ) {
         continue;
       }
 
@@ -98,7 +112,7 @@ const parseAvailability = (availability, monthsAhead = 6) => {
       ].join("/");
 
       const isUnavailable = unavailableDateRanges.some(
-        ([start, end]) => date >= start && date <= end
+        ([start, end]) => date >= start && date <= end,
       );
 
       if (isUnavailable) {
@@ -149,62 +163,9 @@ const getAvailableTimesForDate = (availability, date) => {
   if (!monthData) return null;
 
   return monthData.availableDates.find(
-    (availableDate) => availableDate.date === date
+    (availableDate) => availableDate.date === date,
   );
 };
-
-// Helper function to check if a date is unavailable
-const isDateUnavailable = (availability, date) => {
-  const [day, month, year] = date.split("/");
-  const monthKey = new Date(year, month - 1, day).toLocaleString("default", {
-    month: "long",
-    year: "numeric",
-  });
-
-  const monthData = availability[monthKey];
-  if (!monthData) return false;
-
-  return monthData.unavailableDates.some(
-    (unavailableDate) => unavailableDate.date === date
-  );
-};
-
-// Example usage
-const exampleAvailability = {
-  openTimes: [
-    {
-      days: ["Wednesday", "Tuesday"],
-      times: [9, 11, 13, 14],
-    },
-  ],
-  unavailableDates: [["11/03/2025", "14/03/2025"]],
-};
-
-// Test the function
-// const availability = parseAvailability(exampleAvailability, 2);
-// console.log("Monthly Availability:", availability);
-
-// // Test helper functions
-// console.log(
-//   "Available times for 12/03/2025:",
-//   getAvailableTimesForDate(availability, "12/03/2025")
-// );
-
-// console.log(
-//   "Is 13/03/2025 unavailable:",
-//   isDateUnavailable(availability, "13/03/2025")
-// );
-
-// // Example usage of helper functions
-// console.log(
-//   "Available times for 12/03/2025:",
-//   getAvailableTimesForDate(availability, "12/03/2025")
-// );
-
-// console.log(
-//   "Is 13/03/2025 unavailable:",
-//   isDateUnavailable(availability, "13/03/2025")
-// );
 
 /**
  * Gets all dates in a month except the open dates
@@ -236,7 +197,7 @@ const getClosedDates = (openDates) => {
   const allDates = Array.from({ length: lastDay }, (_, index) => {
     const currentDay = index + 1;
     return `${year}-${String(month).padStart(2, "0")}-${String(
-      currentDay
+      currentDay,
     ).padStart(2, "0")}`;
   });
 
@@ -267,7 +228,7 @@ const getDatesStatus = (openDates) => {
     const currentDay = index + 1;
     return `${String(currentDay).padStart(2, "0")}-${String(month).padStart(
       2,
-      "0"
+      "0",
     )}-${year}`;
   });
 
@@ -344,10 +305,10 @@ const dateUtils = {
   /**
    * Finds the first future or present date
    */
-  findNext: (dates) => {
+  findNext: (dates, mockToday) => {
     if (!dates || !dates.length) return null;
 
-    const today = new Date();
+    const today = mockToday || new Date();
     today.setHours(0, 0, 0, 0);
 
     try {
@@ -374,10 +335,10 @@ const dateUtils = {
   /**
    * Returns all future or present dates
    */
-  findAllFuture: (dates) => {
+  findAllFuture: (dates, mockToday = false) => {
     if (!dates || !dates.length) return [];
 
-    const today = new Date();
+    const today = mockToday || new Date();
     today.setHours(0, 0, 0, 0);
 
     try {
@@ -401,12 +362,13 @@ const dateUtils = {
   /**
    * Checks if a date is today or in the future
    */
-  isFutureOrToday: (dateStr) => {
+  isFutureOrToday: (dateStr, mockToday) => {
     try {
       const [day, month, year] = dateStr.split("/").map(Number);
+      if (month > 12 || month < 1) return false; // Added month validation
       const date = new Date(year, month - 1, day);
 
-      const today = new Date();
+      const today = mockToday || new Date();
       today.setHours(0, 0, 0, 0);
 
       return date >= today;
@@ -436,7 +398,7 @@ const dateUtils = {
     if (modifier.toLowerCase() === "pm") {
       hours = parseInt(hours, 10) + 12;
     }
-    return `${hours}:${minutes || "00"}`;
+    return `${String(hours).padStart(2, "0")}:${minutes || "00"}`;
   },
   convertTimesToHours: (times) => {
     return times.map((timeStr) => {
@@ -488,7 +450,7 @@ const mixedDates = [
 // Example with today's date
 const today = new Date();
 const todayFormatted = `${String(today.getDate()).padStart(2, "0")}/${String(
-  today.getMonth() + 1
+  today.getMonth() + 1,
 ).padStart(2, "0")}/${today.getFullYear()}`;
 const datesWithToday = [...dates, todayFormatted];
 // console.log("Including today:", findNextDate(datesWithToday));
@@ -518,8 +480,10 @@ const getFirstAvailableDate = (parsedDates) => {
     if (monthData.availableDates && monthData.availableDates.length > 0) {
       // Sort dates within the month
       const sortedDates = monthData.availableDates.sort((a, b) => {
-        return new Date(a.date.split('/').reverse().join('-')) -
-          new Date(b.date.split('/').reverse().join('-'));
+        return (
+          new Date(a.date.split("/").reverse().join("-")) -
+          new Date(b.date.split("/").reverse().join("-"))
+        );
       });
       return sortedDates[0].date;
     }
@@ -532,7 +496,6 @@ const getFirstAvailableDate = (parsedDates) => {
 export {
   parseAvailability,
   getFirstAvailableDate,
-  isDateUnavailable,
   getClosedDates,
   dateUtils,
   toIsoDate,

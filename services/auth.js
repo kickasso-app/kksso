@@ -30,7 +30,6 @@ export function AuthProvider({ children }) {
       //console.log(session?.user);
 
       if (event === "SIGNED_OUT") {
-        console.log("SIGNED_OUT", session);
         // clear local and session storage
         [localStorage, sessionStorage].forEach((storage) => {
           if (storage?.length > 0) {
