@@ -25,7 +25,7 @@ const StudioCard = ({
     router.push(articleLink);
   };
 
-  const [imgUrl, setImgUrl] = useState(false);
+  const [imgUrl, setImgUrl] = useState(null);
 
   useEffect(() => {
     const cachedUrl = getProfileImage(uuid);

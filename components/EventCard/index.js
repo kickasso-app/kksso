@@ -14,7 +14,7 @@ const readableDate = (date) => moment(date, "YYYY-MM-DD").format("D MMM 'YY");
 export default function EventCard({ event, inStudio = false }) {
   const router = useRouter();
   const { getEventImage, updateEventImageCache } = useEvents();
-  const [imgUrl, setImgUrl] = useState(false);
+  const [imgUrl, setImgUrl] = useState(null);
   const eventMargin = { vertical: "1rem" };
   const detailsMargin = { vertical: "0.5rem" };
 
