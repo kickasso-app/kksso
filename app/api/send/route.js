@@ -12,6 +12,7 @@ import { EventRequestConfirmation } from "services/emails/eventRequestConfirmati
 import { ResponseVisitRequest } from "services/emails/responseVisitReqTemplate";
 import { ResponseEventRequest } from "services/emails/responseEventReqTemplate";
 import { MagicLinkTemplate } from "services/emails/magicLinkTemplate";
+import { CollectorReferralTemplate } from "services/emails/collectorReferralTemplate";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -26,6 +27,7 @@ const emailTemplates = {
   responseEventRequest: ResponseEventRequest,
   newsletterTemplate: NewsletterTemplate,
   magicLinkTemplate: MagicLinkTemplate,
+  collectorReferralTemplate: CollectorReferralTemplate,
 };
 
 const TEST_ENV = false;
