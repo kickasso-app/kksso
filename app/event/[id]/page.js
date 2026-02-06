@@ -1,5 +1,6 @@
 import { getEvent } from "services/events.server";
 import EventClient from "./EventClient";
+import { cacheLife, cacheTag } from "next/cache";
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
@@ -24,6 +25,10 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function EventPage({ params }) {
+  "use cache";
+  cacheTag("events");
+  cacheLife("hours");
+
   const { id } = await params;
   const event = await getEvent(id);
 

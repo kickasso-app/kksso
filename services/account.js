@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { supabase } from "./supabase";
+import { revalidatePathAction } from "app/actions/revalidate";
 
 import { PROFILE_COLUMNS } from "config/constants/profileColumns";
 
@@ -89,6 +90,7 @@ const AccountProvider = ({ children }) => {
       if (data) {
         setProfile(data?.[0]);
         setIsUpdateSuccess(true);
+        await revalidatePathAction("/studios");
       } else if (error) {
         setIsUpdateError(true);
         setLoading(false);

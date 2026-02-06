@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useCallback, useMemo, useRef } from "react";
 import { supabase } from "./supabase";
+import { revalidatePathAction } from "app/actions/revalidate";
 
 import { useCities } from "services/city";
 
@@ -187,6 +188,8 @@ const EventsProvider = ({ children }) => {
       } else {
         await setEvent(data?.[0]);
         setIsUpdateSuccess(true);
+        await revalidatePathAction("/events");
+        await revalidatePathAction(`/event/${id}`);
       }
     }
 

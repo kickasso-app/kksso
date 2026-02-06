@@ -1,9 +1,10 @@
-import { fetchMagazinePost } from "services/editorial";
+import { getMagazinePost } from "services/editorial.server";
 import ArticleClient from "./ArticleClient";
+import { cacheLife, cacheTag } from "next/cache";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const magPost = await fetchMagazinePost({ magpost_slug: slug });
+  const magPost = await getMagazinePost({ slug });
 
   if (!magPost) {
     return {
@@ -23,8 +24,12 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function ArticlePage({ params }) {
+  "use cache";
+  cacheTag("editorial");
+  cacheLife("hours");
+
   const { slug } = await params;
-  const magPost = await fetchMagazinePost({ magpost_slug: slug });
+  const magPost = await getMagazinePost({ slug });
 
   return <ArticleClient magPost={magPost} slug={slug} />;
 }

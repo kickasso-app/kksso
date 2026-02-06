@@ -1,8 +1,10 @@
+import { Suspense } from "react";
 import { Nunito_Sans } from "next/font/google";
 import { Providers } from "components/Providers";
 import StyledComponentsRegistry from "lib/registry";
 import Header from "layouts/Header";
 import InstallPrompt from "components/PWA/InstallPrompt";
+import Loading from "components/Loading";
 
 import "../styles/base.scss";
 import "../styles/colors.scss";
@@ -64,9 +66,17 @@ export default function RootLayout({ children }) {
         <StyledComponentsRegistry>
           <Providers>
             <div className="layout">
-              <InstallPrompt />
-              <Header />
-              <div className="content">{children}</div>
+              <Suspense fallback={null}>
+                <InstallPrompt />
+              </Suspense>
+              <Suspense fallback={null}>
+                <Header />
+              </Suspense>
+              <div className="content">
+                <Suspense fallback={<Loading />}>
+                  {children}
+                </Suspense>
+              </div>
             </div>
           </Providers>
         </StyledComponentsRegistry>

@@ -17,6 +17,7 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
+  cacheComponents: true,
   async headers() {
     return [
       {
