@@ -1,4 +1,6 @@
-import React, { useEffect, useContext } from "react";
+"use client";
+
+import React, { useEffect, useContext, useMemo } from "react";
 
 import { useRouter, usePathname } from "next/navigation";
 
@@ -15,9 +17,10 @@ export const SelectLocation = ({ isBarFullWidth = false }) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const baseRedirect = pathname.split("/")[1]
-    ? `/${pathname.split("/")[1]}/`
-    : null;
+  const baseRedirect = useMemo(() => {
+    const section = pathname.split("/")[1];
+    return section ? `/${section}/` : null;
+  }, [pathname]);
 
   useEffect(() => {
     async function fetchData() {
@@ -57,11 +60,14 @@ export const SelectLocation = ({ isBarFullWidth = false }) => {
                       }
                       active={selectedCity?.slugName === slugName}
                       disabled={published === false}
-                      onClick={async () => {
+                      onClick={async (e) => {
+                        e.preventDefault();
                         await selectCity(slugName);
+                        if (baseRedirect) {
+                          router.push(baseRedirect + slugName);
+                        }
                       }}
                       align="center"
-                      // gap={size === "small" ? "xsmall" : "small"}
                       color="#FFC0CB"
                       size={size === "small" ? "medium" : "large"}
                       pad={
@@ -70,7 +76,6 @@ export const SelectLocation = ({ isBarFullWidth = false }) => {
                           : "small"
                       }
                       hoverIndicator="#FFC0CB"
-                      href={baseRedirect ? baseRedirect + slugName : null}
                     />
                   </Box>
                 );

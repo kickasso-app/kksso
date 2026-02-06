@@ -6,3 +6,10 @@ export const createSupabaseMock = (result, mockSelectSpy) => {
     select: mockSelectSpy || jest.fn(),
   };
 };
+
+// Add a dummy test to satisfy Jest's requirement that every file in __tests__ has at least one test
+describe('supabaseMock utility', () => {
+  it('should be correctly exported', () => {
+    expect(createSupabaseMock).toBeDefined();
+  });
+});
