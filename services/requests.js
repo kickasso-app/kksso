@@ -1,6 +1,5 @@
 import { createContext, useContext, useState } from "react";
 import { supabase } from "./supabase";
-import { revalidatePathAction } from "app/actions/revalidate";
 
 import { createContact } from "./contacts";
 

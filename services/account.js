@@ -91,6 +91,7 @@ const AccountProvider = ({ children }) => {
         setProfile(data?.[0]);
         setIsUpdateSuccess(true);
         await revalidatePathAction("/studios");
+        await revalidatePathAction(`/studio/${data[0].studio_id}`);
       } else if (error) {
         setIsUpdateError(true);
         setLoading(false);

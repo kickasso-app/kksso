@@ -27,7 +27,7 @@ export async function generateMetadata({ params }) {
 export default async function EventPage({ params }) {
   "use cache";
   cacheTag("events");
-  cacheLife("hours");
+  cacheLife("days");
 
   const { id } = await params;
   const event = await getEvent(id);

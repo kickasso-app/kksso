@@ -8,7 +8,7 @@ import StudiosClient from "./StudiosClient";
 async function getStudios(cityName) {
   "use cache";
   cacheTag("studios");
-  cacheLife("hours");
+  cacheLife("days");
 
   let supabaseQuery = supabase.from("studios").select(STUDIO_PREVIEW_COLUMNS);
   if (cityName) {
