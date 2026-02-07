@@ -137,6 +137,18 @@ async function resizeImage({ file, returnSmallerImage = false }) {
   return [fileLarge, fileSmall];
 }
 
+async function getPublicImageUrls({ userId }) {
+  const { paths } = await listImages({ userId });
+  if (!paths) return [];
+
+  return paths.map((path) => {
+    const { data } = supabase.storage
+      .from("studios-photos")
+      .getPublicUrl(path);
+    return data.publicUrl;
+  });
+}
+
 export {
   fileExists,
   listImages,
@@ -145,4 +157,5 @@ export {
   downloadProfileImage,
   downloadEventImage,
   resizeImage,
+  getPublicImageUrls,
 };
