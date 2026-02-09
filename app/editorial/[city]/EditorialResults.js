@@ -1,4 +1,4 @@
-import { fetchMagazinePosts } from "services/editorial";
+import { getMagazinePosts } from "services/editorial.server";
 import { getCityBySlug } from "services/city.server";
 import EditorialCityClient from "./EditorialCityClient";
 
@@ -7,11 +7,8 @@ export default async function EditorialResults({ city }) {
   let magPosts = [];
 
   if (cityData) {
-    magPosts = await fetchMagazinePosts({ selectedCity: cityData });
+    magPosts = await getMagazinePosts({ selectedCity: cityData });
   }
-
-  // fetchMagazinePosts returns false on error, or array.
-  if (!magPosts) magPosts = [];
 
   return <EditorialCityClient magPosts={magPosts} city={city} />;
 }

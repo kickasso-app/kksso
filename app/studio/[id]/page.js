@@ -1,5 +1,6 @@
 import { getStudio } from "services/studios.server";
 import StudioClient from "./StudioClient";
+import { cacheLife, cacheTag } from "next/cache";
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
@@ -23,6 +24,10 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function StudioPage({ params }) {
+  "use cache";
+  cacheTag("studios");
+  cacheLife("hours");
+
   const { id } = await params;
   const studio = await getStudio(id);
 

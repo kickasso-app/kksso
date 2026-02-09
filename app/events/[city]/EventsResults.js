@@ -1,9 +1,14 @@
+import { cacheLife, cacheTag } from "next/cache";
 import { supabase } from "services/supabase";
 import { titleCase } from "services/helpers/textFormat";
 import { getCityBySlug } from "services/city.server";
 import EventsClient from "./EventsClient";
 
 async function getEvents(cityName) {
+  "use cache";
+  cacheTag("events");
+  cacheLife("hours");
+
   let supabaseQuery = supabase.from("events").select("*");
   if (cityName) {
     supabaseQuery = supabaseQuery.contains("cityLocation", [cityName]);

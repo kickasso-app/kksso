@@ -1,3 +1,4 @@
+import { cacheLife, cacheTag } from "next/cache";
 import { supabase } from "services/supabase";
 import { STUDIO_PREVIEW_COLUMNS } from "config/constants/studioPreviewColumns";
 import { titleCase } from "services/helpers/textFormat";
@@ -5,6 +6,10 @@ import { getCityBySlug } from "services/city.server";
 import StudiosClient from "./StudiosClient";
 
 async function getStudios(cityName) {
+  "use cache";
+  cacheTag("studios");
+  cacheLife("days");
+
   let supabaseQuery = supabase.from("studios").select(STUDIO_PREVIEW_COLUMNS);
   if (cityName) {
     supabaseQuery = supabaseQuery.contains("location", [cityName]);
