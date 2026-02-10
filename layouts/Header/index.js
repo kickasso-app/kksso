@@ -7,7 +7,7 @@ import { Box, Grid, ResponsiveContext } from "grommet";
 import { Menu as MenuIcon, X as CloseIcon } from "react-feather";
 
 import { useAuth } from "services/auth";
-import { useCities } from "services/city";
+import { useRegions } from "services/region";
 
 import NavButton from "./NavButton";
 import ProfileButton from "./ProfileButton";
@@ -19,20 +19,45 @@ import styles from "./index.module.scss";
 const Header = () => {
   const { session } = useAuth();
   const params = useParams();
-  const citySlug = params?.city;
+  const regionSlug = params?.region;
 
   const size = useContext(ResponsiveContext);
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // Helper to construct paths
   const createPath = (label, path) => {
-    const isSpecialLabel = ["Studios", "Events", "Editorial"].includes(label);
-    const pathCity = citySlug ? `${path}/${citySlug}` : `${path}`;
-    return isSpecialLabel ? pathCity : path;
+    // Only append region slug for Studios and Events
+    const isRegionBased = ["Studios", "Events"].includes(label);
+    
+    if (isRegionBased && regionSlug) {
+      return `${path}/${regionSlug}`;
+    }
+    
+    // Editorial and others are location-free or static
+    return path;
   };
+
+  const navButtons = MENU_LINKS.map((button) => (
+    <NavButton
+      key={button.path}
+      path={createPath(button.label, button.path)}
+      label={button.label}
+      onClick={() => setMenuOpen(false)}
+    />
+  ));
+
+  const joinButton = (
+    <NavButton
+      path={"/join"}
+      label={<u>Join</u>}
+      onClick={() => setMenuOpen(false)}
+    />
+  );
 
   return (
     <div className={styles.header}>
       <Box margin={{ vertical: "small", horizontal: "small" }} pad="xsmall">
+        {/* Mobile Header */}
         <div className={styles.mobileHeader}>
           <Box direction="row" align="center" justify="between" fill>
             <Box width="xsmall">
@@ -76,28 +101,19 @@ const Header = () => {
                     label={"Home"}
                     onClick={() => setMenuOpen(false)}
                   />
-                  {MENU_LINKS.map((button) => (
-                    <NavButton
-                      key={button.path}
-                      path={createPath(button.label, button.path)}
-                      label={button.label}
-                      onClick={() => setMenuOpen(false)}
-                    />
-                  ))}
+                  {navButtons}
                   {session ? (
                     <ProfileButton onMenuItemClick={() => setMenuOpen(false)} />
                   ) : (
-                    <NavButton
-                      path={"/join"}
-                      label={<u>Join</u>}
-                      onClick={() => setMenuOpen(false)}
-                    />
+                    joinButton
                   )}
                 </Box>
               </Box>
             )}
           </Box>
         </div>
+
+        {/* Desktop Header */}
         <div className={styles.desktopHeader}>
           <Grid
             columns={["auto", "flex"]}
@@ -128,11 +144,7 @@ const Header = () => {
                   label={button.label}
                 />
               ))}
-              {session ? (
-                <ProfileButton />
-              ) : (
-                <NavButton path={"/join"} label={<u>Join</u>} />
-              )}
+              {session ? <ProfileButton /> : <NavButton path={"/join"} label={<u>Join</u>} />}
             </Box>
           </Grid>
         </div>

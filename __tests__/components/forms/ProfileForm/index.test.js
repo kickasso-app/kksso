@@ -80,8 +80,8 @@ describe('ProfileForm', () => {
     expect(artistInput).toHaveValue('Jane Doe');
 
     const locationInput = queryByName('location');
-    fireEvent.change(locationInput, { target: { value: 'London, UK' } });
-    expect(locationInput).toHaveValue('London, UK');
+    fireEvent.change(locationInput, { target: { value: 'Latvia, UK' } });
+    expect(locationInput).toHaveValue('Latvia, UK');
   });
 
   it('submits the form with updated values and calls updateAccount', async () => {
@@ -91,7 +91,7 @@ describe('ProfileForm', () => {
     fireEvent.change(artistInput, { target: { value: 'Jane Doe' } });
 
     const locationInput = queryByName('location');
-    fireEvent.change(locationInput, { target: { value: 'London, UK' } });
+    fireEvent.change(locationInput, { target: { value: 'Latvia, UK' } });
 
     const saveButton = screen.getByRole('button', { name: /Save Changes/i });
     fireEvent.click(saveButton);
@@ -102,7 +102,7 @@ describe('ProfileForm', () => {
         {
           ...mockProfile,
           artist: 'Jane Doe',
-          location: ['London', 'UK'], // Ensure location is split correctly
+          location: ['Latvia', 'UK'], // Ensure location is split correctly
         },
         { id: 'test-user-id' }
       );

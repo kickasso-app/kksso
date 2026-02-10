@@ -21,7 +21,7 @@ describe('Header', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     useAuth.mockReturnValue({ session: null });
-    useParams.mockReturnValue({ city: 'berlin' });
+    useParams.mockReturnValue({ region: 'germany' });
   });
 
   it('renders the logo', () => {
@@ -39,7 +39,7 @@ describe('Header', () => {
     // Check if path includes city slug
     const navButtons = screen.getAllByTestId('nav-button');
     const studiosButton = navButtons.find(b => b.textContent === 'Studios');
-    expect(studiosButton).toHaveAttribute('data-path', '/studios/berlin');
+    expect(studiosButton).toHaveAttribute('data-path', '/studios/germany');
   });
 
   it('renders navigation links without city slug when absent', () => {

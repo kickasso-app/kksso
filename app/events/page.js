@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
-import DEFAULT_CITY from 'config/default-city';
+import DEFAULT_REGION from 'config/default-region';
 
 export default function EventsIndex() {
-  redirect(`/events/${DEFAULT_CITY}`);
+  redirect(`/events/${DEFAULT_REGION}`);
 }

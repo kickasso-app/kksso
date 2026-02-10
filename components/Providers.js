@@ -4,7 +4,7 @@ import { Grommet } from "grommet";
 import { Analytics } from "@vercel/analytics/react";
 import grommetTheme from "styles/grommetTheme";
 
-import { CityProvider } from "services/city";
+import { RegionProvider } from "services/region";
 import { AuthProvider } from "services/auth";
 import { AccountProvider } from "services/account";
 import { StudiosProvider } from "services/studios";
@@ -14,7 +14,7 @@ import { EventsProvider } from "services/events";
 export function Providers({ children }) {
   return (
     <Grommet theme={grommetTheme}>
-      <CityProvider>
+      <RegionProvider>
         <AuthProvider>
           <AccountProvider>
             <RequestsProvider>
@@ -26,7 +26,7 @@ export function Providers({ children }) {
             </RequestsProvider>
           </AccountProvider>
         </AuthProvider>
-      </CityProvider>
+      </RegionProvider>
       <Analytics />
     </Grommet>
   );

@@ -1,6 +1,6 @@
 // TO DO: clean up, cities and visitTimes not used anymore 
 
-const cities = ["Berlin", "Paris", "Brussels", "Cairo", "Prague", "New York"];
+const cities = ["Berlin", "Portugal", "Brussels", "Cairo", "Prague", "New York"];
 const mediums = [
   "Painting",
   "Drawing",

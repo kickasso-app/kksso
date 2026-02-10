@@ -100,6 +100,7 @@ export default function AccountSettings({ profile }) {
           </Button>
         </Box>
       </Box>
+
       {!loading && (
         <>
           {isUpdateSuccess && (

@@ -1,8 +1,8 @@
 import { supabase } from "./supabase";
 
-export const getCityBySlug = async (slug) => {
+export const getRegionBySlug = async (slug) => {
   const { data, error } = await supabase
-    .from("cities")
+    .from("regions")
     .select("*")
     .eq("slugName", slug)
     .single();

@@ -53,7 +53,7 @@ export const SearchBar = ({ isBarFullWidth = false }) => {
         <Row middle="xs">
           <Col xs={10}>
             <TextInput
-              placeholder={"Search artist, style, or district"}
+              placeholder={"Search city, style, or artist"}
               plain
               value={tempQuery}
               onChange={onChangeQuery}

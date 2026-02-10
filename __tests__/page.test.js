@@ -4,18 +4,18 @@ import Page from "app/page";
 
 // Mock next/navigation
 jest.mock("next/navigation", () => ({
-  useParams: () => ({ city: "berlin" }),
+  useParams: () => ({ region: "germany" }),
   useRouter: () => ({
     push: jest.fn(),
   }),
 }));
 
-// Mock the useCities hook
-jest.mock("services/city", () => ({
-  useCities: () => ({
-    cities: [],
-    fetchCities: jest.fn(),
-    selectedCity: { slugName: "berlin" },
+// Mock the useRegions hook
+jest.mock("services/region", () => ({
+  useRegions: () => ({
+    regions: [],
+    fetchRegions: jest.fn(),
+    selectedRegion: { slugName: "germany" },
   }),
 }));
 
@@ -41,7 +41,7 @@ describe("Landing Page", () => {
     expect(heading).toBeInTheDocument();
   });
 
-  it("renders links with correct city slug", () => {
+  it("renders links with correct region slug", () => {
     render(<Page />);
     
     // Check for Explore Studios link

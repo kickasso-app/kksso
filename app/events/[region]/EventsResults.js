@@ -1,17 +1,18 @@
 import { cacheLife, cacheTag } from "next/cache";
 import { supabase } from "services/supabase";
 import { titleCase } from "services/helpers/textFormat";
-import { getCityBySlug } from "services/city.server";
+import { getRegionBySlug } from "services/region.server";
 import EventsClient from "./EventsClient";
 
-async function getEvents(cityName) {
+async function getEvents(regionName) {
   "use cache";
   cacheTag("events");
   cacheLife("hours");
 
   let supabaseQuery = supabase.from("events").select("*");
-  if (cityName) {
-    supabaseQuery = supabaseQuery.contains("cityLocation", [cityName]);
+  if (regionName) {
+
+    supabaseQuery = supabaseQuery.contains("cityLocation", [regionName]);
   }
   let { data: supaEvents, error } = await supabaseQuery
     .is("isPublished", true)
@@ -21,14 +22,14 @@ async function getEvents(cityName) {
     console.error("Error fetching events:", error);
     return [];
   }
-  // console.log(`Events found for ${cityName}:`, supaEvents?.length);
   return supaEvents || [];
 }
 
-export default async function EventsResults({ city }) {
-  const cityData = await getCityBySlug(city);
-  const cityName = cityData?.city || titleCase(city);
-  const events = await getEvents(cityName);
+export default async function EventsResults({ region }) {
 
-  return <EventsClient events={events} city={city} />;
+  const regionData = await getRegionBySlug(region);
+  const regionName =  regionData?.region || titleCase(region);
+  const events = await getEvents(regionName);
+  
+  return <EventsClient events={events} region={region} />;
 }

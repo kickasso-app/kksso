@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { supabase } from "./supabase";
 
-import { useCities } from "services/city";
+import { useRegions } from "services/region";
 
 import { STUDIO_PREVIEW_COLUMNS } from "config/constants/studioPreviewColumns";
 import { STUDIO_COLUMNS } from "config/constants/studioColumns";
@@ -13,7 +13,7 @@ const StudiosContext = createContext(null);
 const emptyQuery = "";
 
 const StudiosProvider = ({ children }) => {
-  const { selectedCity } = useCities();
+  const { selectedRegion } = useRegions();
 
   const [studios, setStudios] = useState([]);
   const [featuredStudios, setFeaturedStudios] = useState([]);
@@ -39,6 +39,13 @@ const StudiosProvider = ({ children }) => {
     return profileImageCache.current[uuid];
   }, []);
 
+  // Clear search query and results when selectedRegion changes
+  useEffect(() => {
+    setQuery(emptyQuery);
+    setHasQuery(false);
+    setSearchStudios([]);
+  }, [selectedRegion]);
+
   /**
    * This function fetches published studios from a Supabase database and sets them in state.
    */
@@ -51,9 +58,9 @@ const StudiosProvider = ({ children }) => {
 
     let supabaseQuery = supabase.from("studios").select(STUDIO_PREVIEW_COLUMNS);
 
-    if (selectedCity?.city) {
-      const cityName = selectedCity.city;
-      supabaseQuery = supabaseQuery.contains("location", [cityName]);
+    if (selectedRegion?.region) {
+      const regionName = selectedRegion.region;
+      supabaseQuery = supabaseQuery.contains("location", [regionName]);
     }
     let { data: supaStudios, error } = await supabaseQuery
       .is("published", true)
@@ -115,13 +122,12 @@ const StudiosProvider = ({ children }) => {
 
   const fetchSearchStudios = async (newQuery) => {
     setLoading(true);
-
-    const cityName = selectedCity?.city;
+    const regionName = selectedRegion?.region;
 
     let { data: resultStudios, error } = await supabase
       .from("studios")
       .select(STUDIO_PREVIEW_COLUMNS)
-      .contains("location", [cityName])
+      .contains("location", [regionName])
       .is("published", true)
       .is("displayed", true)
       .textSearch("fts", newQuery, {
@@ -213,11 +219,11 @@ const StudiosProvider = ({ children }) => {
 
   const fetchFeaturedStudios = async () => {
     setLoading(true);
-    const cityName = selectedCity?.city;
+    const regionName = selectedRegion?.region;
     let { data: featStudios, error } = await supabase
       .from("studios")
       .select(STUDIO_PREVIEW_COLUMNS)
-      .contains("location", [cityName])
+      .contains("location", [regionName])
       .is("published", true)
       .is("displayed", true)
       .is("featured", true)
@@ -283,6 +289,7 @@ const StudiosProvider = ({ children }) => {
     error,
     getProfileImage,
     updateProfileImageCache,
+    selectedRegion, // Add dependency
   ]);
 
   return (

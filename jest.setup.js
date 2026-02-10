@@ -1,5 +1,9 @@
 import "@testing-library/jest-dom";
 import React from 'react';
+import { TextEncoder, TextDecoder } from 'util';
+
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
 
 jest.mock("@supabase/supabase-js", () => ({
   createClient: jest.fn(() => ({
@@ -12,14 +16,14 @@ jest.mock("@supabase/supabase-js", () => ({
   })),
 }));
 
-jest.mock('services/city', () => ({
-  useCities: jest.fn(() => ({
-    cities: [],
-    fetchCities: jest.fn(),
-    selectedCity: { slugName: 'berlin' },
-    selectCity: jest.fn(),
+jest.mock('services/region', () => ({
+  useRegions: jest.fn(() => ({
+    regions: [],
+    fetchRegions: jest.fn(),
+    selectedRegion: { slugName: 'germany' },
+    selectRegion: jest.fn(),
     loading: false,
     error: null,
   })),
-  CityProvider: ({ children }) => <>{children}</>,
+  RegionProvider: ({ children }) => <>{children}</>,
 }));

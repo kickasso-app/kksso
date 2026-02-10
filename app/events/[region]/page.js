@@ -4,19 +4,19 @@ import EventsResults from "./EventsResults";
 import Loading from "components/Loading";
 
 export async function generateMetadata({ params }) {
-  const { city } = await params;
+  const { region } = await params;
   return {
-    title: `Arti - Events in ${titleCase(city)}`,
-    description: `Discover art events in ${titleCase(city)}.`,
+    title: `Arti - Events in ${titleCase(region)}`,
+    description: `Discover art events in ${titleCase(region)}.`,
   };
 }
 
-export default async function EventsCityPage({ params }) {
-  const { city } = await params;
+export default async function EventsRegionPage({ params }) {
+  const { region } = await params;
 
   return (
     <Suspense fallback={<Loading />}>
-      <EventsResults city={city} />
+      <EventsResults region={region} />
     </Suspense>
   );
 }

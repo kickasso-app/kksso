@@ -4,12 +4,12 @@ import React, { createContext, useContext, useState, useCallback, useMemo, useRe
 import { supabase } from "./supabase";
 import { revalidatePathAction } from "app/actions/revalidate";
 
-import { useCities } from "services/city";
+import { useRegions } from "services/region";
 
 const EventsContext = createContext(null);
 
 const EventsProvider = ({ children }) => {
-  const { selectedCity } = useCities();
+  const { selectedRegion } = useRegions();
 
   const [events, setEvents] = useState([]);
   const [event, setEvent] = useState(null);
@@ -45,9 +45,9 @@ const EventsProvider = ({ children }) => {
 
     let supabaseQuery = supabase.from("events").select("*");
 
-    if (selectedCity?.city) {
-      const cityName = selectedCity.city;
-      supabaseQuery = supabaseQuery.contains("cityLocation", [cityName]);
+    if (selectedRegion?.region) {
+      const regionName = selectedRegion.region;
+      supabaseQuery = supabaseQuery.contains("cityLocation", [regionName]);
     }
 
     let { data: supaEvents, error } = await supabaseQuery
@@ -61,7 +61,7 @@ const EventsProvider = ({ children }) => {
       setError(returnError);
     }
     setLoading(false);
-  }, [selectedCity]);
+  }, [selectedRegion]);
 
   // Fetchs all account events including unpublished ones
 

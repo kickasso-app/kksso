@@ -48,7 +48,7 @@ export default function StudioClient({ initialStudio }) {
         <>
           <ChevronLeft className={styles.icon} size={16} />{" "}
           <Link
-            href={`/studios/` + (studio.location?.[0]?.toLowerCase() || 'munich')}
+            href={`/studios/` + (studio.location?.[0]?.toLowerCase())}
             className={styles.backlink}
           >
             BACK

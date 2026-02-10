@@ -74,7 +74,7 @@ export default function EventClient({ initialEvent }) {
         <>
           <ChevronLeft className={styles.icon} size={16} />{" "}
           <Link
-            href={`/events/` + (event.cityLocation?.[0]?.toLowerCase() || 'munich')}
+            href={`/events/` + (event.cityLocation?.[0]?.toLowerCase())}
             className={styles.backlink}
           >
             BACK

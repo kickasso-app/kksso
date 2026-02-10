@@ -52,7 +52,7 @@ const ArticleClient = ({ magPost, slug }) => {
                 <Link
                   href={
                     `/editorial/` +
-                    (magPost.cityLocation?.[0]?.toLowerCase() || "munich")
+                      (magPost.cityLocation?.[0]?.toLowerCase())
                   }
                   className={styles.backlink}
                 >

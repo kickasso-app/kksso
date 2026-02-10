@@ -10,14 +10,14 @@ jest.mock("next/navigation", () => ({
     prefetch: jest.fn(),
   }),
   usePathname: () => "/",
-  useParams: () => ({ city: "berlin" }),
+  useParams: () => ({ region: "germany" }),
 }));
 
 // Mock services
-jest.mock("services/city", () => ({
-  useCities: () => ({
-    cities: [],
-    fetchCities: jest.fn(),
+jest.mock("services/region", () => ({
+  useRegions: () => ({
+    regions: [],
+    fetchRegions: jest.fn(),
   }),
 }));
 
@@ -29,16 +29,16 @@ jest.mock("services/auth", () => ({
 }));
 
 describe("Header", () => {
-  it("renders navigation links with city slug", () => {
+  it("renders navigation links with region slug", () => {
     render(<Header />);
 
     // Check for Studios link
     const studiosLink = screen.getAllByText(/Studios/i)[0].closest("a");
-    expect(studiosLink).toHaveAttribute("href", "/studios/berlin");
+    expect(studiosLink).toHaveAttribute("href", "/studios/germany");
 
     // Check for Events link
     const eventsLink = screen.getAllByText(/Events/i)[0].closest("a");
-    expect(eventsLink).toHaveAttribute("href", "/events/berlin");
+    expect(eventsLink).toHaveAttribute("href", "/events/germany");
   });
 
   describe("Responsive Navigation - CLS Optimization", () => {

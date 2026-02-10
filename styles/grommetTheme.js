@@ -124,6 +124,13 @@ const themeChanges = {
         background-color: ${(isSelected || isInRange) && "#C0FFF4"}`,
     },
   },
+  notification: {
+    toast: {
+      container: {
+        pad: "medium", // Adds more spacing around the content
+      },
+    }
+  },
   checkBox: {
     border: {
       color: "black",
@@ -139,26 +146,12 @@ const themeChanges = {
       color: "brand",
     },
   },
-  // New changes for Select component
   select: {
     background: { color: "light-1" },
-
     icons: {
       color: "brand",
     },
   },
-  // size is useless
-  // size: {
-  //   large: {
-  //     border: {
-  //       radius: "14px",
-  //     },
-  //     pad: {
-  //       vertical: "14px",
-  //       horizontal: "22px",
-  //     },
-  //   },
-  // },
 };
 
 export default deepMerge(base, themeChanges);

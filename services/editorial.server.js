@@ -4,16 +4,12 @@ import { supabase } from "./supabase";
 /**
  * Fetches magazine posts with caching enabled.
  */
-export const getMagazinePosts = async ({ selectedCity }) => {
+export const getMagazinePosts = async () => {
   "use cache";
   cacheTag("editorial");
   cacheLife("hours");
 
   let supabaseQuery = supabase.from("magazine").select("*");
-  if (selectedCity?.city) {
-    const cityName = selectedCity.city;
-    supabaseQuery = supabaseQuery.contains("cityLocation", [cityName]);
-  }
 
   try {
     const { data: supaMagPosts, error } = await supabaseQuery

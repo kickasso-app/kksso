@@ -1,21 +1,23 @@
 'use client';
 
-import { useEffect } from "react";
-import { useCities } from "services/city";
+import { useEffect, useRef } from "react";
+import { useRegions } from "services/region";
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import { Box, Heading, Text } from "grommet";
 import StudiosFilter from "components/StudiosFilter";
-import SelectLocation from "components/SelectLocation";
+import SelectRegion from "components/SelectRegion";
 import { titleCase } from "services/helpers/textFormat";
 
-const StudiosClient = ({ studios, city }) => {
-  const { selectedCity, selectCity } = useCities();
+const StudiosClient = ({ studios, region }) => {
+  const { selectedRegion, selectRegion } = useRegions();
+  const attemptedRegion = useRef(null);
 
   useEffect(() => {
-    if (city && city !== selectedCity?.slugName) {
-      selectCity(city);
+    if (region && region !== selectedRegion?.slugName && attemptedRegion.current !== region) {
+      attemptedRegion.current = region;
+      selectRegion(region);
     }
-  }, [city, selectedCity, selectCity]);
+  }, [region, selectedRegion, selectRegion]);
 
   return (
     <Grid fluid align="start">
@@ -28,22 +30,19 @@ const StudiosClient = ({ studios, city }) => {
               </Heading>
             </Box>
             
-            {/* We assume data is loaded on server, so no loading state needed here normally.
-                However, if studios is empty, we show error/empty state. */}
-            
             {(!studios || studios.length === 0) ? (
               <>
                 <Box pad={{ horizontal: "medium", vertical: "large" }}>
                   <Text size="medium">
-                    There are no studios in the city{" "}
-                    <b>"{titleCase(city)}"</b>
+                    There are no studios in the region{" "}
+                    <b>"{titleCase(region)}"</b>
                     <br />
                     <br />
-                    Please try to check the URL or choose another city from
+                    Please try to check the URL or choose another region from
                     below
                   </Text>
                 </Box>
-                <SelectLocation isBarFullWidth />
+                <SelectRegion isBarFullWidth />
               </>
             ) : (
               <StudiosFilter studios={studios} />

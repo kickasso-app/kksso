@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
-import DEFAULT_CITY from 'config/default-city';
+import DEFAULT_REGION from 'config/default-region';
 
 export default function StudiosIndex() {
-  redirect(`/studios/${DEFAULT_CITY}`);
+  redirect(`/studios/${DEFAULT_REGION}`);
 }

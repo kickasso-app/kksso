@@ -4,19 +4,19 @@ import StudiosResults from "./StudiosResults";
 import Loading from "components/Loading";
 
 export async function generateMetadata({ params }) {
-  const { city } = await params;
+  const { region } = await params;
   return {
-    title: `Arti - Studios in ${titleCase(city)}`,
-    description: `Discover art studios in ${titleCase(city)}.`,
+    title: `Arti - Studios in ${titleCase(region)}`,
+    description: `Discover art studios in ${titleCase(region)}.`,
   };
 }
 
-export default async function StudiosCityPage({ params }) {
-  const { city } = await params;
+export default async function StudiosRegionPage({ params }) {
+  const { region } = await params;
 
   return (
     <Suspense fallback={<Loading />}>
-      <StudiosResults city={city} />
+      <StudiosResults region={region} />
     </Suspense>
   );
 }

@@ -1,23 +1,25 @@
 "use client";
 
-import { useEffect } from "react";
-import { useCities } from "services/city";
+import { useEffect, useRef } from "react";
+import { useRegions } from "services/region";
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import Masonry from "react-masonry-css";
 import { Box, Heading, Text } from "grommet";
-import SelectLocation from "components/SelectLocation";
+import SelectRegion from "components/SelectRegion";
 import EventCard from "components/EventCard";
 import { titleCase } from "services/helpers/textFormat";
 import styles from "components/StudiosFilter/index.module.scss";
 
-const EventsClient = ({ events, city }) => {
-  const { selectedCity, selectCity } = useCities();
+const EventsClient = ({ events, region }) => {
+  const { selectedRegion, selectRegion } = useRegions();
+  const attemptedRegion = useRef(null);
 
   useEffect(() => {
-    if (city && city !== selectedCity?.slugName) {
-      selectCity(city);
+    if (region && region !== selectedRegion?.slugName && attemptedRegion.current !== region) {
+      attemptedRegion.current = region;
+      selectRegion(region);
     }
-  }, [city, selectedCity, selectCity]);
+  }, [region, selectedRegion, selectRegion]);
 
   return (
     <Grid fluid align="start">
@@ -34,19 +36,19 @@ const EventsClient = ({ events, city }) => {
               <>
                 <Box pad={{ horizontal: "medium", vertical: "large" }}>
                   <Text size="medium">
-                    There are no events in the city <b>"{titleCase(city)}"</b>
+                    There are no events in the region <b>"{titleCase(region)}"</b>
                     <br />
                     <br />
-                    Please try to check the URL or choose another city from
+                    Please try to check the URL or choose another region from
                     below
                   </Text>
                 </Box>
-                <SelectLocation isBarFullWidth />
+                <SelectRegion isBarFullWidth />
               </>
             ) : (
               <Box pad="small">
                 <Box align="center" margin={{ vertical: "medium" }}>
-                  <SelectLocation isBarFullWidth />
+                  <SelectRegion isBarFullWidth />
                 </Box>
 
                 <Masonry

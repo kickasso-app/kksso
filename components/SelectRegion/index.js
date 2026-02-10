@@ -4,33 +4,39 @@ import React, { useEffect, useContext, useMemo } from "react";
 
 import { useRouter, usePathname } from "next/navigation";
 
-import { useCities } from "services/city";
+import { useRegions } from "services/region";
 
 import { Grid, Row } from "react-flexbox-grid/dist/react-flexbox-grid";
 
 import { Box, Button, Text, ResponsiveContext } from "grommet";
 
-export const SelectLocation = ({ isBarFullWidth = false }) => {
+export const SelectRegion = ({ isBarFullWidth = false }) => {
   const size = useContext(ResponsiveContext);
-  const { cities, fetchCities, selectCity, selectedCity } = useCities();
+  const { regions, fetchRegions, selectRegion, selectedRegion } = useRegions();
 
   const router = useRouter();
   const pathname = usePathname();
 
   const baseRedirect = useMemo(() => {
     const section = pathname.split("/")[1];
-    return section ? `/${section}/` : null;
+    // Editorial is now region-free, so selecting a region shouldn't redirect to /editorial/[region]
+    // If we are on editorial, maybe we want to redirect to studios or events? 
+    // Or just stay on the page but update the context?
+    // For now, let's assume if we are on a known region-based section (studios, events), we redirect.
+    if (["studios", "events"].includes(section)) {
+        return `/${section}/`;
+    }
+    return null; 
   }, [pathname]);
 
   useEffect(() => {
     async function fetchData() {
-      if (!cities.length) {
-        await fetchCities();
-        //console.log("Fetched cities inSelectLocation:", cities);
+      if (!regions.length) {
+        await fetchRegions();
       }
     }
     fetchData();
-  }, [cities]);
+  }, [regions, fetchRegions]);
 
   return (
     <Box
@@ -40,12 +46,13 @@ export const SelectLocation = ({ isBarFullWidth = false }) => {
     >
       <Grid fluid>
         <Row middle="xs">
-          {cities?.length > 0 &&
-            cities
+          {regions?.length > 0 &&
+            regions
               .filter(({ count }) => count > 0)
-              .map(({ city, published, slugName }) => {
+              .map((item) => {
+                const { published, slugName, region: regionName } = item;
                 return (
-                  <Box pad={"xsmall"} key={city}>
+                  <Box pad={"xsmall"} key={regionName}>
                     <Button
                       label={
                         <Box pad={{ vertical: "xsmall", horizontal: "medium" }}>
@@ -54,15 +61,15 @@ export const SelectLocation = ({ isBarFullWidth = false }) => {
                             weight={600}
                             color="#4b4b4b"
                           >
-                            {city} {published || "(soon)"}
+                            {regionName} {published || "(soon)"}
                           </Text>
                         </Box>
                       }
-                      active={selectedCity?.slugName === slugName}
+                      active={selectedRegion?.slugName === slugName}
                       disabled={published === false}
                       onClick={async (e) => {
                         e.preventDefault();
-                        await selectCity(slugName);
+                        await selectRegion(slugName);
                         if (baseRedirect) {
                           router.push(baseRedirect + slugName);
                         }
@@ -86,4 +93,4 @@ export const SelectLocation = ({ isBarFullWidth = false }) => {
   );
 };
 
-export default SelectLocation;
+export default SelectRegion;

@@ -1,51 +1,59 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
-import { redirect } from "next/navigation";
-import EditorialCityClient from "app/editorial/[city]/EditorialCityClient";
+import EditorialClient from "app/editorial/EditorialClient";
 import EditorialPage from "app/editorial/page";
-import DEFAULT_CITY from "config/default-city";
 
 jest.mock("next/navigation", () => ({
   redirect: jest.fn(),
 }));
 
-jest.mock("components/SelectLocation", () => () => <div data-testid="select-location">SelectLocation</div>);
+jest.mock("services/editorial.server", () => ({
+  getMagazinePosts: jest.fn(() => Promise.resolve([])),
+}));
+
+// Mock the async server component to be a simple synchronous component
+jest.mock("app/editorial/EditorialResults", () => {
+  return function DummyEditorialResults() {
+    return <div data-testid="editorial-results">EditorialResults</div>;
+  };
+});
+
+jest.mock("components/SelectRegion", () => () => <div data-testid="select-region">SelectRegion</div>);
 jest.mock("components/MagazineCard", () => ({ magPost }) => <div data-testid="mag-post-card">{magPost.title}</div>);
 jest.mock("layouts/WithFooter", () => ({ children }) => <div data-testid="with-footer">{children}</div>);
 
 describe("Editorial Route", () => {
   describe("Index Page", () => {
-    it("redirects /editorial to /editorial/DEFAULT_CITY", () => {
-      EditorialPage();
-      expect(redirect).toHaveBeenCalledWith(`/editorial/${DEFAULT_CITY}`);
+    it("renders without crashing", () => {
+      render(<EditorialPage />);
+      // Since EditorialResults is async server component, testing it directly in unit test might be tricky without mocking.
+      // But EditorialPage is synchronous wrapper. 
+      // However, EditorialResults is async.
+      // Let's just check if it renders without error or mock EditorialResults if needed.
+      // For now, simple render check.
     });
   });
 
-  describe("EditorialCityClient", () => {
+  describe("EditorialClient", () => {
     it("renders magazine posts when data is present", () => {
       const mockPosts = [{ id: 1, title: "Article A" }];
-      const city = "london";
 
       render(
-          <EditorialCityClient magPosts={mockPosts} city={city} />
+          <EditorialClient magPosts={mockPosts} />
       );
 
       expect(screen.getByTestId("with-footer")).toBeInTheDocument();
       expect(screen.getByText("Article A")).toBeInTheDocument();
-      expect(screen.getByTestId("select-location")).toBeInTheDocument();
     });
 
     it("renders empty state when no posts", () => {
-      const city = "london";
       render(
-          <EditorialCityClient magPosts={[]} city={city} />
+          <EditorialClient magPosts={[]} />
       );
 
       expect(
-        screen.getByText(/There are no articles in the city/i)
+        screen.getByText(/There are no articles at the moment/i)
       ).toBeInTheDocument();
-      expect(screen.getByText(/"London"/i)).toBeInTheDocument();
-      expect(screen.getByTestId("select-location")).toBeInTheDocument();
     });
   });
 });
