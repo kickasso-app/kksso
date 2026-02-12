@@ -9,7 +9,6 @@ import {
   Box,
   Form,
   FormField,
-  Notification,
   TextArea,
   TextInput,
   Text,
@@ -18,6 +17,8 @@ import {
   Paragraph,
   Anchor,
 } from "grommet";
+
+import ToastNotification from "components/ToastNotification";
 
 export default function ProfileForm({
   profile: {
@@ -87,7 +88,12 @@ export default function ProfileForm({
             onSubmit={updateProfile}
             validate="submit"
           >
-            <FormField name="artist" label="Full Name or Studio Name" margin={fieldMargin} required>
+            <FormField
+              name="artist"
+              label="Full Name or Studio Name"
+              margin={fieldMargin}
+              required
+            >
               <TextInput name="artist" placeholder="" />
             </FormField>
 
@@ -206,24 +212,11 @@ export default function ProfileForm({
             </Box>
 
             {!loading && (
-              <>
-                {isUpdateSuccess && (
-                  <Notification
-                    toast
-                    status="normal"
-                    title="Your profile was updated."
-                  />
-                )}
-                {isUpdateError && (
-                  <Notification
-                    toast
-                    status="warning"
-                    title="Your profile was not updated!"
-                    message="We couldn't complete your request this time. Please try again."
-                    // onClose={() => {}}
-                  />
-                )}
-              </>
+              <ToastNotification
+                success={isUpdateSuccess}
+                warning={isUpdateError}
+                type="Update Profile"
+              />
             )}
           </Form>
         </Grommet>

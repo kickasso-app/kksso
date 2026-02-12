@@ -5,6 +5,7 @@ import { useAuth } from "services/auth";
 import { useAccount } from "services/account";
 
 import Button from "components/Button";
+import ToastNotification from "components/ToastNotification";
 import { Box, Text, Heading, Notification } from "grommet";
 
 export default function AccountSettings({ profile }) {
@@ -76,7 +77,6 @@ export default function AccountSettings({ profile }) {
                   can preview it.
                 </Text>
               )}
-
               <br />
               <Button onClick={togglePublishProfile} btnStyle="filled">
                 Publish
@@ -102,24 +102,11 @@ export default function AccountSettings({ profile }) {
       </Box>
 
       {!loading && (
-        <>
-          {isUpdateSuccess && (
-            <Notification
-              toast
-              status="normal"
-              title="Your profile was updated."
-            />
-          )}
-          {isUpdateError && (
-            <Notification
-              toast
-              status="warning"
-              title="Your profile was not updated!"
-              message="We couldn't complete your request this time. Please try again."
-              // onClose={() => {}}
-            />
-          )}
-        </>
+        <ToastNotification
+          success={isUpdateSuccess}
+          warning={isUpdateError}
+          type="Update Profile"
+        />
       )}
       {/* <br />
       <br />

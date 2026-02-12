@@ -5,15 +5,9 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "services/auth";
 
 import { Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
-import {
-  Box,
-  FormField,
-  TextInput,
-  Heading,
-  Text,
-  Notification,
-} from "grommet";
+import { Box, FormField, TextInput, Heading } from "grommet";
 import Button from "components/Button";
+import NotificationLayer from "components/NotificationLayer";
 
 export default function ResetPasswordClient() {
   const [loading, setLoading] = useState(false);
@@ -75,8 +69,7 @@ export default function ResetPasswordClient() {
               </Button>
             </Box>
             {success && (
-              <Notification
-                toast
+              <NotificationLayer
                 status="normal"
                 title="Success!"
                 message="Your password has been updated. Redirecting to profile..."
@@ -84,12 +77,12 @@ export default function ResetPasswordClient() {
               />
             )}
             {error && (
-              <Notification
-                toast
-                status="critical"
+              <NotificationLayer
+                status="warning"
                 title="Error"
                 message={error}
                 onClose={() => setError(null)}
+                autoClose={false}
               />
             )}
           </Box>

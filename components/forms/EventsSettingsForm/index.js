@@ -6,7 +6,6 @@ import {
   Heading,
   Text,
   FormField,
-  Notification,
   Select,
   Button as GrommetButton,
 } from "grommet";
@@ -17,6 +16,7 @@ import { useAuth } from "services/auth";
 import { useEvents } from "services/events";
 
 import EventCardEdit from "../EventCardEdit";
+import ToastNotification from "components/ToastNotification";
 
 const MAX_EVENTS = 3;
 export default function EventsSettingsForm({ profile }) {
@@ -150,24 +150,11 @@ export default function EventsSettingsForm({ profile }) {
               />
             )}
             {!loading && (
-              <>
-                {isUpdateSuccess && (
-                  <Notification
-                    toast
-                    status="normal"
-                    title="Your profile was updated."
-                  />
-                )}
-                {isUpdateError && (
-                  <Notification
-                    toast
-                    status="warning"
-                    title="Your profile was not updated!"
-                    message="We couldn't complete your request this time. Please try again."
-                    // onClose={() => {}}
-                  />
-                )}
-              </>
+              <ToastNotification
+                success={isUpdateSuccess}
+                warning={isUpdateError}
+                type="Update Profile"
+              />
             )}
           </Col>
         </Row>

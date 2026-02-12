@@ -292,33 +292,22 @@ const VisitFormOpen = ({ artistEmail, artistName, studioID, studio_uuid }) => {
             </Text>
           )}
 
+
           {isEmailSent ? (
             <NotificationLayer
               status="normal"
               title="Your visit request was sent!"
-              message={
-                <Text>
-                  <br />
-                  Please wait to hear back from us when the studio responds.
-                </Text>
-              }
+              message="Please wait to hear back from us when the studio responds."
               onClose={() => setIsEmailSent(false)}
             />
           ) : (
             isEmailError && (
               <NotificationLayer
-                toast
                 status="warning"
                 title="We couldn't send your request!"
-                message={
-                  <Text>
-                    <br />
-                    Please try again, and reach out to us if you face an issue
-                    again.{" "}
-                  </Text>
-                }
+                message="Please try again, and reach out to us if you face an issue again."
                 onClose={() => setIsEmailError(false)}
-                time="2000"
+                autoClose={false}
               />
             )
           )}

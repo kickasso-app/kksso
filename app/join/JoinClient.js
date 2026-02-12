@@ -19,11 +19,11 @@ import {
   Text,
   Anchor,
   Paragraph,
-  Notification,
 } from "grommet";
 import Button from "components/Button";
 
 import { featureFlags } from "config/feature-flags";
+import NotificationLayer from "components/NotificationLayer";
 
 export default function JoinClient({ referral }) {
   const [loading, setLoading] = useState(false);
@@ -246,8 +246,8 @@ export default function JoinClient({ referral }) {
             </Box>
 
             {signUpToast && (
-              <Notification
-                toast
+              <NotificationLayer
+                autoClose={false}
                 status="normal"
                 title="Almost there!"
                 message="Please check your inbox to verify your email."

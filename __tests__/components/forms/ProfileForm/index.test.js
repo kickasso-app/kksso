@@ -119,7 +119,7 @@ describe('ProfileForm', () => {
 
     render(<ProfileForm profile={mockProfile} goToTab={mockGoToTab} />);
 
-    expect(screen.getByText(/Your profile was updated./i)).toBeInTheDocument();
+    expect(screen.getByText(/Your profile was updated successfully./i)).toBeInTheDocument();
   });
 
   it('shows error notification on failed update', async () => {
@@ -132,7 +132,7 @@ describe('ProfileForm', () => {
 
     render(<ProfileForm profile={mockProfile} goToTab={mockGoToTab} />);
 
-    expect(screen.getByText(/Your profile was not updated!/i)).toBeInTheDocument();
+    expect(screen.getByText(/Your profile was not updated/i)).toBeInTheDocument();
     expect(screen.getByText(/We couldn\'t complete your request this time. Please try again./i)).toBeInTheDocument();
   });
 

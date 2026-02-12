@@ -22,7 +22,7 @@ const carouselConfig = {
   showNav: true,
   isRTL: false,
   slideDuration: 450,
-  slideInterval: 2000,
+  slideInterval: 3000,
   slideOnThumbnailOver: false,
   thumbnailPosition: "bottom",
   showVideo: {},

@@ -9,7 +9,6 @@ import {
   Box,
   Form,
   FormField,
-  Notification,
   TextArea,
   TextInput,
   Text,
@@ -17,6 +16,7 @@ import {
 } from "grommet";
 
 import Button from "components/Button";
+import ToastNotification from "components/ToastNotification";
 
 export default function StudioSettingsForm({
   profile: { visitRules, textStudio, district },
@@ -117,24 +117,11 @@ ex: Rule 1; Rule 2; Rule 3 (semi-colon seperated)"
       </Box>
 
       {!loading && (
-        <>
-          {isUpdateSuccess && (
-            <Notification
-              toast
-              status="normal"
-              title="Your profile was updated."
-            />
-          )}
-          {isUpdateError && (
-            <Notification
-              toast
-              status="warning"
-              title="Your profile was not updated!"
-              message="We couldn't complete your request this time. Please try again."
-              // onClose={() => {}}
-            />
-          )}
-        </>
+        <ToastNotification
+          success={isUpdateSuccess}
+          warning={isUpdateError}
+          type="Update Profile"
+        />
       )}
     </Form>
   );

@@ -21,10 +21,10 @@ describe("SelectRegion", () => {
   const mockFetchRegions = jest.fn();
   
   let mockRegions = [
-    { name: "Germany", slugName: "germany", count: 10, published: true },
-    { name: "United Kingdom", slugName: "united-kingdom", count: 5, published: true },
-    { name: "France", slugName: "france", count: 0, published: true },
-    { name: "Japan", slugName: "japan", count: 2, published: false },
+    { region: "Germany", slugName: "germany", count: 10, published: true },
+    { region: "United Kingdom", slugName: "united-kingdom", count: 5, published: true },
+    { region: "France", slugName: "france", count: 0, published: true },
+    { region: "Japan", slugName: "japan", count: 2, published: false },
   ];
 
   beforeEach(() => {
@@ -43,7 +43,7 @@ describe("SelectRegion", () => {
       regions: mockRegions,
       fetchRegions: mockFetchRegions,
       selectRegion: mockSelectRegion,
-      selectedRegion: { name: "Germany", slugName: "germany" },
+      selectedRegion: { region: "Germany", slugName: "germany" },
       loading: false,
       error: null,
     });

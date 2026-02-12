@@ -1,16 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Box,
-  Button,
-  Form,
-  FormField,
-  Heading,
-  Text,
-  TextArea,
-  Notification,
-} from "grommet";
+import { Box, Button, Form, FormField, Heading, Text, TextArea } from "grommet";
 import { Checkmark, Close } from "grommet-icons";
 import moment from "moment";
 
@@ -305,24 +296,16 @@ export default function RequestForm({
         <>
           {isUpdateSuccess && (
             <NotificationLayer
-              toast
               status="normal"
               title="Your response was sent."
-              time={1500}
             />
           )}
           {isUpdateError && (
             <NotificationLayer
-              toast
               status="warning"
               title="Your response was not sent!"
-              message={
-                <Text>
-                  <br />
-                  We couldn't send your response this time. Please try again.
-                </Text>
-              }
-              time={2000}
+              message=" We couldn't send your response this time. Please try again."
+              autoClose={false}
             />
           )}
         </>

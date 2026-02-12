@@ -10,10 +10,10 @@ import {
   FileInput,
   Image,
   Text,
-  Notification,
   Paragraph,
 } from "grommet";
 import { Edit2, X } from "react-feather";
+import ToastNotification from "components/ToastNotification";
 
 const PHOTO_MAX_SIZE = 1048576; // 1 MB
 
@@ -170,10 +170,9 @@ const EventsPhotoInput = ({ userId, event, postUpload }) => {
       {uploading && <img src={`/img/loader.svg`} />}
       <br />
       {isPhotoTooLarge && (
-        <Notification
-          toast
-          status="warning"
-          title="Your photo was not uploaded"
+        <ToastNotification
+          warning={true}
+          type="Photo Upload"
           message="Upload a smaller image, less than 1 Megabyte."
         />
       )}

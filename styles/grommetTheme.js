@@ -13,9 +13,11 @@ const themeChanges = {
     colors: {
       // overriding colors
       brand: "#FFC0CB",
+      "brand-dark": "#AA8088",
       "accent-1": "#C0FFF4",
+      "accent-1-dark": "#80AAA0",
       "dark-1": "#4b4b4b",
-      "brand-dark": "#D78EB7",
+
       control: "accent-1",
       focus: "#FFF",
       icon: "#FFC0CB",
@@ -112,6 +114,7 @@ const themeChanges = {
     },
     medium: {
       daySize: "30px",
+
       lineHeight: 1.6,
       fontSize: "14px",
     },
@@ -126,10 +129,20 @@ const themeChanges = {
   },
   notification: {
     toast: {
+      time: 6000,
       container: {
-        pad: "medium", // Adds more spacing around the content
+        pad: "medium",
+        width: "medium",
+        elevation: "medium",
+        background: "white",
+        round: "small",
+        // zIndex: "1000", // Grommet layers usually handle this, but can be explicit if needed
       },
-    }
+    },
+    // General notification container (inner content)
+    container: {
+      pad: "small",
+    },
   },
   checkBox: {
     border: {

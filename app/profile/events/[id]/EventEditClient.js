@@ -14,7 +14,6 @@ import {
   Form,
   FormField,
   TextInput,
-  Notification,
   TextArea,
   Select,
   CheckBox,
@@ -26,6 +25,7 @@ import { useAuth } from "services/auth";
 import { useEvents } from "services/events";
 
 import Button from "components/Button";
+import ToastNotification from "components/ToastNotification";
 
 const initialValues = {
   eventType: "Workshop",
@@ -432,23 +432,11 @@ export default function EventEditClient() {
                 <Link href={"/profile?section=3"}>BACK to preview</Link>
               </Box>
               {!loading && (
-                <>
-                  {isUpdateSuccess && (
-                    <Notification
-                      toast
-                      status="normal"
-                      title="Your event was updated."
-                    />
-                  )}
-                  {isUpdateError && (
-                    <Notification
-                      toast
-                      status="warning"
-                      title="Your event was not updated!"
-                      message="We couldn't complete your request this time. Please try again."
-                    />
-                  )}
-                </>
+                <ToastNotification
+                  success={isUpdateSuccess}
+                  warning={isUpdateError}
+                  type="Update Event"
+                />
               )}
             </Form>
           </Grid>
