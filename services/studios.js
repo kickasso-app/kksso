@@ -65,7 +65,7 @@ const StudiosProvider = ({ children }) => {
     let { data: supaStudios, error } = await supabaseQuery
       .is("published", true)
       .is("displayed", true)
-      .order("studio_id", true);
+      .order("rank", true);
     if (supaStudios?.length) {
       setStudios(supaStudios);
     } else {
@@ -75,31 +75,6 @@ const StudiosProvider = ({ children }) => {
     setLoading(false);
   };
 
-  // fetch studios count
-  // https://www.restack.io/docs/supabase-knowledge-supabase-get-count-guide
-
-  //REMOVE after feature-flag studiosByCities is activated
-
-  const fetchAllStudios = async () => {
-    setLoading(true);
-    // console.log("fetching studios");
-
-    // https://markustripp.medium.com/supabase-conditional-queries-with-filter-chaining-1c2bb48b8388
-
-    let { data: supaStudios, error } = await supabase
-      .from("studios")
-      .select(STUDIO_PREVIEW_COLUMNS)
-      .is("published", true)
-      .is("displayed", true)
-      .order("studio_id", true);
-    if (supaStudios?.length) {
-      setStudios(supaStudios);
-    } else {
-      const returnError = error ?? "No studios were fetched";
-      setError(returnError);
-    }
-    setLoading(false);
-  };
 
   /**
    * This function updates the search query and fetches search results from a Supabase database based on
@@ -134,7 +109,7 @@ const StudiosProvider = ({ children }) => {
         type: "websearch",
         config: "english",
       })
-      .order("studio_id", true);
+      .order("rank", true);
     if (error) {
       setError(error);
     } else {
@@ -227,7 +202,7 @@ const StudiosProvider = ({ children }) => {
       .is("published", true)
       .is("displayed", true)
       .is("featured", true)
-      .order("studio_id", true);
+      .order("rank", true);
     if (error) {
       setError(error);
     } else {
@@ -257,40 +232,42 @@ const StudiosProvider = ({ children }) => {
     return doesExist;
   };
 
-  const contextObj = useMemo(() => ({
-    studios,
-    searchStudios,
-    featuredStudios,
-    studio,
-    userStudio,
-    query,
-    hasQuery,
-    updateQuery,
-    fetchStudios,
-    fetchAllStudios,
-    fetchFeaturedStudios,
-    fetchStudio,
-    fetchUserStudio,
-    fetchStudioBasic,
-    doesStudioExist,
-    loading,
-    error,
-    getProfileImage,
-    updateProfileImageCache,
-  }), [
-    studios,
-    searchStudios,
-    featuredStudios,
-    studio,
-    userStudio,
-    query,
-    hasQuery,
-    loading,
-    error,
-    getProfileImage,
-    updateProfileImageCache,
-    selectedRegion, // Add dependency
-  ]);
+  const contextObj = useMemo(
+    () => ({
+      studios,
+      searchStudios,
+      featuredStudios,
+      studio,
+      userStudio,
+      query,
+      hasQuery,
+      updateQuery,
+      fetchStudios,
+      fetchFeaturedStudios,
+      fetchStudio,
+      fetchUserStudio,
+      fetchStudioBasic,
+      doesStudioExist,
+      loading,
+      error,
+      getProfileImage,
+      updateProfileImageCache,
+    }),
+    [
+      studios,
+      searchStudios,
+      featuredStudios,
+      studio,
+      userStudio,
+      query,
+      hasQuery,
+      loading,
+      error,
+      getProfileImage,
+      updateProfileImageCache,
+      selectedRegion, // Add dependency
+    ],
+  );
 
   return (
     <StudiosContext.Provider value={contextObj}>

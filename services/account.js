@@ -49,6 +49,7 @@ const AccountProvider = ({ children }) => {
     const newProfile = {
       uuid: user.id,
       studio_id: randomId,
+      rank: randomId,
       email: user.email,
       created_at: new Date().toISOString(),
     };

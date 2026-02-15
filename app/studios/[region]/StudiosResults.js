@@ -17,7 +17,7 @@ async function getStudios(regionName) {
   let { data: supaStudios, error } = await supabaseQuery
     .is("published", true)
     .is("displayed", true)
-    .order("studio_id", { ascending: true });
+    .order("rank", { ascending: true });
 
   if (error) {
     console.error("Error fetching studios:", error);
