@@ -1,10 +1,5 @@
-import { createClient } from "@supabase/supabase-js";
+import { supabaseAdmin } from "services/supabase-admin";
 import { NextResponse } from 'next/server';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
 
 export async function POST(request) {
   try {
@@ -14,7 +9,7 @@ export async function POST(request) {
       return NextResponse.json({ message: "Email is required" }, { status: 400 });
     }
 
-    const { error } = await supabase.from("contacts").insert([newContact]);
+    const { error } = await supabaseAdmin.from("contacts").insert([newContact]);
 
     if (error) {
       console.error("Supabase insertion error:", error);

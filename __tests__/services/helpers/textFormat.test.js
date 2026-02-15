@@ -11,7 +11,7 @@ import { Paragraph } from "grommet";
 
 // Mock the Grommet Paragraph component to avoid full Grommet rendering issues in unit tests
 jest.mock("grommet", () => ({
-  Paragraph: ({ children, ...props }) => (
+  Paragraph: ({ children, fill, ...props }) => (
     <p data-testid="mock-paragraph" {...props}>
       {children}
     </p>

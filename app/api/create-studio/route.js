@@ -1,10 +1,6 @@
-import { createClient } from "@supabase/supabase-js";
+import { supabaseAdmin } from "services/supabase-admin";
 import { NextResponse } from 'next/server';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+import { revalidateTag } from 'next/cache';
 
 export async function POST(request) {
   try {
@@ -14,7 +10,7 @@ export async function POST(request) {
       return NextResponse.json({ message: "Email and ID are required" }, { status: 400 });
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from("studios")
       .insert([newProfile])
       .select();
@@ -26,6 +22,9 @@ export async function POST(request) {
         error: error.message,
       }, { status: 500 });
     }
+
+    // Invalidate the studios list cache
+    revalidateTag("studios");
 
     return NextResponse.json({
       message: "Studio created successfully",

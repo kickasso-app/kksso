@@ -317,7 +317,7 @@ describe("parseAvailability utility functions", () => {
         new Date("2026-03-11T08:00:00.00Z"),
       );
 
-      console.log(result);
+      // console.log(result);
       const march = result["3"];
 
       expect(march).toBeDefined();

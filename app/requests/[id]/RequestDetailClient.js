@@ -7,6 +7,7 @@ import { useAuth } from "services/auth";
 import { useAccount } from "services/account";
 
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
+import { Box } from "grommet";
 import Link from "next/link";
 import { ChevronLeft } from "react-feather";
 

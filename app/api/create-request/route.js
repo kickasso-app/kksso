@@ -1,10 +1,5 @@
-import { createClient } from "@supabase/supabase-js";
+import { supabaseAdmin } from "services/supabase-admin";
 import { NextResponse } from 'next/server';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
 
 export async function POST(request) {
   try {
@@ -18,7 +13,7 @@ export async function POST(request) {
       return NextResponse.json({ message: "Email and IDs are required" }, { status: 400 });
     }
 
-    const { error } = await supabase.from("requests").insert([newRequest]);
+    const { error } = await supabaseAdmin.from("requests").insert([newRequest]);
 
     if (error) {
       console.error("Supabase insertion error:", error);

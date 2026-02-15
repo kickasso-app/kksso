@@ -3,7 +3,7 @@
 import { useState, useEffect, useContext } from "react";
 
 import { useAuth } from "services/auth";
-import { useStudios } from "services/studios";
+import { useAccount } from "services/account";
 import { useEvents } from "services/events";
 
 import Link from "next/link";
@@ -25,18 +25,23 @@ import styles from "./page.module.scss";
 export default function PreviewClient() {
   const { user } = useAuth();
   const size = useContext(ResponsiveContext);
-  const { userStudio, fetchUserStudio, loading, error } = useStudios();
+  const { profile, fetchProfile, loading, error } = useAccount();
   const { event, fetchEvent } = useEvents();
 
   const [studio, setStudio] = useState();
 
   useEffect(() => {
-    if (user?.id && !userStudio) {
-      fetchUserStudio({ uuid: user.id });
-    } else if (userStudio) {
-      setStudio(userStudio);
+    if (user && !profile) {
+      fetchProfile(user);
+    } else if (profile) {
+      // Add hasOpenDates logic here if it's missing from profile but present in userStudio
+      const profileWithDates = {
+        ...profile,
+        hasOpenDates: profile?.availability?.openTimes?.length ? true : false,
+      };
+      setStudio(profileWithDates);
     }
-  }, [user, userStudio, fetchUserStudio]);
+  }, [user, profile, fetchProfile]);
 
   useEffect(() => {
     if (studio && studio?.eventId) {

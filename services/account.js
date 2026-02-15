@@ -1,5 +1,4 @@
 import { createContext, useContext, useState } from "react";
-import { supabase } from "./supabase";
 import { revalidatePathAction } from "app/actions/revalidate";
 
 import { PROFILE_COLUMNS } from "config/constants/profileColumns";
@@ -21,20 +20,21 @@ const AccountProvider = ({ children }) => {
     resetNotification();
     if (!profile) {
       setLoading(true);
-      let { data, error, status } = await supabase
-        .from("studios")
-        .select(PROFILE_COLUMNS.join(", "))
-        .eq("uuid", user.id)
-        .single();
-      if (!data) {
-        data = await createProfile(user);
-      }
-      setProfile({ ...data });
-      // console.log({ ...data });
-
-      if (error && status !== 406) {
-        setError(error);
-        console.log(error);
+      try {
+        const response = await fetch(`/api/account?uuid=${user.id}`);
+        
+        if (response.status === 404) {
+          const newData = await createProfile(user);
+          setProfile(newData);
+        } else if (response.ok) {
+          const data = await response.json();
+          setProfile(data);
+        } else {
+          const errorData = await response.json();
+          setError(errorData.error);
+        }
+      } catch (err) {
+        setError(err.message);
       }
       setLoading(false);
     }
@@ -67,7 +67,8 @@ const AccountProvider = ({ children }) => {
         throw new Error(errorData.message || "Failed to create studio");
       }
 
-      return await response.json();
+      const data = await response.json();
+      return data.user;
     } catch (error) {
       console.error("Error creating studio:", error);
       throw error;
@@ -80,25 +81,33 @@ const AccountProvider = ({ children }) => {
 
   const updateAccount = async (updates, user) => {
     resetNotification();
-    setLoading(false);
     if (updates) {
       setLoading(true);
-      const { data, error } = await supabase
-        .from("studios")
-        .update(updates)
-        .eq("uuid", user.id)
-        .select();
-      if (data) {
-        setProfile(data?.[0]);
+      try {
+        const response = await fetch("/api/account", {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ uuid: user.id, updates }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || "Failed to update account");
+        }
+
+        const data = await response.json();
+        setProfile(data);
         setIsUpdateSuccess(true);
         await revalidatePathAction("/studios");
-        await revalidatePathAction(`/studio/${data[0].studio_id}`);
-      } else if (error) {
+        await revalidatePathAction(`/studio/${data.studio_id}`);
+      } catch (err) {
         setIsUpdateError(true);
+        setError(err.message);
+      } finally {
         setLoading(false);
-        throw error;
       }
-      setLoading(false);
     }
   };
 
@@ -128,54 +137,3 @@ const AccountProvider = ({ children }) => {
 const useAccount = () => useContext(AccountContext);
 
 export { useAccount, AccountContext, AccountProvider };
-
-// TODO B4 MERGE: remove
-// const createProfileOld = async (user) => {
-//   const randomId = 10000 + Math.floor(Math.random() * 10000);
-//   const newRow = {
-//     uuid: user.id,
-//     studio_id: randomId,
-//     email: user.email,
-//     location: "",
-//     district: "",
-//     artist: "",
-//     styles: "",
-//   };
-
-//   const { newProfile, error } = await supabase
-//     .from("studios")
-//     .insert([newRow])
-//     .select();
-
-//   return newProfile;
-// };
-
-// update count using API
-
-// try {
-//   const response = await fetch("/api/update-studio", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({ updates, userId: user.id }),
-//   });
-
-//   if (!response.ok) {
-//     const errorData = await response.json();
-//     setIsUpdateError(true);
-//     throw new Error(errorData.message || "Failed to update studio");
-//   }
-
-//   const updatedProfile = await response.json();
-//   console.log(updatedProfile);
-//   setProfile(updatedProfile.user);
-//   setIsUpdateSuccess(true);
-
-//   return updatedProfile;
-// } catch (error) {
-//   console.error("Error updating studio:", error);
-//   throw error;
-// } finally {
-//   setLoading(false);
-// }

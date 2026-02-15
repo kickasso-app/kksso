@@ -30,13 +30,8 @@ const RequestCard = ({
 }) => {
   const router = useRouter();
 
-  const articleLink = {
-    pathname: "/requests/[id]",
-    query: { id: request_id },
-  };
-
-  const onOpen = () => {
-    router.push(articleLink);
+  const onOpen = (id) => {
+    router.push(`/requests/${id}`);
   };
 
   const status = !has_response ? "Pending" : response ? "Approved" : "Rejected";

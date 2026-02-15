@@ -13,6 +13,11 @@ jest.mock("next/server", () => ({
   },
 }));
 
+// Mock next/cache
+jest.mock("next/cache", () => ({
+  revalidateTag: jest.fn(),
+}));
+
 // Mock Supabase client with exposed spies
 jest.mock("@supabase/supabase-js", () => {
   const mockInsert = jest.fn();

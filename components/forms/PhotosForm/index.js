@@ -27,7 +27,7 @@ export default function PhotosForm() {
 
   const fetchImgsList = useCallback(async () => {
     setLoading(true);
-    const { imgs, paths } = await listImages({ userId: user.id });
+    const paths = await listImages({ userId: user.id });
     setImgPaths(paths ?? []);
     setLoading(false);
   }, []);
@@ -36,25 +36,6 @@ export default function PhotosForm() {
     fetchImgsList();
   }, [fetchImgsList]);
 
-  //   async function updatePhotosUrl(url) {
-  //     try {
-  //       setIsUpdateError(false);
-  //       setLoading(true);
-  //       let { error } = await supabase
-  //         .from("studios")
-  //         .update({ photoUrl: url }, { returning: "minimal" })
-  //         .eq("uuid", user.id);
-
-  //       if (error) {
-  //         setIsUpdateError(true);
-  //         throw error;
-  //       }
-  //     } catch (error) {
-  //       console.log(error.message);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   }
 
   const fieldMargin = { vertical: "medium" };
   const textMargin = { bottom: "medium" };

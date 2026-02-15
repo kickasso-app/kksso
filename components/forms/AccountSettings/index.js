@@ -1,15 +1,15 @@
-import { useState } from "react";
-import Link from "next/link";
-
 import { useAuth } from "services/auth";
 import { useAccount } from "services/account";
+import Link from "next/link";
 
 import Button from "components/Button";
 import ToastNotification from "components/ToastNotification";
-import { Box, Text, Heading, Notification } from "grommet";
+import { Box, Text, Heading } from "grommet";
 
 export default function AccountSettings({ profile }) {
-  const [isPublished, setIsPublished] = useState(profile?.published);
+  const isPublished = profile?.published;
+  console.log(profile);
+  console.log(isPublished);
 
   const { signOut, user } = useAuth();
   const { updateAccount, loading, isUpdateSuccess, isUpdateError } =
