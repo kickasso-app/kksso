@@ -130,21 +130,30 @@ describe('EventRequestForm', () => {
         request_type: 'event',
         studio_uuid: mockProps.studio_uuid,
         event_uuid: mockProps.event_uuid,
-        to_email: mockProps.artistEmail,
         from_name: 'Jane Doe',
         requestor_email: 'jane@example.com',
         request_id: 'mock-uuid',
       }));
 
       expect(sendEmail).toHaveBeenCalledTimes(2); // One for artist, one for confirmation
+      
+      // First email to artist (using recipient ID)
       expect(sendEmail).toHaveBeenCalledWith(expect.objectContaining({
         emailTemplate: 'eventRequest',
-        emailDetails: expect.objectContaining({ toEmail: [mockProps.artistEmail] }),
+        recipient: {
+            type: 'studio',
+            id: mockProps.studio_uuid,
+        },
         emailVariables: expect.objectContaining({ from_name: 'Jane Doe' }),
       }));
+
+      // Second email to requestor (using recipient email)
       expect(sendEmail).toHaveBeenCalledWith(expect.objectContaining({
         emailTemplate: 'eventRequestConfirmation',
-        emailDetails: expect.objectContaining({ toEmail: ['jane@example.com'] }),
+        recipient: {
+            type: 'user',
+            email: ['jane@example.com'],
+        },
         emailVariables: expect.objectContaining({ from_name: 'Jane Doe' }),
       }));
     });

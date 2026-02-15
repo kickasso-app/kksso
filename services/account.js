@@ -1,8 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { revalidatePathAction } from "app/actions/revalidate";
 
-import { PROFILE_COLUMNS } from "config/constants/profileColumns";
-
 const AccountContext = createContext(null);
 
 const AccountProvider = ({ children }) => {

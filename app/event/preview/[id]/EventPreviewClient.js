@@ -38,12 +38,13 @@ export default function EventPreviewClient({ initialEvent }) {
           uuid: event.studio_uuid,
         });
         if (studioBasicData) {
+
+          console.log(studioBasicData);
             setStudioBasic({
               name: studioBasicData.artist,
-              email: studioBasicData.email,
               id: studioBasicData.studio_id,
             });
-            if (studioBasicData.published) {
+            if (studioBasicData?.published) {
               setStudioLink(`/studio/${studioBasicData.studio_id}`);
             }
         }

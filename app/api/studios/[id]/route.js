@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getStudio, getStudioByUuid } from 'services/studios.server';
 import { STUDIO_COLUMNS } from "config/constants/studioColumns";
-import { STUDIO_PREVIEW_COLUMNS } from "config/constants/studioPreviewColumns";
 
 export async function GET(request, { params }) {
   const { id } = await params;
@@ -14,7 +13,7 @@ export async function GET(request, { params }) {
 
   try {
     let studio;
-    const columns = isPreview ? STUDIO_PREVIEW_COLUMNS : STUDIO_COLUMNS.join(", ");
+    const columns = isPreview ? STUDIO_COLUMNS.PREVIEW : STUDIO_COLUMNS.ALL;
 
     if (isUuid) {
       studio = await getStudioByUuid(id, columns);

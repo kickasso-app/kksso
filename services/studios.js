@@ -18,7 +18,6 @@ const StudiosProvider = ({ children }) => {
   const [hasQuery, setHasQuery] = useState(false);
   const [searchStudios, setSearchStudios] = useState([]);
 
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
 
@@ -47,12 +46,14 @@ const StudiosProvider = ({ children }) => {
   const fetchStudios = async () => {
     setLoading(true);
     const regionName = selectedRegion?.region || "";
-    
+
     try {
-      const response = await fetch(`/api/studios?region=${encodeURIComponent(regionName)}`);
+      const response = await fetch(
+        `/api/studios?region=${encodeURIComponent(regionName)}`,
+      );
       if (!response.ok) throw new Error("Failed to fetch studios");
       const supaStudios = await response.json();
-      
+
       if (supaStudios?.length) {
         setStudios(supaStudios);
       } else {
@@ -63,15 +64,6 @@ const StudiosProvider = ({ children }) => {
     }
     setLoading(false);
   };
-
-
-  /**
-   * This function updates the search query and fetches search results from a Supabase database based on
-   * the query.
-   * @param newQuery - newQuery is a string parameter that represents the user's search query. It is
-   * passed to the updateQuery function as an argument and then used to fetch relevant data from the
-   * "studios" table in the Supabase database.
-   */
 
   const updateQuery = (newQuery) => {
     setQuery(newQuery);
@@ -89,7 +81,9 @@ const StudiosProvider = ({ children }) => {
     const regionName = selectedRegion?.region || "";
 
     try {
-      const response = await fetch(`/api/studios?region=${encodeURIComponent(regionName)}&search=${encodeURIComponent(newQuery)}`);
+      const response = await fetch(
+        `/api/studios?region=${encodeURIComponent(regionName)}&search=${encodeURIComponent(newQuery)}`,
+      );
       if (!response.ok) throw new Error("Failed to fetch search results");
       const resultStudios = await response.json();
       setSearchStudios(resultStudios);
@@ -99,27 +93,13 @@ const StudiosProvider = ({ children }) => {
     setLoading(false);
   };
 
-  /**
-   * This is an asynchronous function that fetches data from a Supabase database table called "studios"
-   * based on a given ID (studio_id) and sets the fetched data to a state variable called "studio".
-   */
-
-  const fetchStudioBasic = async ({ uuid }) => {
-    setLoading(true);
-    try {
-      const response = await fetch(`/api/studios/${uuid}`);
-      if (!response.ok) throw new Error("Studio not found");
-      return await response.json();
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
   const fetchFeaturedStudios = async () => {
     setLoading(true);
     const regionName = selectedRegion?.region || "";
     try {
-      const response = await fetch(`/api/studios?region=${encodeURIComponent(regionName)}&featured=true`);
+      const response = await fetch(
+        `/api/studios?region=${encodeURIComponent(regionName)}&featured=true`,
+      );
       if (!response.ok) throw new Error("Failed to fetch featured studios");
       const featStudios = await response.json();
       setFeaturedStudios(featStudios);
@@ -127,6 +107,17 @@ const StudiosProvider = ({ children }) => {
       setError(err.message);
     }
     setLoading(false);
+  };
+
+  const fetchStudioBasic = async ({ uuid }) => {
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/studios/${uuid}?preview=true`);
+      if (!response.ok) throw new Error("Studio not found");
+      return await response.json();
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   const doesStudioExist = async ({ uuid }) => {

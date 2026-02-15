@@ -1,4 +1,4 @@
-import { POST } from "app/api/send/route";
+import { POST } from "app/api/send-email/route";
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
 
@@ -32,13 +32,20 @@ jest.mock("next/server", () => ({
   },
 }));
 
+// Mock next/cache
+jest.mock("next/cache", () => ({
+  cacheTag: jest.fn(),
+  cacheLife: jest.fn(),
+  revalidateTag: jest.fn(),
+}));
+
 describe("/api/send Email Route", () => {
   let mockSend;
 
   beforeAll(() => {
     // Suppress console logs for expected errors
-    jest.spyOn(console, 'log').mockImplementation(() => {});
-    jest.spyOn(console, 'error').mockImplementation(() => {});
+    jest.spyOn(console, "log").mockImplementation(() => {});
+    jest.spyOn(console, "error").mockImplementation(() => {});
 
     // Check if Resend was instantiated
     if (Resend.mock.calls.length > 0) {
@@ -51,7 +58,9 @@ describe("/api/send Email Route", () => {
 
     if (!mockSend) {
       // Use original console if mock setup fails to ensure visibility
-      console.error = console.error.getMockImplementation ? console.error.getMockImplementation() : console.error;
+      console.error = console.error.getMockImplementation
+        ? console.error.getMockImplementation()
+        : console.error;
       console.error(
         "Resend mock failed to capture instance. Calls:",
         Resend.mock.calls.length,
@@ -172,19 +181,19 @@ describe("/api/send Email Route", () => {
       expectedContent: "Guest",
     },
     {
-      key: 'magicLinkTemplate',
-      variables: { magic: 'http://login-link' },
-      expectedContent: 'http://login-link'
+      key: "magicLinkTemplate",
+      variables: { magic: "http://login-link" },
+      expectedContent: "http://login-link",
     },
     {
-      key: 'collectorReferralTemplate',
-      variables: { 
-        name: 'Charlie', 
-        referredBy: 'Bob', 
-        studioLink: 'http://studio-link', 
-        includeStudioLink: true 
+      key: "collectorReferralTemplate",
+      variables: {
+        name: "Charlie",
+        referredBy: "Bob",
+        studioLink: "http://studio-link",
+        includeStudioLink: true,
       },
-      expectedContent: 'Charlie'
+      expectedContent: "Charlie",
     },
   ];
 

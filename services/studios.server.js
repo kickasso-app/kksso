@@ -1,6 +1,5 @@
 import { supabaseAdmin } from "./supabase-admin";
 import { STUDIO_COLUMNS } from "config/constants/studioColumns";
-import { STUDIO_PREVIEW_COLUMNS } from "config/constants/studioPreviewColumns";
 import { cacheLife, cacheTag, revalidateTag } from "next/cache";
 
 export const getStudio = async (id) => {
@@ -10,7 +9,7 @@ export const getStudio = async (id) => {
 
   const { data, error } = await supabaseAdmin
     .from("studios")
-    .select(STUDIO_COLUMNS.join(", "))
+    .select(STUDIO_COLUMNS.ALL)
     .eq("studio_id", id)
     .single();
 
@@ -59,7 +58,9 @@ export async function getStudios({ regionName, featured, search } = {}) {
   cacheTag("studios");
   cacheLife("days");
 
-  let supabaseQuery = supabaseAdmin.from("studios").select(STUDIO_PREVIEW_COLUMNS);
+  let supabaseQuery = supabaseAdmin
+    .from("studios")
+    .select(STUDIO_COLUMNS.PREVIEW);
 
   if (regionName) {
     supabaseQuery = supabaseQuery.contains("location", [regionName]);

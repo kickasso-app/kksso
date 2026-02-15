@@ -11,7 +11,7 @@ export async function GET(request) {
   }
 
   try {
-    const profile = await getStudioByUuid(uuid, PROFILE_COLUMNS.join(", "));
+    const profile = await getStudioByUuid(uuid, PROFILE_COLUMNS);
     if (!profile) {
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
     }

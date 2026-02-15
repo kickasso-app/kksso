@@ -13,6 +13,7 @@ import { ResponseVisitRequest } from "services/emails/responseVisitReqTemplate";
 import { ResponseEventRequest } from "services/emails/responseEventReqTemplate";
 import { MagicLinkTemplate } from "services/emails/magicLinkTemplate";
 import { CollectorReferralTemplate } from "services/emails/collectorReferralTemplate";
+import { getStudioByUuid } from "services/studios.server";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -34,7 +35,7 @@ const TEST_ENV = false;
 
 export async function POST(request) {
   try {
-    const { emailTemplate, emailDetails, emailVariables } = await request.json();
+    const { emailTemplate, emailDetails, emailVariables, recipient } = await request.json();
 
     const EmailTemplate = emailTemplates[emailTemplate];
     if (!EmailTemplate) {
@@ -45,10 +46,42 @@ export async function POST(request) {
       await render(<EmailTemplate {...emailVariables} />)
     );
 
-    const toEmail =
-      emailDetails.toEmail === "demo"
-        ? ["delivered@resend.dev"]
-        : emailDetails.toEmail;
+    let toEmail;
+
+    // Handle new recipient strategy
+    if (recipient) {
+      if (recipient.type === 'studio') {
+        if (!recipient.id) {
+           return NextResponse.json({ error: "Studio ID is required" }, { status: 400 });
+        }
+        const studio = await getStudioByUuid(recipient.id, 'email');
+        if (!studio || !studio.email) {
+            console.error("Studio email not found for UUID:", recipient.id);
+            return NextResponse.json({ error: "Recipient email not found" }, { status: 404 });
+        }
+        toEmail = [studio.email];
+      } else if (recipient.type === 'user') {
+        if (!recipient.email) {
+           return NextResponse.json({ error: "User email is required" }, { status: 400 });
+        }
+        toEmail = recipient.email;
+      } else {
+        return NextResponse.json({ error: "Invalid recipient type" }, { status: 400 });
+      }
+    } else {
+      // Fallback for legacy calls (optional, can be removed if all calls are updated)
+       toEmail = emailDetails?.toEmail;
+    }
+
+    // Demo override
+    if (toEmail === "demo" || (Array.isArray(toEmail) && toEmail[0] === "demo")) {
+        toEmail = ["delivered@resend.dev"];
+    }
+
+    if (!toEmail || (Array.isArray(toEmail) && toEmail.length === 0)) {
+         return NextResponse.json({ error: "No recipient email provided" }, { status: 400 });
+    }
+
     const fromEmail =
       emailDetails.fromEmail === "default"
         ? "Arti <hello@arti.my>"

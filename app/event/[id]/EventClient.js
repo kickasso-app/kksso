@@ -44,10 +44,9 @@ export default function EventClient({ initialEvent }) {
         if (studioBasicData) {
             setStudioBasic({
               name: studioBasicData.artist,
-              email: studioBasicData.email,
               id: studioBasicData.studio_id,
             });
-            if (studioBasicData.published) {
+            if (studioBasicData?.published) {
               setStudioLink(`/studio/${studioBasicData.studio_id}`);
             }
         }
@@ -74,7 +73,7 @@ export default function EventClient({ initialEvent }) {
         <>
           <ChevronLeft className={styles.icon} size={16} />{" "}
           <Link
-            href={`/events/` + (event.cityLocation?.[0]?.toLowerCase())}
+            href={`/events/` + event.cityLocation?.[0]?.toLowerCase()}
             className={styles.backlink}
           >
             BACK
@@ -92,7 +91,7 @@ export default function EventClient({ initialEvent }) {
                     height: size === "small" ? "100%" : "auto",
                     maxHeight: size !== "small" ? "60vh" : "none",
                     width: "100%",
-                    objectFit: "contain"
+                    objectFit: "contain",
                   }}
                 />
               </Box>
@@ -232,7 +231,6 @@ export default function EventClient({ initialEvent }) {
                       Request to Join
                     </Heading>
                     <EventRequestForm
-                      artistEmail={studioBasic.email}
                       artistName={studioBasic.name}
                       studioID={studioBasic.id}
                       studio_uuid={event.studio_uuid}
