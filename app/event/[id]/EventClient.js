@@ -10,6 +10,7 @@ import { Box, Heading, Paragraph, ResponsiveContext, Text } from "grommet";
 import { ChevronLeft, Disc, Globe } from "react-feather";
 
 import EventRequestForm from "components/forms/EventRequestForm";
+import ShareButton from "components/ShareButton";
 import { makeParagraphs } from "services/helpers/textFormat";
 import styles from "./page.module.scss";
 
@@ -99,22 +100,30 @@ export default function EventClient({ initialEvent }) {
           )}
           <Row>
             <Col xs={12} md={6}>
-              <Row between="xs" middle="xs">
-                <Col>
-                  {event.title && (
-                    <h2 className={styles.maintitle}>{event.title}</h2>
-                  )}
-                </Col>
-                {event.type && (
-                  <Box
-                    border
-                    round="xsmall"
-                    pad={{ vertical: "small", horizontal: "medium" }}
-                  >
-                    {event.type}
-                  </Box>
+              <Box margin={{ bottom: "medium" }}>
+                {event.title && (
+                  <h2 className={styles.maintitle}>{event.title}</h2>
                 )}
-              </Row>
+                <Box
+                  direction="row"
+                  justify="between"
+                  align="center"
+                  margin={{ top: "medium" }}
+                >
+                  {event.type ? (
+                    <Box
+                      border
+                      round="xsmall"
+                      pad={{ vertical: "small", horizontal: "medium" }}
+                    >
+                      {event.type}
+                    </Box>
+                  ) : (
+                    <Box />
+                  )}
+                  <ShareButton title={event.title} />
+                </Box>
+              </Box>
 
               {studioBasic && (
                 <Heading

@@ -12,6 +12,7 @@ import EventCard from "components/EventCard";
 import VisitFormWithDates from "components/forms/VisitFormWithDates";
 import VisitFormOpen from "components/forms/VisitFormOpen";
 import ImagesCarousel from "components/ImagesCarousel";
+import ShareButton from "components/ShareButton";
 
 import { makeParagraphs } from "services/helpers/textFormat";
 
@@ -59,20 +60,27 @@ export default function StudioClient({ initialStudio }) {
           <Row>
             <Col xs={12} md={6}>
               <br />
-              <Row between="xs" middle="xs">
-                <Col>
-                  {studio.artist && (
-                    <h2 className={styles.maintitle}>{studio.artist}</h2>
-                  )}
-                </Col>
-                {studio.hasOpenDates === true && (
-                  <Col>
+              <Box
+                direction="row"
+                justify="between"
+                align="center"
+                margin={{ bottom: "small" }}
+                gap="medium"
+              >
+                {studio.artist && (
+                  <h2 className={styles.maintitle} style={{ flex: 1, margin: 0 }}>
+                    {studio.artist}
+                  </h2>
+                )}
+                <Box direction="row" gap="medium" align="center" flex={false}>
+                  {studio.hasOpenDates === true && (
                     <Button btnStyle="outline">
                       <Link href="#private-visits">Visit</Link>
                     </Button>
-                  </Col>
-                )}
-              </Row>
+                  )}
+                  <ShareButton title={studio.artist} />
+                </Box>
+              </Box>
               {/*  Main Text  */}
               {studio.textLong && (
                 <div dir={studio?.txtDirection}>

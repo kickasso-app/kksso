@@ -8,6 +8,7 @@ import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import { Box, Heading, Paragraph, ResponsiveContext } from "grommet";
 import { ChevronLeft } from "react-feather";
 import MagazinePostMarkdown from "./MagazinePostMarkdown";
+import ShareButton from "components/ShareButton";
 import styles from "./page.module.scss";
 import WithFooter from "layouts/WithFooter";
 
@@ -107,6 +108,7 @@ const ArticleClient = ({ magPost, slug }) => {
                       </Paragraph>
                     )}
 
+                    <ShareButton title={magPost.title} />
                     <Box margin={{ vertical: "large" }}>
                       <hr />
                       <Box margin="medium">
