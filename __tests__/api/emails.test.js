@@ -2,6 +2,11 @@ import { POST } from "app/api/send-email/route";
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
 
+// Mock react-markdown because it is ESM only and causes issues with Jest
+jest.mock("react-markdown", () => (props) => {
+  return <>{props.children}</>;
+});
+
 // Mock @react-email/render
 jest.mock("@react-email/render", () => ({
   render: jest.fn((element) => Promise.resolve(JSON.stringify(element.props))),
