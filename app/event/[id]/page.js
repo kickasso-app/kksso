@@ -13,9 +13,9 @@ export async function generateMetadata({ params }) {
   }
 
   return {
-    title: `${event.title} - Event - Arti`,
+    title: `${event.title} - Event | Arti`,
     description:
-      event.miniDescription || `Join the art event ${event.title} on Arti.`,
+      event.miniDescription || `Join the event ${event.title} on Arti.`,
     openGraph: {
       images: [
         `/api/create-og-image?imgurl=${encodeURIComponent(`https://chsbkuvxttsertgkuwhy.supabase.co/storage/v1/object/public/events/${event.studio_uuid}/${event.id}/event-small.jpg`)}`,
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }) {
 export default async function EventPage({ params }) {
   "use cache";
   cacheTag("events");
-  cacheLife("days");
+  cacheLife("hours");
 
   const { id } = await params;
   const event = await getEvent(id);

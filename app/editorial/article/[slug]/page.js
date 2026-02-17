@@ -13,7 +13,7 @@ export async function generateMetadata({ params }) {
   }
 
   return {
-    title: `${magPost.title} - Arti`,
+    title: `${magPost.title} | Arti Editorial`,
     description: magPost.subtitle || `Read ${magPost.title} on Arti.`,
     openGraph: {
       images: [
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }) {
 export default async function ArticlePage({ params }) {
   "use cache";
   cacheTag("editorial");
-  cacheLife("hours");
+  cacheLife("days");
 
   const { slug } = await params;
   const magPost = await getMagazinePost({ slug });

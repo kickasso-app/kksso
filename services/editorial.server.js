@@ -7,7 +7,7 @@ import { supabase } from "./supabase";
 export const getMagazinePosts = async () => {
   "use cache";
   cacheTag("editorial");
-  cacheLife("hours");
+  cacheLife("days");
 
   let supabaseQuery = supabase.from("magazine").select("*");
 
@@ -29,7 +29,7 @@ export const getMagazinePosts = async () => {
 export const getMagazinePost = async ({ slug }) => {
   "use cache";
   cacheTag("editorial");
-  cacheLife("hours");
+  cacheLife("days");
 
   try {
     let { data: supaMagPost, error } = await supabase

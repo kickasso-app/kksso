@@ -13,7 +13,7 @@ export async function generateMetadata({ params }) {
   }
 
   return {
-    title: `${studio.artist} - Studio - Arti`,
+    title: `${studio.artist} - Studio | Arti`,
     description: studio.textMini || `Visit ${studio.artist}'s studio on Arti.`,
     openGraph: {
       images: [
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }) {
 export default async function StudioPage({ params }) {
   "use cache";
   cacheTag("studios");
-  cacheLife("hours");
+  cacheLife("days");
 
   const { id } = await params;
   const studio = await getStudio(id);
