@@ -46,13 +46,6 @@ const Header = () => {
     />
   ));
 
-  const joinButton = (
-    <NavButton
-      path={"/join"}
-      label={<u>Join</u>}
-      onClick={() => setMenuOpen(false)}
-    />
-  );
 
   return (
     <div className={styles.header}>
@@ -70,13 +63,22 @@ const Header = () => {
               </Link>
             </Box>
 
-            <button
-              onClick={() => setMenuOpen(true)}
-              aria-label="Open menu"
-              className={styles.menuIcon}
-            >
-              <MenuIcon size={28} strokeWidth="1" color="#4b4b4b" fill="#fff" />
-            </button>
+            <Box direction="row" align="center">
+              <button
+                onClick={() => setMenuOpen(true)}
+                aria-label="Open menu"
+                className={styles.menuIcon}
+              >
+                <MenuIcon
+                  size={28}
+                  strokeWidth="1"
+                  color="#4b4b4b"
+                  fill="#fff"
+                />
+              </button>
+              {session && <ProfileButton />}
+            </Box>
+
             {menuOpen && (
               <Box
                 className={styles.mobileMenu}
@@ -106,10 +108,12 @@ const Header = () => {
                     onClick={() => setMenuOpen(false)}
                   />
                   {navButtons}
-                  {session ? (
-                    <ProfileButton onMenuItemClick={() => setMenuOpen(false)} />
-                  ) : (
-                    joinButton
+                  {!session && (
+                    <NavButton
+                      path={"/join"}
+                      label={<u>Join</u>}
+                      onClick={() => setMenuOpen(false)}
+                    />
                   )}
                 </Box>
               </Box>
@@ -152,7 +156,11 @@ const Header = () => {
                   label={button.label}
                 />
               ))}
-              {session ? <ProfileButton /> : <NavButton path={"/join"} label={<u>Join</u>} />}
+              {session ? (
+                <ProfileButton />
+              ) : (
+                <NavButton path={"/join"} label={<u>Join</u>} />
+              )}
             </Box>
           </Grid>
         </div>

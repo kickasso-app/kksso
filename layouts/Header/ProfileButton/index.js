@@ -9,7 +9,7 @@ import { useAuth } from "services/auth";
 import Button from "components/Button";
 import NavButton from "../NavButton";
 
-import { User, Gift } from "react-feather";
+import { User, Gift, X as CloseIcon } from "react-feather";
 
 import { DropButton, Box, ResponsiveContext } from "grommet";
 
@@ -63,8 +63,19 @@ export default function ProfileButton({ onMenuItemClick }) {
             <Box
               className={styles.mobileMenu}
               animation={{ type: "fadeIn", duration: 300 }}
-              onClick={() => setOpen(false)}
             >
+              <button
+                onClick={() => setOpen(false)}
+                className={styles.menuIconClose}
+                aria-label="Close profile menu"
+              >
+                <CloseIcon
+                  size={28}
+                  strokeWidth="1"
+                  color="#4b4b4b"
+                  fill="#fff"
+                />
+              </button>
               <Box direction="column" gap="small" align="center">
                 <NavButton
                   path={"/profile?section=0"}
