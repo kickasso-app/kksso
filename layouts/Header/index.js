@@ -62,7 +62,11 @@ const Header = () => {
           <Box direction="row" align="center" justify="between" fill>
             <Box width="xsmall">
               <Link href="/">
-                <img src={`/img/logo-name-web.png`} alt="arti" />
+                <img
+                  src={`/img/logo-name-web-high.png`}
+                  height="36px"
+                  alt="arti"
+                />
               </Link>
             </Box>
 
@@ -126,7 +130,11 @@ const Header = () => {
           >
             <Box gridArea="logo" width="xsmall">
               <Link href="/">
-                <img src={`/img/logo-name-web.png`} alt="arti" />
+                <img
+                  src={`/img/logo-name-web-high.png`}
+                  height="40px"
+                  alt="arti"
+                />
               </Link>
             </Box>
             <Box
