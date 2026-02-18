@@ -18,4 +18,4 @@ export const PROFILE_COLUMNS = [
   "published",
   "studio_id",
   "uuid",
-];
+].join(",");

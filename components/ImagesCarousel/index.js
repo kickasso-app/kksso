@@ -1,8 +1,12 @@
-import { useState, useEffect, useCallback } from "react";
-import ImageGallery from "react-image-gallery";
-import "react-image-gallery/styles/css/image-gallery.css";
+'use client';
 
-import { downloadImages } from "services/images";
+import { useState, useEffect } from "react";
+import ImageGallery from "react-image-gallery";
+import Image from "next/image";
+import "react-image-gallery/styles/css/image-gallery.css";
+import styles from "./index.module.scss";
+
+import { getPublicImageUrls } from "services/images";
 
 import { Box } from "grommet";
 
@@ -18,79 +22,82 @@ const carouselConfig = {
   showNav: true,
   isRTL: false,
   slideDuration: 450,
-  slideInterval: 2000,
+  slideInterval: 3000,
   slideOnThumbnailOver: false,
   thumbnailPosition: "bottom",
   showVideo: {},
   loading: "lazy",
   lazyload: true,
-  originalHeight: "60vh",
 };
 
 const ImagesCarousel = ({ userId }) => {
-  const [imgs, setImgs] = useState([]);
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  // const firstImageRendered = useRef(false);
-
-  const fetchImgs = useCallback(async () => {
-    // console.time('ImageCarousel:totalLoad');
-    setLoading(true);
-    setImgs([]); // Clear previous images
-    // firstImageRendered.current = false; // Reset for new fetches
-    const imagePromises = await downloadImages({ userId }); // This now returns an array of promises
-
-    if (imagePromises && imagePromises.length > 0) {
-      let loadedCount = 0;
-      const totalImages = imagePromises.length;
-
-      imagePromises.forEach(async (promise, index) => {
-        //console.time(`ImageCarousel:imageDownload-${index}`);
-        try {
-          const url = await promise;
-          //console.timeEnd(`ImageCarousel:imageDownload-${index}`);
-          if (url) {
-            setImgs((prevImgs) => {
-              const newImgs = [
-                ...prevImgs,
-                { original: url, originalHeight: 600 },
-              ];
-              // if (!firstImageRendered.current && newImgs.length > 0) {
-              //   //console.timeEnd('ImageCarousel:firstDraw');
-              //   firstImageRendered.current = true;
-              // }
-              return newImgs;
-            });
-          }
-        } catch (error) {
-          console.error("Error loading individual image:", error);
-          //console.timeEnd(`ImageCarousel:imageDownload-${index}`); // End timer even on error
-        } finally {
-          loadedCount++;
-          if (loadedCount === totalImages) {
-            setLoading(false); // All promises have settled
-            //console.timeEnd('ImageCarousel:totalLoad');
-          }
-        }
-      });
-    } else {
-      setLoading(false);
-      // console.timeEnd('ImageCarousel:totalLoad');
-    }
-  }, [userId]);
 
   useEffect(() => {
-    // console.time('ImageCarousel:firstDraw'); // Start timer for first draw when fetchImgs is called
-    fetchImgs();
-  }, [fetchImgs]);
+    let active = true;
+    setLoading(true);
+
+    const loadImages = async () => {
+      try {
+        const urls = await getPublicImageUrls({ userId });
+        
+        if (!active) return;
+
+        if (urls && urls.length > 0) {
+          const galleryItems = urls.map((url) => ({
+            original: url,
+          }));
+          setItems(galleryItems);
+        }
+      } catch (error) {
+        console.error("Error loading images:", error);
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+
+    if (userId) {
+      loadImages();
+    } else {
+      setLoading(false);
+    }
+
+    return () => {
+      active = false;
+    };
+  }, [userId]);
+
+  const renderItem = (item) => {
+    return (
+      <div className={styles.slideWrapper}>
+        <Image
+          src={item.original}
+          alt="Studio Gallery Image"
+          width={1200}
+          height={800}
+          className={styles.image}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+          priority={items.indexOf(item) === 0}
+        />
+      </div>
+    );
+  };
 
   return (
     <>
-      {loading && imgs.length === 0 ? ( // Show loader only if no images are loaded yet
+      {loading ? (
         <Box pad="large">
-          <img src={`/img/loader.svg`} />
+          <img src={`/img/loader.svg`} alt="Loading..." />
         </Box>
       ) : (
-        <ImageGallery items={imgs} {...carouselConfig} />
+        items.length > 0 && (
+          <ImageGallery 
+            items={items} 
+            renderItem={renderItem}
+            {...carouselConfig} 
+          />
+        )
       )}
     </>
   );

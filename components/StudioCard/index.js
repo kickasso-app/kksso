@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 import ProgressiveImage from "react-progressive-image";
 // import moment from "moment";
 import { Disc, Hash } from "react-feather";
 
+import { useStudios } from "services/studios";
 import { downloadProfileImage } from "services/images";
 
 import { capitalizeFirstLetter } from "services/helpers/textFormat";
@@ -16,26 +17,35 @@ const StudioCard = ({
   studio: { studio_id, uuid, artist, district, styles: artStyles, textMini },
 }) => {
   const router = useRouter();
+  const { getProfileImage, updateProfileImageCache } = useStudios();
 
-  const articleLink = {
-    pathname: "/studio/[id]",
-    query: { id: studio_id },
-  };
+  const articleLink = `/studio/${studio_id}`;
 
   const openArticle = () => {
     router.push(articleLink);
   };
 
-  const [imgUrl, setImgUrl] = useState(false);
+  const [imgUrl, setImgUrl] = useState(null);
 
   useEffect(() => {
-    downloadProfileImage({ userId: uuid }).then((url) => setImgUrl(url));
-  }, [uuid]);
+    const cachedUrl = getProfileImage(uuid);
+    if (cachedUrl) {
+      setImgUrl(cachedUrl);
+    } else {
+      downloadProfileImage({ userId: uuid }).then((url) => {
+        setImgUrl(url);
+        updateProfileImageCache(uuid, url);
+      });
+    }
+  }, [uuid, getProfileImage, updateProfileImageCache]);
 
   return (
     <div className={styles.StudioCard}>
       <div className={styles.imgContainer}>
-        <Link href={articleLink} onClick={() => openArticle()}>
+        <Link href={articleLink} onClick={(e) => {
+          e.preventDefault();
+          openArticle();
+        }}>
 
           <ProgressiveImage src={imgUrl} placeholder={`/img/loader.svg`}>
             {(src, loading) => (

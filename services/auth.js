@@ -11,13 +11,14 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     // Check active sessions and sets the user
-    const activeSession = supabase.auth.getSession();
+    const checkSession = async () => {
+      const { data: { session: activeSession } } = await supabase.auth.getSession();
+      setSession(activeSession ?? null);
+      setUser(activeSession?.user ?? null);
+      setLoading(false);
+    };
 
-    // TODO: use getUser() instead of session?.user
-
-    setSession(activeSession ?? null);
-    setUser(activeSession?.user ?? null);
-    setLoading(false);
+    checkSession();
 
     // Listen for changes on auth state (logged in, signed out, etc.)
     const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
@@ -29,7 +30,6 @@ export function AuthProvider({ children }) {
       //console.log(session?.user);
 
       if (event === "SIGNED_OUT") {
-        console.log("SIGNED_OUT", session);
         // clear local and session storage
         [localStorage, sessionStorage].forEach((storage) => {
           if (storage?.length > 0) {
@@ -51,6 +51,7 @@ export function AuthProvider({ children }) {
     signUp: (data) => supabase.auth.signUp(data),
     signIn: (data) => supabase.auth.signInWithPassword(data),
     signOut: () => supabase.auth.signOut(),
+    updateUser: (data) => supabase.auth.updateUser(data),
     user,
     session,
     event,
@@ -59,7 +60,7 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 }

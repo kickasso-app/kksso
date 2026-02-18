@@ -41,7 +41,7 @@ async function listImages({ userId }) {
     console.log("Error listing images: ", error.message);
   }
 
-  return { imgs, paths };
+  return paths;
 }
 
 async function downloadImage({ imgPath, postDownload }) {
@@ -102,7 +102,7 @@ async function downloadProfileImage({ userId }) {
 
 async function downloadImages({ userId }) {
   // console.time("downloadImages:all");
-  const { paths } = await listImages({ userId });
+  const paths = await listImages({ userId });
   // console.log(paths);
   const imagePromises = paths.map((path) =>
     downloadImage({
@@ -137,6 +137,18 @@ async function resizeImage({ file, returnSmallerImage = false }) {
   return [fileLarge, fileSmall];
 }
 
+async function getPublicImageUrls({ userId }) {
+  const paths = await listImages({ userId });
+  if (!paths) return [];
+
+  return paths.map((path) => {
+    const { data } = supabase.storage
+      .from("studios-photos")
+      .getPublicUrl(path);
+    return data.publicUrl;
+  });
+}
+
 export {
   fileExists,
   listImages,
@@ -145,4 +157,5 @@ export {
   downloadProfileImage,
   downloadEventImage,
   resizeImage,
+  getPublicImageUrls,
 };

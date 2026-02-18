@@ -1,47 +1,37 @@
-import { supabase } from "services/supabase";
+import { supabase } from "./supabase";
 
-const fetchMagazinePosts = async ({ selectedCity }) => {
+export const getMagazinePosts = async () => {
   let supabaseQuery = supabase.from("magazine").select("*");
-  if (selectedCity?.city) {
-    const cityName = selectedCity.city;
-    supabaseQuery = supabaseQuery.contains("cityLocation", [cityName]);
+
+  const { data: supaMagPosts, error } = await supabaseQuery
+    .is("isPublished", true)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Error fetching magazine posts:", error);
+    return [];
   }
 
-  try {
-    const { data: supaMagPosts, error } = await supabaseQuery
-      .is("isPublished", true)
-      .order("created_at", { ascending: false });
-
-    await supabaseQuery
-      .is("isPublished", true)
-      .order("created_at", { ascending: false });
-
-    if (supaMagPosts?.length) {
-      //console.log(supaMagPosts);
-      return supaMagPosts;
-    }
-  } catch (error) {
-    console.log(error?.message || "No articles were fetched");
-    return false;
-  }
+  return supaMagPosts || [];
 };
 
-const fetchMagazinePost = async ({ magpost_slug }) => {
-  // console.log("fetching Post " + magpost_slug);
-  try {
-    let { data: supaMagPost, error } = await supabase
-      .from("magazine")
-      .select("*")
-      .eq("slug", magpost_slug)
-      .single();
-    if (supaMagPost) {
-      // console.log(supaMagPost);
-      return supaMagPost;
-    }
-  } catch (error) {
-    console.error(error.message ?? "No Editorial Post were fetched");
+export const getMagazinePost = async (slug) => {
+  const { data: supaMagPost, error } = await supabase
+    .from("magazine")
+    .select("*")
+    .eq("slug", slug)
+    .single();
+
+  if (error) {
+    console.error("Error fetching magazine post:", error);
+    return null;
   }
+  return supaMagPost;
 };
+
+// Compatibility aliases for older code that might import fetch*
+export const fetchMagazinePosts = getMagazinePosts;
+export const fetchMagazinePost = getMagazinePost;
 
 // Images
 
@@ -62,7 +52,7 @@ async function magazineImageExists(bucketName, filePath, fileName) {
   return doesItExist;
 }
 
-async function downloadMagazineImage({ imgPath, postDownload }) {
+export async function downloadMagazineImage({ imgPath, postDownload }) {
   const [slug, fileName] = imgPath.split("/");
 
   const doesImgExist = await magazineImageExists("magazine", slug, fileName);
@@ -89,7 +79,7 @@ async function downloadMagazineImage({ imgPath, postDownload }) {
   }
 }
 
-async function downloadMagazineThumbnail({ slug }) {
+export async function downloadMagazineThumbnail({ slug }) {
   const imgPath = slug + "/thumbnail.jpg";
   let url = await downloadMagazineImage({
     imgPath: imgPath,
@@ -98,10 +88,3 @@ async function downloadMagazineThumbnail({ slug }) {
 
   return url ?? false;
 }
-
-export {
-  fetchMagazinePosts,
-  fetchMagazinePost,
-  downloadMagazineImage,
-  downloadMagazineThumbnail,
-};

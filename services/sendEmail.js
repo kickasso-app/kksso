@@ -2,11 +2,12 @@ export const sendEmail = async ({
   emailTemplate,
   emailDetails,
   emailVariables,
+  recipient,
 }) => {
   let emailSent = false;
   let errorMsg = false;
   try {
-    const response = await fetch("/api/send", {
+    const response = await fetch("/api/send-email", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -15,6 +16,7 @@ export const sendEmail = async ({
         emailTemplate,
         emailDetails,
         emailVariables,
+        recipient,
       }),
     });
 
@@ -22,7 +24,7 @@ export const sendEmail = async ({
       emailSent = true;
       // console.log("Email sent successfully!");
     } else {
-      errorDetails = await response.json();
+      const errorDetails = await response.json();
       console.error("Error sending email:", errorDetails.message);
       errorMsg = errorDetails.message;
     }

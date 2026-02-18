@@ -7,16 +7,17 @@ const Button = ({
   children,
   padding,
   disabled,
+  as: Component = "button",
 }) => {
   return (
-    <button
-      type={type}
+    <Component
+      type={Component === "button" ? type : undefined}
       disabled={disabled}
       className={styles[btnStyle]}
       onClick={onClick}
     >
       {children}
-    </button>
+    </Component>
   );
 };
 

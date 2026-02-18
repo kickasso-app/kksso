@@ -5,12 +5,12 @@ import { downloadImage, resizeImage } from "services/images";
 import { Edit2, X } from "react-feather";
 import {
   Box,
-  Notification,
   FileInput,
   Paragraph,
   ResponsiveContext,
 } from "grommet";
 import Button from "components/Button";
+import ToastNotification from "components/ToastNotification";
 
 const PHOTO_MAX_SIZE = 1048576; // 1 MB
 
@@ -205,10 +205,9 @@ export default function PhotoInput({
           {isMainPhoto && <Paragraph fill>Your main studio photo</Paragraph>}
 
           {isPhotoTooLarge && (
-            <Notification
-              toast
-              status="warning"
-              title="Your photo was not uploaded"
+            <ToastNotification
+              warning={true}
+              type="Photo Upload"
               message="Upload a smaller image, less than 1 Megabyte."
             />
           )}

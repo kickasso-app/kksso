@@ -1,18 +1,18 @@
-button.outline:focus,
-button.filled:focus,
-button.text:focus {
+.outline:focus,
+.filled:focus,
+.text:focus {
   outline: 0;
 }
 
-button.outline:disabled,
-button.filled:disabled,
-button.text:disabled {
+.outline:disabled,
+.filled:disabled,
+.text:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;
 }
 
-button.text {
+.text {
   background-color: $color--bg-white;
   color: $color-primary;
 
@@ -28,11 +28,11 @@ button.text {
   // margin: 0;
 }
 
-button.text:hover {
+.text:hover {
   font-weight: bold;
 }
 
-button.outline {
+.outline {
   background-color: $color--bg-white;
   color: $color-primary;
   font-weight: 600;
@@ -47,17 +47,19 @@ button.outline {
   padding: 0.5rem 1.5rem;
   // margin-bottom: 0.5rem;
   border-radius: 0.5rem;
-  border: 0.1rem solid $color-secondary;
+  border: 0.1rem solid $color-quad;
   margin-right: 0.5rem;
-  transition: color 0.25s ease, background-color 0.25s ease,
+  transition:
+    color 0.25s ease,
+    background-color 0.25s ease,
     border-color 0.25s ease;
 }
 
-button.outline:hover {
+.outline:hover {
   border: 2px solid $color-primary;
 }
 
-button.filled {
+.filled {
   background-color: $color-quad; // $color--bg-white;
   color: $color-primary;
 
@@ -74,21 +76,23 @@ button.filled {
   // border-radius: 0.5rem;
   border: 1px solid $color-quad;
   margin-right: 0.5rem;
-  transition: color 0.25s ease, background-color 0.25s ease,
+  transition:
+    color 0.25s ease,
+    background-color 0.25s ease,
     border-color 0.25s ease;
 }
 
-button.filled:hover {
+.filled:hover {
   border: 1px solid $color-primary;
 }
 
 @media only screen and (max-width: 768px) {
-  button.outline {
+  .outline {
     padding: 0.5rem 1rem;
     margin: 1rem;
   }
 
-  button.text {
+  .text {
     // padding: 1rem;
     margin: 1rem;
   }

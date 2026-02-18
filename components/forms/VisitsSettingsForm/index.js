@@ -10,18 +10,14 @@ import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import {
   Box,
   Form,
-  FormField,
-  Notification,
-  CheckBoxGroup,
   Calendar,
-  TextArea,
-  TextInput,
   Text,
   Heading,
   RadioButtonGroup,
 } from "grommet";
 
 import Button from "components/Button";
+import ToastNotification from "components/ToastNotification";
 
 import { calendarBounds } from "config/calendar";
 import WeekdayTimeSelector from "./weekday-time-selector";
@@ -237,24 +233,11 @@ export default function VisitsSettingsForm({
             </Row>
 
             {!loading && (
-              <>
-                {isUpdateSuccess && (
-                  <Notification
-                    toast
-                    status="normal"
-                    title="Your profile was updated."
-                  />
-                )}
-                {isUpdateError && (
-                  <Notification
-                    toast
-                    status="warning"
-                    title="Your profile was not updated!"
-                    message="We couldn't complete your request this time. Please try again."
-                    // onClose={() => {}}
-                  />
-                )}
-              </>
+                <ToastNotification
+                  success={isUpdateSuccess}
+                  warning={isUpdateError}
+                  type="Update Profile"
+                />
             )}
             </Form></>)}
         </Grid>

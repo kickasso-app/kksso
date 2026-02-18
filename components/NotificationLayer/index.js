@@ -1,58 +1,86 @@
 "use client";
 
-import { useState } from "react";
-import { Box, Button, Grommet, Layer, Notification } from "grommet";
-import { FormClose } from "grommet-icons";
+import { useState, useEffect, useContext } from "react";
+
+import { Box, Layer, Text, Notification, ResponsiveContext } from "grommet";
+
+import { CheckCircle, AlertCircle } from "react-feather";
+
+const notificationIcons = {
+  normal: <CheckCircle size="24px" color="#80AAA0" />,
+  warning: <AlertCircle size="24px" color="#AA8088" />,
+};
 
 export default function NotificationLayer({
   message,
   title,
   status = "normal",
   onClose = () => {},
+  autoClose = 3000,
 }) {
+  const size = useContext(ResponsiveContext);
+
+  const isMobile = size === "small";
+
   const [isVisible, setIsVisible] = useState(true);
+
+  const PaddedMessage = message ? (
+    <Text>
+      <br /> {message}
+    </Text>
+  ) : (
+    ""
+  );
 
   const onCloseNotification = () => {
     setIsVisible(false);
     onClose();
   };
 
+  useEffect(() => {
+    if (autoClose && isVisible) {
+      const timer = setTimeout(() => {
+        onCloseNotification();
+      }, autoClose);
+
+      return () => clearTimeout(timer);
+    }
+  }, [autoClose, isVisible]);
+
   if (!isVisible) return null;
 
   return (
     <Layer
-      position="center"
-      modal
+      position="bottom-right"
+      modal={isMobile}
+      full={isMobile}
+      margin={isMobile ? "none" : { vertical: "medium", horizontal: "small" }}
+      responsive={false}
       onClickOutside={onCloseNotification}
       onEsc={onCloseNotification}
-      responsive
       animation="fadeIn"
+      plain={!isMobile} // Remove default modal styling on desktop
     >
       <Box
-        pad={{ horizontial: "large", vertical: "large" }}
-        gap="medium"
-        // width={{ min: "500px", max: "800px" }}
-        // height={{ min: "100px", max: "300px" }}
-        // size={size === "small" ? "small" : "medium"}
-        size={"xlarge"}
-        responsive
         align="center"
+        justify="center"
+        fill={isMobile}
+        background="white"
+        pad={isMobile ? "medium" : ""}
       >
-        {/* <Box direction="row" justify="between" align="center"> */}
         <Notification
           status={status}
-          message={message}
+          message={PaddedMessage}
           title={title}
           onClose={onCloseNotification}
+          icon={notificationIcons[status]}
+          pad="medium"
+          elevation="medium"
+          round="small"
         />
-        {/* <Button
-            icon={<FormClose />}
-            onClick={closeNotification}
-            plain
-            hoverIndicator
-          /> */}
-        {/* </Box> */}
       </Box>
     </Layer>
   );
 }
+
+

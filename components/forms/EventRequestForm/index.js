@@ -32,7 +32,6 @@ const convertToTimestampTZ = (d, t) => {
 };
 
 const EventRequestForm = ({
-  artistEmail,
   artistName,
   studioID,
   studio_uuid,
@@ -44,7 +43,7 @@ const EventRequestForm = ({
   const { createRequest } = useRequests();
 
   const initValues = {
-    to_email: artistEmail,
+    // to_email: artistEmail, // Legacy: Removed to protect privacy
     to_name: artistName,
     requestor_email: "requests@arti.my",
     from_name: "Requestor Name",
@@ -89,7 +88,7 @@ const EventRequestForm = ({
 
       const emailRequestDetails = {
         subject: "You got a new event request!",
-        toEmail: [emailVariables.to_email],
+        // toEmail: [emailVariables.to_email], // Legacy: Removed to protect privacy
         fromEmail: "Arti <requests@arti.my>",
       };
 
@@ -98,11 +97,15 @@ const EventRequestForm = ({
           emailTemplate: "eventRequest",
           emailDetails: emailRequestDetails,
           emailVariables,
+          recipient: {
+            type: "studio",
+            id: studio_uuid,
+          },
         });
 
       const emailRequestConfirmationDetails = {
         subject: `We sent your event request to ${emailVariables.to_name}`,
-        toEmail: [emailVariables.requestor_email],
+        // toEmail: [emailVariables.requestor_email], // Legacy
         fromEmail: "Arti <requests@arti.my>",
       };
 
@@ -111,6 +114,10 @@ const EventRequestForm = ({
           emailTemplate: "eventRequestConfirmation",
           emailDetails: emailRequestConfirmationDetails,
           emailVariables,
+          recipient: {
+            type: "user",
+            email: [emailVariables.requestor_email],
+          },
         });
 
       if (requestinDB && emailRequestSent && emailConfirmationSent) {
@@ -231,29 +238,17 @@ const EventRequestForm = ({
             <NotificationLayer
               status="normal"
               title="Your request was sent!"
-              message={
-                <Text>
-                  <br />
-                  Please wait to hear back from us when the studio responds.
-                </Text>
-              }
+              message="Please wait to hear back from us when the studio responds."
               onClose={() => setIsEmailSent(false)}
             />
           ) : (
             isEmailError && (
               <NotificationLayer
-                toast
                 status="warning"
                 title="We couldn't send your request!"
-                message={
-                  <Text>
-                    <br />
-                    Please try again, and reach out to us if you face an issue
-                    again.{" "}
-                  </Text>
-                }
+                message="Please try again, and reach out to us if you face an issue again."
                 onClose={() => setIsEmailError(false)}
-                time="2000"
+                autoClose={false}
               />
             )
           )}

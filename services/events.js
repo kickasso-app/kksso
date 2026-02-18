@@ -1,12 +1,15 @@
-import React, { createContext, useContext, useState } from "react";
-import { supabase } from "./supabase";
+'use client';
 
-import { useCities } from "services/city";
+import React, { createContext, useContext, useState, useCallback, useMemo, useRef } from "react";
+import { supabase } from "./supabase";
+import { revalidatePathAction } from "app/actions/revalidate";
+
+import { useRegions } from "services/region";
 
 const EventsContext = createContext(null);
 
 const EventsProvider = ({ children }) => {
-  const { selectedCity } = useCities();
+  const { selectedRegion } = useRegions();
 
   const [events, setEvents] = useState([]);
   const [event, setEvent] = useState(null);
@@ -16,19 +19,35 @@ const EventsProvider = ({ children }) => {
   const [isUpdateError, setIsUpdateError] = useState(false);
   const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
 
+  // Cache for event images using useRef to avoid re-renders
+  const eventImageCache = useRef({});
+
+  const updateEventImageCache = useCallback((eventPath, url) => {
+    eventImageCache.current[eventPath] = url;
+  }, []);
+
+  const getEventImage = useCallback((eventPath) => {
+    return eventImageCache.current[eventPath];
+  }, []);
+
+  const resetNotification = useCallback(() => {
+    setIsUpdateSuccess(false);
+    setIsUpdateError(false);
+  }, []);
+
   /**
    * This function fetches published Events from a Supabase database and sets them in state.
    */
 
-  const fetchEvents = async () => {
+  const fetchEvents = useCallback(async () => {
     setLoading(true);
     // console.log("fetching Events");
 
     let supabaseQuery = supabase.from("events").select("*");
 
-    if (selectedCity?.city) {
-      const cityName = selectedCity.city;
-      supabaseQuery = supabaseQuery.contains("cityLocation", [cityName]);
+    if (selectedRegion?.region) {
+      const regionName = selectedRegion.region;
+      supabaseQuery = supabaseQuery.contains("cityLocation", [regionName]);
     }
 
     let { data: supaEvents, error } = await supabaseQuery
@@ -42,11 +61,11 @@ const EventsProvider = ({ children }) => {
       setError(returnError);
     }
     setLoading(false);
-  };
+  }, [selectedRegion]);
 
   // Fetchs all account events including unpublished ones
 
-  const fetchAccountEvents = async (id) => {
+  const fetchAccountEvents = useCallback(async (id) => {
     setLoading(true);
     // console.log("fetching Events");
 
@@ -63,11 +82,11 @@ const EventsProvider = ({ children }) => {
       setError(returnError);
     }
     setLoading(false);
-  };
+  }, []);
 
-  const fetchEvent = async ({ event_id }) => {
+  const fetchEvent = useCallback(async ({ event_id }) => {
     setLoading(true);
-    resetNotification;
+    resetNotification();
     // console.log("fetching Events");
     try {
       let { data: supaEvent, error } = await supabase
@@ -89,13 +108,13 @@ const EventsProvider = ({ children }) => {
       setLoading(false);
     }
     // setLoading(false);
-  };
+  }, [resetNotification]);
 
   /**
    * This function creates a new Events in a Supabase database
    */
 
-  const createEvent = async ({ studio_uuid, event_id, cityLocation }) => {
+  const createEvent = useCallback(async ({ studio_uuid, event_id, cityLocation }) => {
     setLoading(true);
     let eventCreated = false;
     let errorMsg = false;
@@ -144,13 +163,13 @@ const EventsProvider = ({ children }) => {
 
     setLoading(false);
     return { eventCreated, error: { message: errorMsg } };
-  };
+  }, []);
 
   /**
    * This function updates a event item in a Supabase database
    */
 
-  const updateEvent = async (updates, id) => {
+  const updateEvent = useCallback(async (updates, id) => {
     setLoading(true);
     resetNotification();
 
@@ -169,19 +188,16 @@ const EventsProvider = ({ children }) => {
       } else {
         await setEvent(data?.[0]);
         setIsUpdateSuccess(true);
+        await revalidatePathAction("/events");
+        await revalidatePathAction(`/event/${id}`);
       }
     }
 
     setLoading(false);
     return { error: false };
-  };
+  }, [resetNotification]);
 
-  const resetNotification = () => {
-    setIsUpdateSuccess(false);
-    setIsUpdateError(false);
-  };
-
-  const contextObj = {
+  const contextObj = useMemo(() => ({
     events,
     event,
     createEvent,
@@ -193,7 +209,23 @@ const EventsProvider = ({ children }) => {
     error,
     isUpdateSuccess,
     isUpdateError,
-  };
+    getEventImage,
+    updateEventImageCache,
+  }), [
+    events,
+    event,
+    createEvent,
+    updateEvent,
+    fetchEvent,
+    fetchEvents,
+    fetchAccountEvents,
+    loading,
+    error,
+    isUpdateSuccess,
+    isUpdateError,
+    getEventImage,
+    updateEventImageCache,
+  ]);
 
   return (
     <EventsContext.Provider value={contextObj}>

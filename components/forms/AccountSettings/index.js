@@ -1,14 +1,15 @@
-import { useState } from "react";
-import Link from "next/link";
-
 import { useAuth } from "services/auth";
 import { useAccount } from "services/account";
+import Link from "next/link";
 
 import Button from "components/Button";
-import { Box, Text, Heading, Notification } from "grommet";
+import ToastNotification from "components/ToastNotification";
+import { Box, Text, Heading } from "grommet";
 
 export default function AccountSettings({ profile }) {
-  const [isPublished, setIsPublished] = useState(profile?.published);
+  const isPublished = profile?.published;
+  console.log(profile);
+  console.log(isPublished);
 
   const { signOut, user } = useAuth();
   const { updateAccount, loading, isUpdateSuccess, isUpdateError } =
@@ -76,7 +77,6 @@ export default function AccountSettings({ profile }) {
                   can preview it.
                 </Text>
               )}
-
               <br />
               <Button onClick={togglePublishProfile} btnStyle="filled">
                 Publish
@@ -100,25 +100,13 @@ export default function AccountSettings({ profile }) {
           </Button>
         </Box>
       </Box>
+
       {!loading && (
-        <>
-          {isUpdateSuccess && (
-            <Notification
-              toast
-              status="normal"
-              title="Your profile was updated."
-            />
-          )}
-          {isUpdateError && (
-            <Notification
-              toast
-              status="warning"
-              title="Your profile was not updated!"
-              message="We couldn't complete your request this time. Please try again."
-              // onClose={() => {}}
-            />
-          )}
-        </>
+        <ToastNotification
+          success={isUpdateSuccess}
+          warning={isUpdateError}
+          type="Update Profile"
+        />
       )}
       {/* <br />
       <br />

@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { Box, Heading, Paragraph } from "grommet";
 import Link from "next/link";
 import moment from "moment";
 import ProgressiveImage from "react-progressive-image";
 
+import { useEvents } from "services/events";
 import { downloadEventImage } from "services/images";
 import styles from "./index.module.scss";
 
@@ -12,7 +13,8 @@ const readableDate = (date) => moment(date, "YYYY-MM-DD").format("D MMM 'YY");
 
 export default function EventCard({ event, inStudio = false }) {
   const router = useRouter();
-  const [imgUrl, setImgUrl] = useState(false);
+  const { getEventImage, updateEventImageCache } = useEvents();
+  const [imgUrl, setImgUrl] = useState(null);
   const eventMargin = { vertical: "1rem" };
   const detailsMargin = { vertical: "0.5rem" };
 
@@ -23,13 +25,27 @@ export default function EventCard({ event, inStudio = false }) {
 
   useEffect(() => {
     const imgPath = `${event.studio_uuid}/${event.id}/event-small.jpg`;
-    downloadEventImage({ imgPath }).then((url) => setImgUrl(url));
-  }, [event]);
+    const cachedUrl = getEventImage(imgPath);
+
+    if (cachedUrl) {
+      setImgUrl(cachedUrl);
+    } else {
+      downloadEventImage({ imgPath }).then((url) => {
+        if (url) {
+          setImgUrl(url);
+          updateEventImageCache(imgPath, url);
+        }
+      });
+    }
+  }, [event.studio_uuid, event.id, getEventImage, updateEventImageCache]);
 
   return (
     <div className={styles.eventCard}>
       <div className={styles.imgContainer}>
-        <Link href={eventLink} onClick={() => openEvent()}>
+        <Link href={eventLink} onClick={(e) => {
+          e.preventDefault();
+          openEvent();
+        }}>
           <ProgressiveImage src={imgUrl} placeholder={`/img/loader.svg`}>
             {(src, loading) => (
               <img className={styles.cardImg} src={src} alt={event.title} />

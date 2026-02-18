@@ -1,6 +1,6 @@
 // import { useState } from "react";
 import { supabase } from "services/supabase";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 import { useAuth } from "services/auth";
@@ -16,8 +16,8 @@ export default function SignUp() {
   const handleSignUp = async (event) => {
     event.preventDefault();
 
-    const email = event.target.email.value;
-    const password = event.target.password.value;
+    const email = event.currentTarget.elements.email.value;
+    const password = event.currentTarget.elements.password.value;
 
     // With Context
 
@@ -27,7 +27,7 @@ export default function SignUp() {
       alert(error.message);
     } else if (user) {
       // Redirect user to Dashboard
-      router.push("/welcome?email=${user.email}");
+      router.push(`/welcome?email=${user.email}`);
     }
 
     // Quick and Dirty

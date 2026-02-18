@@ -1,10 +1,13 @@
+'use client';
+
 import { useContext, useState } from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { Box, Grid, ResponsiveContext } from "grommet";
 import { Menu as MenuIcon, X as CloseIcon } from "react-feather";
 
 import { useAuth } from "services/auth";
-import { useCities } from "services/city";
+import { useRegions } from "services/region";
 
 import NavButton from "./NavButton";
 import ProfileButton from "./ProfileButton";
@@ -15,36 +18,67 @@ import styles from "./index.module.scss";
 
 const Header = () => {
   const { session } = useAuth();
-  const { selectedCity } = useCities();
+  const params = useParams();
+  const regionSlug = params?.region;
+
   const size = useContext(ResponsiveContext);
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // Helper to construct paths
   const createPath = (label, path) => {
-    const isSpecialLabel = ["Studios", "Events", "Editorial"].includes(label);
-    const pathCity = selectedCity
-      ? `${path}/${selectedCity.slugName}`
-      : `${path}`;
-    return isSpecialLabel ? pathCity : path;
+    // Only append region slug for Studios and Events
+    const isRegionBased = ["Studios", "Events"].includes(label);
+    
+    if (isRegionBased && regionSlug) {
+      return `${path}/${regionSlug}`;
+    }
+    
+    // Editorial and others are location-free or static
+    return path;
   };
+
+  const navButtons = MENU_LINKS.map((button) => (
+    <NavButton
+      key={button.path}
+      path={createPath(button.label, button.path)}
+      label={button.label}
+      onClick={() => setMenuOpen(false)}
+    />
+  ));
+
 
   return (
     <div className={styles.header}>
       <Box margin={{ vertical: "small", horizontal: "small" }} pad="xsmall">
-        {size === "small" ? (
+        {/* Mobile Header */}
+        <div className={styles.mobileHeader}>
           <Box direction="row" align="center" justify="between" fill>
             <Box width="xsmall">
               <Link href="/">
-                <img src={`/img/logo-name-web.png`} alt="arti" />
+                <img
+                  src={`/img/logo-name-web-high.png`}
+                  height="36px"
+                  alt="arti"
+                />
               </Link>
             </Box>
 
-            <button
-              onClick={() => setMenuOpen(true)}
-              aria-label="Open menu"
-              className={styles.menuIcon}
-            >
-              <MenuIcon size={28} strokeWidth="1" color="#4b4b4b" fill="#fff" />
-            </button>
+            <Box direction="row" align="center">
+              <button
+                onClick={() => setMenuOpen(true)}
+                aria-label="Open menu"
+                className={styles.menuIcon}
+              >
+                <MenuIcon
+                  size={28}
+                  strokeWidth="1"
+                  color="#4b4b4b"
+                  fill="#fff"
+                />
+              </button>
+              {session && <ProfileButton />}
+            </Box>
+
             {menuOpen && (
               <Box
                 className={styles.mobileMenu}
@@ -73,17 +107,8 @@ const Header = () => {
                     label={"Home"}
                     onClick={() => setMenuOpen(false)}
                   />
-                  {MENU_LINKS.map((button) => (
-                    <NavButton
-                      key={button.path}
-                      path={createPath(button.label, button.path)}
-                      label={button.label}
-                      onClick={() => setMenuOpen(false)}
-                    />
-                  ))}
-                  {session ? (
-                    <ProfileButton onMenuItemClick={() => setMenuOpen(false)} />
-                  ) : (
+                  {navButtons}
+                  {!session && (
                     <NavButton
                       path={"/join"}
                       label={<u>Join</u>}
@@ -94,7 +119,10 @@ const Header = () => {
               </Box>
             )}
           </Box>
-        ) : (
+        </div>
+
+        {/* Desktop Header */}
+        <div className={styles.desktopHeader}>
           <Grid
             columns={["auto", "flex"]}
             rows={["auto"]}
@@ -106,7 +134,11 @@ const Header = () => {
           >
             <Box gridArea="logo" width="xsmall">
               <Link href="/">
-                <img src={`/img/logo-name-web.png`} alt="arti" />
+                <img
+                  src={`/img/logo-name-web-high.png`}
+                  height="40px"
+                  alt="arti"
+                />
               </Link>
             </Box>
             <Box
@@ -131,7 +163,7 @@ const Header = () => {
               )}
             </Box>
           </Grid>
-        )}
+        </div>
       </Box>
     </div>
   );

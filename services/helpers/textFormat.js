@@ -4,6 +4,7 @@ const titleCase = (text) => {
   return text
     .trim()
     .split(" ")
+    .filter(Boolean)
     .map((w) => w[0].toUpperCase() + w.substring(1).toLowerCase())
     .join(" ");
 };
@@ -30,14 +31,14 @@ const paragraphSeperator = /\r\n|\n|\r/;
 const makeParagraphs = (
   paragraphString,
   pSeparator = paragraphSeperator,
-  paragraphMargin = { top: "small", bottom: "small" }
+  paragraphMargin = { top: "small", bottom: "small" },
 ) => {
   if (!paragraphString) return [];
   return paragraphString.split(pSeparator).map((paragraph, index) => {
     const formattedParagraph =
       paragraph.trim().charAt(0).toUpperCase() + paragraph.trim().slice(1);
     return (
-      <Paragraph key={index} size="medium" margin={paragraphMargin} fill>
+      <Paragraph key={index} size="medium" margin={paragraphMargin} fill={true}>
         {formattedParagraph}
       </Paragraph>
     );

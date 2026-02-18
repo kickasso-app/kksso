@@ -1,0 +1,76 @@
+.installPage {
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  .title {
+    font-size: 1.875rem;
+    margin-bottom: 1.5rem;
+    color: $color-primary;
+    text-align: center;
+  }
+
+  .description {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #666;
+    margin-bottom: 2rem;
+  }
+
+  .installedHeader {
+    margin-bottom: 2rem;
+    color: $color-primary;
+
+    display: flex;
+    gap: 10px;
+    font-size: 1.5rem;
+
+    // Target the icon directly if possible, or we can wrap it in a div with this class
+    svg {
+      // margin-bottom: 1rem;
+      color: $color-quad;
+    }
+  }
+
+  .installSection {
+    margin-top: 2rem;
+  }
+
+  .browserIcon {
+    margin-bottom: 1rem;
+  }
+
+  .instructions {
+    margin-top: 1.5rem;
+    text-align: left;
+    line-height: 1.5rem;
+
+    ol {
+      padding-left: 1.2rem;
+
+      li {
+        margin-bottom: 0.8rem;
+      }
+    }
+  }
+
+  .notificationsWrapper {
+    text-align: left;
+    color: $color-primary;
+
+    h3 {
+      margin-top: 4rem;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    margin: 0 4px;
+  }
+}

@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { Box, Heading, Paragraph, ResponsiveContext } from "grommet";
 import Link from "next/link";
 import moment from "moment";
@@ -44,7 +44,10 @@ export default function MagPostCard({ magPost }) {
         >
           <Box basis="33%" flex={false} className={styles.imgBox}>
             {/* <Image src="path-to-your-image.jpg" fit="cover" /> */}
-            <div className={styles.imgContainer} onClick={() => openMagPost()}>
+            <div className={styles.imgContainer} onClick={(e) => {
+              e.preventDefault();
+              openMagPost();
+            }}>
               <ProgressiveImage src={imgUrl} placeholder={`/img/loader.svg`}>
                 {(src, loading) => (
                   <img

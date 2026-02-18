@@ -1,6 +1,4 @@
 import { createContext, useContext, useState } from "react";
-import { supabase } from "./supabase";
-
 import { createContact } from "./contacts";
 
 const RequestsContext = createContext(null);
@@ -21,47 +19,29 @@ const RequestsProvider = ({ children }) => {
 
   const fetchRequests = async (id) => {
     setLoading(true);
-    // console.log("fetching Requests");
-
-    let { data: supaRequests, error } = await supabase
-      .from("requests")
-      .select("*")
-      .eq("studio_uuid", id)
-      .order("request_date_tz", { ascending: false });
-    if (supaRequests?.length) {
-      // console.log(supaRequests);
-      setRequests(supaRequests);
-    } else {
-      const returnError = error ?? "No Requests were fetched";
-      setError(returnError);
+    try {
+      const response = await fetch(`/api/requests?studio_uuid=${id}`);
+      if (!response.ok) throw new Error("Failed to fetch requests");
+      const supaRequests = await response.json();
+      setRequests(supaRequests || []);
+    } catch (err) {
+      setError(err.message);
     }
     setLoading(false);
   };
 
   const fetchRequest = async (id, studio_uuid) => {
     setLoading(true);
-    // console.log("fetching Requests");
     try {
-      let { data: supaRequest, error } = await supabase
-        .from("requests")
-        .select("*")
-        .eq("studio_uuid", studio_uuid)
-        .eq("request_id", id)
-        .single();
-      if (error) {
-        setError(error.message);
-        throw error;
-      }
-
+      const response = await fetch(`/api/requests?studio_uuid=${studio_uuid}&request_id=${id}`);
+      if (!response.ok) throw new Error("Failed to fetch request");
+      const supaRequest = await response.json();
       setRequest(supaRequest);
-    } catch (error) {
-      const returnError = error.message ?? "No Request were fetched";
-      console.error("There was a problem fetch this request:", error.message);
-      setError(returnError);
+    } catch (err) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
-    // setLoading(false);
   };
 
   /**
@@ -150,20 +130,29 @@ const RequestsProvider = ({ children }) => {
     setLoading(true);
 
     if (updates) {
-      let { data, error } = await supabase
-        .from("requests")
-        .update(updates)
-        .eq("request_id", id)
-        .select();
+      try {
+        const response = await fetch("/api/requests", {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ request_id: id, updates }),
+        });
 
-      if (error) {
-        setError(true);
-        setLoading(false);
-        return { error };
-        throw error;
-      } else {
-        await setRequest(data?.[0]);
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || "Failed to update request");
+        }
+
+        const data = await response.json();
+        setRequest(data);
         setIsUpdateSuccess(true);
+        return { error: false };
+      } catch (err) {
+        setIsUpdateError(true);
+        setError(err.message);
+        setLoading(false);
+        return { error: err };
       }
     }
 
@@ -192,18 +181,3 @@ const RequestsProvider = ({ children }) => {
 const useRequests = () => useContext(RequestsContext);
 
 export { useRequests, RequestsContext, RequestsProvider };
-
-// const sample = {
-//   request_id: "1c546bb6-79f9-498e-8dd4-889e9d7a0ad9",
-//   request_date: "2025-03-04 at 13:00",
-//   request_date_tz: "",
-//   reponse: null,
-//   studio_uuid: "a67a18aa-551c-4ecf-9281-8f1f6b596ef2",
-//   has_response: false,
-//   response_date: null,
-//   messages: null,
-//   studio_name: "Should be last",
-//   last_update: "2025-02-17T15:43:40.972084+00:00",
-//   requestor_email: null,
-//   requestor_link: null,
-// };

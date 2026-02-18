@@ -1,0 +1,36 @@
+import { getEvent } from "services/events.server";
+import EventClient from "./EventClient";
+import { cacheLife, cacheTag } from "next/cache";
+
+export async function generateMetadata({ params }) {
+  const { id } = await params;
+  const event = await getEvent(id);
+
+  if (!event) {
+    return {
+      title: "Event Not Found - Arti",
+    };
+  }
+
+  return {
+    title: `${event.title} - Event | Arti`,
+    description:
+      event.miniDescription || `Join the event ${event.title} on Arti.`,
+    openGraph: {
+      images: [
+        `/api/create-og-image?imgurl=${encodeURIComponent(`https://chsbkuvxttsertgkuwhy.supabase.co/storage/v1/object/public/events/${event.studio_uuid}/${event.id}/event-small.jpg`)}`,
+      ],
+    },
+  };
+}
+
+export default async function EventPage({ params }) {
+  "use cache";
+  cacheTag("events");
+  cacheLife("hours");
+
+  const { id } = await params;
+  const event = await getEvent(id);
+
+  return <EventClient initialEvent={event} />;
+}

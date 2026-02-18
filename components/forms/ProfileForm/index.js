@@ -9,7 +9,6 @@ import {
   Box,
   Form,
   FormField,
-  Notification,
   TextArea,
   TextInput,
   Text,
@@ -18,6 +17,8 @@ import {
   Paragraph,
   Anchor,
 } from "grommet";
+
+import ToastNotification from "components/ToastNotification";
 
 export default function ProfileForm({
   profile: {
@@ -87,13 +88,18 @@ export default function ProfileForm({
             onSubmit={updateProfile}
             validate="submit"
           >
-            <FormField name="artist" label="Name" margin={fieldMargin} required>
+            <FormField
+              name="artist"
+              label="Full Name or Studio Name"
+              margin={fieldMargin}
+              required
+            >
               <TextInput name="artist" placeholder="" />
             </FormField>
 
             <FormField
               name="location"
-              label="Your studio location"
+              label="Studio Location"
               margin={textMargin}
               required
             >
@@ -103,13 +109,13 @@ export default function ProfileForm({
               <TextInput name="location" placeholder="e.g Berlin, Germany" />
             </FormField>
             <FormField
-              label="A short intro (max 300 chars)"
+              label="Short Bio (300 chars max)"
               name="textMini"
               margin={fieldMargin}
             >
               <TextArea
                 name="textMini"
-                placeholder="Tell us about your art practice. This is the main text. (required)"
+                placeholder="Provide a brief introduction to your art practice. This text will be visible as a quick overview in the studios list."
                 fill
                 maxLength={300}
                 rows={6}
@@ -124,7 +130,7 @@ export default function ProfileForm({
             >
               <TextInput
                 name="styles"
-                placeholder="painting, prints, sound (comma sepearted)"
+                placeholder="painting, prints, sound (comma separated)"
                 required
               />
             </FormField>
@@ -153,7 +159,7 @@ export default function ProfileForm({
             >
               <TextArea
                 name="textLong"
-                placeholder="Tell us about your artwork in more detail"
+                placeholder="Elaborate on your artistic vision, process, and the core themes of your work. This detailed statement will be featured on your studio profile page."
                 fill
                 maxLength={1200}
                 rows={8}
@@ -167,7 +173,7 @@ export default function ProfileForm({
             >
               <TextInput
                 name="languages"
-                placeholder="Deutsch, English, Español, Arabic"
+                placeholder="e.g., Deutsch, English, Español, Arabic"
                 required
               />
             </FormField>
@@ -182,7 +188,7 @@ export default function ProfileForm({
               <TextInput
                 id="text-input-id"
                 name="website"
-                placeholder="https://yoursite.com"
+                placeholder="https://yourportfolio.com"
               />
             </FormField>
             <FormField
@@ -195,7 +201,7 @@ export default function ProfileForm({
               <TextInput
                 id="text-input-id"
                 name="instagram"
-                placeholder="https://instagram.com/X"
+                placeholder="https://instagram.com/yourhandle"
               />
             </FormField>
 
@@ -206,65 +212,15 @@ export default function ProfileForm({
             </Box>
 
             {!loading && (
-              <>
-                {isUpdateSuccess && (
-                  <Notification
-                    toast
-                    status="normal"
-                    title="Your profile was updated."
-                  />
-                )}
-                {isUpdateError && (
-                  <Notification
-                    toast
-                    status="warning"
-                    title="Your profile was not updated!"
-                    message="We couldn't complete your request this time. Please try again."
-                    // onClose={() => {}}
-                  />
-                )}
-              </>
+              <ToastNotification
+                success={isUpdateSuccess}
+                warning={isUpdateError}
+                type="Update Profile"
+              />
             )}
           </Form>
         </Grommet>
       </Box>
     </Box>
   );
-}
-
-{
-  /* <FormField
-              name="from_name"
-              htmlfor="text-input-id"
-              label="Name"
-              required
-              margin={fieldMargin}
-            >
-              <TextInput
-                id="text-input-id"
-                name="from_name"
-                placeholder="Name"
-              />
-            </FormField>
-            <FormField
-              label="Email"
-              name="requestor_email"
-              required
-              validate={{
-                regexp: /\S+@\S+\.\S+/,
-                message: "Enter a valid email address",
-              }}
-              margin={fieldMargin}
-            >
-              <MaskedInput
-                name="requestor_email"
-                mask={[
-                  { regexp: /^[\w\-_.]+$/, placeholder: "your" },
-                  { fixed: "@" },
-                  { regexp: /^[\w]+$/, placeholder: "email" },
-                  { fixed: "." },
-                  { regexp: /^[\w]+$/, placeholder: "com" },
-                ]}
-              />
-            </FormField> */
 }
