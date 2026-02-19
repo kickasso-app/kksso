@@ -78,7 +78,7 @@ export default function PreviewClient() {
         ) : (
           <>
             <Box align="center" margin="small">
-              <ImagesCarousel userId={studio.uuid} />
+              <ImagesCarousel userId={studio.uuid} refresh={true} />
             </Box>
             <Row>
               <Col xs={12} md={6}>

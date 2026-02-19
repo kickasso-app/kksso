@@ -137,7 +137,19 @@ async function resizeImage({ file, returnSmallerImage = false }) {
   return [fileLarge, fileSmall];
 }
 
-async function getPublicImageUrls({ userId }) {
+async function downloadRawImages({ userId }) {
+  const paths = await listImages({ userId });
+  if (!paths) return [];
+
+  const imagePromises = paths.map((path) =>
+    supabase.storage.from("studios-photos").download(path),
+  );
+
+  const results = await Promise.all(imagePromises);
+  return results.map((result) => result.data);
+}
+
+async function getPublicImageUrls({ userId, refresh = false }) {
   const paths = await listImages({ userId });
   if (!paths) return [];
 
@@ -145,7 +157,7 @@ async function getPublicImageUrls({ userId }) {
     const { data } = supabase.storage
       .from("studios-photos")
       .getPublicUrl(path);
-    return data.publicUrl;
+    return refresh ? `${data.publicUrl}?t=${Date.now()}` : data.publicUrl;
   });
 }
 
@@ -154,6 +166,7 @@ export {
   listImages,
   downloadImage,
   downloadImages,
+  downloadRawImages,
   downloadProfileImage,
   downloadEventImage,
   resizeImage,

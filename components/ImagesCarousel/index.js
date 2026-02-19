@@ -30,7 +30,7 @@ const carouselConfig = {
   lazyload: true,
 };
 
-const ImagesCarousel = ({ userId }) => {
+const ImagesCarousel = ({ userId, refresh = false }) => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -40,7 +40,7 @@ const ImagesCarousel = ({ userId }) => {
 
     const loadImages = async () => {
       try {
-        const urls = await getPublicImageUrls({ userId });
+        const urls = await getPublicImageUrls({ userId, refresh });
         
         if (!active) return;
 
@@ -66,7 +66,7 @@ const ImagesCarousel = ({ userId }) => {
     return () => {
       active = false;
     };
-  }, [userId]);
+  }, [userId, refresh]);
 
   const renderItem = (item) => {
     return (

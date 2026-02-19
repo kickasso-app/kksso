@@ -19,24 +19,24 @@ export default function PhotoInput({
   imgId,
   isMainPhoto,
   postUpload,
+  imgUrl: initialImgUrl,
   //   onSetMain,
 }) {
-  const [imgUrl, setImgUrl] = useState(null);
-  const [editing, setEditing] = useState(true);
+  const [imgUrl, setImgUrl] = useState(initialImgUrl);
+  const [editing, setEditing] = useState(!initialImgUrl);
   const [uploading, setUploading] = useState(false);
-  const [isPhotoTooLarge, setIsPhotoTooLarge] = useState(false);
+  const [notification, setNotification] = useState(null);
 
   const { user } = useAuth();
   const size = useContext(ResponsiveContext);
 
   useEffect(() => {
-    if (imgPath) {
-      downloadImage({ imgPath, postDownload: setImgUrl });
-      setEditing(!imgPath);
-    }
-  }, [imgPath]);
+    setImgUrl(initialImgUrl);
+    setEditing(!initialImgUrl);
+  }, [initialImgUrl, imgPath]);
 
   async function removeImage() {
+    setNotification(null);
     const newImgPath = imgPath.replace("/", `/removed/${Date.now()}-`);
     try {
       let { error } = await supabase.storage
@@ -50,8 +50,17 @@ export default function PhotoInput({
       }
 
       setImgUrl(null);
+      setNotification({
+        success: true,
+        type: "Photo Removal",
+      });
+      if (postUpload) await postUpload();
     } catch (error) {
-      alert(error.message);
+      setNotification({
+        warning: true,
+        type: "Photo Removal",
+        message: error.message,
+      });
     } finally {
       setEditing(true);
     }
@@ -60,7 +69,7 @@ export default function PhotoInput({
   async function uploadImage({ event, imgName }) {
     try {
       setUploading(true);
-      setIsPhotoTooLarge(false);
+      setNotification(null);
 
       if (imgPath) await removeImage();
       if (!event.target.files?.[0]) {
@@ -72,7 +81,11 @@ export default function PhotoInput({
       const filePath = `${user.id}/${fileName}`;
 
       if (file.size > PHOTO_MAX_SIZE) {
-        setIsPhotoTooLarge(true);
+        setNotification({
+          warning: true,
+          type: "Photo Upload",
+          message: "Upload a smaller image, less than 1 Megabyte.",
+        });
         return;
       }
 
@@ -123,14 +136,19 @@ export default function PhotoInput({
         );
       }
 
-      await downloadImage({
-        imgPath: `${filePath}?t=${Date.now()}`,
-        postDownload: setImgUrl,
+      if (postUpload) await postUpload();
+      setNotification({
+        success: true,
+        type: "Photo Upload",
       });
       setEditing(false);
     } catch (error) {
       console.error("Upload error:", error);
-      alert(error.message);
+      setNotification({
+        warning: true,
+        type: "Photo Upload",
+        message: error.message,
+      });
     } finally {
       setUploading(false);
     }
@@ -204,11 +222,10 @@ export default function PhotoInput({
           <br />
           {isMainPhoto && <Paragraph fill>Your main studio photo</Paragraph>}
 
-          {isPhotoTooLarge && (
+          {notification && (
             <ToastNotification
-              warning={true}
-              type="Photo Upload"
-              message="Upload a smaller image, less than 1 Megabyte."
+              {...notification}
+              onClose={() => setNotification(null)}
             />
           )}
         </Box>

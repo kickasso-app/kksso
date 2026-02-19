@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 
 import { useAuth } from "services/auth";
 import { useAccount } from "services/account";
-import { listImages } from "services/images";
+import { listImages, downloadRawImages } from "services/images";
 
 import Button from "components/Button";
 import PhotoInput from "./PhotoInput";
@@ -20,17 +20,42 @@ export default function PhotosForm() {
   const { user } = useAuth();
   const { fetchProfile } = useAccount();
 
-  const [imgPaths, setImgPaths] = useState([]);
+  const [imgData, setImgData] = useState({});
 
   const [loading, setLoading] = useState(false);
   const [isUpdateError, setIsUpdateError] = useState(false);
 
   const fetchImgsList = useCallback(async () => {
     setLoading(true);
-    const paths = await listImages({ userId: user.id });
-    setImgPaths(paths ?? []);
-    setLoading(false);
-  }, []);
+    try {
+      const paths = await listImages({ userId: user.id });
+      const blobs = await downloadRawImages({ userId: user.id });
+
+      setImgData((prevData) => {
+        // Revoke old URLs to prevent memory leaks
+        Object.values(prevData).forEach((img) => {
+          if (img.url) URL.revokeObjectURL(img.url);
+        });
+
+        const nextData = {};
+        paths?.forEach((path, index) => {
+          const fileName = path.split("/").pop();
+          const id = parseInt(fileName.split(".")[0]);
+          if (!isNaN(id)) {
+            nextData[id] = {
+              path,
+              url: blobs[index] ? URL.createObjectURL(blobs[index]) : null,
+            };
+          }
+        });
+        return nextData;
+      });
+    } catch (error) {
+      console.error("Error fetching images:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [user.id]);
 
   useEffect(() => {
     fetchImgsList();
@@ -55,10 +80,12 @@ export default function PhotosForm() {
           <b>1 MB per image</b>
         </Text>
         {[0, 1, 2, 3, 4].map((imgId) => {
+          const img = imgData[imgId];
           return (
             <PhotoInput
               key={imgId}
-              imgPath={imgPaths[imgId] ?? null}
+              imgPath={img?.path ?? null}
+              imgUrl={img?.url ?? null}
               imgId={imgId}
               isMainPhoto={imgId === 0}
               postUpload={async () => {
