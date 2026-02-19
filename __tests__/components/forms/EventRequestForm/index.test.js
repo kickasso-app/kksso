@@ -60,14 +60,12 @@ const convertToTimestampTZ = (d, t) => {
 
 describe('EventRequestForm', () => {
   const mockProps = {
-    artistEmail: 'artist@example.com',
-    artistName: 'Test Artist',
-    studioID: '123',
-    studio_uuid: 'studio-abc',
-    event_uuid: 'event-xyz',
-    event_title: 'Test Event',
-    event_date_time: 'March 15, 2026 12:00 PM',
-    event_date: '2026-03-15',
+    artistName: "Test Artist",
+    studio_uuid: "studio-abc",
+    event_uuid: "event-xyz",
+    event_title: "Test Event",
+    event_date_time: "March 15, 2026 12:00 PM",
+    event_date: "2026-03-15",
   };
 
   beforeEach(() => {

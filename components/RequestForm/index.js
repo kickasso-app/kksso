@@ -68,11 +68,6 @@ export default function RequestForm({
 
     let emailError = false;
     if (message) {
-      const emailDetails = {
-        subject: "Arti: Response from " + studio_name,
-        toEmail: [requestor_email],
-        fromEmail: "requests@arti.my",
-      };
       const emailVariables = {
         name: requestor_name,
         request_date,
@@ -88,7 +83,14 @@ export default function RequestForm({
         emailTemplate: isEventReq
           ? "responseEventRequest"
           : "responseVisitRequest",
-        emailDetails,
+        emailDetails: {
+          subject: "Arti: Response from " + studio_name,
+          fromEmail: "requests@arti.my",
+        },
+        recipient: {
+          type: "user",
+          email: [requestor_email],
+        },
         emailVariables,
       });
       emailError = error?.message;

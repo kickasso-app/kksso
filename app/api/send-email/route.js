@@ -18,6 +18,8 @@ import { getStudioByUuid } from "services/studios.server";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+const TEST_ENV = process.env.NODE_ENV === "test";
+
 const emailTemplates = {
   testTemplate: TestTemplate,
   referralTemplate: ReferralTemplate,
@@ -32,8 +34,6 @@ const emailTemplates = {
   collectorReferralTemplate: CollectorReferralTemplate,
   genericTemplate: GenericTemplate,
 };
-
-const TEST_ENV = false;
 
 export async function POST(request) {
   try {
@@ -57,6 +57,8 @@ export async function POST(request) {
            return NextResponse.json({ error: "Studio ID is required" }, { status: 400 });
         }
         const studio = await getStudioByUuid(recipient.id, 'email');
+
+        console.log(studio);
         if (!studio || !studio.email) {
             console.error("Studio email not found for UUID:", recipient.id);
             return NextResponse.json({ error: "Recipient email not found" }, { status: 404 });
@@ -84,28 +86,25 @@ export async function POST(request) {
          return NextResponse.json({ error: "No recipient email provided" }, { status: 400 });
     }
 
+    console.log("toEmail", toEmail);
+
     const fromEmail =
       emailDetails.fromEmail === "default"
         ? "Arti <hello@arti.my>"
         : emailDetails.fromEmail;
 
-    if (TEST_ENV === false) {
-      const { data, error } = await resend.emails.send({
-        from: fromEmail,
-        to: toEmail,
-        subject: emailDetails.subject,
-        html: emailHtml,
-      });
-      
-      if (error) {
-        console.log("Error details:", error);
-        return NextResponse.json(error, { status: 400 });
-      }
-      return NextResponse.json(data);
-    } else {
-      // FOR TEST
-      return NextResponse.json({ dataisok: true });
+    const { data, error } = await resend.emails.send({
+      from: fromEmail,
+      to: toEmail,
+      subject: emailDetails.subject,
+      html: emailHtml,
+    });
+    
+    if (error) {
+      console.log("Error details:", error);
+      return NextResponse.json(error, { status: 400 });
     }
+    return NextResponse.json(data);
   } catch (error) {
     console.error("Caught error:", error);
     return NextResponse.json({ error: "Error sending email" }, { status: 500 });

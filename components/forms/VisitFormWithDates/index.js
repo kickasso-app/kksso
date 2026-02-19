@@ -33,7 +33,6 @@ import {
 } from "services/helpers/parseAvailability";
 
 const VisitFormWithDates = ({
-  artistEmail,
   artistName,
   openDates,
   availability,
@@ -43,7 +42,6 @@ const VisitFormWithDates = ({
   const { createRequest } = useRequests();
 
   const initValues = {
-    to_email: artistEmail,
     to_name: artistName,
     requestor_email: "requests@arti.my",
     from_name: "Requestor Name",
@@ -86,7 +84,7 @@ const VisitFormWithDates = ({
     //console.log(parsedDates[m].availableDates);
 
     const parsedDate = parsedDates[m].availableDates.filter(
-      (d) => d.date === toReverseIsoDate(date)
+      (d) => d.date === toReverseIsoDate(date),
     )[0];
 
     // console.log(parsedDate);
@@ -96,11 +94,11 @@ const VisitFormWithDates = ({
     // console.log(tempTimes);
     // Check if bookedTimes has the same date and remove the times from tempTimes
     const bookedDate = bookedTimes.find(
-      (bt) => bt.date === toReverseIsoDate(date)
+      (bt) => bt.date === toReverseIsoDate(date),
     );
     if (bookedDate) {
       const bookedHours = bookedDate.times.map((t) =>
-        dateUtils.toAmPm(t.split(":")[0])
+        dateUtils.toAmPm(t.split(":")[0]),
       );
 
       // console.log(bookedHours);
@@ -133,7 +131,7 @@ const VisitFormWithDates = ({
     const tempOpen = dates[m].availableDates.map((item) => item.date);
 
     const tempUnavail = dates[m].unavailableDates.map((item) =>
-      toIsoDate(item.date)
+      toIsoDate(item.date),
     );
 
     const tempClosed = getClosedDates(tempOpen);
@@ -222,29 +220,31 @@ const VisitFormWithDates = ({
           ...emailVariables,
         });
 
-      const emailRequestDetails = {
-        subject: "You got a new studio visit request!",
-        toEmail: [emailVariables.to_email],
-        fromEmail: "Arti <requests@arti.my>",
-      };
-
       const { emailSent: emailRequestSent, error: errorRequest } =
         await sendEmail({
           emailTemplate: "visitRequest",
-          emailDetails: emailRequestDetails,
+          emailDetails: {
+            subject: "You got a new studio visit request!",
+            fromEmail: "Arti <requests@arti.my>",
+          },
+          recipient: {
+            type: "studio",
+            id: studio_uuid,
+          },
           emailVariables,
         });
-
-      const emailRequestConfirmationDetails = {
-        subject: `We sent your studio visit request to ${emailVariables.to_name}`,
-        toEmail: [emailVariables.requestor_email],
-        fromEmail: "Arti <requests@arti.my>",
-      };
 
       const { emailSent: emailConfirmationSent, error: errorConfirmation } =
         await sendEmail({
           emailTemplate: "visitRequestConfirmation",
-          emailDetails: emailRequestConfirmationDetails,
+          emailDetails: {
+            subject: `We sent your studio visit request to ${emailVariables.to_name}`,
+            fromEmail: "Arti <requests@arti.my>",
+          },
+          recipient: {
+            type: "user",
+            email: [emailVariables.requestor_email],
+          },
           emailVariables,
         });
 
@@ -257,7 +257,7 @@ const VisitFormWithDates = ({
             " " +
             errorRequest?.message +
             " " +
-            errorConfirmation?.message
+            errorConfirmation?.message,
         );
         setIsEmailError(true);
       }

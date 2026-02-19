@@ -151,7 +151,11 @@ export default function PreviewClient() {
                           color="#4B4B4B"
                           fill="#FFF"
                         />{" "}
-                        <a href={studio.website} target="_blank" rel="noopener noreferrer">
+                        <a
+                          href={studio.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           {studio.website}
                         </a>
                       </Paragraph>
@@ -238,7 +242,6 @@ export default function PreviewClient() {
                   </>
                 ) : studio.hasOpenDates === true ? (
                   <VisitFormWithDates
-                    artistEmail={studio.email}
                     artistName={studio.artist}
                     studioID={studio.studio_id}
                     studio_uuid={studio.uuid}
@@ -246,7 +249,6 @@ export default function PreviewClient() {
                   />
                 ) : (
                   <VisitFormOpen
-                    artistEmail={studio.email}
                     artistName={studio.artist}
                     studioID={studio.studio_id}
                     studio_uuid={studio.uuid}

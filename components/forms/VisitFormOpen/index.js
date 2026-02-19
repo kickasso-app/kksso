@@ -29,11 +29,10 @@ const hours = Array.from({ length: 12 }, (_, i) => {
   return `${displayHour}:00 ${period}`;
 });
 
-const VisitFormOpen = ({ artistEmail, artistName, studioID, studio_uuid }) => {
+const VisitFormOpen = ({ artistName, studioID, studio_uuid }) => {
   const { createRequest } = useRequests();
 
   const initValues = {
-    to_email: artistEmail,
     to_name: artistName,
     requestor_email: "requests@arti.my",
     from_name: "Requestor Name",
@@ -74,7 +73,7 @@ const VisitFormOpen = ({ artistEmail, artistName, studioID, studio_uuid }) => {
       Number(month) - 1,
       Number(day),
       hour,
-      0
+      0,
     );
     return dateObj.toISOString();
   };
@@ -110,29 +109,31 @@ const VisitFormOpen = ({ artistEmail, artistName, studioID, studio_uuid }) => {
           ...emailVariables,
         });
 
-      const emailRequestDetails = {
-        subject: "You got a new studio visit request!",
-        toEmail: [emailVariables.to_email],
-        fromEmail: "Arti <requests@arti.my>",
-      };
-
       const { emailSent: emailRequestSent, error: errorRequest } =
         await sendEmail({
           emailTemplate: "visitRequest",
-          emailDetails: emailRequestDetails,
+          emailDetails: {
+            subject: "You got a new studio visit request!",
+            fromEmail: "Arti <requests@arti.my>",
+          },
+          recipient: {
+            type: "studio",
+            id: studio_uuid,
+          },
           emailVariables,
         });
-
-      const emailRequestConfirmationDetails = {
-        subject: `We sent your studio visit request to ${emailVariables.to_name}`,
-        toEmail: [emailVariables.requestor_email],
-        fromEmail: "Arti <requests@arti.my>",
-      };
 
       const { emailSent: emailConfirmationSent, error: errorConfirmation } =
         await sendEmail({
           emailTemplate: "visitRequestConfirmation",
-          emailDetails: emailRequestConfirmationDetails,
+          emailDetails: {
+            subject: `We sent your studio visit request to ${emailVariables.to_name}`,
+            fromEmail: "Arti <requests@arti.my>",
+          },
+          recipient: {
+            type: "user",
+            email: [emailVariables.requestor_email],
+          },
           emailVariables,
         });
 
@@ -145,7 +146,7 @@ const VisitFormOpen = ({ artistEmail, artistName, studioID, studio_uuid }) => {
             " " +
             errorRequest?.message +
             " " +
-            errorConfirmation?.message
+            errorConfirmation?.message,
         );
         setIsEmailError(true);
       }
@@ -291,7 +292,6 @@ const VisitFormOpen = ({ artistEmail, artistName, studioID, studio_uuid }) => {
               <br /> Sending request ...
             </Text>
           )}
-
 
           {isEmailSent ? (
             <NotificationLayer
