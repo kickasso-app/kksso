@@ -93,7 +93,7 @@ const VisitFormOpen = ({ artistName, studioID, studio_uuid }) => {
       request_id,
     };
 
-    console.log(emailVariables);
+    // console.log(emailVariables);
     // console.log(selectedDate + " " + selectedTime);
     // console.log(readableDate(selectedDate));
     setIsEmailSent(false);

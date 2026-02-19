@@ -8,13 +8,10 @@ import { Box, Text, Heading } from "grommet";
 
 export default function AccountSettings({ profile }) {
   const isPublished = profile?.published;
-  console.log(profile);
-  console.log(isPublished);
 
   const { signOut, user } = useAuth();
   const { updateAccount, loading, isUpdateSuccess, isUpdateError } =
     useAccount();
-  // console.log(profile);
 
   async function togglePublishProfile() {
     const isPublishedNew = !isPublished;

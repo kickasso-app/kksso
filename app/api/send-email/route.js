@@ -58,7 +58,6 @@ export async function POST(request) {
         }
         const studio = await getStudioByUuid(recipient.id, 'email');
 
-        console.log(studio);
         if (!studio || !studio.email) {
             console.error("Studio email not found for UUID:", recipient.id);
             return NextResponse.json({ error: "Recipient email not found" }, { status: 404 });
@@ -85,8 +84,6 @@ export async function POST(request) {
     if (!toEmail || (Array.isArray(toEmail) && toEmail.length === 0)) {
          return NextResponse.json({ error: "No recipient email provided" }, { status: 400 });
     }
-
-    console.log("toEmail", toEmail);
 
     const fromEmail =
       emailDetails.fromEmail === "default"

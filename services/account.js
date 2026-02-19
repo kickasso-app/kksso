@@ -1,5 +1,4 @@
 import { createContext, useContext, useState } from "react";
-import { revalidatePathAction } from "app/actions/revalidate";
 
 const AccountContext = createContext(null);
 
@@ -98,8 +97,6 @@ const AccountProvider = ({ children }) => {
         const data = await response.json();
         setProfile(data);
         setIsUpdateSuccess(true);
-        await revalidatePathAction("/studios");
-        await revalidatePathAction(`/studio/${data.studio_id}`);
       } catch (err) {
         setIsUpdateError(true);
         setError(err.message);
