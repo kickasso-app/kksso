@@ -23,7 +23,8 @@ import ToastNotification from "components/ToastNotification";
 export default function ProfileForm({
   profile: {
     artist,
-    location,
+    city,
+    country,
     textMini,
     textLong,
     styles,
@@ -40,7 +41,8 @@ export default function ProfileForm({
 
   const [values, setValues] = useState({
     artist,
-    location: location ? location.join(", ") : "",
+    city: city || "",
+    country: country || "",
     textMini,
     textLong,
     styles,
@@ -50,11 +52,8 @@ export default function ProfileForm({
   });
 
   const updateProfile = async (event) => {
-    const locationSeperator = values.location.includes(", ") ? ", " : ",";
-
     const updates = {
       ...values,
-      location: values.location.split(locationSeperator),
     };
 
     await updateAccount(updates, user);
@@ -97,17 +96,19 @@ export default function ProfileForm({
               <TextInput name="artist" placeholder="" />
             </FormField>
 
+            <FormField name="city" label="City" margin={textMargin} required>
+              <TextInput name="city" placeholder="e.g Berlin" />
+            </FormField>
+
             <FormField
-              name="location"
-              label="Studio Location"
+              name="country"
+              label="Country"
               margin={textMargin}
               required
             >
-              <Box pad="small">
-                <Text size="small">City, Country</Text>
-              </Box>
-              <TextInput name="location" placeholder="e.g Berlin, Germany" />
+              <TextInput name="country" placeholder="e.g Germany" />
             </FormField>
+
             <FormField
               label="Short Bio (300 chars max)"
               name="textMini"

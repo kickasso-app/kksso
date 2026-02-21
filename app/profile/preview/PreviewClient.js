@@ -122,6 +122,9 @@ export default function PreviewClient() {
                   />{" "}
                   {studio.district}
                 </h4>
+                <h4 className={styles.subsectiontitle} style={{ marginTop: 0 }}>
+                  {[studio.city, studio.country].filter(Boolean).join(', ')}
+                </h4>
 
                 <Box margin={sectionMargin}>
                   <hr />

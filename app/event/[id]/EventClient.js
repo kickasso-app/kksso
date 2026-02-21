@@ -11,7 +11,7 @@ import { ChevronLeft, Disc, Globe } from "react-feather";
 
 import EventRequestForm from "components/forms/EventRequestForm";
 import ShareButton from "components/ShareButton";
-import { makeParagraphs } from "services/helpers/textFormat";
+import { makeParagraphs, createSlug } from "services/helpers/textFormat";
 import styles from "./page.module.scss";
 
 const readableDate = (date) =>
@@ -74,7 +74,7 @@ export default function EventClient({ initialEvent }) {
         <>
           <ChevronLeft className={styles.icon} size={16} />{" "}
           <Link
-            href={`/events/` + event.cityLocation?.[0]?.toLowerCase()}
+            href={`/events/` + createSlug(event.country)}
             className={styles.backlink}
           >
             BACK

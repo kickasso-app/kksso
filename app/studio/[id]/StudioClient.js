@@ -14,7 +14,7 @@ import VisitFormOpen from "components/forms/VisitFormOpen";
 import ImagesCarousel from "components/ImagesCarousel";
 import ShareButton from "components/ShareButton";
 
-import { makeParagraphs } from "services/helpers/textFormat";
+import { makeParagraphs, createSlug } from "services/helpers/textFormat";
 
 import styles from "./page.module.scss";
 
@@ -49,7 +49,7 @@ export default function StudioClient({ initialStudio }) {
         <>
           <ChevronLeft className={styles.icon} size={16} />{" "}
           <Link
-            href={`/studios/` + studio.location?.[0]?.toLowerCase()}
+            href={`/studios/` + createSlug(studio.country)}
             className={styles.backlink}
           >
             BACK
@@ -124,6 +124,9 @@ export default function StudioClient({ initialStudio }) {
                   fill="#fff"
                 />{" "}
                 {studio.district}
+              </h4>
+              <h4 className={styles.subsectiontitle} style={{ marginTop: 0 }}>
+                {[studio.city, studio.country].filter(Boolean).join(', ')}
               </h4>
 
               <Box margin={sectionMargin}>

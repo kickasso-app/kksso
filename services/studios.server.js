@@ -58,7 +58,7 @@ export async function getStudios({ regionName, featured, search } = {}) {
     .select(STUDIO_COLUMNS.PREVIEW);
 
   if (regionName) {
-    supabaseQuery = supabaseQuery.contains("location", [regionName]);
+    supabaseQuery = supabaseQuery.eq("country", regionName);
   }
 
   if (featured) {

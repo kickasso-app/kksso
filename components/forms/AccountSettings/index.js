@@ -62,7 +62,7 @@ export default function AccountSettings({ profile }) {
               <Text size="medium" margin={textMargin}>
                 Are you ready to publish you profile?
               </Text>
-              {profile?.artist && profile?.location ? (
+              {profile?.artist && profile?.country ? (
                 <Text size="medium" margin={textMargin}>
                   You can preview it{" "}
                   <Link href={`/profile/preview`}> here</Link>.

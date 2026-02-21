@@ -14,7 +14,15 @@ import { capitalizeFirstLetter } from "services/helpers/textFormat";
 import styles from "./index.module.scss";
 
 const StudioCard = ({
-  studio: { studio_id, uuid, artist, district, styles: artStyles, textMini },
+  studio: {
+    studio_id,
+    uuid,
+    artist,
+    district,
+    city,
+    styles: artStyles,
+    textMini,
+  },
 }) => {
   const router = useRouter();
   const { getProfileImage, updateProfileImageCache } = useStudios();
@@ -42,17 +50,18 @@ const StudioCard = ({
   return (
     <div className={styles.StudioCard}>
       <div className={styles.imgContainer}>
-        <Link href={articleLink} onClick={(e) => {
-          e.preventDefault();
-          openArticle();
-        }}>
-
+        <Link
+          href={articleLink}
+          onClick={(e) => {
+            e.preventDefault();
+            openArticle();
+          }}
+        >
           <ProgressiveImage src={imgUrl} placeholder={`/img/loader.svg`}>
             {(src, loading) => (
               <img className={styles.cardImg} src={src} alt={artist} />
             )}
           </ProgressiveImage>
-
         </Link>
       </div>
       <h4 className={styles.primary}>{artist}</h4>
@@ -64,7 +73,7 @@ const StudioCard = ({
           color="#FFC0CB"
           fill="#fff"
         />
-        {capitalizeFirstLetter(district)}
+        {[district, city].filter(Boolean).map(capitalizeFirstLetter).join(', ')}
       </h4>
       {/* CHANGED FOR PILOT */}
       {/* 

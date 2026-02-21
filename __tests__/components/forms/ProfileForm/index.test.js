@@ -20,7 +20,8 @@ jest.mock('services/account', () => ({
 describe('ProfileForm', () => {
   const mockProfile = {
     artist: 'John Doe',
-    location: ['Berlin', 'Germany'],
+    city: 'Berlin',
+    country: 'Germany',
     textMini: 'A short intro about John Doe.',
     textLong: 'Detailed description of John Doe\'s art.',
     styles: 'painting, sculpture',
@@ -51,7 +52,8 @@ describe('ProfileForm', () => {
     render(<ProfileForm profile={mockProfile} goToTab={mockGoToTab} />);
 
     expect(screen.getByDisplayValue(mockProfile.artist)).toBeInTheDocument();
-    expect(screen.getByDisplayValue(mockProfile.location.join(', '))).toBeInTheDocument();
+    expect(screen.getByDisplayValue(mockProfile.city)).toBeInTheDocument();
+    expect(screen.getByDisplayValue(mockProfile.country)).toBeInTheDocument();
     expect(screen.getByDisplayValue(mockProfile.textMini)).toBeInTheDocument();
     expect(screen.getByDisplayValue(mockProfile.styles)).toBeInTheDocument();
     expect(screen.getByDisplayValue(mockProfile.textLong)).toBeInTheDocument();
@@ -79,9 +81,13 @@ describe('ProfileForm', () => {
     fireEvent.change(artistInput, { target: { value: 'Jane Doe' } });
     expect(artistInput).toHaveValue('Jane Doe');
 
-    const locationInput = queryByName('location');
-    fireEvent.change(locationInput, { target: { value: 'Latvia, UK' } });
-    expect(locationInput).toHaveValue('Latvia, UK');
+    const cityInput = queryByName('city');
+    fireEvent.change(cityInput, { target: { value: 'Riga' } });
+    expect(cityInput).toHaveValue('Riga');
+
+    const countryInput = queryByName('country');
+    fireEvent.change(countryInput, { target: { value: 'Latvia' } });
+    expect(countryInput).toHaveValue('Latvia');
   });
 
   it('submits the form with updated values and calls updateAccount', async () => {
@@ -90,8 +96,11 @@ describe('ProfileForm', () => {
     const artistInput = queryByName('artist');
     fireEvent.change(artistInput, { target: { value: 'Jane Doe' } });
 
-    const locationInput = queryByName('location');
-    fireEvent.change(locationInput, { target: { value: 'Latvia, UK' } });
+    const cityInput = queryByName('city');
+    fireEvent.change(cityInput, { target: { value: 'Riga' } });
+
+    const countryInput = queryByName('country');
+    fireEvent.change(countryInput, { target: { value: 'Latvia' } });
 
     const saveButton = screen.getByRole('button', { name: /Save Changes/i });
     fireEvent.click(saveButton);
@@ -102,7 +111,8 @@ describe('ProfileForm', () => {
         {
           ...mockProfile,
           artist: 'Jane Doe',
-          location: ['Latvia', 'UK'], // Ensure location is split correctly
+          city: 'Riga',
+          country: 'Latvia',
         },
         { id: 'test-user-id' }
       );

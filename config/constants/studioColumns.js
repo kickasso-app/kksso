@@ -1,7 +1,8 @@
 export const STUDIO_COLUMNS = {
   ALL: [
     "artist",
-    "location",
+    "city",
+    "country",
     "district",
     "styles",
     "textMini",
@@ -25,6 +26,7 @@ export const STUDIO_COLUMNS = {
     "uuid",
     "artist",
     "district",
+    "city",
     "styles",
     "textMini",
     "published",

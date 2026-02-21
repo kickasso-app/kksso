@@ -54,11 +54,11 @@ export default function StudioSettingsForm({
     >
       <FormField
         name="district"
-        label="District or kiez in your city"
+        label="District in your city"
         margin={textMargin}
         required
       >
-        <TextInput name="district" placeholder="Kreuzberg" />
+        <TextInput name="district" placeholder="e.g Kreuzberg" />
       </FormField>
 
       <FormField
