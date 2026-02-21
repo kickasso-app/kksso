@@ -42,7 +42,8 @@ export default function EventsSettingsForm({ profile }) {
     const newEvent = {
       event_id: event_id,
       studio_uuid: user.id,
-      cityLocation: profile.location,
+      city: profile.city,
+      country: profile.country,
     };
     await createEvent(newEvent);
     if (events?.length === 0) {

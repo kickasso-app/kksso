@@ -1,5 +1,3 @@
-import { sendEmail } from "./sendEmail";
-
 const sendMagicLink = async ({ email }) => {
   let oldUser = {};
   let magicLinkSent = false;

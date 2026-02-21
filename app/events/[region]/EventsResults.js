@@ -12,7 +12,7 @@ async function getEvents(regionName) {
   let supabaseQuery = supabase.from("events").select("*");
   if (regionName) {
 
-    supabaseQuery = supabaseQuery.contains("cityLocation", [regionName]);
+    supabaseQuery = supabaseQuery.eq("country", regionName);
   }
   let { data: supaEvents, error } = await supabaseQuery
     .is("isPublished", true)

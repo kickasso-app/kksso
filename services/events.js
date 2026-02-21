@@ -47,7 +47,7 @@ const EventsProvider = ({ children }) => {
 
     if (selectedRegion?.region) {
       const regionName = selectedRegion.region;
-      supabaseQuery = supabaseQuery.contains("cityLocation", [regionName]);
+      supabaseQuery = supabaseQuery.eq("country", regionName);
     }
 
     let { data: supaEvents, error } = await supabaseQuery
@@ -114,7 +114,7 @@ const EventsProvider = ({ children }) => {
    * This function creates a new Events in a Supabase database
    */
 
-  const createEvent = useCallback(async ({ studio_uuid, event_id, cityLocation }) => {
+  const createEvent = useCallback(async ({ studio_uuid, event_id, city, country }) => {
     setLoading(true);
     let eventCreated = false;
     let errorMsg = false;
@@ -124,7 +124,8 @@ const EventsProvider = ({ children }) => {
     const newEvent = {
       id: event_id, // uuid from event
       studio_uuid, // uuid of the studio
-      cityLocation,
+      city,
+      country,
       created_at: new Date().toISOString(), // timestamp with time zone
       location: "Studio",
       isPublished: false,

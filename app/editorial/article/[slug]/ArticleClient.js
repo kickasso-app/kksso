@@ -15,7 +15,7 @@ import WithFooter from "layouts/WithFooter";
 const readableDate = (date) =>
   moment(date, "YYYY-MM-DD").format("MMMM D, YYYY");
 
-const ArticleClient = ({ magPost, slug }) => {
+const ArticleClient = ({ magPost }) => {
   const size = useContext(ResponsiveContext);
   const [imgUrl, setImgUrl] = useState(false);
 
@@ -50,13 +50,7 @@ const ArticleClient = ({ magPost, slug }) => {
                 align="center"
               >
                 <ChevronLeft className={styles.icon} size={16} />{" "}
-                <Link
-                  href={
-                    `/editorial/` +
-                      (magPost.cityLocation?.[0]?.toLowerCase())
-                  }
-                  className={styles.backlink}
-                >
+                <Link href={`/editorial/`} className={styles.backlink}>
                   BACK
                 </Link>
               </Box>

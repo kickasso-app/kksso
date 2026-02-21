@@ -78,7 +78,7 @@ export default function PreviewClient() {
         ) : (
           <>
             <Box align="center" margin="small">
-              <ImagesCarousel userId={studio.uuid} />
+              <ImagesCarousel userId={studio.uuid} refresh={true} />
             </Box>
             <Row>
               <Col xs={12} md={6}>
@@ -122,6 +122,9 @@ export default function PreviewClient() {
                   />{" "}
                   {studio.district}
                 </h4>
+                <h4 className={styles.subsectiontitle} style={{ marginTop: 0 }}>
+                  {[studio.city, studio.country].filter(Boolean).join(', ')}
+                </h4>
 
                 <Box margin={sectionMargin}>
                   <hr />
@@ -151,7 +154,11 @@ export default function PreviewClient() {
                           color="#4B4B4B"
                           fill="#FFF"
                         />{" "}
-                        <a href={studio.website} target="_blank" rel="noopener noreferrer">
+                        <a
+                          href={studio.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           {studio.website}
                         </a>
                       </Paragraph>
@@ -238,7 +245,6 @@ export default function PreviewClient() {
                   </>
                 ) : studio.hasOpenDates === true ? (
                   <VisitFormWithDates
-                    artistEmail={studio.email}
                     artistName={studio.artist}
                     studioID={studio.studio_id}
                     studio_uuid={studio.uuid}
@@ -246,7 +252,6 @@ export default function PreviewClient() {
                   />
                 ) : (
                   <VisitFormOpen
-                    artistEmail={studio.email}
                     artistName={studio.artist}
                     studioID={studio.studio_id}
                     studio_uuid={studio.uuid}

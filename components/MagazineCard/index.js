@@ -8,7 +8,7 @@ import ProgressiveImage from "react-progressive-image";
 import { downloadMagazineThumbnail } from "services/editorial";
 import { capitalizeFirstLetter } from "services/helpers/textFormat";
 
-import { Hash } from "react-feather";
+import { Hash, Disc } from "react-feather";
 
 import styles from "./index.module.scss";
 
@@ -44,10 +44,13 @@ export default function MagPostCard({ magPost }) {
         >
           <Box basis="33%" flex={false} className={styles.imgBox}>
             {/* <Image src="path-to-your-image.jpg" fit="cover" /> */}
-            <div className={styles.imgContainer} onClick={(e) => {
-              e.preventDefault();
-              openMagPost();
-            }}>
+            <div
+              className={styles.imgContainer}
+              onClick={(e) => {
+                e.preventDefault();
+                openMagPost();
+              }}
+            >
               <ProgressiveImage src={imgUrl} placeholder={`/img/loader.svg`}>
                 {(src, loading) => (
                   <img
@@ -79,6 +82,16 @@ export default function MagPostCard({ magPost }) {
                 {" " + magPost.tags.map(capitalizeFirstLetter).join(", ")}
               </Paragraph>
             )}
+            <Paragraph margin={detailsMargin} size="small">
+              <Disc
+                className={styles.Icon}
+                size={18}
+                strokeWidth="2"
+                color="#FFC0CB"
+                fill="#fff"
+              />
+              {[magPost.city, magPost.country].filter(Boolean).join(', ')}
+            </Paragraph>
           </Box>
         </Box>
       </Link>

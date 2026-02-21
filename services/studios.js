@@ -93,7 +93,7 @@ const StudiosProvider = ({ children }) => {
     setLoading(false);
   };
 
-  const fetchFeaturedStudios = async () => {
+  const fetchFeaturedStudios = useCallback(async () => {
     setLoading(true);
     const regionName = selectedRegion?.region || "";
     try {
@@ -107,7 +107,7 @@ const StudiosProvider = ({ children }) => {
       setError(err.message);
     }
     setLoading(false);
-  };
+  }, [selectedRegion]);
 
   const fetchStudioBasic = async ({ uuid }) => {
     setLoading(true);

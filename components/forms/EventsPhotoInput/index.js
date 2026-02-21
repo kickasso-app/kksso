@@ -21,7 +21,7 @@ const EventsPhotoInput = ({ userId, event, postUpload }) => {
   const [imgUrl, setImgUrl] = useState(null);
   const [editing, setEditing] = useState(true);
   const [uploading, setUploading] = useState(false);
-  const [isPhotoTooLarge, setIsPhotoTooLarge] = useState(false);
+  const [notification, setNotification] = useState(null);
 
   // console.log("event is", event);
   const imgDirectory = `${userId}/${event.id}`;
@@ -45,7 +45,7 @@ const EventsPhotoInput = ({ userId, event, postUpload }) => {
             imgPath: imgPath,
             postDownload: setImgUrl,
           });
-          setEditing(!imgPath);
+          setEditing(false);
         }
       }
     };
@@ -54,6 +54,7 @@ const EventsPhotoInput = ({ userId, event, postUpload }) => {
   }, [event]);
 
   async function removeImage() {
+    setNotification(null);
     try {
       let { error } = await supabase.storage
         .from("events")
@@ -68,66 +69,87 @@ const EventsPhotoInput = ({ userId, event, postUpload }) => {
       let { errorRemove } = await supabase.storage
         .from("events")
         .remove([filePathSmall]);
-      if (errorRemove) {
-        throw errorRemove;
-      }
+      
+      setNotification({
+        success: true,
+        type: "Photo Removal",
+      });
+      
+      if (postUpload) await postUpload();
     } catch (error) {
-      alert(error.message);
+      setNotification({
+        warning: true,
+        type: "Photo Removal",
+        message: error.message,
+      });
     } finally {
       setEditing(true);
     }
   }
 
-  async function uploadImage({ event, imgName = "event" }) {
+  async function uploadImage({ event: uploadEvent, imgName = "event" }) {
     try {
       setUploading(true);
-      setIsPhotoTooLarge(false);
+      setNotification(null);
+      
       if (imgUrl) await removeImage();
-      if (!event.target.files || event.target.files.length === 0) {
+      if (!uploadEvent.target.files || uploadEvent.target.files.length === 0) {
         throw new Error("You must select an image to upload.");
       }
 
-      const file = event.target.files[0];
+      const file = uploadEvent.target.files[0];
 
       if (file.size > PHOTO_MAX_SIZE) {
-        setIsPhotoTooLarge(true);
-        setUploading(false);
-      } else {
-        const [fileLarge, fileSmall] = await resizeImage({
-          file: file,
-          returnSmallerImage: true,
+        setNotification({
+          warning: true,
+          type: "Photo Upload",
+          message: "Upload a smaller image, less than 1 Megabyte.",
         });
-
-        // console.log(fileLarge.size);
-        // console.log(fileSmall.size);
-
-        let { errorLarge } = await supabase.storage
-          .from("events")
-          .upload(filePathLarge, fileLarge, {
-            cacheControl: "30",
-            upsert: true,
-          });
-
-        let { errorSmall } = await supabase.storage
-          .from("events")
-          .upload(filePathSmall, fileSmall, {
-            cacheControl: "30",
-            upsert: true,
-          });
-
-        if (errorLarge || errorSmall) {
-          throw errorLarge || errorSmall;
-        }
-        // await postUpload();
-        // Append a timestamp query parameter to force a fresh download and bypass cache
-        await downloadEventImage({
-          imgPath: `${filePathSmall}?t=${Date.now()}`,
-          postDownload: setImgUrl,
-        });
-        setEditing(false);
+        return;
       }
+      
+      const [fileLarge, fileSmall] = await resizeImage({
+        file: file,
+        returnSmallerImage: true,
+      });
+
+      let { error: errorLarge } = await supabase.storage
+        .from("events")
+        .upload(filePathLarge, fileLarge, {
+          cacheControl: "30",
+          upsert: true,
+        });
+
+      let { error: errorSmall } = await supabase.storage
+        .from("events")
+        .upload(filePathSmall, fileSmall, {
+          cacheControl: "30",
+          upsert: true,
+        });
+
+      if (errorLarge || errorSmall) {
+        throw errorLarge || errorSmall;
+      }
+      
+      await downloadEventImage({
+        imgPath: `${filePathSmall}?t=${Date.now()}`,
+        postDownload: setImgUrl,
+      });
+
+      setNotification({
+        success: true,
+        type: "Photo Upload",
+      });
+
+      if (postUpload) await postUpload();
+      setEditing(false);
     } catch (error) {
-      alert(error.message);
+      console.error("Upload error:", error);
+      setNotification({
+        warning: true,
+        type: "Photo Upload",
+        message: error.message,
+      });
     } finally {
       setUploading(false);
     }
@@ -169,11 +191,10 @@ const EventsPhotoInput = ({ userId, event, postUpload }) => {
       </Box>
       {uploading && <img src={`/img/loader.svg`} />}
       <br />
-      {isPhotoTooLarge && (
+      {notification && (
         <ToastNotification
-          warning={true}
-          type="Photo Upload"
-          message="Upload a smaller image, less than 1 Megabyte."
+          {...notification}
+          onClose={() => setNotification(null)}
         />
       )}
     </Grid>

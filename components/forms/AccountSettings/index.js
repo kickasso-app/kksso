@@ -8,13 +8,10 @@ import { Box, Text, Heading } from "grommet";
 
 export default function AccountSettings({ profile }) {
   const isPublished = profile?.published;
-  console.log(profile);
-  console.log(isPublished);
 
   const { signOut, user } = useAuth();
   const { updateAccount, loading, isUpdateSuccess, isUpdateError } =
     useAccount();
-  // console.log(profile);
 
   async function togglePublishProfile() {
     const isPublishedNew = !isPublished;
@@ -65,7 +62,7 @@ export default function AccountSettings({ profile }) {
               <Text size="medium" margin={textMargin}>
                 Are you ready to publish you profile?
               </Text>
-              {profile?.artist && profile?.location ? (
+              {profile?.artist && profile?.country ? (
                 <Text size="medium" margin={textMargin}>
                   You can preview it{" "}
                   <Link href={`/profile/preview`}> here</Link>.

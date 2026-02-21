@@ -13,10 +13,8 @@ const StudiosFeatured = () => {
     useStudios();
 
   useEffect(() => {
-    if (!featuredStudios.length && !error) {
-      fetchFeaturedStudios();
-    }
-  }, [featuredStudios, error]);
+    fetchFeaturedStudios();
+  }, [fetchFeaturedStudios]);
 
   return (
     <div className={styles.studios}>

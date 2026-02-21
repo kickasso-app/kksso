@@ -44,8 +44,14 @@ jest.mock("next/cache", () => ({
   revalidateTag: jest.fn(),
 }));
 
+// Mock services/studios.server
+jest.mock("services/studios.server", () => ({
+  getStudioByUuid: jest.fn((id) => Promise.resolve({ email: "studio@example.com" })),
+}));
+
 describe("/api/send Email Route", () => {
   let mockSend;
+  const { getStudioByUuid } = require("services/studios.server");
 
   beforeAll(() => {
     // Suppress console logs for expected errors
@@ -85,6 +91,7 @@ describe("/api/send Email Route", () => {
       mockSend.mockClear();
       mockSend.mockResolvedValue({ data: { id: "test-id" }, error: null });
     }
+    getStudioByUuid.mockClear();
   });
 
   // const mockSend = ... (REMOVED)
@@ -95,11 +102,15 @@ describe("/api/send Email Route", () => {
       key: "testTemplate",
       variables: { firstName: "John" },
       expectedContent: "John",
+      recipient: { type: "user", email: ["test@example.com"] },
+      expectedRecipient: ["test@example.com"],
     },
     {
       key: "newsletterTemplate",
       variables: { city: "Berlin" },
       expectedContent: "Berlin",
+      recipient: { type: "user", email: ["test@example.com"] },
+      expectedRecipient: ["test@example.com"],
     },
     {
       key: "referralTemplate",
@@ -109,6 +120,8 @@ describe("/api/send Email Route", () => {
         joinLink: "https://arti.my/join",
       },
       expectedContent: "Alice",
+      recipient: { type: "user", email: ["test@example.com"] },
+      expectedRecipient: ["test@example.com"],
     },
     {
       key: "visitRequest",
@@ -121,6 +134,8 @@ describe("/api/send Email Route", () => {
         request_id: "123",
       },
       expectedContent: "Artist",
+      recipient: { type: "studio", id: "studio-uuid" },
+      expectedRecipient: ["studio@example.com"],
     },
     {
       key: "visitRequestConfirmation",
@@ -132,6 +147,8 @@ describe("/api/send Email Route", () => {
         visit_reason: "Love art",
       },
       expectedContent: "Fan",
+      recipient: { type: "user", email: ["test@example.com"] },
+      expectedRecipient: ["test@example.com"],
     },
     {
       key: "eventRequest",
@@ -146,6 +163,8 @@ describe("/api/send Email Route", () => {
         event_title: "Gala",
       },
       expectedContent: "Host",
+      recipient: { type: "studio", id: "studio-uuid" },
+      expectedRecipient: ["studio@example.com"],
     },
     {
       key: "eventRequestConfirmation",
@@ -158,6 +177,8 @@ describe("/api/send Email Route", () => {
         event_title: "Gala",
       },
       expectedContent: "Guest",
+      recipient: { type: "user", email: ["test@example.com"] },
+      expectedRecipient: ["test@example.com"],
     },
     {
       key: "responseVisitRequest",
@@ -171,6 +192,8 @@ describe("/api/send Email Route", () => {
         studio_email: "artist@test.com",
       },
       expectedContent: "Fan",
+      recipient: { type: "user", email: ["test@example.com"] },
+      expectedRecipient: ["test@example.com"],
     },
     {
       key: "responseEventRequest",
@@ -184,11 +207,15 @@ describe("/api/send Email Route", () => {
         request_date: "2023-01-01",
       },
       expectedContent: "Guest",
+      recipient: { type: "user", email: ["test@example.com"] },
+      expectedRecipient: ["test@example.com"],
     },
     {
       key: "magicLinkTemplate",
       variables: { magic: "http://login-link" },
       expectedContent: "http://login-link",
+      recipient: { type: "user", email: ["test@example.com"] },
+      expectedRecipient: ["test@example.com"],
     },
     {
       key: "collectorReferralTemplate",
@@ -199,20 +226,28 @@ describe("/api/send Email Route", () => {
         includeStudioLink: true,
       },
       expectedContent: "Charlie",
+      recipient: { type: "user", email: ["test@example.com"] },
+      expectedRecipient: ["test@example.com"],
     },
   ];
 
   test.each(templates)(
     "renders and sends email template $key correctly",
-    async ({ key, variables, expectedContent }) => {
+    async ({
+      key,
+      variables,
+      expectedContent,
+      recipient,
+      expectedRecipient,
+    }) => {
       const requestBody = {
         emailTemplate: key,
         emailDetails: {
-          toEmail: "test@example.com",
           subject: `Test ${key}`,
           fromEmail: "default",
         },
         emailVariables: variables,
+        recipient,
       };
 
       const req = {
@@ -226,7 +261,7 @@ describe("/api/send Email Route", () => {
       expect(mockSend).toHaveBeenCalledTimes(1);
 
       const sendArgs = mockSend.mock.calls[0][0];
-      expect(sendArgs.to).toEqual("test@example.com");
+      expect(sendArgs.to).toEqual(expectedRecipient);
       expect(sendArgs.subject).toEqual(`Test ${key}`);
       expect(sendArgs.from).toEqual("Arti <hello@arti.my>");
       expect(sendArgs.html).toContain(expectedContent);
@@ -236,7 +271,8 @@ describe("/api/send Email Route", () => {
   test("returns 400 for invalid template", async () => {
     const requestBody = {
       emailTemplate: "invalidTemplate",
-      emailDetails: { toEmail: "test@example.com" },
+      recipient: { type: "user", email: ["test@example.com"] },
+      emailDetails: {},
       emailVariables: {},
     };
 
@@ -259,7 +295,8 @@ describe("/api/send Email Route", () => {
 
     const requestBody = {
       emailTemplate: "testTemplate",
-      emailDetails: { toEmail: "test@example.com", subject: "Error Test" },
+      recipient: { type: "user", email: ["test@example.com"] },
+      emailDetails: { subject: "Error Test" },
       emailVariables: { firstName: "John" },
     };
 
@@ -279,7 +316,8 @@ describe("/api/send Email Route", () => {
 
     const requestBody = {
       emailTemplate: "testTemplate",
-      emailDetails: { toEmail: "test@example.com" },
+      recipient: { type: "user", email: ["test@example.com"] },
+      emailDetails: {},
       emailVariables: { firstName: "John" },
     };
 
@@ -294,3 +332,4 @@ describe("/api/send Email Route", () => {
     expect(data.error).toBe("Error sending email");
   });
 });
+

@@ -23,6 +23,12 @@ export default function ToastNotification({
     if (message   ) {
       messageError = message;
     }
+  } else if (type === "Photo Removal") {
+    titleSuccess = "Your photo was removed successfully.";
+    titleError = "Your photo was not removed";
+    if (message) {
+      messageError = message;
+    }
   } else if (type === "Update Event") {
     titleSuccess = "Your event was updated successfully.";
     titleError = "Your event was not updated";

@@ -4,6 +4,7 @@ import { Box, Heading, Paragraph } from "grommet";
 import Link from "next/link";
 import moment from "moment";
 import ProgressiveImage from "react-progressive-image";
+import { Disc } from "react-feather";
 
 import { useEvents } from "services/events";
 import { downloadEventImage } from "services/images";
@@ -42,10 +43,13 @@ export default function EventCard({ event, inStudio = false }) {
   return (
     <div className={styles.eventCard}>
       <div className={styles.imgContainer}>
-        <Link href={eventLink} onClick={(e) => {
-          e.preventDefault();
-          openEvent();
-        }}>
+        <Link
+          href={eventLink}
+          onClick={(e) => {
+            e.preventDefault();
+            openEvent();
+          }}
+        >
           <ProgressiveImage src={imgUrl} placeholder={`/img/loader.svg`}>
             {(src, loading) => (
               <img className={styles.cardImg} src={src} alt={event.title} />
@@ -58,9 +62,20 @@ export default function EventCard({ event, inStudio = false }) {
           {event.title}
         </Heading>
         <Paragraph margin={detailsMargin}>
-          {event.type} on {readableDate(event.date)}{" "}
+          {event.type} on {readableDate(event.date)}
         </Paragraph>
-        <Paragraph margin={detailsMargin}>{event.miniDescription}</Paragraph>
+
+        <Paragraph margin={detailsMargin}>{event.miniDescription} </Paragraph>
+        <Paragraph margin={detailsMargin}>
+          <Disc
+            className={styles.Icon}
+            size={18}
+            strokeWidth="2"
+            color="#FFC0CB"
+            fill="#fff"
+          />
+          {event.city}
+        </Paragraph>
       </Box>
     </div>
   );

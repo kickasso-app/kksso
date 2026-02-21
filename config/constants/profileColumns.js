@@ -1,6 +1,7 @@
 export const PROFILE_COLUMNS = [
   "artist",
-  "location",
+  "city",
+  "country",
   "district",
   "styles",
   "textMini",

@@ -14,7 +14,7 @@ import VisitFormOpen from "components/forms/VisitFormOpen";
 import ImagesCarousel from "components/ImagesCarousel";
 import ShareButton from "components/ShareButton";
 
-import { makeParagraphs } from "services/helpers/textFormat";
+import { makeParagraphs, createSlug } from "services/helpers/textFormat";
 
 import styles from "./page.module.scss";
 
@@ -49,7 +49,7 @@ export default function StudioClient({ initialStudio }) {
         <>
           <ChevronLeft className={styles.icon} size={16} />{" "}
           <Link
-            href={`/studios/` + (studio.location?.[0]?.toLowerCase())}
+            href={`/studios/` + createSlug(studio.country)}
             className={styles.backlink}
           >
             BACK
@@ -68,7 +68,10 @@ export default function StudioClient({ initialStudio }) {
                 gap="medium"
               >
                 {studio.artist && (
-                  <h2 className={styles.maintitle} style={{ flex: 1, margin: 0 }}>
+                  <h2
+                    className={styles.maintitle}
+                    style={{ flex: 1, margin: 0 }}
+                  >
                     {studio.artist}
                   </h2>
                 )}
@@ -90,8 +93,7 @@ export default function StudioClient({ initialStudio }) {
 
               {studio.magazine_article && (
                 <Paragraph size="medium" margin={sectionMargin} fill>
-                  For a deeper dive into the artist's world, read our
-                  interview
+                  For a deeper dive into the artist's world, read our interview
                   <br />
                   <Link
                     href={
@@ -123,6 +125,9 @@ export default function StudioClient({ initialStudio }) {
                 />{" "}
                 {studio.district}
               </h4>
+              <h4 className={styles.subsectiontitle} style={{ marginTop: 0 }}>
+                {[studio.city, studio.country].filter(Boolean).join(', ')}
+              </h4>
 
               <Box margin={sectionMargin}>
                 <hr />
@@ -152,7 +157,11 @@ export default function StudioClient({ initialStudio }) {
                         color="#4B4B4B"
                         fill="#FFF"
                       />{" "}
-                      <a href={studio.website} target="_blank" rel="noopener noreferrer">
+                      <a
+                        href={studio.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         {studio.website}
                       </a>
                     </Paragraph>
@@ -238,7 +247,6 @@ export default function StudioClient({ initialStudio }) {
                 </>
               ) : studio.hasOpenDates === true ? (
                 <VisitFormWithDates
-                  artistEmail={studio.email}
                   artistName={studio.artist}
                   studioID={studio.studio_id}
                   studio_uuid={studio.uuid}
@@ -246,7 +254,6 @@ export default function StudioClient({ initialStudio }) {
                 />
               ) : (
                 <VisitFormOpen
-                  artistEmail={studio.email}
                   artistName={studio.artist}
                   studioID={studio.studio_id}
                   studio_uuid={studio.uuid}

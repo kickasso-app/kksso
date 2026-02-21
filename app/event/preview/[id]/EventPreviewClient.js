@@ -69,21 +69,28 @@ export default function EventPreviewClient({ initialEvent }) {
     <Grid fluid className={styles.event}>
       <Col xs={12}>
         <>
-            <Box
-              border
-              round="xsmall"
-              pad={"small"}
-              margin={{ vertical: "small" }}
-              width={"small"}
-              align="center"
-            >
-              Preview
-            </Box>
+          <Box
+            border
+            round="xsmall"
+            pad={"small"}
+            margin={{ vertical: "small" }}
+            width={"small"}
+            align="center"
+          >
+            Preview
+          </Box>
           <ChevronLeft className={styles.icon} size={16} />{" "}
-          <button 
-            onClick={() => router.back()} 
+          <button
+            onClick={() => router.back()}
             className={styles.backlink}
-            style={{ background: 'none', border: 'none', padding: 0, font: 'inherit', cursor: 'pointer', textDecoration: 'underline' }}
+            style={{
+              background: "none",
+              border: "none",
+              padding: 0,
+              font: "inherit",
+              cursor: "pointer",
+              textDecoration: "underline",
+            }}
           >
             BACK
           </button>
@@ -100,7 +107,7 @@ export default function EventPreviewClient({ initialEvent }) {
                     height: size === "small" ? "100%" : "auto",
                     maxHeight: size !== "small" ? "60vh" : "none",
                     width: "100%",
-                    objectFit: "contain"
+                    objectFit: "contain",
                   }}
                 />
               </Box>
@@ -240,7 +247,6 @@ export default function EventPreviewClient({ initialEvent }) {
                       Request to Join
                     </Heading>
                     <EventRequestForm
-                      artistEmail={studioBasic.email}
                       artistName={studioBasic.name}
                       studioID={studioBasic.id}
                       studio_uuid={event.studio_uuid}

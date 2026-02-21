@@ -42,6 +42,7 @@ const initialValues = {
   languages: "",
   contact: "",
   link: "",
+  city: "",
   location: "Studio",
   locationOther: "",
   isPublished: false,
@@ -102,6 +103,7 @@ export default function EventEditClient() {
       languages: values.languages,
       contact: values.contact,
       link: values.link,
+      city: values.city,
       isPublished: values.isPublished ? true : false,
     };
     await updateEvent(eventData, id);
@@ -141,6 +143,7 @@ export default function EventEditClient() {
           fee: event.fee ?? "",
           contact: event.contact ?? "",
           link: event.link ?? "",
+          city: event.city ?? "",
           isPublished: event.isPublished ?? false,
           location: event.location === "Studio" ? "Studio" : "Other",
           locationOther: event.location !== "Studio" ? event.location : "",
@@ -329,6 +332,13 @@ export default function EventEditClient() {
                   />
                 </FormField>
               )}
+              <FormField label="City" name="city" margin={fieldMargin}>
+                <TextInput
+                  name="city"
+                  placeholder="e.g Berlin"
+                  required
+                />
+              </FormField>
               <FormField
                 label="Languages"
                 name="languages"

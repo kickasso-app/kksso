@@ -68,7 +68,6 @@ export default function InvitesForm({ profile }) {
 
       const emailDetails = {
         subject: subject,
-        toEmail: toEmail,
         fromEmail: "default",
       };
       const emailVariables = {
@@ -82,6 +81,10 @@ export default function InvitesForm({ profile }) {
         emailTemplate: emailTemplate,
         emailDetails,
         emailVariables,
+        recipient: {
+          type: "user",
+          email: [toEmail],
+        },
       });
 
       if (emailSent === true) {

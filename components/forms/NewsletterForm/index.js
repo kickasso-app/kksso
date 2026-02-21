@@ -53,7 +53,6 @@ export default function NewsletterForm({ profile }) {
 
       const emailDetails = {
         subject: "Arti Newsletter: Thanks for subscribing!",
-        toEmail: email,
         fromEmail: "default",
       };
 
@@ -61,6 +60,10 @@ export default function NewsletterForm({ profile }) {
         emailTemplate: "newsletterTemplate",
         emailDetails,
         emailVariables: { city: city },
+        recipient: {
+          type: "user",
+          email: [email],
+        },
       });
 
       if (emailSent && isContactCreated) {

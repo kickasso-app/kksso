@@ -21,10 +21,6 @@ export const getStudio = async (id) => {
 };
 
 export const getStudioByUuid = async (uuid, columns = "*") => {
-  "use cache";
-  cacheTag("studios", `studio-${uuid}`);
-  cacheLife("hours");
-
   const { data, error } = await supabaseAdmin
     .from("studios")
     .select(columns)
@@ -46,7 +42,6 @@ export const updateStudio = async (uuid, updates) => {
   if (error) throw error;
 
   // Revalidate cache tags to ensure fresh data on next fetch
-  revalidateTag(`studio-${uuid}`);
   revalidateTag(`studio-${data.studio_id}`);
   revalidateTag("studios");
 
@@ -63,7 +58,7 @@ export async function getStudios({ regionName, featured, search } = {}) {
     .select(STUDIO_COLUMNS.PREVIEW);
 
   if (regionName) {
-    supabaseQuery = supabaseQuery.contains("location", [regionName]);
+    supabaseQuery = supabaseQuery.eq("country", regionName);
   }
 
   if (featured) {

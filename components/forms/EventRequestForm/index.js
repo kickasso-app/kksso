@@ -33,7 +33,6 @@ const convertToTimestampTZ = (d, t) => {
 
 const EventRequestForm = ({
   artistName,
-  studioID,
   studio_uuid,
   event_uuid,
   event_title,
@@ -43,7 +42,6 @@ const EventRequestForm = ({
   const { createRequest } = useRequests();
 
   const initValues = {
-    // to_email: artistEmail, // Legacy: Removed to protect privacy
     to_name: artistName,
     requestor_email: "requests@arti.my",
     from_name: "Requestor Name",
@@ -129,7 +127,7 @@ const EventRequestForm = ({
             " " +
             errorRequest?.message +
             " " +
-            errorConfirmation?.message
+            errorConfirmation?.message,
         );
         setIsEmailError(true);
       }

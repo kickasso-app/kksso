@@ -31,5 +31,5 @@ export default async function ArticlePage({ params }) {
   const { slug } = await params;
   const magPost = await getMagazinePost({ slug });
 
-  return <ArticleClient magPost={magPost} slug={slug} />;
+  return <ArticleClient magPost={magPost} />;
 }
