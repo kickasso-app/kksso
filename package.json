@@ -2,6 +2,9 @@
   "name": "kksso",
   "version": "2.0.0",
   "homepage": "https://arti.my/",
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "dev": "NODE_OPTIONS='--no-deprecation' next dev -p 3000",
     "build": "next build",

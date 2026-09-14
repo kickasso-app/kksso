@@ -1,4 +1,5 @@
 const path = require("path");
+const { PHASE_PRODUCTION_BUILD } = require("next/constants");
 
 const nextConfig = {
   // distDir: "build",
@@ -69,4 +70,11 @@ const nextConfig = {
   env: {},
 };
 
-module.exports = nextConfig;
+module.exports = (phase) => {
+  // Surfaces the Node version in the build log (local and Vercel) so the
+  // engines pin can be confirmed after a deploy. Silent during dev/start.
+  if (phase === PHASE_PRODUCTION_BUILD) {
+    console.log(`[build] Node ${process.version}`);
+  }
+  return nextConfig;
+};
