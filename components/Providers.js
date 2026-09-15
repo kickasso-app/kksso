@@ -10,6 +10,7 @@ import { AccountProvider } from "services/account";
 import { StudiosProvider } from "services/studios";
 import { RequestsProvider } from "services/requests";
 import { EventsProvider } from "services/events";
+import { FeaturedProvider } from "services/featured";
 
 export function Providers({ children }) {
   return (
@@ -20,7 +21,9 @@ export function Providers({ children }) {
             <RequestsProvider>
               <EventsProvider>
                 <StudiosProvider>
+                  <FeaturedProvider>
                     {children}
+                  </FeaturedProvider>
                 </StudiosProvider>
               </EventsProvider>
             </RequestsProvider>

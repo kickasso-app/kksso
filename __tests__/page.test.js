@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
-import Page from "app/page";
+import LandingClient from "app/LandingClient";
 
 // Mock next/navigation
 jest.mock("next/navigation", () => ({
@@ -28,9 +28,12 @@ jest.mock("next/image", () => ({
   },
 }));
 
+// FeaturedSection fetches via a context service; covered by its own test file
+jest.mock("components/FeaturedSection", () => () => null);
+
 describe("Landing Page", () => {
   it("renders the main heading", () => {
-    render(<Page />);
+    render(<LandingClient />);
 
     // LandingClient has <Heading level={2}>Discover Your Local Art Scene</Heading>
     const heading = screen.getByRole("heading", {
@@ -42,7 +45,7 @@ describe("Landing Page", () => {
   });
 
   it("renders links with correct region slug", () => {
-    render(<Page />);
+    render(<LandingClient />);
     
     // Check for Explore Studios link
     const studiosLink = screen.getByRole("link", { name: /explore studios/i });
@@ -55,7 +58,7 @@ describe("Landing Page", () => {
 
   describe("Hero Banner - CLS Optimization ", () => {
     it("renders both mobile and desktop banners to prevent hydration mismatch", () => {
-      render(<Page />);
+      render(<LandingClient />);
 
       const images = screen.getAllByRole("img", { name: /banner/i });
       expect(images).toHaveLength(2);
@@ -72,7 +75,7 @@ describe("Landing Page", () => {
     });
 
     it("uses priority loading for LCP images", () => {
-      render(<Page />);
+      render(<LandingClient />);
       const images = screen.getAllByRole("img", { name: /banner/i });
 
       images.forEach((img) => {

@@ -59,7 +59,7 @@ const Footer = () => {
               <Box height="50px" margin="small">
                 <Image fit="contain" src="/img/logo-only.png" />
               </Box>
-              <Text size="small">© Arti, 2025</Text>
+              <Text size="small">© Arti, 2026</Text>
 
               <br />
               <br />
