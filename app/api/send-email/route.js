@@ -13,7 +13,7 @@ import { ResponseVisitRequest } from "services/emails/responseVisitReqTemplate";
 import { ResponseEventRequest } from "services/emails/responseEventReqTemplate";
 import { MagicLinkTemplate } from "services/emails/magicLinkTemplate";
 import { CollectorReferralTemplate } from "services/emails/collectorReferralTemplate";
-import { GenericTemplate } from "services/emails/genericTemplate";
+import { OpenCallApproval } from "services/emails/openCallApprovalTemplate";
 import { getStudioByUuid } from "services/studios.server";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -32,7 +32,7 @@ const emailTemplates = {
   newsletterTemplate: NewsletterTemplate,
   magicLinkTemplate: MagicLinkTemplate,
   collectorReferralTemplate: CollectorReferralTemplate,
-  genericTemplate: GenericTemplate,
+  openCallApproval: OpenCallApproval,
 };
 
 export async function POST(request) {

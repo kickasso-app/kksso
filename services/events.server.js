@@ -1,5 +1,6 @@
 import { supabase } from "./supabase";
 import { cacheLife, cacheTag } from "next/cache";
+import { EVENT_COLUMNS } from "config/constants/eventColumns";
 
 export const getEvent = async (id) => {
   "use cache";
@@ -8,7 +9,7 @@ export const getEvent = async (id) => {
 
   const { data, error } = await supabase
     .from("events")
-    .select("*")
+    .select(EVENT_COLUMNS.ALL)
     .eq("id", id)
     .single();
 

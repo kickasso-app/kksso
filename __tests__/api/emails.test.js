@@ -211,6 +211,19 @@ describe("/api/send Email Route", () => {
       expectedRecipient: ["test@example.com"],
     },
     {
+      key: "openCallApproval",
+      variables: {
+        name: "Sam",
+        event_title: "Studio Night",
+        event_date_time: "Monday 1 Dec, 2026 at 6-8 pm",
+        event_link: "http://event-link",
+        edit_link: "http://edit-link",
+      },
+      expectedContent: "http://edit-link",
+      recipient: { type: "user", email: ["test@example.com"] },
+      expectedRecipient: ["test@example.com"],
+    },
+    {
       key: "magicLinkTemplate",
       variables: { magic: "http://login-link" },
       expectedContent: "http://login-link",
