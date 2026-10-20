@@ -20,6 +20,7 @@ import {
 } from "grommet";
 
 import EventsPhotoInput from "components/forms/EventsPhotoInput";
+import { EVENT_TYPES } from "config/constants/eventTypes";
 import { useAccount } from "services/account";
 import { useAuth } from "services/auth";
 import { useEvents } from "services/events";
@@ -47,19 +48,6 @@ const initialValues = {
   locationOther: "",
   isPublished: false,
 };
-
-const EVENT_TYPES = [
-  "Workshop",
-  "Open Studio",
-  "Exhibition",
-  "Art Salon",
-  "Studio Tour",
-  "Artist Dinner",
-  "Talk",
-  "Film Screening",
-  "Community",
-  "Other",
-];
 
 export default function EventEditClient() {
   const router = useRouter();

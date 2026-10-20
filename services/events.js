@@ -5,6 +5,7 @@ import { supabase } from "./supabase";
 import { revalidatePathAction } from "app/actions/revalidate";
 
 import { useRegions } from "services/region";
+import { EVENT_COLUMNS } from "config/constants/eventColumns";
 
 const EventsContext = createContext(null);
 
@@ -43,7 +44,7 @@ const EventsProvider = ({ children }) => {
     setLoading(true);
     // console.log("fetching Events");
 
-    let supabaseQuery = supabase.from("events").select("*");
+    let supabaseQuery = supabase.from("events").select(EVENT_COLUMNS.ALL);
 
     if (selectedRegion?.region) {
       const regionName = selectedRegion.region;
@@ -71,7 +72,7 @@ const EventsProvider = ({ children }) => {
 
     let { data: supaEvents, error } = await supabase
       .from("events")
-      .select("*")
+      .select(EVENT_COLUMNS.ALL)
       .eq("studio_uuid", id)
       .order("created_at", { ascending: false });
     if (supaEvents?.length) {
@@ -91,7 +92,7 @@ const EventsProvider = ({ children }) => {
     try {
       let { data: supaEvent, error } = await supabase
         .from("events")
-        .select("*")
+        .select(EVENT_COLUMNS.ALL)
         .eq("id", event_id)
         .single();
       if (error) {
@@ -179,7 +180,7 @@ const EventsProvider = ({ children }) => {
         .from("events")
         .update(updates)
         .eq("id", id)
-        .select();
+        .select(EVENT_COLUMNS.ALL);
 
       if (error) {
         setError(true);

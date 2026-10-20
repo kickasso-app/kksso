@@ -4,6 +4,10 @@ import React, { useContext } from "react";
 import { Grid, Row, Col } from "react-flexbox-grid/dist/react-flexbox-grid";
 import { Box, Heading, Text, Paragraph, ResponsiveContext } from "grommet";
 import { Circle } from "react-feather";
+import Link from "next/link";
+
+import Button from "components/Button";
+import Footer from "layouts/Footer";
 
 const CirclePoint = ({ children }) => (
   <Box direction="row" align="center" margin={{ vertical: "small" }}>
@@ -129,7 +133,7 @@ const ArtiNightClient = () => {
 
               <Box margin={{ vertical: "large" }} gap="small">
                 <Heading level={2} margin={{ bottom: "medium" }}>
-                  Getting Started
+                  Join the Open Call
                 </Heading>
                 <Paragraph fill>
                   The minimum version is small: one artist, one studio, eight
@@ -138,18 +142,31 @@ const ArtiNightClient = () => {
                   sheet by the door. That is a complete Arti Night.
                 </Paragraph>
                 <Paragraph fill>
-                  If you would like to host one, write to us at{" "}
+                  Ready to host one? Tell us about your evening in the open
+                  call form. We review every submission, and once your evening
+                  is approved we add it to our shared events and send you the
+                  materials. Questions? Write to us at{" "}
                   <a href="mailto:hello@arti.my">
                     <b>hello@arti.my</b>
                   </a>
-                  . We will add your evening to our shared events and send you
-                  the materials.
+                  .
                 </Paragraph>
+                <Box margin={{ top: "medium" }} align="start">
+                  <Link
+                    href="/night/opencall"
+                    style={{ textDecoration: "none" }}
+                  >
+                    <Button btnStyle="filled" as="div">
+                      <Box margin="small">Submit your Arti Night</Box>
+                    </Button>
+                  </Link>
+                </Box>
               </Box>
             </Col>
           </Row>
         </Grid>
       </Box>
+      <Footer />
     </>
   );
 };

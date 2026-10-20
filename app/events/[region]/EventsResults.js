@@ -2,6 +2,7 @@ import { cacheLife, cacheTag } from "next/cache";
 import { supabase } from "services/supabase";
 import { titleCase } from "services/helpers/textFormat";
 import { getRegionBySlug } from "services/region.server";
+import { EVENT_COLUMNS } from "config/constants/eventColumns";
 import EventsClient from "./EventsClient";
 
 async function getEvents(regionName) {
@@ -9,7 +10,7 @@ async function getEvents(regionName) {
   cacheTag("events");
   cacheLife("hours");
 
-  let supabaseQuery = supabase.from("events").select("*");
+  let supabaseQuery = supabase.from("events").select(EVENT_COLUMNS.ALL);
   if (regionName) {
 
     supabaseQuery = supabaseQuery.eq("country", regionName);

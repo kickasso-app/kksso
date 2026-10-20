@@ -146,7 +146,7 @@ const LandingClient = () => {
                       >
                         Curious about hosting your first {` `}
                         <Link
-                          href={"/how-it-works/arti-night"}
+                          href={"/night"}
                           // style={{ textDecoration: "none" }}
                         >
                           Arti Night

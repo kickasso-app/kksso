@@ -56,6 +56,8 @@ export default function EventClient({ initialEvent }) {
     fetchStudioBasicInfo();
   }, [event, fetchStudioBasic]);
 
+  const hostName = event?.host_name;
+
   const headingMargin = { top: "large", bottom: "small" };
   const paragraphMargin = { top: "small", bottom: "small" };
   const sectionMargin = { top: "medium", bottom: "medium" };
@@ -125,7 +127,16 @@ export default function EventClient({ initialEvent }) {
                 </Box>
               </Box>
 
-              {studioBasic && (
+              {hostName ? (
+                <Heading
+                  level="4"
+                  size="small"
+                  margin={{ top: "small", bottom: "small" }}
+                >
+                  by {hostName}
+                </Heading>
+              ) : (
+                studioBasic && (
                 <Heading
                   level="4"
                   size="small"
@@ -144,6 +155,7 @@ export default function EventClient({ initialEvent }) {
                     studioBasic.name
                   )}
                 </Heading>
+                )
               )}
               <Heading level="3" size="medium" margin={headingMargin}>
                 Details
@@ -180,7 +192,7 @@ export default function EventClient({ initialEvent }) {
                 </>
               )}
 
-              {studioBasic && studioLink && (
+              {!hostName && studioBasic && studioLink && (
                 <>
                   <Box margin={sectionMargin}>
                     <hr />
@@ -240,7 +252,7 @@ export default function EventClient({ initialEvent }) {
                       Request to Join
                     </Heading>
                     <EventRequestForm
-                      artistName={studioBasic.name}
+                      artistName={hostName || studioBasic.name}
                       studioID={studioBasic.id}
                       studio_uuid={event.studio_uuid}
                       event_uuid={event.id}
